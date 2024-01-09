@@ -58,9 +58,9 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
                 appColor="grey"
                 appLogo={
                     theme === LIGHT_THEME ? (
-                        <PowsyblLogo /> //GridXXXLogoLight
+                        <PowsyblLogo /> //GridAdminLogoLight
                     ) : (
-                        <PowsyblLogo /> //GridXXXLogoDark
+                        <PowsyblLogo /> //GridAdminLogoDark
                     )
                 }
                 appVersion={AppPackage.version}

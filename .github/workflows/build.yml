@@ -23,7 +23,7 @@ jobs:
               if: github.ref == 'refs/heads/main'
               uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
               with:
-                  name: gridsuite/gridXXX-app
+                  name: gridsuite/gridadmin-app
                   username: gridsuiteci
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -32,4 +32,4 @@ jobs:
               uses: gridsuite/broadcast-event@main
               with:
                   token: ${{ secrets.REPO_ACCESS_TOKEN }}
-                  event-type: gridXXX_app_updated
+                  event-type: gridadmin_app_updated

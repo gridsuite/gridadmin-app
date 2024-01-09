@@ -51,7 +51,7 @@ it('renders', async () => {
         )
     );
 
-    expect(container.textContent).toContain('GridXXX');
+    expect(container.textContent).toContain('GridAdmin');
     act(() => {
         root.unmount();
     });

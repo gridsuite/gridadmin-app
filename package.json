@@ -1,9 +1,14 @@
 {
-    "name": "gridXXX-app",
+    "name": "gridadmin-app",
     "version": "0.1.0",
     "license": "MPL-2.0",
     "homepage": ".",
     "private": true,
+    "bugs": "https://github.com/gridsuite/gridadmin-app/issues",
+    "repository": {
+        "type": "TODO",
+        "url": "https://github.com/gridsuite/gridadmin-app"
+    },
     "engines": {
         "node": ">=18",
         "npm": "^10.2.0"

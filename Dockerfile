@@ -2,6 +2,6 @@ FROM bitnami/apache:2.4.55-debian-11-r3@sha256:bbe50190eb3bbf3be6f61318004480b32
 
 USER root
 COPY app-httpd.conf /opt/bitnami/apache/conf/bitnami/bitnami.conf
-COPY build /opt/bitnami/apache/htdocs/gridXXX
-RUN sed -i -e 's;<base href="\./"/>;<base href="<!--#echo var="BASE" -->"/>;' /opt/bitnami/apache/htdocs/gridXXX/index.html
+COPY build /opt/bitnami/apache/htdocs/gridadmin
+RUN sed -i -e 's;<base href="\./"/>;<base href="<!--#echo var="BASE" -->"/>;' /opt/bitnami/apache/htdocs/gridadmin/index.html
 USER 1001
