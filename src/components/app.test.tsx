@@ -1,9 +1,8 @@
-// app.test.js
+// app.test.tsx
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,13 +10,14 @@ import App from './app';
 import { store } from '../redux/store';
 import {
     createTheme,
-    ThemeProvider,
     StyledEngineProvider,
+    ThemeProvider,
 } from '@mui/material/styles';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
-import CssBaseline from '@mui/material/CssBaseline';
+import { CssBaseline } from '@mui/material';
 
-let container = null;
+let container: Element | any = null;
+
 beforeEach(() => {
     // setup a DOM element as a render target
     container = document.createElement('div');

@@ -5,43 +5,47 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
-
+import React, {
+    FunctionComponent,
+    useCallback,
+    useEffect,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
     Navigate,
     Route,
     Routes,
-    useNavigate,
     useLocation,
+    useMatch,
+    useNavigate,
 } from 'react-router-dom';
-
+import { FormattedMessage } from 'react-intl';
+import { Box, Typography } from '@mui/material';
+import {
+    AuthenticationRouter,
+    CardErrorBoundary,
+    getPreLoginPath,
+    initializeAuthenticationDev,
+    initializeAuthenticationProd,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
 } from '../redux/actions';
-
+import { AppState } from '../redux/reducer';
 import {
-    AuthenticationRouter,
-    CardErrorBoundary,
-    getPreLoginPath,
-    initializeAuthenticationProd,
-    initializeAuthenticationDev,
-} from '@gridsuite/commons-ui';
-
-import { useMatch } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import { Box, Typography } from '@mui/material';
-
-import {
+    ConfigParameter,
+    ConfigParameters,
     connectNotificationsWsUpdateConfig,
     fetchAuthorizationCodeFlowFeatureFlag,
     fetchConfigParameter,
     fetchConfigParameters,
     fetchValidateUser,
 } from '../utils/rest-api';
+import { UserManager } from 'oidc-client';
 import {
     APP_NAME,
     COMMON_APP_NAME,
@@ -49,27 +53,27 @@ import {
     PARAM_THEME,
 } from '../utils/config-params';
 import { getComputedLanguage } from '../utils/language';
-import { useSnackMessage } from '@gridsuite/commons-ui';
-import AppTopBar from './app-top-bar';
+import AppTopBar, { AppTopBarProps } from './app-top-bar';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const noUserManager = { instance: null, error: null };
-
-const App = () => {
+const App: FunctionComponent = () => {
     const { snackError } = useSnackMessage();
 
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state: AppState) => state.user);
 
     const signInCallbackError = useSelector(
-        (state) => state.signInCallbackError
+        (state: AppState) => state.signInCallbackError
     );
     const authenticationRouterError = useSelector(
-        (state) => state.authenticationRouterError
+        (state: AppState) => state.authenticationRouterError
     );
     const showAuthenticationRouterLogin = useSelector(
-        (state) => state.showAuthenticationRouterLogin
+        (state: AppState) => state.showAuthenticationRouterLogin
     );
 
-    const [userManager, setUserManager] = useState(noUserManager);
+    const [userManager, setUserManager] = useState<
+        AppTopBarProps['userManager']
+    >({ instance: null, error: null });
 
     const navigate = useNavigate();
 
@@ -77,10 +81,10 @@ const App = () => {
 
     const location = useLocation();
 
-    const updateParams = useCallback(
-        (params) => {
+    const updateParams: (p: ConfigParameters) => void = useCallback(
+        (params: ConfigParameters) => {
             console.debug('received UI parameters : ', params);
-            params.forEach((param) => {
+            params.forEach((param: ConfigParameter) => {
                 switch (param.name) {
                     case PARAM_THEME:
                         dispatch(selectTheme(param.value));
@@ -100,27 +104,27 @@ const App = () => {
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig = useCallback(() => {
-        const ws = connectNotificationsWsUpdateConfig();
-
-        ws.onmessage = function (event) {
-            let eventData = JSON.parse(event.data);
-            if (eventData.headers && eventData.headers['parameterName']) {
-                fetchConfigParameter(eventData.headers['parameterName'])
-                    .then((param) => updateParams([param]))
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'paramsRetrievingError',
-                        })
-                    );
-            }
-        };
-        ws.onerror = function (event) {
-            console.error('Unexpected Notification WebSocket error', event);
-        };
-        return ws;
-    }, [updateParams, snackError]);
+    const connectNotificationsUpdateConfig: () => ReconnectingWebSocket =
+        useCallback(() => {
+            const ws = connectNotificationsWsUpdateConfig();
+            ws.onmessage = function (event) {
+                let eventData = JSON.parse(event.data);
+                if (eventData.headers && eventData.headers['parameterName']) {
+                    fetchConfigParameter(eventData.headers['parameterName'])
+                        .then((param) => updateParams([param]))
+                        .catch((error) =>
+                            snackError({
+                                messageTxt: error.message,
+                                headerId: 'paramsRetrievingError',
+                            })
+                        );
+                }
+            };
+            ws.onerror = function (event) {
+                console.error('Unexpected Notification WebSocket error', event);
+            };
+            return ws;
+        }, [updateParams, snackError]);
 
     // Can't use lazy initializer because useMatch is a hook
     const [initialMatchSilentRenewCallbackUrl] = useState(
@@ -129,18 +133,17 @@ const App = () => {
         })
     );
 
-    const initialize = useCallback(() => {
+    const initialize: () => Promise<UserManager> = useCallback(() => {
         if (process.env.REACT_APP_USE_AUTHENTICATION === 'true') {
             return fetchAuthorizationCodeFlowFeatureFlag().then(
-                (authorizationCodeFlowEnabled) => {
-                    return initializeAuthenticationProd(
+                (authorizationCodeFlowEnabled) =>
+                    initializeAuthenticationProd(
                         dispatch,
                         initialMatchSilentRenewCallbackUrl != null,
                         fetch('idpSettings.json'),
                         fetchValidateUser,
                         authorizationCodeFlowEnabled
-                    );
-                }
+                    )
             );
         } else {
             return initializeAuthenticationDev(
@@ -157,10 +160,10 @@ const App = () => {
 
     useEffect(() => {
         initialize()
-            .then((userManager) => {
-                setUserManager({ instance: userManager, error: null });
+            .then((userManager: UserManager | undefined) => {
+                setUserManager({ instance: userManager || null, error: null });
             })
-            .catch(function (error) {
+            .catch((error: any) => {
                 setUserManager({ instance: null, error: error.message });
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl won't change
@@ -187,9 +190,7 @@ const App = () => {
                 );
 
             const ws = connectNotificationsUpdateConfig();
-            return function () {
-                ws.close();
-            };
+            return () => ws.close();
         }
     }, [
         user,
@@ -263,5 +264,4 @@ const App = () => {
         </>
     );
 };
-
 export default App;

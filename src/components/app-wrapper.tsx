@@ -6,22 +6,23 @@
  */
 
 import App from './app';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import {
     createTheme,
-    ThemeProvider,
     StyledEngineProvider,
+    Theme,
+    ThemeProvider,
 } from '@mui/material/styles';
 import {
-    LIGHT_THEME,
+    card_error_boundary_en,
+    card_error_boundary_fr,
     CardErrorBoundary,
+    LIGHT_THEME,
     login_en,
     login_fr,
     SnackbarProvider,
     top_bar_en,
     top_bar_fr,
-    card_error_boundary_en,
-    card_error_boundary_fr,
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
@@ -33,8 +34,10 @@ import messages_plugins_fr from '../plugins/translations/fr.json';
 import { store } from '../redux/store';
 import CssBaseline from '@mui/material/CssBaseline';
 import { PARAM_THEME } from '../utils/config-params';
+import { IntlConfig } from 'react-intl/src/types';
+import { AppState } from '../redux/reducer';
 
-const lightTheme = createTheme({
+const lightTheme: Theme = createTheme({
     palette: {
         mode: 'light',
     },
@@ -60,7 +63,7 @@ const lightTheme = createTheme({
     mapboxStyle: 'mapbox://styles/mapbox/light-v9',
 });
 
-const darkTheme = createTheme({
+const darkTheme: Theme = createTheme({
     palette: {
         mode: 'dark',
     },
@@ -86,7 +89,7 @@ const darkTheme = createTheme({
     mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
 });
 
-const getMuiTheme = (theme) => {
+const getMuiTheme = (theme: unknown): Theme => {
     if (theme === LIGHT_THEME) {
         return lightTheme;
     } else {
@@ -94,30 +97,30 @@ const getMuiTheme = (theme) => {
     }
 };
 
-const messages = {
+const messages: Record<string, IntlConfig['messages']> = {
     en: {
         ...messages_en,
         ...login_en,
         ...top_bar_en,
         ...card_error_boundary_en,
-        ...messages_plugins_en, // keep it at the end to allow translation overwritting
+        ...messages_plugins_en, // keep it at the end to allow translation overwriting
     },
     fr: {
         ...messages_fr,
         ...login_fr,
         ...top_bar_fr,
         ...card_error_boundary_fr,
-        ...messages_plugins_fr, // keep it at the end to allow translation overwritting
+        ...messages_plugins_fr, // keep it at the end to allow translation overwriting
     },
 };
 
-const basename = new URL(document.querySelector('base').href).pathname;
+const basename = new URL(document.querySelector('base')?.href || '').pathname;
 
-const AppWrapperWithRedux = () => {
-    const computedLanguage = useSelector((state) => state.computedLanguage);
-
-    const theme = useSelector((state) => state[PARAM_THEME]);
-
+const AppWrapperWithRedux: FunctionComponent = () => {
+    const computedLanguage = useSelector(
+        (state: AppState) => state.computedLanguage
+    );
+    const theme = useSelector((state: AppState) => state[PARAM_THEME]);
     return (
         <IntlProvider
             locale={computedLanguage}
@@ -139,7 +142,7 @@ const AppWrapperWithRedux = () => {
     );
 };
 
-const AppWrapper = () => {
+const AppWrapper: FunctionComponent = () => {
     return (
         <Provider store={store}>
             <AppWrapperWithRedux />

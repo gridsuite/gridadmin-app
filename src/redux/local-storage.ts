@@ -12,22 +12,28 @@ import { APP_NAME } from '../utils/config-params';
 const LOCAL_STORAGE_THEME_KEY = (APP_NAME + '_THEME').toUpperCase();
 const LOCAL_STORAGE_LANGUAGE_KEY = (APP_NAME + '_LANGUAGE').toUpperCase();
 
-export const getLocalStorageTheme = () => {
+export function getLocalStorageTheme(): ReturnType<
+    (typeof Storage.prototype)['getItem']
+> {
     return localStorage.getItem(LOCAL_STORAGE_THEME_KEY) || DARK_THEME;
-};
+}
 
-export const saveLocalStorageTheme = (theme) => {
+export function saveLocalStorageTheme(
+    theme: string
+): ReturnType<(typeof Storage.prototype)['setItem']> {
     localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme);
-};
+}
 
-export const getLocalStorageLanguage = () => {
+export function getLocalStorageLanguage(): NonNullable<
+    ReturnType<(typeof Storage.prototype)['getItem']>
+> {
     return localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY) || LANG_SYSTEM;
-};
+}
 
-export const saveLocalStorageLanguage = (language) => {
+export function saveLocalStorageLanguage(language: string): void {
     localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, language);
-};
+}
 
-export const getLocalStorageComputedLanguage = () => {
+export function getLocalStorageComputedLanguage(): string {
     return getComputedLanguage(getLocalStorageLanguage());
-};
+}

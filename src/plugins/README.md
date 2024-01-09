@@ -3,16 +3,16 @@
 
 Add a plugin component or object in the corresponding group represented as folders.
 
-plugins/myPluginGroup/myNewPlugin.js
-```js
+```ts
+// plugins/myPluginGroup/myNewPlugin.ts
 const MyNewPlugin = {
     ...
 };
 export default MyNewPlugin;
 ```
 
-Edit index.js to export your new plugin in the corresponding group
-```js
+Edit `index.ts` to export your new plugin in the corresponding group
+```ts
 import MyNewPlugin from './myPluginGroup/myNewPlugin';
 ...
 export const MyPluginGroupPlugins = [
@@ -23,13 +23,15 @@ export const MyPluginGroupPlugins = [
 ];
 ```
 
-Defining and adding a group a group of plugins needs to add some code in the target component
-```js
+Defining and adding a group of plugins needs to add some code in the target component
+
+```tsx
+import { FunctionComponent } from 'react';
 // Plugins
 import { MyPluginGroupPlugins } from '../plugins';
 //...
 
-const MyPluggableComponent = () => {
+const MyPluggableComponent: FunctionComponent = () => {
     //...
     return (
         <>
@@ -46,6 +48,5 @@ const MyPluggableComponent = () => {
 # How to overwrite translations
 
 Add your private translations to the following files to complete or overwrite existing translations
-
-* src/plugins/translations/en.json
-* src/plugins/translations/fr.json
+* `src/plugins/translations/en.json`
+* `src/plugins/translations/fr.json`
