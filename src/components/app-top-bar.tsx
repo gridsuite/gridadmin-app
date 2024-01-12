@@ -12,7 +12,8 @@ import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppsMetadataSrv, StudySrv } from '../services';
 import { useNavigate } from 'react-router-dom';
-import { ReactComponent as PowsyblLogo } from '../images/powsybl_logo.svg';
+import { ReactComponent as GridAdminLogoLight } from '../images/GridAdmin_logo_light.svg';
+import { ReactComponent as GridAdminLogoDark } from '../images/GridAdmin_logo_dark.svg';
 import AppPackage from '../../package.json';
 import { AppState } from '../redux/reducer';
 import { UserManager } from 'oidc-client';
@@ -54,12 +55,12 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
         <>
             <TopBar
                 appName={APP_NAME}
-                appColor="grey"
+                appColor="#FD3745"
                 appLogo={
                     theme === LIGHT_THEME ? (
-                        <PowsyblLogo /> //GridAdminLogoLight
+                        <GridAdminLogoLight />
                     ) : (
-                        <PowsyblLogo /> //GridAdminLogoDark
+                        <GridAdminLogoDark />
                     )
                 }
                 appVersion={AppPackage.version}
