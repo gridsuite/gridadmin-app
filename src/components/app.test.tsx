@@ -1,11 +1,11 @@
 // app.test.tsx
 
-import React from 'react';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import App from './app';
 import { store } from '../redux/store';
 import {
@@ -14,7 +14,9 @@ import {
     ThemeProvider,
 } from '@mui/material/styles';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
+import { UserManagerMock } from '@gridsuite/commons-ui/es/utils/UserManagerMock';
 import { CssBaseline } from '@mui/material';
+import { appRoutes } from '../routes';
 
 let container: Element | any = null;
 
@@ -32,22 +34,40 @@ afterEach(() => {
 
 it('renders', async () => {
     const root = createRoot(container);
+    const AppWrapperRouterLayout: FunctionComponent<
+        PropsWithChildren<{}>
+    > = () => (
+        <IntlProvider locale="en">
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={createTheme({})}>
+                    <SnackbarProvider hideIconVariant={false}>
+                        <CssBaseline />
+                        <App userManager={new UserManagerMock({})}>
+                            <Outlet />
+                        </App>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </StyledEngineProvider>
+        </IntlProvider>
+    );
+    const router = createMemoryRouter(
+        [
+            {
+                element: (
+                    <AppWrapperRouterLayout>
+                        <Outlet />
+                    </AppWrapperRouterLayout>
+                ),
+                children: appRoutes(),
+            },
+        ]
+        //{ basename: props.basename }
+    );
     await act(async () =>
         root.render(
-            <IntlProvider locale="en">
-                <BrowserRouter>
-                    <Provider store={store}>
-                        <StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={createTheme({})}>
-                                <SnackbarProvider hideIconVariant={false}>
-                                    <CssBaseline />
-                                    <App />
-                                </SnackbarProvider>
-                            </ThemeProvider>
-                        </StyledEngineProvider>
-                    </Provider>
-                </BrowserRouter>
-            </IntlProvider>
+            <Provider store={store}>
+                <RouterProvider router={router} />
+            </Provider>
         )
     );
 

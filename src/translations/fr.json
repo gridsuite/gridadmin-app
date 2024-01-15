@@ -1,4 +1,6 @@
 {
+    "logoutFailed": "Erreur: échec de la déconnexion\u00a0; vous êtes toujours connecté(e).",
+    "connected": "Connecté(e)",
     "close": "Fermer",
     "parameters": "Paramètres",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",

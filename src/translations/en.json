@@ -1,4 +1,6 @@
 {
+    "logoutFailed": "Error: logout failed; you are still logged in.",
+    "connected": "Connected",
     "close": "Close",
     "parameters": "Parameters",
     "paramsChangingError": "An error occured when changing the parameters",
