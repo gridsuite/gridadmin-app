@@ -10,8 +10,7 @@ import { LIGHT_THEME, logout, TopBar } from '@gridsuite/commons-ui';
 import Parameters, { useParameterState } from './parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAppsAndUrls, fetchVersion } from '../utils/rest-api';
-import { getServersInfos } from '../rest/study';
+import { AppsMetadataSrv, StudySrv } from '../services';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as PowsyblLogo } from '../images/powsybl_logo.svg';
 import AppPackage from '../../package.json';
@@ -31,7 +30,7 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     const dispatch = useDispatch();
 
     const [appsAndUrls, setAppsAndUrls] = useState<
-        Awaited<ReturnType<typeof fetchAppsAndUrls>>
+        Awaited<ReturnType<typeof AppsMetadataSrv.fetchAppsAndUrls>>
     >([]);
 
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
@@ -45,7 +44,7 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
 
     useEffect(() => {
         if (props.user !== null) {
-            fetchAppsAndUrls().then((res) => {
+            AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
                 setAppsAndUrls(res);
             });
         }
@@ -73,9 +72,11 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
                 user={props.user}
                 appsAndUrls={appsAndUrls}
                 globalVersionPromise={() =>
-                    fetchVersion().then((res) => res?.deployVersion)
+                    AppsMetadataSrv.fetchVersion().then(
+                        (res) => res?.deployVersion
+                    )
                 }
-                additionalModulesPromise={getServersInfos}
+                additionalModulesPromise={StudySrv.getServersInfos}
                 onThemeClick={handleChangeTheme}
                 theme={themeLocal}
                 onLanguageClick={handleChangeLanguage}

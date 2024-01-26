@@ -26,7 +26,6 @@ import {
     AuthenticationRouter,
     CardErrorBoundary,
     getPreLoginPath,
-    initializeAuthenticationDev,
     initializeAuthenticationProd,
     useSnackMessage,
 } from '@gridsuite/commons-ui';
@@ -37,14 +36,13 @@ import {
 } from '../redux/actions';
 import { AppState } from '../redux/reducer';
 import {
+    ConfigSrv,
     ConfigParameter,
     ConfigParameters,
-    connectNotificationsWsUpdateConfig,
-    fetchAuthorizationCodeFlowFeatureFlag,
-    fetchConfigParameter,
-    fetchConfigParameters,
-    fetchValidateUser,
-} from '../utils/rest-api';
+    UserAdminSrv,
+    AppsMetadataSrv,
+} from '../services';
+import { connectNotificationsWsUpdateConfig } from '../utils/rest-api';
 import { UserManager } from 'oidc-client';
 import {
     APP_NAME,
@@ -109,8 +107,10 @@ const App: FunctionComponent = () => {
             const ws = connectNotificationsWsUpdateConfig();
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
-                if (eventData.headers && eventData.headers['parameterName']) {
-                    fetchConfigParameter(eventData.headers['parameterName'])
+                if (eventData?.headers?.parameterName) {
+                    ConfigSrv.fetchConfigParameter(
+                        eventData.headers.parameterName
+                    )
                         .then((param) => updateParams([param]))
                         .catch((error) =>
                             snackError({
@@ -133,33 +133,17 @@ const App: FunctionComponent = () => {
         })
     );
 
-    const initialize: () => Promise<UserManager> = useCallback(() => {
-        if (process.env.REACT_APP_USE_AUTHENTICATION === 'true') {
-            return fetchAuthorizationCodeFlowFeatureFlag().then(
-                (authorizationCodeFlowEnabled) =>
-                    initializeAuthenticationProd(
-                        dispatch,
-                        initialMatchSilentRenewCallbackUrl != null,
-                        fetch('idpSettings.json'),
-                        fetchValidateUser,
-                        authorizationCodeFlowEnabled
-                    )
-            );
-        } else {
-            return initializeAuthenticationDev(
-                dispatch,
-                initialMatchSilentRenewCallbackUrl != null,
-                () =>
-                    new Promise((resolve) =>
-                        window.setTimeout(() => resolve(true), 500)
-                    )
-            );
-        }
-        // Note: initialMatchSilentRenewCallbackUrl and dispatch don't change
-    }, [initialMatchSilentRenewCallbackUrl, dispatch]);
-
     useEffect(() => {
-        initialize()
+        AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
+            .then((authorizationCodeFlowEnabled) =>
+                initializeAuthenticationProd(
+                    dispatch,
+                    initialMatchSilentRenewCallbackUrl != null,
+                    fetch('idpSettings.json'),
+                    UserAdminSrv.fetchValidateUser,
+                    authorizationCodeFlowEnabled
+                )
+            )
             .then((userManager: UserManager | undefined) => {
                 setUserManager({ instance: userManager || null, error: null });
             })
@@ -167,11 +151,11 @@ const App: FunctionComponent = () => {
                 setUserManager({ instance: null, error: error.message });
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl won't change
-    }, [initialize, initialMatchSilentRenewCallbackUrl, dispatch]);
+    }, [initialMatchSilentRenewCallbackUrl, dispatch]);
 
     useEffect(() => {
         if (user !== null) {
-            fetchConfigParameters(COMMON_APP_NAME)
+            ConfigSrv.fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
@@ -180,7 +164,7 @@ const App: FunctionComponent = () => {
                     })
                 );
 
-            fetchConfigParameters(APP_NAME)
+            ConfigSrv.fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

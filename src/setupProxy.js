@@ -2,18 +2,18 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 module.exports = function (app) {
     app.use(
         createProxyMiddleware('http://localhost:9000/api/gateway', {
-            pathRewrite: { '^/api/gateway/': '/' },
+            pathRewrite: { [`^${process.env.REACT_APP_API_GATEWAY}`]: '/' },
         })
     );
     app.use(
         createProxyMiddleware('http://localhost:9000/ws/gateway', {
-            pathRewrite: { '^/ws/gateway/': '/' },
+            pathRewrite: { [`^${process.env.REACT_APP_WS_GATEWAY}`]: '/' },
             ws: true,
         })
     );
     app.use(
-        createProxyMiddleware('http://localhost:5001/api/study-server', {
-            pathRewrite: { '^/api/study-server/': '/' },
+        createProxyMiddleware('http://localhost:8070', {
+            pathRewrite: { '^/api/apps-metadata-server/': '/' },
         })
     );
 };
