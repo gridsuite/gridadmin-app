@@ -28,7 +28,7 @@ import {
     Typography,
 } from '@mui/material';
 import { CSSObject, Theme } from '@emotion/react';
-import { updateConfigParameter } from '../utils/rest-api';
+import { ConfigSrv } from '../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AppState } from '../redux/reducer';
 import { TypographyTypeMap } from '@mui/material/Typography/Typography';
@@ -65,7 +65,7 @@ export function useParameterState<
     const handleChangeParamLocalState = useCallback(
         (value: any) => {
             setParamLocalState(value);
-            updateConfigParameter(paramName, value).catch((error) => {
+            ConfigSrv.updateConfigParameter(paramName, value).catch((error) => {
                 setParamLocalState(paramGlobalState);
                 snackError({
                     messageTxt: error.message,
