@@ -132,6 +132,11 @@ const App: FunctionComponent = () => {
             path: '/silent-renew-callback',
         })
     );
+    const [initialMatchSignInCallbackUrl] = useState(
+        useMatch({
+            path: '/sign-in-callback',
+        })
+    );
 
     useEffect(() => {
         AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
@@ -141,7 +146,8 @@ const App: FunctionComponent = () => {
                     initialMatchSilentRenewCallbackUrl != null,
                     fetch('idpSettings.json'),
                     UserAdminSrv.fetchValidateUser,
-                    authorizationCodeFlowEnabled
+                    authorizationCodeFlowEnabled,
+                    initialMatchSignInCallbackUrl != null
                 )
             )
             .then((userManager: UserManager | undefined) => {
@@ -150,8 +156,12 @@ const App: FunctionComponent = () => {
             .catch((error: any) => {
                 setUserManager({ instance: null, error: error.message });
             });
-        // Note: initialize and initialMatchSilentRenewCallbackUrl won't change
-    }, [initialMatchSilentRenewCallbackUrl, dispatch]);
+        // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
+    }, [
+        dispatch,
+        initialMatchSilentRenewCallbackUrl,
+        initialMatchSignInCallbackUrl,
+    ]);
 
     useEffect(() => {
         if (user !== null) {
