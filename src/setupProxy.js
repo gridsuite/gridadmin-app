@@ -11,9 +11,4 @@ module.exports = function (app) {
             ws: true,
         })
     );
-    app.use(
-        createProxyMiddleware('http://localhost:8070', {
-            pathRewrite: { '^/api/apps-metadata-server/': '/' },
-        })
-    );
 };
