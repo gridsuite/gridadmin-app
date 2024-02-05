@@ -19,7 +19,7 @@ export type InitRequest = Partial<Parameters<typeof fetch>[1]>; //Partial<Reques
 export type Token = string;
 export type ReqResponse = Awaited<ReturnType<typeof fetch>>;
 
-const PREFIX_CONFIG_NOTIFICATION_WS = `${process.env.REACT_APP_WS_GATEWAY}/${process.env.REACT_APP_SRV_CONFIG_NOTIF_URI}`;
+const PREFIX_CONFIG_NOTIFICATION_WS = `${process.env.REACT_APP_WS_GATEWAY}/config-notification`;
 
 export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
     const webSocketBaseUrl = document.baseURI

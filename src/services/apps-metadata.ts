@@ -6,8 +6,6 @@ function fetchEnv(): Promise<EnvJson> {
     return fetch('/env.json').then((res: ReqResponse) => res.json());
 }
 
-//process.env.NODE_ENV !=== 'production'  // production/development/test
-
 export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
     console.info(`Fetching authorization code flow feature flag...`);
     return fetchEnv()
