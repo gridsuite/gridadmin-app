@@ -1,7 +1,7 @@
 import { getAppName } from '../utils/config-params';
 import { backendFetch, backendFetchJson } from '../utils/rest-api';
 
-const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/config`;
+const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/${process.env.REACT_APP_SRV_CONFIG_URI}`;
 
 export type ConfigParameter = {
     //TODO check with config-server swagger

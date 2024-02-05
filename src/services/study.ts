@@ -6,7 +6,7 @@
  */
 import { backendFetchJson, Token } from '../utils/rest-api';
 
-const STUDY_URL = `${process.env.REACT_APP_API_GATEWAY}/study/v1`;
+const STUDY_URL = `${process.env.REACT_APP_API_GATEWAY}/${process.env.REACT_APP_SRV_STUDY_URI}/v1`;
 
 //TODO delete when commons-ui will be in typescript
 export type ServerAbout = {

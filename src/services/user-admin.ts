@@ -1,6 +1,6 @@
 import { backendFetch, ReqResponse } from '../utils/rest-api';
 
-const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/user-admin`;
+const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/${process.env.REACT_APP_SRV_USER_ADMIN_URI}`;
 
 export function fetchValidateUser(user: Record<string, any>): Promise<boolean> {
     const sub = user?.profile?.sub;
