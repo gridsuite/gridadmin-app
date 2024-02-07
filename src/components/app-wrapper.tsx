@@ -6,7 +6,7 @@
  */
 
 import App from './app';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import {
     createTheme,
     StyledEngineProvider,
