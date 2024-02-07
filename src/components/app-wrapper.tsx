@@ -119,10 +119,7 @@ const basename = new URL(document.querySelector('base')?.href || '').pathname;
 /**
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
  */
-const AppWrapperRouterLayout: FunctionComponent<Parameters<typeof App>[0]> = (
-    props,
-    context
-) => {
+const AppWrapperRouterLayout: typeof App = (props, context) => {
     const computedLanguage = useSelector(
         (state: AppState) => state.computedLanguage
     );

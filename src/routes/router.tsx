@@ -6,10 +6,8 @@
  */
 
 import {
-    Dispatch,
     FunctionComponent,
     PropsWithChildren,
-    SetStateAction,
     useEffect,
     useMemo,
     useState,
@@ -21,10 +19,7 @@ import {
     getPreLoginPath,
     initializeAuthenticationProd,
 } from '@gridsuite/commons-ui';
-import { Router } from '@remix-run/router';
-import { AppTopBarProps } from '../components/app-top-bar';
 import {
-    BrowserRouter,
     createBrowserRouter,
     Navigate,
     Outlet,
@@ -37,18 +32,17 @@ import {
 import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
-import { UserAdminSrv, AppsMetadataSrv } from '../services';
+import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import App from '../components/app';
 import { Users } from '../components/users';
 import { Connections } from '../components/connections';
 import ErrorPage from './ErrorPage';
+import { updateUserManager_ } from '../redux/actions';
 
-const pathUsers = 'users';
-const pathConnections = 'connections';
-export const UrlPaths = {
-    users: `/${pathUsers}`,
-    connections: `/${pathConnections}`,
-};
+export enum MainPaths {
+    users = 'users',
+    connections = 'connections',
+}
 
 export function appRoutes(): RouteObject[] {
     return [
@@ -69,8 +63,20 @@ export function appRoutes(): RouteObject[] {
                         </Box>
                     ),
                 },
-                { path: pathUsers, element: <Users /> },
-                { path: pathConnections, element: <Connections /> },
+                {
+                    path: `/${MainPaths.users}`,
+                    element: <Users />,
+                    handle: {
+                        appBar_tab: MainPaths.users,
+                    },
+                },
+                {
+                    path: `/${MainPaths.connections}`,
+                    element: <Connections />,
+                    handle: {
+                        appBar_tab: MainPaths.connections,
+                    },
+                },
             ],
         },
         {
@@ -123,16 +129,9 @@ const AuthRouter: FunctionComponent<{
  * <br/>Sub-component because `useMatch` must be under router context.
  */
 const AppAuthStateWithRouterLayer: FunctionComponent<
-    PropsWithChildren<{
-        userManagerState: [
-            AppTopBarProps['userManager'],
-            Dispatch<SetStateAction<AppTopBarProps['userManager']>>
-        ];
-        layout: FunctionComponent<Parameters<typeof App>[0]>;
-    }>
+    PropsWithChildren<{ layout: typeof App }>
 > = (props, context) => {
-    const AppWrapperRouterLayout = props.layout;
-    const [userManager, setUserManager] = props.userManagerState;
+    const AppRouterLayout = props.layout;
     const dispatch = useDispatch();
 
     // Can't use lazy initializer because useMatch is a hook
@@ -160,72 +159,67 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                 )
             )
             .then((userManager: UserManager | undefined) => {
-                setUserManager({ instance: userManager ?? null, error: null });
+                dispatch(updateUserManager_(userManager ?? null, null));
             })
             .catch((error: any) => {
-                setUserManager({ instance: null, error: error.message });
+                dispatch(updateUserManager_(null, error.message));
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
     }, [
         dispatch,
-        setUserManager,
         initialMatchSilentRenewCallbackUrl,
         initialMatchSignInCallbackUrl,
     ]);
 
-    return (
-        <AppWrapperRouterLayout userManager={userManager}>
-            {props.children}
-        </AppWrapperRouterLayout>
-    );
+    return <AppRouterLayout>{props.children}</AppRouterLayout>;
 };
 
 /**
- * Manage authentication and assure cohabitation of legacy and new router api
+ * Manage authentication and assure cohabitation of legacy router and new data router api
  */
 export const AppWithAuthRouter: FunctionComponent<{
     basename: string;
-    layout: FunctionComponent<Parameters<typeof App>[0]>;
+    layout: typeof App;
 }> = (props, context) => {
-    const [userManager, setUserManager] = useState<
-        AppTopBarProps['userManager']
-    >({ instance: null, error: null });
-
     const user = useSelector((state: AppState) => state.user);
-    const router: NullableRouter = useMemo((): NullableRouter => {
-        if (user === null) {
-            return null;
-        } else {
-            return createBrowserRouter(
-                [
-                    {
-                        element: (
-                            <AppAuthStateWithRouterLayer
-                                userManagerState={[userManager, setUserManager]}
-                                layout={props.layout}
-                            >
-                                <Outlet />
-                            </AppAuthStateWithRouterLayer>
-                        ),
-                        children: appRoutes(),
-                    },
-                ],
+    const router = useMemo(
+        () =>
+            createBrowserRouter(
+                user
+                    ? [
+                          /*new react-router v6 api*/
+                          {
+                              element: (
+                                  <AppAuthStateWithRouterLayer
+                                      layout={props.layout}
+                                  >
+                                      <Outlet />
+                                  </AppAuthStateWithRouterLayer>
+                              ),
+                              children: appRoutes(),
+                          },
+                      ]
+                    : ([
+                          /*legacy component router*/
+                          {
+                              path: '*',
+                              Component: () => (
+                                  <LegacyAuthRouter layout={props.layout} />
+                              ),
+                          },
+                      ] as RouteObject[]),
                 { basename: props.basename }
-            );
-        }
-    }, [user, userManager, props.layout, props.basename]);
+            ),
+        [props.basename, props.layout, user]
+    );
+    return <RouterProvider router={router} />;
+};
 
-    return router !== null ? (
-        /*new react-router v6 api*/ <RouterProvider router={router} />
-    ) : (
-        /*legacy component router*/ <BrowserRouter basename={props.basename}>
-            <AppAuthStateWithRouterLayer
-                userManagerState={[userManager, setUserManager]}
-                layout={props.layout}
-            >
-                <AuthRouter userManager={userManager} />
-            </AppAuthStateWithRouterLayer>
-        </BrowserRouter>
+const LegacyAuthRouter: FunctionComponent<{ layout: typeof App }> = (props) => {
+    const userManager = useSelector((state: AppState) => state.userManager);
+    return (
+        <AppAuthStateWithRouterLayer layout={props.layout}>
+            <AuthRouter userManager={userManager} />
+        </AppAuthStateWithRouterLayer>
     );
 };
-type NullableRouter = Router | null;

@@ -28,12 +28,10 @@ import {
     PARAM_THEME,
 } from '../utils/config-params';
 import { getComputedLanguage } from '../utils/language';
-import AppTopBar, { AppTopBarProps } from './app-top-bar';
+import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const App: FunctionComponent<
-    PropsWithChildren<{ userManager: AppTopBarProps['userManager'] }>
-> = (props, context) => {
+const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch();
     const user = useSelector((state: AppState) => state.user);
@@ -118,9 +116,11 @@ const App: FunctionComponent<
 
     return (
         <>
-            <AppTopBar user={user} userManager={props.userManager} />
+            <header>
+                <AppTopBar />
+            </header>
             <CardErrorBoundary>
-                {/*Router outlet ->*/ props.children}
+                <main>{/*Router outlet ->*/ props.children}</main>
             </CardErrorBoundary>
         </>
     );

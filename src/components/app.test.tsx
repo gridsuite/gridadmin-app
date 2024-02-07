@@ -42,7 +42,7 @@ it('renders', async () => {
                 <ThemeProvider theme={createTheme({})}>
                     <SnackbarProvider hideIconVariant={false}>
                         <CssBaseline />
-                        <App userManager={new UserManagerMock({})}>
+                        <App>
                             <Outlet />
                         </App>
                     </SnackbarProvider>
