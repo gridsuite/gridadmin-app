@@ -39,19 +39,39 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { UserAdminSrv, AppsMetadataSrv } from '../services';
 import App from '../components/app';
+import { Users } from '../components/users';
+import { Connections } from '../components/connections';
+import ErrorPage from './ErrorPage';
+
+const pathUsers = 'users';
+const pathConnections = 'connections';
+export const UrlPaths = {
+    users: `/${pathUsers}`,
+    connections: `/${pathConnections}`,
+};
 
 export function appRoutes(): RouteObject[] {
     return [
         {
             path: '/',
-            element: (
-                <Box mt={20}>
-                    <Typography variant="h3" color="textPrimary" align="center">
-                        <FormattedMessage id="connected" />
-                    </Typography>
-                </Box>
-            ),
-            children: undefined,
+            children: [
+                {
+                    index: true,
+                    element: (
+                        <Box mt={20}>
+                            <Typography
+                                variant="h3"
+                                color="textPrimary"
+                                align="center"
+                            >
+                                <FormattedMessage id="connected" />
+                            </Typography>
+                        </Box>
+                    ),
+                },
+                { path: pathUsers, element: <Users /> },
+                { path: pathConnections, element: <Connections /> },
+            ],
         },
         {
             path: '/sign-in-callback',
@@ -64,6 +84,7 @@ export function appRoutes(): RouteObject[] {
         {
             path: '*',
             element: <FormattedMessage tagName="h1" id="PageNotFound" />,
+            errorElement: <ErrorPage />,
         },
     ];
 }

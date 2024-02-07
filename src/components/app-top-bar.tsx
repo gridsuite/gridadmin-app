@@ -5,18 +5,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+    forwardRef,
+    FunctionComponent,
+    useEffect,
+    useState,
+} from 'react';
 import { LIGHT_THEME, logout, TopBar } from '@gridsuite/commons-ui';
 import Parameters, { useParameterState } from './parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppsMetadataSrv, StudySrv } from '../services';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ReactComponent as GridAdminLogoLight } from '../images/GridAdmin_logo_light.svg';
 import { ReactComponent as GridAdminLogoDark } from '../images/GridAdmin_logo_dark.svg';
 import AppPackage from '../../package.json';
 import { AppState } from '../redux/reducer';
 import { UserManager } from 'oidc-client';
+import { FormattedMessage } from 'react-intl';
+import { Tab, TabProps, Tabs, TabsProps } from '@mui/material';
+import { History, PeopleAlt } from '@mui/icons-material';
 
 export type AppTopBarProps = {
     user?: AppState['user'];
@@ -27,17 +35,28 @@ export type AppTopBarProps = {
 };
 const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
+
+    const [tabSelected, setTabSelected] = useState<TabsProps['value']>(false);
+    const tabs = [
+        {
+            to: '/users',
+            icon: <PeopleAlt />,
+            label: <FormattedMessage id="users" />,
+        },
+        {
+            to: '/connections',
+            icon: <History />,
+            label: <FormattedMessage id="connections" />,
+        },
+    ];
 
     const [appsAndUrls, setAppsAndUrls] = useState<
         Awaited<ReturnType<typeof AppsMetadataSrv.fetchAppsAndUrls>>
     >([]);
 
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
-
     const [themeLocal, handleChangeTheme] = useParameterState(PARAM_THEME);
-
     const [languageLocal, handleChangeLanguage] =
         useParameterState(PARAM_LANGUAGE);
 
@@ -82,7 +101,29 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
                 theme={themeLocal}
                 onLanguageClick={handleChangeLanguage}
                 language={languageLocal}
-            />
+            >
+                {props.user && (
+                    <nav>
+                        <Tabs
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            aria-label="Main navigation menu"
+                            disabled={!!props.user}
+                            value={tabSelected}
+                        >
+                            {tabs.map((value, index, array) => (
+                                <TabNavLink
+                                    tabValue={index}
+                                    setTabSelected={setTabSelected}
+                                    href={value.to}
+                                    icon={value.icon}
+                                    label={value.label}
+                                />
+                            ))}
+                        </Tabs>
+                    </nav>
+                )}
+            </TopBar>
             <Parameters
                 showParameters={showParameters}
                 hideParameters={() => setShowParameters(false)}
@@ -91,3 +132,32 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     );
 };
 export default AppTopBar;
+
+const TabNavLink: FunctionComponent<{
+    icon: TabProps['icon'];
+    label: TabProps['label'];
+    href: string;
+    tabValue: TabsProps['value'];
+    setTabSelected: (tab: TabsProps['value']) => void;
+}> = (props, context) => {
+    const fnActive = () => props.setTabSelected(props.tabValue);
+    return (
+        <Tab
+            icon={props.icon}
+            iconPosition="start"
+            label={props.label}
+            href={props.href}
+            LinkComponent={forwardRef((props, ref) => (
+                <NavLink
+                    innerRef={ref}
+                    to={props.href}
+                    {...props}
+                    style={({ isActive, isPending }) => {
+                        isActive && fnActive();
+                        return props.style;
+                    }}
+                />
+            ))}
+        />
+    );
+};
