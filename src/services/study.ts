@@ -18,7 +18,7 @@ export type ServerAbout = {
 
 export function getServersInfos(token: Token): Promise<ServerAbout[]> {
     return backendFetchJson(
-        `${STUDY_URL}/servers/about`,
+        `${STUDY_URL}/servers/about?view=admin`,
         {
             headers: {
                 Accept: 'application/json',

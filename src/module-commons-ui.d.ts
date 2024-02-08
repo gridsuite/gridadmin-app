@@ -2,3 +2,4 @@
 declare module '@gridsuite/commons-ui' /*{
     export = typeof import('@gridsuite/commons-ui');
 }*/;
+declare module '@gridsuite/commons-ui/es/utils/UserManagerMock';

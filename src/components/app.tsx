@@ -5,45 +5,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, {
+import {
     FunctionComponent,
+    PropsWithChildren,
     useCallback,
     useEffect,
-    useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    Navigate,
-    Route,
-    Routes,
-    useLocation,
-    useMatch,
-    useNavigate,
-} from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import { Box, Typography } from '@mui/material';
-import {
-    AuthenticationRouter,
-    CardErrorBoundary,
-    getPreLoginPath,
-    initializeAuthenticationProd,
-    useSnackMessage,
-} from '@gridsuite/commons-ui';
+import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
 import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
 } from '../redux/actions';
 import { AppState } from '../redux/reducer';
-import {
-    ConfigSrv,
-    ConfigParameter,
-    ConfigParameters,
-    UserAdminSrv,
-    AppsMetadataSrv,
-} from '../services';
+import { ConfigParameter, ConfigParameters, ConfigSrv } from '../services';
 import { connectNotificationsWsUpdateConfig } from '../utils/rest-api';
-import { UserManager } from 'oidc-client';
 import {
     APP_NAME,
     COMMON_APP_NAME,
@@ -51,33 +28,14 @@ import {
     PARAM_THEME,
 } from '../utils/config-params';
 import { getComputedLanguage } from '../utils/language';
-import AppTopBar, { AppTopBarProps } from './app-top-bar';
+import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { Grid } from '@mui/material';
 
-const App: FunctionComponent = () => {
+const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     const { snackError } = useSnackMessage();
-
-    const user = useSelector((state: AppState) => state.user);
-
-    const signInCallbackError = useSelector(
-        (state: AppState) => state.signInCallbackError
-    );
-    const authenticationRouterError = useSelector(
-        (state: AppState) => state.authenticationRouterError
-    );
-    const showAuthenticationRouterLogin = useSelector(
-        (state: AppState) => state.showAuthenticationRouterLogin
-    );
-
-    const [userManager, setUserManager] = useState<
-        AppTopBarProps['userManager']
-    >({ instance: null, error: null });
-
-    const navigate = useNavigate();
-
     const dispatch = useDispatch();
-
-    const location = useLocation();
+    const user = useSelector((state: AppState) => state.user);
 
     const updateParams: (p: ConfigParameters) => void = useCallback(
         (params: ConfigParameters) => {
@@ -126,43 +84,6 @@ const App: FunctionComponent = () => {
             return ws;
         }, [updateParams, snackError]);
 
-    // Can't use lazy initializer because useMatch is a hook
-    const [initialMatchSilentRenewCallbackUrl] = useState(
-        useMatch({
-            path: '/silent-renew-callback',
-        })
-    );
-    const [initialMatchSignInCallbackUrl] = useState(
-        useMatch({
-            path: '/sign-in-callback',
-        })
-    );
-
-    useEffect(() => {
-        AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
-            .then((authorizationCodeFlowEnabled) =>
-                initializeAuthenticationProd(
-                    dispatch,
-                    initialMatchSilentRenewCallbackUrl != null,
-                    fetch('idpSettings.json'),
-                    UserAdminSrv.fetchValidateUser,
-                    authorizationCodeFlowEnabled,
-                    initialMatchSignInCallbackUrl != null
-                )
-            )
-            .then((userManager: UserManager | undefined) => {
-                setUserManager({ instance: userManager || null, error: null });
-            })
-            .catch((error: any) => {
-                setUserManager({ instance: null, error: error.message });
-            });
-        // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
-    }, [
-        dispatch,
-        initialMatchSilentRenewCallbackUrl,
-        initialMatchSignInCallbackUrl,
-    ]);
-
     useEffect(() => {
         if (user !== null) {
             ConfigSrv.fetchConfigParameters(COMMON_APP_NAME)
@@ -195,67 +116,21 @@ const App: FunctionComponent = () => {
     ]);
 
     return (
-        <>
-            <AppTopBar user={user} userManager={userManager} />
-            <CardErrorBoundary>
-                {user !== null ? (
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <Box mt={20}>
-                                    <Typography
-                                        variant="h3"
-                                        color="textPrimary"
-                                        align="center"
-                                    >
-                                        Connected
-                                    </Typography>
-                                </Box>
-                            }
-                        />
-                        <Route
-                            path="/sign-in-callback"
-                            element={
-                                <Navigate
-                                    replace
-                                    to={getPreLoginPath() || '/'}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/logout-callback"
-                            element={
-                                <h1>
-                                    Error: logout failed; you are still logged
-                                    in.
-                                </h1>
-                            }
-                        />
-                        <Route
-                            path="*"
-                            element={
-                                <h1>
-                                    <FormattedMessage id="PageNotFound" />
-                                </h1>
-                            }
-                        />
-                    </Routes>
-                ) : (
-                    <AuthenticationRouter
-                        userManager={userManager}
-                        signInCallbackError={signInCallbackError}
-                        authenticationRouterError={authenticationRouterError}
-                        showAuthenticationRouterLogin={
-                            showAuthenticationRouterLogin
-                        }
-                        dispatch={dispatch}
-                        navigate={navigate}
-                        location={location}
-                    />
-                )}
-            </CardErrorBoundary>
-        </>
+        <Grid
+            container
+            direction="column"
+            spacing={0}
+            justifyContent="flex-start"
+            alignItems="stretch"
+            sx={{ height: '100vh' }}
+        >
+            <Grid item xs="auto" component={AppTopBar} />
+            <Grid item container xs component="main">
+                <CardErrorBoundary>
+                    {/*Router outlet ->*/ props.children}
+                </CardErrorBoundary>
+            </Grid>
+        </Grid>
     );
 };
 export default App;

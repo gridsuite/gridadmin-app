@@ -18,6 +18,7 @@ export type Url = Exclude<Parameters<typeof fetch>[0], Request>; //string | URL;
 export type InitRequest = Partial<Parameters<typeof fetch>[1]>; //Partial<RequestInit>;
 export type Token = string;
 export type ReqResponse = Awaited<ReturnType<typeof fetch>>;
+export type User = AppState['user'];
 
 const PREFIX_CONFIG_NOTIFICATION_WS = `${process.env.REACT_APP_WS_GATEWAY}/config-notification`;
 
@@ -38,9 +39,28 @@ export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
     return reconnectingWebSocket;
 }
 
-function getToken(): Token {
+export function getToken(user?: User): Token {
+    return (user ?? getUser())?.id_token;
+}
+
+export function getUser(): User {
     const state: AppState = store.getState();
-    return state.user?.id_token;
+    return state.user; //?? state.userManager?.instance?.getUser().then();
+}
+
+export function extractUserSub(user: User): Promise<unknown> {
+    const sub = user?.profile?.sub;
+    if (!sub) {
+        return Promise.reject(
+            new Error(
+                `Fetching access for missing user.profile.sub : ${JSON.stringify(
+                    user
+                )}`
+            )
+        );
+    } else {
+        return Promise.resolve(sub);
+    }
 }
 
 function parseError(text: string): any {
@@ -79,7 +99,7 @@ function prepareRequest(init?: InitRequest, token?: Token): RequestInit {
     }
     const initCopy: RequestInit = { ...init };
     initCopy.headers = new Headers(initCopy.headers || {});
-    const tokenCopy = token || getToken();
+    const tokenCopy = token ?? getToken();
     initCopy.headers.append('Authorization', `Bearer ${tokenCopy}`);
     return initCopy;
 }

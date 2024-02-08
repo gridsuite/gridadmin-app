@@ -6,17 +6,27 @@
  */
 
 import App from './app';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent, useCallback } from 'react';
+import { CssBaseline, responsiveFontSizes } from '@mui/material';
 import {
     createTheme,
     StyledEngineProvider,
     Theme,
+    ThemeOptions,
     ThemeProvider,
 } from '@mui/material/styles';
+import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
+//import { enUS as MuiPickersEnUS, frFR as MuiPickersFrFR } from '@mui/x-date-pickers/locales';
+import {
+    enUS as MuiDataGridEnUS,
+    frFR as MuiDataGridFrFR,
+} from '@mui/x-data-grid';
 import {
     card_error_boundary_en,
     card_error_boundary_fr,
     CardErrorBoundary,
+    LANG_ENGLISH,
+    LANG_FRENCH,
     LIGHT_THEME,
     login_en,
     login_fr,
@@ -25,19 +35,18 @@ import {
     top_bar_fr,
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import messages_en from '../translations/en.json';
 import messages_fr from '../translations/fr.json';
 import messages_plugins_en from '../plugins/translations/en.json';
 import messages_plugins_fr from '../plugins/translations/fr.json';
 import { store } from '../redux/store';
-import CssBaseline from '@mui/material/CssBaseline';
 import { PARAM_THEME } from '../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
 import { AppState } from '../redux/reducer';
+import { AppWithAuthRouter } from '../routes';
 
-const lightTheme: Theme = createTheme({
+const lightTheme: ThemeOptions = {
     palette: {
         mode: 'light',
     },
@@ -61,9 +70,9 @@ const lightTheme: Theme = createTheme({
         color: 'blue',
     },
     mapboxStyle: 'mapbox://styles/mapbox/light-v9',
-});
+};
 
-const darkTheme: Theme = createTheme({
+const darkTheme: ThemeOptions = {
     palette: {
         mode: 'dark',
     },
@@ -87,25 +96,28 @@ const darkTheme: Theme = createTheme({
         color: 'green',
     },
     mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
-});
+};
 
-const getMuiTheme = (theme: unknown): Theme => {
-    if (theme === LIGHT_THEME) {
-        return lightTheme;
-    } else {
-        return darkTheme;
-    }
+const getMuiTheme = (theme: unknown, locale: unknown): Theme => {
+    return responsiveFontSizes(
+        createTheme(
+            theme === LIGHT_THEME ? lightTheme : darkTheme,
+            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS, // MUI core translations
+            //locale === LANG_FRENCH ? MuiPickersFrFR : MuiPickersEnUS, // MUI x-date-pickers translations
+            locale === LANG_FRENCH ? MuiDataGridFrFR : MuiDataGridEnUS // MUI x-data-grid translations
+        )
+    );
 };
 
 const messages: Record<string, IntlConfig['messages']> = {
-    en: {
+    [LANG_ENGLISH]: {
         ...messages_en,
         ...login_en,
         ...top_bar_en,
         ...card_error_boundary_en,
         ...messages_plugins_en, // keep it at the end to allow translation overwriting
     },
-    fr: {
+    [LANG_FRENCH]: {
         ...messages_fr,
         ...login_fr,
         ...top_bar_fr,
@@ -116,38 +128,47 @@ const messages: Record<string, IntlConfig['messages']> = {
 
 const basename = new URL(document.querySelector('base')?.href || '').pathname;
 
-const AppWrapperWithRedux: FunctionComponent = () => {
+/**
+ * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
+ */
+const AppWrapperRouterLayout: typeof App = (props, context) => {
     const computedLanguage = useSelector(
         (state: AppState) => state.computedLanguage
     );
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
+    const getTheme = useCallback(getMuiTheme, []);
     return (
         <IntlProvider
             locale={computedLanguage}
             messages={messages[computedLanguage]}
         >
-            <BrowserRouter basename={basename}>
-                <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={getMuiTheme(theme)}>
-                        <SnackbarProvider hideIconVariant={false}>
-                            <CssBaseline />
-                            <CardErrorBoundary>
-                                <App />
-                            </CardErrorBoundary>
-                        </SnackbarProvider>
-                    </ThemeProvider>
-                </StyledEngineProvider>
-            </BrowserRouter>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={getTheme(theme, computedLanguage)}>
+                    <SnackbarProvider hideIconVariant={false}>
+                        <CssBaseline />
+                        <CardErrorBoundary>
+                            <App {...props}>{props.children}</App>
+                        </CardErrorBoundary>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </StyledEngineProvider>
         </IntlProvider>
     );
 };
 
-const AppWrapper: FunctionComponent = () => {
-    return (
-        <Provider store={store}>
-            <AppWrapperWithRedux />
-        </Provider>
-    );
-};
+/**
+ * Layer managing router depending on user authentication state
+ */
+const AppWrapperWithRedux: FunctionComponent = () => (
+    <AppWithAuthRouter basename={basename} layout={AppWrapperRouterLayout} />
+);
 
+/**
+ * Layer injecting Redux store in context
+ */
+const AppWrapper: FunctionComponent = () => (
+    <Provider store={store}>
+        <AppWrapperWithRedux />
+    </Provider>
+);
 export default AppWrapper;
