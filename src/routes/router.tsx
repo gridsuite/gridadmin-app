@@ -32,7 +32,7 @@ import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
-import App from '../components/app';
+import { App } from '../components/App';
 import { Connections, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManager_ } from '../redux/actions';
@@ -121,7 +121,7 @@ const AuthRouter: FunctionComponent<{
  * <br/>Sub-component because `useMatch` must be under router context.
  */
 const AppAuthStateWithRouterLayer: FunctionComponent<
-    PropsWithChildren<{ layout: typeof App }>
+    PropsWithChildren<{ layout: App }>
 > = (props, context) => {
     const AppRouterLayout = props.layout;
     const dispatch = useDispatch();
@@ -171,7 +171,7 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
  */
 export const AppWithAuthRouter: FunctionComponent<{
     basename: string;
-    layout: typeof App;
+    layout: App;
 }> = (props, context) => {
     const user = useSelector((state: AppState) => state.user);
     const router = useMemo(
@@ -207,7 +207,7 @@ export const AppWithAuthRouter: FunctionComponent<{
     return <RouterProvider router={router} />;
 };
 
-const LegacyAuthRouter: FunctionComponent<{ layout: typeof App }> = (props) => {
+const LegacyAuthRouter: FunctionComponent<{ layout: App }> = (props) => {
     const userManager = useSelector((state: AppState) => state.userManager);
     return (
         <AppAuthStateWithRouterLayer layout={props.layout}>

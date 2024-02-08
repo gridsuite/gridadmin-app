@@ -14,19 +14,23 @@ import {
     useState,
 } from 'react';
 import { LIGHT_THEME, logout, TopBar } from '@gridsuite/commons-ui';
-import Parameters, { useParameterState } from './parameters';
-import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
+import Parameters, { useParameterState } from '../parameters';
+import {
+    APP_NAME,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+} from '../../utils/config-params';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppsMetadataSrv, StudySrv } from '../services';
+import { AppsMetadataSrv, StudySrv } from '../../services';
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
-import { ReactComponent as GridAdminLogoLight } from '../images/GridAdmin_logo_light.svg';
-import { ReactComponent as GridAdminLogoDark } from '../images/GridAdmin_logo_dark.svg';
-import AppPackage from '../../package.json';
-import { AppState } from '../redux/reducer';
+import { ReactComponent as GridAdminLogoLight } from '../../images/GridAdmin_logo_light.svg';
+import { ReactComponent as GridAdminLogoDark } from '../../images/GridAdmin_logo_dark.svg';
+import AppPackage from '../../../package.json';
+import { AppState } from '../../redux/reducer';
 import { FormattedMessage } from 'react-intl';
 import { Tab, TabProps, Tabs } from '@mui/material';
 import { History, PeopleAlt } from '@mui/icons-material';
-import { MainPaths } from '../routes';
+import { MainPaths } from '../../routes';
 
 const TabNavLink: FunctionComponent<TabProps & { href: string }> = (
     props,

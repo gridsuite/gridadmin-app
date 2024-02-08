@@ -17,17 +17,17 @@ import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
-} from '../redux/actions';
-import { AppState } from '../redux/reducer';
-import { ConfigParameter, ConfigParameters, ConfigSrv } from '../services';
-import { connectNotificationsWsUpdateConfig } from '../utils/rest-api';
+} from '../../redux/actions';
+import { AppState } from '../../redux/reducer';
+import { ConfigParameter, ConfigParameters, ConfigSrv } from '../../services';
+import { connectNotificationsWsUpdateConfig } from '../../utils/rest-api';
 import {
     APP_NAME,
     COMMON_APP_NAME,
     PARAM_LANGUAGE,
     PARAM_THEME,
-} from '../utils/config-params';
-import { getComputedLanguage } from '../utils/language';
+} from '../../utils/config-params';
+import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { Grid } from '@mui/material';

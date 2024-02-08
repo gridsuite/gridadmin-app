@@ -7,7 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import App from './app';
-import { store } from '../redux/store';
+import { store } from '../../redux/store';
 import {
     createTheme,
     StyledEngineProvider,
@@ -16,7 +16,7 @@ import {
 import { SnackbarProvider } from '@gridsuite/commons-ui';
 import { UserManagerMock } from '@gridsuite/commons-ui/es/utils/UserManagerMock';
 import { CssBaseline } from '@mui/material';
-import { appRoutes } from '../routes';
+import { appRoutes } from '../../routes';
 
 let container: Element | any = null;
 
