@@ -30,6 +30,7 @@ import {
 import { getComputedLanguage } from '../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { Grid } from '@mui/material';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     const { snackError } = useSnackMessage();
@@ -115,14 +116,21 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     ]);
 
     return (
-        <>
-            <header>
-                <AppTopBar />
-            </header>
-            <CardErrorBoundary>
-                <main>{/*Router outlet ->*/ props.children}</main>
-            </CardErrorBoundary>
-        </>
+        <Grid
+            container
+            direction="column"
+            spacing={0}
+            justifyContent="flex-start"
+            alignItems="stretch"
+            sx={{ height: '100vh' }}
+        >
+            <Grid item xs="auto" component={AppTopBar} />
+            <Grid item container xs component="main">
+                <CardErrorBoundary>
+                    {/*Router outlet ->*/ props.children}
+                </CardErrorBoundary>
+            </Grid>
+        </Grid>
     );
 };
 export default App;

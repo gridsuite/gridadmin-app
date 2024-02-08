@@ -1,15 +1,19 @@
+import { Grid, Typography } from '@mui/material';
 import { useRouteError } from 'react-router-dom';
+import { ReactElement } from 'react';
 
-export default function ErrorPage() {
+export default function ErrorPage(): ReactElement {
     const error = useRouteError() as Record<any, any>;
     console.error(error);
     return (
-        <div id="error-page">
-            <h1>Oops!</h1>
-            <p>Sorry, an unexpected error has occurred.</p>
+        <Grid item id="error-page">
+            <Typography variant="h1">Oops!</Typography>
+            <Typography variant="body1" component="p">
+                Sorry, an unexpected error has occurred.
+            </Typography>
             <p>
                 <i>{error.statusText || error.message}</i>
             </p>
-        </div>
+        </Grid>
     );
 }

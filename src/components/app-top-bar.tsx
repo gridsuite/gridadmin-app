@@ -36,7 +36,7 @@ const TabNavLink: FunctionComponent<TabProps & { href: string }> = (
         {...props}
         iconPosition="start"
         LinkComponent={forwardRef((props, ref) => (
-            <NavLink innerRef={ref} to={props.href} {...props} />
+            <NavLink ref={ref} to={props.href} {...props} />
         ))}
     />
 );
@@ -46,7 +46,7 @@ const tabs = new Map<MainPaths, ReactElement>([
         MainPaths.users,
         <TabNavLink
             icon={<PeopleAlt />}
-            label={<FormattedMessage id="users" />}
+            label={<FormattedMessage id="appBar.tabs.users" />}
             href={`/${MainPaths.users}`}
             value={MainPaths.users}
             key={`tab-${MainPaths.users}`}
@@ -56,7 +56,7 @@ const tabs = new Map<MainPaths, ReactElement>([
         MainPaths.connections,
         <TabNavLink
             icon={<History />}
-            label={<FormattedMessage id="connections" />}
+            label={<FormattedMessage id="appBar.tabs.connections" />}
             href={`/${MainPaths.connections}`}
             value={MainPaths.connections}
             key={`tab-${MainPaths.connections}`}
@@ -136,7 +136,7 @@ const AppTopBar: FunctionComponent = () => {
                         variant="scrollable"
                         scrollButtons="auto"
                         aria-label="Main navigation menu"
-                        disabled={!user}
+                        sx={{ display: user ? 'hidden' : undefined }}
                         value={selectedTabValue}
                     >
                         {[...tabs.values()]}

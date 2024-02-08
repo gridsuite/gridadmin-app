@@ -12,7 +12,6 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { Box, Typography } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import {
     AuthenticationRouter,
@@ -38,6 +37,7 @@ import { Users } from '../components/users';
 import { Connections } from '../components/connections';
 import ErrorPage from './ErrorPage';
 import { updateUserManager_ } from '../redux/actions';
+import HomePage from './HomePage';
 
 export enum MainPaths {
     users = 'users',
@@ -51,17 +51,7 @@ export function appRoutes(): RouteObject[] {
             children: [
                 {
                     index: true,
-                    element: (
-                        <Box mt={20}>
-                            <Typography
-                                variant="h3"
-                                color="textPrimary"
-                                align="center"
-                            >
-                                <FormattedMessage id="connected" />
-                            </Typography>
-                        </Box>
-                    ),
+                    element: <HomePage />,
                 },
                 {
                     path: `/${MainPaths.users}`,

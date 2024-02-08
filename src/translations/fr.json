@@ -5,6 +5,22 @@
     "parameters": "Paramètres",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",
     "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres",
-    "users": "Utilisateurs",
-    "connections": "Connexions"
+
+    "appBar.tabs.users": "Utilisateurs",
+    "appBar.tabs.connections": "Connexions",
+
+    "table.noRows": "No data",
+
+    "connections.title": "Historique des connexions",
+    "connections.table.id": "ID",
+    "connections.table.id.description": "Identifiant de l'utilisateur",
+    "connections.table.firstConnection": "1ᵉʳᵉ connexion",
+    "connections.table.firstConnection.description": "La première tentative de connexion de l'utilisateur",
+    "connections.table.lastConnection": "Dernière conn.",
+    "connections.table.lastConnection.description": "La dernière tentative de connexion de l'utilisateur",
+    "connections.table.allowed": "Autorisé",
+    "connections.table.allowed.description": "Si l'utilisateur fût autorisé lors de sa dernière tentative de connexion",
+    "connections.table.allowed.yes": "Oui",
+    "connections.table.allowed.no": "Échec",
+    "connections.table.allowed.unknown": "\u00A0"
 }
