@@ -16,6 +16,7 @@ import {
 
 import {
     ComputedLanguageAction,
+    LanguageAction,
     SELECT_COMPUTED_LANGUAGE,
     SELECT_THEME,
     ThemeAction,
@@ -74,6 +75,7 @@ export type Actions =
     | UserManagerInstanceAction
     | UserManagerErrorAction
     | ThemeAction
+    | LanguageAction
     | ComputedLanguageAction;
 
 export type AppStateKey = keyof AppState;
