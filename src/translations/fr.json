@@ -12,7 +12,7 @@
     "table.noRows": "No data",
     "table.id": "ID",
     "table.id.description": "Identifiant de l'utilisateur",
-    "table.error.retrieve": "Error while retrieving data",
+    "table.error.retrieve": "Erreur pendant la récupération des données",
 
     "connections.title": "Historique des connexions",
     "connections.table.firstConnection": "1ᵉʳᵉ connexion",

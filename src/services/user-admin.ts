@@ -48,7 +48,7 @@ export type UserInfos = {
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
-    console.info(`Fetching access for user...`);
+    console.info(`Fetching list of users...`);
     return backendFetchJson(`${USER_ADMIN_URL}/users`, {
         headers: {
             Accept: 'application/json',
@@ -69,7 +69,7 @@ export type UserConnection = {
 };
 
 export function fetchUsersConnections(): Promise<UserConnection[]> {
-    console.info(`Fetching access for user...`);
+    console.info(`Fetching users connections...`);
     return backendFetchJson(`${USER_ADMIN_URL}/connections`, {
         headers: {
             Accept: 'application/json',
