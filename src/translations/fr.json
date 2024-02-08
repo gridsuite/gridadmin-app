@@ -10,10 +10,10 @@
     "appBar.tabs.connections": "Connexions",
 
     "table.noRows": "No data",
+    "table.id": "ID",
+    "table.id.description": "Identifiant de l'utilisateur",
 
     "connections.title": "Historique des connexions",
-    "connections.table.id": "ID",
-    "connections.table.id.description": "Identifiant de l'utilisateur",
     "connections.table.firstConnection": "1ᵉʳᵉ connexion",
     "connections.table.firstConnection.description": "La première tentative de connexion de l'utilisateur",
     "connections.table.lastConnection": "Dernière conn.",
@@ -22,5 +22,9 @@
     "connections.table.allowed.description": "Si l'utilisateur fût autorisé lors de sa dernière tentative de connexion",
     "connections.table.allowed.yes": "Oui",
     "connections.table.allowed.no": "Échec",
-    "connections.table.allowed.unknown": "\u00A0"
+    "connections.table.allowed.unknown": "\u00A0",
+
+    "users.title": "Liste des utilisateurs",
+    "users.table.isAdmin": "Admin",
+    "users.table.isAdmin.description": "L'utilisateur est administrateur de GridSuite"
 }

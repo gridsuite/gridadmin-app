@@ -22,5 +22,9 @@
     "connections.table.allowed.description": "Is the user as authorized last time?",
     "connections.table.allowed.yes": "Yes",
     "connections.table.allowed.no": "No",
-    "connections.table.allowed.unknown": "Unknown"
+    "connections.table.allowed.unknown": "Unknown",
+
+    "users.title": "List of GridSuite users",
+    "users.table.isAdmin": "Admin",
+    "users.table.isAdmin.description": "The users is an administrator of GridSuite"
 }

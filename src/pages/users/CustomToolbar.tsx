@@ -7,14 +7,14 @@ import {
     GridToolbarExport,
     GridToolbarFilterButton,
     GridToolbarProps,
-    GridToolbarQuickFilter, useGridApiContext,
-    useGridRootProps
+    GridToolbarQuickFilter,
+    useGridApiContext,
+    useGridRootProps,
 } from '@mui/x-data-grid';
 
-export const CustomToolbar: FunctionComponent<PropsWithChildren<GridToolbarProps>> = forwardRef<
-    HTMLDivElement,
-    GridToolbarProps
->((props, ref) => {
+export const CustomToolbar: FunctionComponent<
+    PropsWithChildren<GridToolbarProps>
+> = forwardRef<HTMLDivElement, GridToolbarProps>((props, ref) => {
     const rootProps = useGridRootProps();
     const apiRef = useGridApiContext();
 
@@ -31,7 +31,7 @@ export const CustomToolbar: FunctionComponent<PropsWithChildren<GridToolbarProps
     } else {
         return (
             <GridToolbarContainer ref={ref} {...props.other}>
-                <GridToolbarColumnsButton />
+                {/*<GridToolbarColumnsButton />*/}
                 <GridToolbarFilterButton />
                 <GridToolbarDensitySelector />
                 <GridToolbarExport
@@ -39,11 +39,12 @@ export const CustomToolbar: FunctionComponent<PropsWithChildren<GridToolbarProps
                     printOptions={props.printOptions}
                     //excelOptions={props.excelOptions}
                 />
+                {/*TODO refresh-data*/}
                 <Box sx={{ flex: 1 }} />
                 {props.showQuickFilter && (
                     <GridToolbarQuickFilter {...props.quickFilterProps} />
                 )}
-                {props.children} //TODO refresh-data
+                {props.children}
             </GridToolbarContainer>
         );
     }
