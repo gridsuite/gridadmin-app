@@ -13,6 +13,7 @@
     "table.id": "ID",
     "table.id.description": "Identifiant de l'utilisateur",
     "table.error.retrieve": "Error while retrieving data",
+    "table.error.delete": "Error while deleting user",
     "table.toolbar.refresh": "Refresh",
     "table.toolbar.refresh.label": "Refresh data",
     "table.toolbar.refresh.tooltip": "Refresh table data",

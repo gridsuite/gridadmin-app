@@ -2,37 +2,60 @@ import { DataGrid, DataGridProps } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay';
 import { GridValidRowModel } from '@mui/x-data-grid/models/gridRows';
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import {
+    FunctionComponent,
+    ReactElement,
+    Ref,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from 'react';
 import { deepmerge } from '@mui/utils';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import CustomToolbar from './CustomToolbar';
+import CustomToolbar, { CustomGridToolbarProps } from './CustomToolbar';
+
+export type CommonDataGridExposed = {
+    actionThenRefresh: (action: () => Promise<unknown>) => void;
+};
+interface CommonDataGridProps<R extends GridValidRowModel>
+    extends Omit<DataGridProps<R>, 'rows' | 'loading'> {
+    //rows: Partial<DataGridProps<R>['rows']>;
+    loader: () => Promise<R[]>;
+    exposesRef: ReturnType<typeof useRef<CommonDataGridExposed>>;
+}
 
 export default function CommonDataGrid<R extends GridValidRowModel>(
-    props: Omit<DataGridProps<R>, 'rows' | 'loading'> & {
-        //rows: Partial<DataGridProps<R>['rows']>;
-        loader: () => Promise<R[]>;
-    }
+    props: Readonly<CommonDataGridProps<R>>
 ): ReactElement {
     const { snackError } = useSnackMessage();
     const [data, setData] = useState<R[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const actionWithRefresh = useCallback(function action(
+        action: () => Promise<unknown>
+    ) {
+        //TODO how to block simultaneous calls?
+        setLoading(true);
+        action().finally(() => setLoading(false));
+    },
+    []);
+
     const { loader } = props; //for eslint who don't understand with usememo
-    const loadData = useMemo(
-        () =>
-            function loadData() {
-                setLoading(true);
-                loader()
-                    .then(setData, (error) => {
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'table.error.retrieve',
-                        });
-                        //TODO what to do with "old" data?
-                    })
-                    .finally(() => setLoading(false));
-            },
-        [loader, snackError]
+    const loadData = useCallback(
+        function loadData() {
+            actionWithRefresh(() =>
+                loader().then(setData, (error) => {
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'table.error.retrieve',
+                    });
+                    //TODO what to do with "old" data?
+                })
+            );
+        },
+        [actionWithRefresh, loader, snackError]
     );
 
     useEffect(() => {
@@ -40,6 +63,14 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
         loadData();
     }, [loadData]);
 
+    //expose to parent
+    useImperativeHandle<CommonDataGridExposed, CommonDataGridExposed>(
+        props.exposesRef as Ref<CommonDataGridExposed>,
+        () => ({
+            actionThenRefresh: actionWithRefresh,
+        }),
+        [actionWithRefresh]
+    );
     return (
         <DataGrid
             {...props}
@@ -48,8 +79,9 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
             density="compact"
             slots={{
                 //toolbar: GridToolbar,
-                toolbar: (props, context) => (
-                    <CustomToolbar {...props} refresh={loader} />
+                toolbar: useCallback<FunctionComponent<CustomGridToolbarProps>>(
+                    (props) => <CustomToolbar {...props} refresh={loadData} />,
+                    [loadData]
                 ),
                 loadingOverlay: LinearProgress,
                 noRowsOverlay: CustomNoRowsOverlay,

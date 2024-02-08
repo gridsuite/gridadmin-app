@@ -1,9 +1,13 @@
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useCallback, useMemo, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { GridColDef } from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import { Grid, Typography } from '@mui/material';
-import CommonDataGrid from '../../components/XDataGrid/CommonDataGrid';
+import { Delete } from '@mui/icons-material';
+import CommonDataGrid, {
+    CommonDataGridExposed,
+} from '../../components/XDataGrid/CommonDataGrid';
 import { UserAdminSrv, UserInfos } from '../../services';
+import { useSnackMessage } from '@gridsuite/commons-ui';
 
 function getRowId(row: UserInfos) {
     return row.sub;
@@ -12,6 +16,26 @@ function getRowId(row: UserInfos) {
 const UsersPage: FunctionComponent = () => {
     //const data = useLoaderData() as DeferredData;
     const intl = useIntl();
+    const { snackError } = useSnackMessage();
+    const gridRef = useRef<CommonDataGridExposed>();
+    const deleteUser = useCallback(
+        (id: string) => () =>
+            gridRef.current?.actionThenRefresh(() =>
+                UserAdminSrv.deleteUser(id).then(
+                    (success) =>
+                        snackError({
+                            messageTxt: `Error while deleting user ${id}`,
+                            headerId: 'table.error.delete',
+                        }),
+                    (error) =>
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'table.error.delete',
+                        })
+                )
+            ),
+        [snackError]
+    );
     const columns: GridColDef<UserInfos>[] = useMemo(
         () => [
             {
@@ -40,8 +64,20 @@ const UsersPage: FunctionComponent = () => {
                 editable: false,
                 filterable: true,
             },
+            {
+                field: 'actions',
+                type: 'actions',
+                width: 80,
+                getActions: (params) => [
+                    <GridActionsCellItem
+                        icon={<Delete />}
+                        label="Delete"
+                        onClick={deleteUser(params.row.sub)}
+                    />,
+                ],
+            },
         ],
-        [intl]
+        [intl, deleteUser]
     );
     return (
         <Grid item container direction="column" spacing={2}>
@@ -52,6 +88,7 @@ const UsersPage: FunctionComponent = () => {
             </Grid>
             <Grid item xs>
                 <CommonDataGrid
+                    exposesRef={gridRef}
                     loader={UserAdminSrv.fetchUsers}
                     columns={columns}
                     getRowId={getRowId}

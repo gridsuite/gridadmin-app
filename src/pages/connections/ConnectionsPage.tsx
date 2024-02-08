@@ -1,9 +1,11 @@
 import { GridColDef } from '@mui/x-data-grid';
 import { Chip, ChipProps, Grid, Typography } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useMemo, useRef } from 'react';
 import { Check, Close, QuestionMark } from '@mui/icons-material';
-import CommonDataGrid from '../../components/XDataGrid/CommonDataGrid';
+import CommonDataGrid, {
+    CommonDataGridExposed,
+} from '../../components/XDataGrid/CommonDataGrid';
 import { UserAdminSrv, UserConnection } from '../../services';
 
 function getRowId(row: UserConnection) {
@@ -46,6 +48,7 @@ const BoolValue: FunctionComponent<{
 export const ConnectionsPage: FunctionComponent = () => {
     //const [dataConnections, setDataConnections] = useState<UserConnection[] | null>(null);
     const intl = useIntl();
+    const gridRef = useRef<CommonDataGridExposed>();
     const columns: GridColDef<UserConnection>[] = useMemo(
         () => [
             {
@@ -119,6 +122,7 @@ export const ConnectionsPage: FunctionComponent = () => {
             </Grid>
             <Grid item xs>
                 <CommonDataGrid
+                    exposesRef={gridRef}
                     loader={UserAdminSrv.fetchUsersConnections}
                     columns={columns}
                     getRowId={getRowId}

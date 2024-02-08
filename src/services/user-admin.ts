@@ -61,6 +61,16 @@ export function fetchUsers(): Promise<UserInfos[]> {
     });
 }
 
+export function deleteUser(sub: string): Promise<void> {
+    console.info(`Deleting sub user "${sub}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })
+        .then((response: ReqResponse) => undefined)
+        .catch((reason) => {
+            console.error(`Error while deleting the servers data : ${reason}`);
+            throw reason;
+        });
+}
+
 export type UserConnection = {
     sub: string;
     firstConnection: string; //$date-time
