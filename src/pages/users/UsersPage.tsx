@@ -3,7 +3,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { GridColDef } from '@mui/x-data-grid';
 import { Grid, Typography } from '@mui/material';
 import CommonDataGrid from '../../components/XDataGrid/CommonDataGrid';
-import CustomToolbar from './CustomToolbar';
 import { UserAdminSrv, UserInfos } from '../../services';
 
 function getRowId(row: UserInfos) {
@@ -56,15 +55,12 @@ const UsersPage: FunctionComponent = () => {
                     loader={UserAdminSrv.fetchUsers}
                     columns={columns}
                     getRowId={getRowId}
-                    slots={{
-                        toolbar: CustomToolbar,
-                    }}
+                    ignoreDiacritics
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
                         },
                     }}
-                    ignoreDiacritics
                     initialState={{
                         filter: {
                             filterModel: {

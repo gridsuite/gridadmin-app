@@ -1,10 +1,11 @@
-import { DataGrid, DataGridProps, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, DataGridProps } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay';
 import { GridValidRowModel } from '@mui/x-data-grid/models/gridRows';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { deepmerge } from '@mui/utils';
 import { useSnackMessage } from '@gridsuite/commons-ui';
+import CustomToolbar from './CustomToolbar';
 
 export default function CommonDataGrid<R extends GridValidRowModel>(
     props: Omit<DataGridProps<R>, 'rows' | 'loading'> & {
@@ -46,7 +47,10 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
             loading={loading}
             density="compact"
             slots={{
-                toolbar: GridToolbar, //TODO (des)active as app parameter
+                //toolbar: GridToolbar,
+                toolbar: (props, context) => (
+                    <CustomToolbar {...props} refresh={loader} />
+                ),
                 loadingOverlay: LinearProgress,
                 noRowsOverlay: CustomNoRowsOverlay,
                 //TODO noResultsOverlay: ...

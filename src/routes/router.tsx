@@ -59,7 +59,6 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.users,
                     },
-                    //loader: () => defer({users: new Promise(r => setTimeout(r, 4000)).then(() => UserAdminSrv.fetchUsers())}),
                 },
                 {
                     path: `/${MainPaths.connections}`,
@@ -67,7 +66,6 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.connections,
                     },
-                    //loader: () => UserAdminSrv.fetchUsersConnections,
                 },
             ],
         },

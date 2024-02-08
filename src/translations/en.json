@@ -13,6 +13,9 @@
     "table.id": "ID",
     "table.id.description": "Identifiant de l'utilisateur",
     "table.error.retrieve": "Error while retrieving data",
+    "table.toolbar.refresh": "Refresh",
+    "table.toolbar.refresh.label": "Refresh data",
+    "table.toolbar.refresh.tooltip": "Refresh table data",
 
     "connections.table.id.description": "User login",
     "connections.table.firstConnection": "First see",
