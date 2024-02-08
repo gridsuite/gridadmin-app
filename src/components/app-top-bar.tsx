@@ -25,7 +25,7 @@ import AppPackage from '../../package.json';
 import { AppState } from '../redux/reducer';
 import { FormattedMessage } from 'react-intl';
 import { Tab, TabProps, Tabs } from '@mui/material';
-import { History, PeopleAlt } from '@mui/icons-material';
+import { Engineering, History, PeopleAlt } from '@mui/icons-material';
 import { MainPaths } from '../routes';
 
 const TabNavLink: FunctionComponent<TabProps & { href: string }> = (
@@ -60,6 +60,16 @@ const tabs = new Map<MainPaths, ReactElement>([
             href={`/${MainPaths.connections}`}
             value={MainPaths.connections}
             key={`tab-${MainPaths.connections}`}
+        />,
+    ],
+    [
+        MainPaths.maintenance,
+        <TabNavLink
+            icon={<Engineering />}
+            label={<FormattedMessage id="appBar.tabs.maintenance" />}
+            href={`/${MainPaths.maintenance}`}
+            value={MainPaths.maintenance}
+            key={`tab-${MainPaths.maintenance}`}
         />,
     ],
 ]);

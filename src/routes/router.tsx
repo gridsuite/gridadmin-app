@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import App from '../components/app';
-import { Connections, Users } from '../pages';
+import { Connections, MaintenanceMsg, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManager_ } from '../redux/actions';
 import HomePage from './HomePage';
@@ -41,6 +41,7 @@ import HomePage from './HomePage';
 export enum MainPaths {
     users = 'users',
     connections = 'connections',
+    maintenance = 'maintenance',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -68,6 +69,13 @@ export function appRoutes(): RouteObject[] {
                         appBar_tab: MainPaths.connections,
                     },
                     //loader: () => UserAdminSrv.fetchUsersConnections,
+                },
+                {
+                    path: `/${MainPaths.maintenance}`,
+                    element: <MaintenanceMsg />,
+                    handle: {
+                        appBar_tab: MainPaths.maintenance,
+                    },
                 },
             ],
         },

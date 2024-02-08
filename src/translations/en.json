@@ -8,6 +8,7 @@
 
     "appBar.tabs.users": "Users",
     "appBar.tabs.connections": "Connections",
+    "appBar.tabs.maintenance": "Maintenance",
 
     "table.noRows": "No data",
     "table.id": "ID",
