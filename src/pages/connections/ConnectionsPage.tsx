@@ -4,15 +4,9 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { FunctionComponent, useMemo } from 'react';
 import { Check, Close, QuestionMark } from '@mui/icons-material';
 import CommonDataGrid from '../../components/XDataGrid/CommonDataGrid';
+import { UserAdminSrv, UserConnection } from '../../services';
 
-type ConnectionRow = {
-    sub: string;
-    firstConnection: string; //Datetime
-    lastConnection: string; //Datetime
-    allowed: boolean;
-};
-
-function getRowId(row: ConnectionRow) {
+function getRowId(row: UserConnection) {
     return row.sub;
 }
 
@@ -49,29 +43,10 @@ const BoolValue: FunctionComponent<{
     return <Chip variant="outlined" size="small" {...conf} />;
 };
 
-const dataExample: ConnectionRow[] = [
-    {
-        sub: 'test',
-        firstConnection: `${new Date()}`,
-        lastConnection: `${new Date()}`,
-        allowed: true,
-    },
-    {
-        sub: 'test2',
-        firstConnection: `${new Date()}`,
-        lastConnection: `${new Date()}`,
-        allowed: true,
-    },
-    {
-        sub: 'test3',
-        firstConnection: `${new Date()}`,
-        lastConnection: `${new Date()}`,
-        allowed: false,
-    },
-];
 export const ConnectionsPage: FunctionComponent = () => {
+    //const [dataConnections, setDataConnections] = useState<UserConnection[] | null>(null);
     const intl = useIntl();
-    const columns: GridColDef<ConnectionRow>[] = useMemo(
+    const columns: GridColDef<UserConnection>[] = useMemo(
         () => [
             {
                 field: 'sub',
@@ -98,7 +73,7 @@ export const ConnectionsPage: FunctionComponent = () => {
                 flex: 0.3,
                 editable: false,
                 filterable: true,
-                //TODO valueFormatter
+                //TODO valueFormatter "2023-09-05T21:42:18.100151Z"
             },
             {
                 field: 'lastConnection',
@@ -116,7 +91,7 @@ export const ConnectionsPage: FunctionComponent = () => {
                 //TODO valueFormatter
             },
             {
-                field: 'allowed',
+                field: 'isAccepted',
                 headerName: intl.formatMessage({
                     id: 'connections.table.allowed',
                 }),
@@ -144,7 +119,7 @@ export const ConnectionsPage: FunctionComponent = () => {
             </Grid>
             <Grid item xs>
                 <CommonDataGrid
-                    rows={dataExample}
+                    loader={UserAdminSrv.fetchUsersConnections}
                     columns={columns}
                     getRowId={getRowId}
                 />

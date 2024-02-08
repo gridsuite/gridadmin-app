@@ -10,9 +10,10 @@
     "appBar.tabs.connections": "Connections",
 
     "table.noRows": "No data",
+    "table.id": "ID",
+    "table.id.description": "Identifiant de l'utilisateur",
+    "table.error.retrieve": "Error while retrieving data",
 
-    "connections.title": "History of connections",
-    "connections.table.id": "ID",
     "connections.table.id.description": "User login",
     "connections.table.firstConnection": "First see",
     "connections.table.firstConnection.description": "The first time the user try to connect",

@@ -2,17 +2,49 @@ import { DataGrid, DataGridProps, GridToolbar } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay';
 import { GridValidRowModel } from '@mui/x-data-grid/models/gridRows';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { deepmerge } from '@mui/utils';
+import { useSnackMessage } from '@gridsuite/commons-ui';
 
 export default function CommonDataGrid<R extends GridValidRowModel>(
-    props: DataGridProps<R>
+    props: Omit<DataGridProps<R>, 'rows' | 'loading'> & {
+        //rows: Partial<DataGridProps<R>['rows']>;
+        loader: () => Promise<R[]>;
+    }
 ): ReactElement {
+    const { snackError } = useSnackMessage();
+    const [data, setData] = useState<R[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const { loader } = props; //for eslint who don't understand with usememo
+    const loadData = useMemo(
+        () =>
+            function loadData() {
+                setLoading(true);
+                loader()
+                    .then(setData, (error) => {
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'table.error.retrieve',
+                        });
+                        //TODO what to do with "old" data?
+                    })
+                    .finally(() => setLoading(false));
+            },
+        [loader, snackError]
+    );
+
+    useEffect(() => {
+        //Load data one time at initial render
+        loadData();
+    }, [loadData]);
+
     return (
         <DataGrid
             {...props}
+            rows={data ?? []}
+            loading={loading}
             density="compact"
-            //TODO loading={false}
             slots={{
                 toolbar: GridToolbar, //TODO (des)active as app parameter
                 loadingOverlay: LinearProgress,

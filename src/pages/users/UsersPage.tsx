@@ -4,33 +4,16 @@ import { GridColDef } from '@mui/x-data-grid';
 import { Grid, Typography } from '@mui/material';
 import CommonDataGrid from '../../components/XDataGrid/CommonDataGrid';
 import CustomToolbar from './CustomToolbar';
+import { UserAdminSrv, UserInfos } from '../../services';
 
-type UserInfosRow = {
-    sub: string;
-    isAdmin: boolean;
-};
-
-function getRowId(row: UserInfosRow) {
+function getRowId(row: UserInfos) {
     return row.sub;
 }
 
-const dataExample: UserInfosRow[] = [
-    {
-        sub: 'test',
-        isAdmin: true,
-    },
-    {
-        sub: 'test2',
-        isAdmin: true,
-    },
-    {
-        sub: 'test3',
-        isAdmin: false,
-    },
-];
 const UsersPage: FunctionComponent = () => {
+    //const data = useLoaderData() as DeferredData;
     const intl = useIntl();
-    const columns: GridColDef<UserInfosRow>[] = useMemo(
+    const columns: GridColDef<UserInfos>[] = useMemo(
         () => [
             {
                 field: 'sub',
@@ -70,7 +53,7 @@ const UsersPage: FunctionComponent = () => {
             </Grid>
             <Grid item xs>
                 <CommonDataGrid
-                    rows={dataExample}
+                    loader={UserAdminSrv.fetchUsers}
                     columns={columns}
                     getRowId={getRowId}
                     slots={{

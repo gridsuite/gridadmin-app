@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import App from '../components/app';
-import { Users, Connections } from '../pages';
+import { Connections, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManager_ } from '../redux/actions';
 import HomePage from './HomePage';
@@ -47,6 +47,7 @@ export function appRoutes(): RouteObject[] {
     return [
         {
             path: '/',
+            errorElement: <ErrorPage />,
             children: [
                 {
                     index: true,
@@ -58,6 +59,7 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.users,
                     },
+                    //loader: () => defer({users: new Promise(r => setTimeout(r, 4000)).then(() => UserAdminSrv.fetchUsers())}),
                 },
                 {
                     path: `/${MainPaths.connections}`,
@@ -65,6 +67,7 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.connections,
                     },
+                    //loader: () => UserAdminSrv.fetchUsersConnections,
                 },
             ],
         },
