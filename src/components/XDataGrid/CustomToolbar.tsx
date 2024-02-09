@@ -1,9 +1,11 @@
 import { forwardRef, FunctionComponent, PropsWithChildren } from 'react';
 import { Box, Divider } from '@mui/material';
 import {
+    GridCsvExportMenuItem,
+    GridPrintExportMenuItem,
     GridToolbarContainer,
     GridToolbarDensitySelector,
-    GridToolbarExport,
+    GridToolbarExportContainer,
     GridToolbarFilterButton,
     GridToolbarProps,
     GridToolbarQuickFilter,
@@ -12,6 +14,7 @@ import {
 import GridToolbarRefresh, {
     GridToolbarRefreshProps,
 } from './GridToolbarRefresh';
+import GridJsonExportMenuItem from './GridJsonExportMenuItem';
 
 export type CustomGridToolbarProps = GridToolbarProps & {
     refresh?: GridToolbarRefreshProps['refresh'];
@@ -38,11 +41,13 @@ export const CustomToolbar: FunctionComponent<
                 {/*<GridToolbarColumnsButton />*/}
                 <GridToolbarFilterButton />
                 <GridToolbarDensitySelector />
-                <GridToolbarExport
-                    csvOptions={props.csvOptions}
-                    printOptions={props.printOptions}
-                    //excelOptions={props.excelOptions}
-                />
+                <GridToolbarExportContainer>
+                    <GridCsvExportMenuItem options={props.csvOptions} />
+                    <GridPrintExportMenuItem options={props.printOptions} />
+                    {/*<GridExcelExportMenuItem options={props.excelOptions} />*/}
+                    <GridJsonExportMenuItem options={undefined} />
+                    {/*TODO add to props definition*/}
+                </GridToolbarExportContainer>
                 {(props.showQuickFilter || props.refresh || props.children) && (
                     <>
                         <Divider orientation="vertical" />
