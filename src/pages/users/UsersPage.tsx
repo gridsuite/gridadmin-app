@@ -25,12 +25,12 @@ const UsersPage: FunctionComponent = () => {
                     (success) =>
                         snackError({
                             messageTxt: `Error while deleting user ${id}`,
-                            headerId: 'table.error.delete',
+                            headerId: 'users.table.error.delete',
                         }),
                     (error) =>
                         snackError({
                             messageTxt: error.message,
-                            headerId: 'table.error.delete',
+                            headerId: 'users.table.error.delete',
                         })
                 )
             ),
@@ -42,7 +42,7 @@ const UsersPage: FunctionComponent = () => {
                 field: 'sub',
                 headerName: intl.formatMessage({ id: 'table.id' }),
                 description: intl.formatMessage({
-                    id: 'table.id.description',
+                    id: 'users.table.id.description',
                 }),
                 type: 'string',
                 flex: 0.25,

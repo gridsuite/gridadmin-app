@@ -55,7 +55,7 @@ export const ConnectionsPage: FunctionComponent = () => {
                 field: 'sub',
                 headerName: intl.formatMessage({ id: 'table.id' }),
                 description: intl.formatMessage({
-                    id: 'table.id.description',
+                    id: 'connections.table.id.description',
                 }),
                 type: 'string',
                 flex: 0.25,

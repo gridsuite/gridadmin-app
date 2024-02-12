@@ -11,9 +11,7 @@
 
     "table.noRows": "No data",
     "table.id": "ID",
-    "table.id.description": "Identifiant de l'utilisateur",
     "table.error.retrieve": "Error while retrieving data",
-    "table.error.delete": "Error while deleting user",
     "table.toolbar.refresh": "Refresh",
     "table.toolbar.refresh.label": "Refresh data",
     "table.toolbar.refresh.tooltip": "Refresh table data",
@@ -30,6 +28,8 @@
     "connections.table.allowed.unknown": "Unknown",
 
     "users.title": "List of GridSuite users",
+    "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",
-    "users.table.isAdmin.description": "The users is an administrator of GridSuite"
+    "users.table.isAdmin.description": "The users is an administrator of GridSuite",
+    "users.table.error.delete": "Error while deleting user"
 }
