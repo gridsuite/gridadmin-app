@@ -131,7 +131,7 @@ const UsersPage: FunctionComponent = () => {
     };
     const onSubmit: SubmitHandler<{ user: string }> = (data) => {
         console.log('onSubmit(', data, ')');
-        addUser(data.user);
+        addUser(data.user.trim());
         handleClose();
     };
     const onSubmitForm = handleSubmit(onSubmit);
