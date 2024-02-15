@@ -4,8 +4,8 @@ export type * from './api';
 
 export function getWsBase(): string {
     return document.baseURI
-        .replace(/^http:\/\//, 'ws://')
-        .replace(/^https:\/\//, 'wss://');
+        .replace(/^http(s?):\/\//, 'ws$1://')
+        .replace(/\/$/, '');
 }
 
 export function getUrlWithToken(baseUrl: string): string {
