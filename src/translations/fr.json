@@ -15,6 +15,8 @@
     "table.toolbar.refresh": "Rafraîchir",
     "table.toolbar.refresh.label": "Refresh data",
     "table.toolbar.refresh.tooltip": "Actualiser les données du tableau",
+    "table.toolbar.add": "Ajouter",
+    "table.toolbar.delete": "Supprimer",
 
     "connections.title": "Historique des connexions",
     "connections.table.firstConnection": "1ᵉʳᵉ connexion",
@@ -31,5 +33,12 @@
     "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "L'utilisateur est administrateur de GridSuite",
-    "users.table.error.delete": "Erreur pendant la suppression de l'utilisateur"
+    "users.table.error.delete": "Erreur pendant la suppression de l'utilisateur",
+    "users.table.error.add": "Erreur pendant l'ajout de l'utilisateur",
+    "users.table.toolbar.add": "Add user",
+    "users.table.toolbar.add.label": "Add user",
+    "users.table.toolbar.add.tooltip": "Ajouter un utilisateur",
+    "users.form.title": "Ajouter un utilisateur",
+    "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
+    "users.form.field.username.label": ":ID utilisateur"
 }

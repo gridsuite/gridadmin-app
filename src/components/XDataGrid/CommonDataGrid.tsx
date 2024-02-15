@@ -15,6 +15,8 @@ import {
 import { deepmerge } from '@mui/utils';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import CustomToolbar, { CustomGridToolbarProps } from './CustomToolbar';
+import { LinearProgressProps } from '@mui/material/LinearProgress/LinearProgress';
+import { GridSlotsComponentsProps } from '@mui/x-data-grid/models/gridSlotsComponentsProps';
 
 export type CommonDataGridExposed = {
     actionThenRefresh: (action: () => Promise<unknown>) => void;
@@ -24,6 +26,7 @@ interface CommonDataGridProps<R extends GridValidRowModel>
     //rows: Partial<DataGridProps<R>['rows']>;
     loader: () => Promise<R[]>;
     exposesRef: ReturnType<typeof useRef<CommonDataGridExposed>>;
+    toolbarExtends?: CustomGridToolbarProps['children'];
 }
 
 export default function CommonDataGrid<R extends GridValidRowModel>(
@@ -32,37 +35,44 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
     const { snackError } = useSnackMessage();
     const [data, setData] = useState<R[] | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingRefresh, setLoadingRefresh] = useState<boolean>(false);
 
-    const actionWithRefresh = useCallback(function action(
+    const actionWithLoadingState = useCallback(function actionWithState(
         action: () => Promise<unknown>
     ) {
         //TODO how to block simultaneous calls?
         setLoading(true);
-        action().finally(() => setLoading(false));
+        return action().finally(() => {
+            setLoading(false);
+        });
     },
     []);
 
     const { loader } = props; //for eslint who don't understand with usememo
     const loadData = useCallback(
         function loadData() {
-            actionWithRefresh(() =>
-                loader().then(setData, (error) => {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'table.error.retrieve',
-                    });
-                    //TODO what to do with "old" data?
-                })
+            setLoadingRefresh(true);
+            actionWithLoadingState(() =>
+                loader()
+                    .then(setData, (error) => {
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'table.error.retrieve',
+                        });
+                        //TODO what to do with "old" data?
+                    })
+                    .finally(() => setLoadingRefresh(false))
             );
         },
-        [actionWithRefresh, loader, snackError]
+        [actionWithLoadingState, loader, snackError]
     );
 
-    useEffect(() => {
-        //Load data one time at initial render
-        loadData();
-    }, [loadData]);
-
+    const actionWithRefresh = useCallback(
+        function actionThenRefresh(action: () => Promise<unknown>) {
+            actionWithLoadingState(action).then(loadData);
+        },
+        [actionWithLoadingState, loadData]
+    );
     //expose to parent
     useImperativeHandle<CommonDataGridExposed, CommonDataGridExposed>(
         props.exposesRef as Ref<CommonDataGridExposed>,
@@ -71,6 +81,12 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
         }),
         [actionWithRefresh]
     );
+
+    useEffect(() => {
+        //Load data one time at initial render
+        loadData();
+    }, [loadData]);
+
     return (
         <DataGrid
             {...props}
@@ -80,8 +96,12 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
             slots={{
                 //toolbar: GridToolbar,
                 toolbar: useCallback<FunctionComponent<CustomGridToolbarProps>>(
-                    (props) => <CustomToolbar {...props} refresh={loadData} />,
-                    [loadData]
+                    (toolbarProps) => (
+                        <CustomToolbar {...toolbarProps} onRefresh={loadData}>
+                            {props.toolbarExtends}
+                        </CustomToolbar>
+                    ),
+                    [loadData, props.toolbarExtends]
                 ),
                 loadingOverlay: LinearProgress,
                 noRowsOverlay: CustomNoRowsOverlay,
@@ -103,6 +123,9 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
                             //https://mui.com/x/api/data-grid/grid-print-export-options/
                         },
                     },
+                    loadingOverlay: {
+                        variant: loadingRefresh ? 'query' : 'indeterminate',
+                    } as LinearProgressProps as GridSlotsComponentsProps['loadingOverlay'],
                 },
                 props.slotProps
             )}

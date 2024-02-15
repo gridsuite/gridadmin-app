@@ -13,12 +13,13 @@ import {
 } from '@mui/x-data-grid';
 import GridToolbarRefresh, {
     GridToolbarRefreshProps,
-} from './GridToolbarRefresh';
+} from './GridToolbarButtonRefresh';
 import GridJsonExportMenuItem from './GridJsonExportMenuItem';
 
-export type CustomGridToolbarProps = GridToolbarProps & {
-    refresh?: GridToolbarRefreshProps['refresh'];
-};
+export interface CustomGridToolbarProps extends GridToolbarProps {
+    onRefresh?: GridToolbarRefreshProps['refresh'];
+    //TODO remove multi selection
+}
 
 export const CustomToolbar: FunctionComponent<
     PropsWithChildren<CustomGridToolbarProps>
@@ -48,19 +49,23 @@ export const CustomToolbar: FunctionComponent<
                     <GridJsonExportMenuItem options={undefined} />
                     {/*TODO add to props definition*/}
                 </GridToolbarExportContainer>
-                {(props.showQuickFilter || props.refresh || props.children) && (
+                {(props.children || props.onRefresh) && (
                     <>
                         <Divider orientation="vertical" />
-                        {props.refresh && (
-                            <GridToolbarRefresh refresh={props.refresh} />
+                        {props.onRefresh && (
+                            <GridToolbarRefresh refresh={props.onRefresh} />
                         )}
+                        {props.children}
+                    </>
+                )}
+                {props.showQuickFilter && (
+                    <>
                         <Box sx={{ flex: 1 }} />
                         {props.showQuickFilter && (
                             <GridToolbarQuickFilter
                                 {...props.quickFilterProps}
                             />
                         )}
-                        {props.children}
                     </>
                 )}
             </GridToolbarContainer>

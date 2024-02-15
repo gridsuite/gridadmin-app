@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import { SvgIconComponent } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material';
 import { SvgIconTypeMap } from '@mui/material/SvgIcon/SvgIcon';
@@ -8,12 +7,6 @@ type ExtendIconProps<I extends SvgIconComponent = any> = SvgIconProps<
     SvgIconTypeMap['defaultComponent'],
     { component: I }
 >;
-interface ExtendIcon<
-    I extends SvgIconComponent = any,
-    P extends ExtendIconProps<I> = any
-> extends FunctionComponent<P> {
-    (props: P, context?: any): I;
-}
 
 const style: CSSObject = {
     animation: 'spin 2s linear infinite',
@@ -27,7 +20,10 @@ const style: CSSObject = {
     },
 };
 
-export const RotateIcon: ExtendIcon = (props, context) => (
-    <props.component {...props} sx={style} />
-);
-export default RotateIcon;
+export default function RotateIcon<I extends SvgIconComponent>(
+    props: ExtendIconProps<I>
+) {
+    const { component, ...restProps } = props;
+    const Cmpnt = component as SvgIconComponent;
+    return <Cmpnt {...restProps} sx={style} />;
+}
