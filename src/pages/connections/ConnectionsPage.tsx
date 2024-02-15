@@ -120,7 +120,7 @@ export const ConnectionsPage: FunctionComponent = () => {
                     <FormattedMessage id="connections.title" />
                 </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid item xs sx={{ width: 1 }}>
                 <CommonDataGrid
                     exposesRef={gridRef}
                     loader={UserAdminSrv.fetchUsersConnections}

@@ -20,7 +20,3 @@ code {
 body > iframe[width='0'][height='0'] {
     border: 0;
 }
-
-#root {
-    height: 100vh;
-}

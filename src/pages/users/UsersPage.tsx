@@ -143,7 +143,7 @@ const UsersPage: FunctionComponent = () => {
                     <FormattedMessage id="users.title" />
                 </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid item xs sx={{ width: 1 }}>
                 <CommonDataGrid
                     exposesRef={gridRef}
                     loader={UserAdminSrv.fetchUsers}

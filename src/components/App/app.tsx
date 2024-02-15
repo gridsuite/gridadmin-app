@@ -122,7 +122,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
             spacing={0}
             justifyContent="flex-start"
             alignItems="stretch"
-            sx={{ height: '100vh' }}
+            sx={{ height: '100vh', width: '100vw' }}
         >
             <Grid item xs="auto" component={AppTopBar} />
             <Grid item container xs component="main">
