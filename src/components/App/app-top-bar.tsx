@@ -140,7 +140,7 @@ const AppTopBar: FunctionComponent = () => {
                         variant="scrollable"
                         scrollButtons="auto"
                         aria-label="Main navigation menu"
-                        sx={{ display: user ? 'hidden' : undefined }}
+                        sx={{ visibility: !user ? 'hidden' : undefined }}
                         value={selectedTabValue}
                     >
                         {[...tabs.values()]}
