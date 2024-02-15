@@ -1,5 +1,5 @@
 import { getAppName } from '../utils/config-params';
-import { backendFetch, backendFetchJson } from '../utils/rest-api';
+import { backendFetch, backendFetchJson } from '../utils/api-rest';
 
 const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/config`;
 
