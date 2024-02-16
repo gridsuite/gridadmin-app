@@ -33,6 +33,9 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import { Grid } from '@mui/material';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
+    console.count('app render');
+    console?.timeStamp('app render');
+
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch();
     const user = useSelector((state: AppState) => state.user);

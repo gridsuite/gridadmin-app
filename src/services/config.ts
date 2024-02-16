@@ -14,18 +14,16 @@ export function fetchConfigParameters(
     appName: string
 ): Promise<ConfigParameters> {
     appName = appName.toLowerCase();
-    console.info(`Fetching UI configuration params for app : ${appName}`);
-    const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters`;
-    return backendFetchJson(fetchParams);
+    console.debug(`Fetching UI configuration params for app : ${appName}`);
+    return backendFetchJson(`${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters`);
 }
 
 export function fetchConfigParameter(
     name: string
 ): ReturnType<typeof backendFetchJson> {
     const appName = getAppName(name).toLowerCase();
-    console.info(`Fetching UI config parameter '${name}' for app '${appName}'`);
-    const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}`;
-    return backendFetchJson(fetchParams);
+    console.debug(`Fetching UI config parameter '${name}' for app '${appName}'`);
+    return backendFetchJson(`${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}`);
 }
 
 export function updateConfigParameter(
@@ -33,11 +31,6 @@ export function updateConfigParameter(
     value: Parameters<typeof encodeURIComponent>[0]
 ): ReturnType<typeof backendFetch> {
     const appName = getAppName(name).toLowerCase();
-    console.info(
-        `Updating config parameter '${name}=${value}' for app '${appName}'`
-    );
-    const updateParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}?value=${encodeURIComponent(
-        value
-    )}`;
-    return backendFetch(updateParams, { method: 'put' });
+    console.debug(`Updating config parameter '${name}=${value}' for app '${appName}'`);
+    return backendFetch(`${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}?value=${encodeURIComponent(value)}`, { method: 'put' });
 }

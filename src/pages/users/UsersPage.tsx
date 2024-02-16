@@ -130,7 +130,9 @@ const UsersPage: FunctionComponent = () => {
         clearErrors();
     };
     const onSubmit: SubmitHandler<{ user: string }> = (data) => {
-        console.log('onSubmit(', data, ')');
+        console.groupCollapsed('onSubmit(...)');
+        console.dir(data);
+        console.groupEnd();
         addUser(data.user.trim());
         handleClose();
     };

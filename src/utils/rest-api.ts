@@ -33,7 +33,7 @@ export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
     );
     reconnectingWebSocket.onopen = function (event: Event) {
         console.info(
-            `Connected Websocket update config ui ${webSocketUrl} ...`
+            `Connected Websocket update config ui: ${webSocketUrl} ...`
         );
     };
     return reconnectingWebSocket;

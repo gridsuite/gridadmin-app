@@ -7,14 +7,14 @@ function fetchEnv(): Promise<EnvJson> {
 }
 
 export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
-    console.info(`Fetching authorization code flow feature flag...`);
+    console.debug(`Fetching authorization code flow feature flag...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/authentication.json`)
         )
         .then((res: ReqResponse) => res.json())
         .then((res: Record<string, any>) => {
-            console.log(
+            console.info(
                 `Authorization code flow is ${
                     res.authorizationCodeFlowFeatureFlag
                         ? 'enabled'
@@ -33,7 +33,7 @@ export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
 }
 
 export function fetchVersion(): Promise<Record<string, any>> {
-    console.info(`Fetching global metadata...`);
+    console.debug(`Fetching global metadata...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/version.json`)
@@ -46,7 +46,7 @@ export function fetchVersion(): Promise<Record<string, any>> {
 }
 
 export function fetchAppsAndUrls(): Promise<Array<Record<string, any>>> {
-    console.info(`Fetching apps and urls...`);
+    console.debug(`Fetching apps and urls...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`)

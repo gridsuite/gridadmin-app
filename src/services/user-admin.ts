@@ -20,11 +20,9 @@ export function getUserSub(): Promise<unknown> {
 export function fetchValidateUser(user: User): Promise<boolean> {
     return extractUserSub(user)
         .then((sub) => {
-            console.info(`Fetching access for user...`);
-            const CheckAccessUrl = `${USER_ADMIN_URL}/users/${sub}`;
-            console.debug(CheckAccessUrl);
+            console.debug(`Fetching access for user "${sub}"...`);
             return backendFetch(
-                CheckAccessUrl,
+                `${USER_ADMIN_URL}/users/${sub}`,
                 { method: 'head' },
                 getToken(user)
             );
@@ -48,7 +46,7 @@ export type UserInfos = {
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
-    console.info(`Fetching list of users...`);
+    console.debug(`Fetching list of users...`);
     return backendFetchJson(`${USER_ADMIN_URL}/users`, {
         headers: {
             Accept: 'application/json',
@@ -62,7 +60,7 @@ export function fetchUsers(): Promise<UserInfos[]> {
 }
 
 export function deleteUser(sub: string): Promise<void> {
-    console.info(`Deleting sub user "${sub}"...`);
+    console.debug(`Deleting sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })
         .then((response: ReqResponse) => undefined)
         .catch((reason) => {
@@ -72,7 +70,7 @@ export function deleteUser(sub: string): Promise<void> {
 }
 
 export function addUser(sub: string): Promise<void> {
-    console.info(`Creating sub user "${sub}"...`);
+    console.debug(`Creating sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'put' })
         .then((response: ReqResponse) => undefined)
         .catch((reason) => {
@@ -89,7 +87,7 @@ export type UserConnection = {
 };
 
 export function fetchUsersConnections(): Promise<UserConnection[]> {
-    console.info(`Fetching users connections...`);
+    console.debug(`Fetching users connections...`);
     return backendFetchJson(`${USER_ADMIN_URL}/connections`, {
         headers: {
             Accept: 'application/json',
