@@ -37,12 +37,12 @@ import {
 import { AppState } from '../redux/reducer';
 import {
     ConfigSrv,
+    ConfigNotif,
     ConfigParameter,
     ConfigParameters,
     UserAdminSrv,
     AppsMetadataSrv,
 } from '../services';
-import { connectNotificationsWsUpdateConfig } from '../utils/rest-api';
 import { UserManager } from 'oidc-client';
 import {
     APP_NAME,
@@ -104,7 +104,7 @@ const App: FunctionComponent = () => {
 
     const connectNotificationsUpdateConfig: () => ReconnectingWebSocket =
         useCallback(() => {
-            const ws = connectNotificationsWsUpdateConfig();
+            const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
                 if (eventData?.headers?.parameterName) {
@@ -174,7 +174,7 @@ const App: FunctionComponent = () => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME)
+            ConfigSrv.fetchConfigParameters(APP_NAME.toLowerCase())
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
