@@ -9,7 +9,6 @@ export function getWsBase(): string {
 }
 
 export function getUrlWithToken(baseUrl: string): string {
-    return `${baseUrl}${
-        baseUrl.includes('?') ? '&' : '?'
-    }access_token=${getToken()}`;
+    const querySymbol = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${querySymbol}access_token=${getToken()}`;
 }
