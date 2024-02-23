@@ -46,7 +46,6 @@ const BoolValue: FunctionComponent<{
 };
 
 export const ConnectionsPage: FunctionComponent = () => {
-    //const [dataConnections, setDataConnections] = useState<UserConnection[] | null>(null);
     const intl = useIntl();
     const gridRef = useRef<CommonDataGridExposed>();
     const columns: GridColDef<UserConnection>[] = useMemo(

@@ -18,6 +18,7 @@
     "table.toolbar.add": "Add",
     "table.toolbar.delete": "Delete",
 
+    "connections.title": "Connections history",
     "connections.table.id.description": "User login",
     "connections.table.firstConnection": "First see",
     "connections.table.firstConnection.description": "The first time the user try to connect",

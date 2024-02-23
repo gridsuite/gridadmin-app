@@ -25,10 +25,6 @@ export const CustomToolbar: FunctionComponent<
     PropsWithChildren<CustomGridToolbarProps>
 > = forwardRef<HTMLDivElement, CustomGridToolbarProps>((props, ref) => {
     const rootProps = useGridRootProps();
-    //const apiRef = useGridApiContext();
-
-    //const handleExport = (options: GridCsvExportOptions) => apiRef.current.exportDataAsCsv(options);
-
     if (
         rootProps.disableColumnFilter &&
         rootProps.disableColumnSelector &&

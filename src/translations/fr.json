@@ -19,6 +19,7 @@
     "table.toolbar.delete": "Supprimer",
 
     "connections.title": "Historique des connexions",
+    "connections.table.id.description": "Identifiant de l'utilisateur",
     "connections.table.firstConnection": "1ᵉʳᵉ connexion",
     "connections.table.firstConnection.description": "La première tentative de connexion de l'utilisateur",
     "connections.table.lastConnection": "Dernière conn.",

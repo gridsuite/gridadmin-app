@@ -23,7 +23,6 @@ export type CommonDataGridExposed = {
 };
 interface CommonDataGridProps<R extends GridValidRowModel>
     extends Omit<DataGridProps<R>, 'rows' | 'loading'> {
-    //rows: Partial<DataGridProps<R>['rows']>;
     loader: () => Promise<R[]>;
     exposesRef: ReturnType<typeof useRef<CommonDataGridExposed>>;
     toolbarExtends?: CustomGridToolbarProps['children'];
@@ -82,10 +81,14 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
         [actionWithRefresh]
     );
 
+    const [firstRun, setFirstRun] = useState<boolean>(true);
     useEffect(() => {
-        //Load data one time at initial render
-        loadData();
-    }, [loadData]);
+        // Load data one time at initial render
+        if (firstRun) {
+            loadData();
+            setFirstRun(false);
+        }
+    }, [firstRun, loadData]);
 
     return (
         <DataGrid
@@ -94,7 +97,6 @@ export default function CommonDataGrid<R extends GridValidRowModel>(
             loading={loading}
             density="compact"
             slots={{
-                //toolbar: GridToolbar,
                 toolbar: useCallback<FunctionComponent<CustomGridToolbarProps>>(
                     (toolbarProps) => (
                         <CustomToolbar {...toolbarProps} onRefresh={loadData}>

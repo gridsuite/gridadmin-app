@@ -35,7 +35,7 @@ import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
 import { Connections, Users } from '../pages';
 import ErrorPage from './ErrorPage';
-import { updateUserManager_ } from '../redux/actions';
+import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 
 export enum MainPaths {
@@ -149,10 +149,12 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                 )
             )
             .then((userManager: UserManager | undefined) => {
-                dispatch(updateUserManager_(userManager ?? null, null));
+                dispatch(
+                    updateUserManagerDestructured(userManager ?? null, null)
+                );
             })
             .catch((error: any) => {
-                dispatch(updateUserManager_(null, error.message));
+                dispatch(updateUserManagerDestructured(null, error.message));
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
     }, [

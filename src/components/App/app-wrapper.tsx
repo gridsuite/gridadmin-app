@@ -16,7 +16,6 @@ import {
     ThemeProvider,
 } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
-//import { enUS as MuiPickersEnUS, frFR as MuiPickersFrFR } from '@mui/x-date-pickers/locales';
 import {
     enUS as MuiDataGridEnUS,
     frFR as MuiDataGridFrFR,
@@ -103,7 +102,6 @@ const getMuiTheme = (theme: unknown, locale: unknown): Theme => {
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
             locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS, // MUI core translations
-            //locale === LANG_FRENCH ? MuiPickersFrFR : MuiPickersEnUS, // MUI x-date-pickers translations
             locale === LANG_FRENCH ? MuiDataGridFrFR : MuiDataGridEnUS // MUI x-data-grid translations
         )
     );

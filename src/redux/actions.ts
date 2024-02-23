@@ -20,14 +20,11 @@ export function updateUserManager(
 ): UserManagerAction {
     return { type: UPDATE_USER_MANAGER_STATE, userManager };
 }
-export function updateUserManager_(
+export function updateUserManagerDestructured(
     instance: UserManagerState['instance'],
     error: UserManagerState['error']
 ): UserManagerAction {
-    return {
-        type: UPDATE_USER_MANAGER_STATE,
-        userManager: { instance, error },
-    };
+    return updateUserManager({ instance, error });
 }
 
 export const UPDATE_USER_MANAGER_INSTANCE = 'UPDATE_USER_MANAGER_INSTANCE';
