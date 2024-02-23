@@ -1,12 +1,5 @@
-import {
-    backendFetch,
-    backendFetchJson,
-    extractUserSub,
-    getToken,
-    getUser,
-    ReqResponse,
-    User,
-} from '../utils/rest-api';
+import { backendFetch, backendFetchJson, ReqResponse } from '../utils/api-rest';
+import { extractUserSub, getToken, getUser, User } from '../utils/api';
 
 const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/user-admin/v1`;
 

@@ -19,8 +19,12 @@ import {
     selectTheme,
 } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { ConfigParameter, ConfigParameters, ConfigSrv } from '../../services';
-import { connectNotificationsWsUpdateConfig } from '../../utils/rest-api';
+import {
+    ConfigNotif,
+    ConfigParameter,
+    ConfigParameters,
+    ConfigSrv,
+} from '../../services';
 import {
     APP_NAME,
     COMMON_APP_NAME,
@@ -65,7 +69,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
 
     const connectNotificationsUpdateConfig: () => ReconnectingWebSocket =
         useCallback(() => {
-            const ws = connectNotificationsWsUpdateConfig();
+            const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
                 if (eventData?.headers?.parameterName) {
@@ -98,7 +102,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME)
+            ConfigSrv.fetchConfigParameters(APP_NAME.toLowerCase())
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

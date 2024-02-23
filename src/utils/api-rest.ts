@@ -5,10 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { APP_NAME } from './config-params';
-import { store } from '../redux/store';
-import ReconnectingWebSocket, { Event } from 'reconnecting-websocket';
-import { AppState } from '../redux/reducer';
+import { getToken, parseError, Token } from './api';
+
+export type * from './api';
 
 export interface ErrorWithStatus extends Error {
     status?: number;
@@ -16,60 +15,7 @@ export interface ErrorWithStatus extends Error {
 
 export type Url = Exclude<Parameters<typeof fetch>[0], Request>; //string | URL;
 export type InitRequest = Partial<Parameters<typeof fetch>[1]>; //Partial<RequestInit>;
-export type Token = string;
 export type ReqResponse = Awaited<ReturnType<typeof fetch>>;
-export type User = AppState['user'];
-
-const PREFIX_CONFIG_NOTIFICATION_WS = `${process.env.REACT_APP_WS_GATEWAY}/config-notification`;
-
-export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
-    const webSocketBaseUrl = document.baseURI
-        .replace(/^http:\/\//, 'ws://')
-        .replace(/^https:\/\//, 'wss://');
-    const webSocketUrl = `${webSocketBaseUrl}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?appName=${APP_NAME}`;
-
-    const reconnectingWebSocket = new ReconnectingWebSocket(
-        () => `${webSocketUrl}&access_token=${getToken()}`
-    );
-    reconnectingWebSocket.onopen = function (event: Event) {
-        console.info(
-            `Connected Websocket update config ui: ${webSocketUrl} ...`
-        );
-    };
-    return reconnectingWebSocket;
-}
-
-export function getToken(user?: User): Token {
-    return (user ?? getUser())?.id_token;
-}
-
-export function getUser(): User {
-    const state: AppState = store.getState();
-    return state.user; //?? state.userManager?.instance?.getUser().then();
-}
-
-export function extractUserSub(user: User): Promise<unknown> {
-    const sub = user?.profile?.sub;
-    if (!sub) {
-        return Promise.reject(
-            new Error(
-                `Fetching access for missing user.profile.sub : ${JSON.stringify(
-                    user
-                )}`
-            )
-        );
-    } else {
-        return Promise.resolve(sub);
-    }
-}
-
-function parseError(text: string): any {
-    try {
-        return JSON.parse(text);
-    } catch (err) {
-        return null;
-    }
-}
 
 function handleError(response: ReqResponse): Promise<never> {
     return response.text().then((text: string) => {

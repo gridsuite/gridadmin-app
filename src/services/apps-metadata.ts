@@ -1,4 +1,4 @@
-import { ReqResponse } from '../utils/rest-api';
+import { ReqResponse } from '../utils/api-rest';
 
 export type EnvJson = typeof import('../../public/env.json');
 
