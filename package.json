@@ -6,7 +6,7 @@
     "private": true,
     "bugs": "https://github.com/gridsuite/gridadmin-app/issues",
     "repository": {
-        "type": "TODO",
+        "type": "git",
         "url": "https://github.com/gridsuite/gridadmin-app"
     },
     "engines": {
