@@ -64,7 +64,7 @@ export function deleteUser(sub: string): Promise<void> {
 
 export function addUser(sub: string): Promise<void> {
     console.debug(`Creating sub user "${sub}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'put' })
+    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
         .then((response: ReqResponse) => undefined)
         .catch((reason) => {
             console.error(`Error while pushing the data : ${reason}`);
