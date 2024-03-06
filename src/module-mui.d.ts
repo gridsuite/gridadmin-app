@@ -4,6 +4,7 @@ import {
     Theme as MuiTheme,
     ThemeOptions as MuiThemeOptions,
 } from '@mui/material/styles/createTheme';
+import { AgGridClasses, AgGridCss } from './components/Grid/AgGrid/ag-theme-alpine';
 
 declare module '@mui/material/styles/createTheme' {
     export * from '@mui/material/styles/createTheme';
@@ -15,8 +16,12 @@ declare module '@mui/material/styles/createTheme' {
         circle_hover: CSSObject;
         link: CSSObject;
         mapboxStyle: string;
+        agGridTheme: 'ag-theme-alpine' | 'ag-theme-alpine-dark';
+        agGridThemeOverride?: CSSObject & {
+            [K in AgGridCss | AgGridClasses]?: CSSObject;
+        };
     };
-    export interface Theme extends MuiTheme, Required<ThemeExtension> {}
+    export interface Theme extends MuiTheme, ThemeExtension {}
     // allow configuration using `createTheme`
     export interface ThemeOptions
         extends MuiThemeOptions,

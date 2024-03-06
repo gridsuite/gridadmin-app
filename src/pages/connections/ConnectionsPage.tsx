@@ -1,129 +1,96 @@
-import { GridColDef } from '@mui/x-data-grid';
-import { Chip, ChipProps, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FunctionComponent, useMemo, useRef } from 'react';
-import { Check, Close, QuestionMark } from '@mui/icons-material';
-import CommonDataGrid, {
-    CommonDataGridExposed,
-} from '../../components/XDataGrid/CommonDataGrid';
+import DataGrid, { DataGridRef } from '../../components/Grid/DataGrid';
 import { UserAdminSrv, UserConnection } from '../../services';
+import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
+import { AgColDef } from '../../components/Grid/AgGrid/AgGrid.type';
+import { GridColumnTypes } from '../../components/Grid/GridFormat';
 
-function getRowId(row: UserConnection) {
-    return row.sub;
+function getRowId(params: GetRowIdParams<UserConnection>): string {
+    return params.data.sub;
 }
-
-const BoolValue: FunctionComponent<{
-    value: boolean | null | undefined;
-}> = (props, context) => {
-    const conf = ((value: unknown): Partial<ChipProps> => {
-        switch (value) {
-            case true:
-                return {
-                    label: (
-                        <FormattedMessage id="connections.table.allowed.yes" />
-                    ),
-                    icon: <Check fontSize="small" color="success" />,
-                    color: 'success',
-                };
-            case false:
-                return {
-                    label: (
-                        <FormattedMessage id="connections.table.allowed.no" />
-                    ),
-                    icon: <Close fontSize="small" color="error" />,
-                    color: 'error',
-                };
-            default:
-                return {
-                    label: (
-                        <FormattedMessage id="connections.table.allowed.unknown" />
-                    ),
-                    icon: <QuestionMark fontSize="small" />,
-                };
-        }
-    })(props.value);
-    return <Chip variant="outlined" size="small" {...conf} />;
-};
 
 export const ConnectionsPage: FunctionComponent = () => {
     const intl = useIntl();
-    const gridRef = useRef<CommonDataGridExposed>();
-    const columns: GridColDef<UserConnection>[] = useMemo(
+    const gridRef = useRef<DataGridRef<UserConnection>>(null);
+
+    const columns: AgColDef<UserConnection>[] = useMemo(
         () => [
             {
                 field: 'sub',
+                cellDataType: 'text',
+                flex: 2,
                 headerName: intl.formatMessage({ id: 'table.id' }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'connections.table.id.description',
                 }),
-                type: 'string',
-                flex: 0.25,
-                editable: false,
-                filterable: true,
-                hideable: false,
+                filter: true,
+                lockVisible: true,
             },
             {
                 field: 'firstConnection',
+                type: GridColumnTypes.Timestamp,
+                flex: 3,
                 headerName: intl.formatMessage({
                     id: 'connections.table.firstConnection',
                 }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'connections.table.firstConnection.description',
                 }),
-                type: 'dateTime',
-                valueGetter: ({ value }) => value && new Date(value),
-                flex: 0.3,
-                editable: false,
-                filterable: true,
+                valueGetter: (params) =>
+                    params.data?.firstConnection &&
+                    new Date(params.data?.firstConnection),
+                //filter: true,
                 //TODO valueFormatter "2023-09-05T21:42:18.100151Z"
             },
             {
                 field: 'lastConnection',
+                type: GridColumnTypes.Timestamp,
+                flex: 3,
                 headerName: intl.formatMessage({
                     id: 'connections.table.lastConnection',
                 }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'connections.table.lastConnection.description',
                 }),
-                type: 'dateTime',
-                valueGetter: ({ value }) => value && new Date(value),
-                flex: 0.3,
-                editable: false,
-                filterable: true,
-                //TODO valueFormatter
+                valueGetter: (params) =>
+                    params.data?.lastConnection &&
+                    new Date(params.data?.lastConnection),
+                //filter: true,
             },
             {
                 field: 'isAccepted',
+                cellDataType: 'boolean',
+                flex: 1,
                 headerName: intl.formatMessage({
                     id: 'connections.table.allowed',
                 }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'connections.table.allowed.description',
                 }),
-                type: 'boolean',
                 sortable: false,
-                flex: 0.15,
-                editable: false,
-                filterable: true,
-                renderCell: (params) => <BoolValue value={params.value} />,
+                filter: true,
+                /*renderCell: (params) => <BoolValue value={params.value} />,
                 headerAlign: 'left',
-                align: 'left',
+                */
             },
         ],
         [intl]
     );
     return (
-        <Grid item container direction="column" spacing={2}>
-            <Grid item xs="auto">
+        <Grid item container direction="column" spacing={2} component="section">
+            <Grid item xs="auto" component="header">
                 <Typography variant="h2">
                     <FormattedMessage id="connections.title" />
                 </Typography>
             </Grid>
-            <Grid item xs sx={{ width: 1 }}>
-                <CommonDataGrid
-                    exposesRef={gridRef}
-                    loader={UserAdminSrv.fetchUsersConnections}
-                    columns={columns}
+            <Grid item xs sx={{ width: 1 }} component="main">
+                <DataGrid<UserConnection>
+                    accessRef={gridRef}
+                    dataLoader={UserAdminSrv.fetchUsersConnections}
+                    columnDefs={columns}
+                    gridId="grid-connections"
                     getRowId={getRowId}
                 />
             </Grid>

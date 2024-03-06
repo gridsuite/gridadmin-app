@@ -1,7 +1,6 @@
 /*
  * from https://mui.com/x/react-data-grid/components/#no-rows-overlay
  */
-import { ReactElement } from 'react';
 import { Box } from '@mui/material';
 import { SxProps } from '@mui/system/styleFunctionSx';
 import { Theme } from '@emotion/react';
@@ -73,7 +72,7 @@ const NoRowsSvg = (
     </svg>
 );
 
-export default function CustomNoRowsOverlay(): ReactElement {
+export default function NoRowsOverlay() {
     return (
         <Box sx={style}>
             {NoRowsSvg}

@@ -17,10 +17,6 @@ import {
 } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
 import {
-    enUS as MuiDataGridEnUS,
-    frFR as MuiDataGridFrFR,
-} from '@mui/x-data-grid';
-import {
     card_error_boundary_en,
     card_error_boundary_fr,
     CardErrorBoundary,
@@ -69,6 +65,7 @@ const lightTheme: ThemeOptions = {
         color: 'blue',
     },
     mapboxStyle: 'mapbox://styles/mapbox/light-v9',
+    agGridTheme: 'ag-theme-alpine',
 };
 
 const darkTheme: ThemeOptions = {
@@ -95,14 +92,14 @@ const darkTheme: ThemeOptions = {
         color: 'green',
     },
     mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
+    agGridTheme: 'ag-theme-alpine-dark',
 };
 
 const getMuiTheme = (theme: unknown, locale: unknown): Theme => {
     return responsiveFontSizes(
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
-            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS, // MUI core translations
-            locale === LANG_FRENCH ? MuiDataGridFrFR : MuiDataGridEnUS // MUI x-data-grid translations
+            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS // MUI core translations
         )
     );
 };

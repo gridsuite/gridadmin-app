@@ -1,5 +1,4 @@
 import {
-    Fragment,
     FunctionComponent,
     useCallback,
     useMemo,
@@ -7,7 +6,6 @@ import {
     useState,
 } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 import {
     Button,
     Dialog,
@@ -22,28 +20,29 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { AccountCircle, Delete, PersonAdd } from '@mui/icons-material';
-import CommonDataGrid, {
-    CommonDataGridExposed,
-} from '../../components/XDataGrid/CommonDataGrid';
+import { AccountCircle, PersonAdd } from '@mui/icons-material';
+import DataGrid, { DataGridRef } from '../../components/Grid/DataGrid';
 import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import GridToolbarBtnAdd from '../../components/XDataGrid/GridToolbarButtonAdd';
+import GridToolbarBtnAdd from '../../components/Grid/buttons/ButtonAdd';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
+import { AgColDef } from '../../components/Grid/AgGrid/AgGrid.type';
+import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
 
-function getRowId(row: UserInfos) {
-    return row.sub;
+function getRowId(params: GetRowIdParams<UserInfos>): string {
+    return params.data.sub;
 }
 
 const UsersPage: FunctionComponent = () => {
     //const data = useLoaderData() as DeferredData;
     const intl = useIntl();
     const { snackError } = useSnackMessage();
-    const gridRef = useRef<CommonDataGridExposed>();
+    const gridRef = useRef<DataGridRef<UserInfos>>(null);
 
     const deleteUser = useCallback(
         (id: string) => () =>
-            gridRef.current?.actionThenRefresh(() =>
+            gridRef.current?.context?.actionThenRefresh(() =>
                 UserAdminSrv.deleteUser(id).catch((error) =>
                     snackError({
                         messageTxt: `Error while deleting user "${id}"${
@@ -55,53 +54,52 @@ const UsersPage: FunctionComponent = () => {
             ),
         [snackError]
     );
-    const columns: GridColDef<UserInfos>[] = useMemo(
-        () => [
+    const columns = useMemo(
+        (): AgColDef<UserInfos>[] => [
             {
                 field: 'sub',
+                cellDataType: 'text',
+                flex: 3,
+                lockVisible: true,
+                filter: true,
                 headerName: intl.formatMessage({ id: 'table.id' }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'users.table.id.description',
                 }),
-                type: 'string',
-                flex: 0.25,
-                editable: false,
-                filterable: true,
-                hideable: false,
+                //TODO headerCheckboxSelection: true,
+                //initialSortIndex: 2,
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<UserInfos>,
             },
             {
                 field: 'isAdmin',
+                cellDataType: 'boolean',
+                //checkboxSelection: true,
+                //cellRenderer: 'agCheckboxCellRenderer',
+                cellRendererParams: {
+                    disabled: true,
+                },
+                flex: 1,
                 headerName: intl.formatMessage({
                     id: 'users.table.isAdmin',
                 }),
-                description: intl.formatMessage({
+                headerTooltip: intl.formatMessage({
                     id: 'users.table.isAdmin.description',
                 }),
-                type: 'boolean',
                 sortable: false,
-                flex: 0.15,
-                editable: false,
-                filterable: true,
-            },
-            {
-                field: 'actions',
-                type: 'actions',
-                width: 80,
-                getActions: (params) => [
-                    <GridActionsCellItem
-                        icon={<Delete />}
-                        label="Delete"
-                        onClick={deleteUser(params.row.sub)}
-                    />,
-                ],
+                filter: true,
+                initialSortIndex: 1,
+                initialSort: 'asc',
             },
         ],
-        [intl, deleteUser]
+        [intl.locale]
     );
 
     const addUser = useCallback(
         (id: string) =>
-            gridRef.current?.actionThenRefresh(() =>
+            gridRef.current?.context?.actionThenRefresh(() =>
                 UserAdminSrv.addUser(id).catch((error) =>
                     snackError({
                         messageTxt: `Error while adding user "${id}"${
@@ -138,48 +136,36 @@ const UsersPage: FunctionComponent = () => {
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
+    const buttonAdd = useCallback(
+        () => (
+            <GridToolbarBtnAdd
+                labelId="users.table.toolbar.add.label"
+                textId="users.table.toolbar.add"
+                tooltipTextId="users.table.toolbar.add.tooltip"
+                onClick={() => setOpen(true)}
+                icon={PersonAdd}
+            />
+        ),
+        []
+    );
+
     return (
-        <Grid item container direction="column" spacing={2}>
-            <Grid item xs="auto">
+        <Grid item container direction="column" spacing={2} component="section">
+            <Grid item xs="auto" component="header">
                 <Typography variant="h2">
                     <FormattedMessage id="users.title" />
                 </Typography>
             </Grid>
             <Grid item xs sx={{ width: 1 }}>
-                <CommonDataGrid
-                    exposesRef={gridRef}
-                    loader={UserAdminSrv.fetchUsers}
-                    columns={columns}
+                <DataGrid<UserInfos>
+                    accessRef={gridRef}
+                    dataLoader={UserAdminSrv.fetchUsers}
+                    addBtn={buttonAdd}
+                    columnDefs={columns}
+                    gridId="table-users"
                     getRowId={getRowId}
-                    ignoreDiacritics
-                    slotProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                        },
-                    }}
-                    initialState={{
-                        filter: {
-                            filterModel: {
-                                items: [],
-                                quickFilterExcludeHiddenColumns: true,
-                            },
-                        },
-                    }}
-                    toolbarExtends={
-                        <>
-                            <GridToolbarBtnAdd
-                                labelId="users.table.toolbar.add.label"
-                                textId="users.table.toolbar.add"
-                                tooltipId="users.table.toolbar.add.tooltip"
-                                addElement={useCallback(
-                                    () => setOpen(true),
-                                    []
-                                )}
-                                icon={PersonAdd}
-                            />
-                            {/*TODO remove selection*/}
-                        </>
-                    }
+                    //TODO onClick={deleteUser(params.row.sub)}
+                    //TODO onRemove
                 />
                 <Dialog
                     open={open}
@@ -252,5 +238,5 @@ const PaperForm: FunctionComponent<
 > = (props, context) => {
     const { untypedProps, ...formProps } = props;
     const othersProps = untypedProps as PaperProps<'form'>; //trust me ts
-    return <Paper component="form" {...formProps} {...othersProps} />;
+    return <Paper component="form" {...formProps} {...(othersProps ?? {})} />;
 };

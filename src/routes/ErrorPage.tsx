@@ -8,7 +8,7 @@ export default function ErrorPage(): ReactElement {
         console.error(error);
     }, [error]);
     return (
-        <Grid item id="error-page">
+        <Grid item id="error-page" component="article">
             <Typography variant="h1">Oops!</Typography>
             <Typography variant="body1" component="p">
                 Sorry, an unexpected error has occurred.
