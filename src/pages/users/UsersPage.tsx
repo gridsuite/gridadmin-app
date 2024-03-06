@@ -49,21 +49,8 @@ const UsersPage: FunctionComponent = () => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
     const gridRef = useRef<DataGridRef<UserInfos>>(null);
+    const gridContext = gridRef.current?.context;
 
-    const deleteUser = useCallback(
-        (id: string) => () =>
-            gridRef.current?.context?.actionThenRefresh(() =>
-                UserAdminSrv.deleteUser(id).catch((error) =>
-                    snackError({
-                        messageTxt: `Error while deleting user "${id}"${
-                            error.message && ':\n' + error.message
-                        }`,
-                        headerId: 'users.table.error.delete',
-                    })
-                )
-            ),
-        [snackError]
-    );
     const columns = useMemo(
         (): AgColDef<UserInfos>[] => [
             {
@@ -107,19 +94,36 @@ const UsersPage: FunctionComponent = () => {
         [intl.locale]
     );
 
-    const addUser = useCallback(
-        (id: string) =>
-            gridRef.current?.context?.actionThenRefresh(() =>
-                UserAdminSrv.addUser(id).catch((error) =>
-                    snackError({
-                        messageTxt: `Error while adding user "${id}"${
-                            error.message && ':\n' + error.message
-                        }`,
-                        headerId: 'users.table.error.delete',
-                    })
-                )
+    const deleteUser = useCallback(
+        (dataLine: UserInfos): Promise<void> =>
+            UserAdminSrv.deleteUser(dataLine.sub).catch((error) =>
+                snackError({
+                    messageTxt: `Error while deleting user "${dataLine.sub}"${
+                        error.message && ':\n' + error.message
+                    }`,
+                    headerId: 'users.table.error.delete',
+                })
             ),
         [snackError]
+    );
+
+    const addUser = useCallback(
+        (id: string) => {
+            console.log(gridRef);
+            gridContext
+                ?.queryAction(() =>
+                    UserAdminSrv.addUser(id).catch((error) =>
+                        snackError({
+                            messageTxt: `Error while adding user "${id}"${
+                                error.message && ':\n' + error.message
+                            }`,
+                            headerId: 'users.table.error.delete',
+                        })
+                    )
+                )
+                .then(() => gridContext?.refresh?.());
+        },
+        [gridContext, snackError]
     );
     const {
         register,
@@ -130,7 +134,9 @@ const UsersPage: FunctionComponent = () => {
         reset,
         setFocus,
         clearErrors,
-    } = useForm<{ user: string }>();
+    } = useForm<{ user: string }>({
+        defaultValues: { user: '' }, //need default not undefined value for html input, else react error at runtime
+    });
     const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false);
@@ -171,11 +177,10 @@ const UsersPage: FunctionComponent = () => {
                     accessRef={gridRef}
                     dataLoader={UserAdminSrv.fetchUsers}
                     addBtn={buttonAdd}
+                    removeElement={deleteUser}
                     columnDefs={columns}
                     gridId="table-users"
                     getRowId={getRowId}
-                    //TODO onClick={deleteUser(params.row.sub)}
-                    //TODO onRemove
                 />
                 <Dialog
                     open={open}

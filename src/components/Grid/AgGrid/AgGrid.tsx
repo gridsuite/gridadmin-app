@@ -48,10 +48,9 @@ type AccessibleAgGridReact<TData> = Omit<
     AgGridReact<TData>,
     'apiListeners' | 'setGridApi' //private in class
 >;
-export type AgGridRef<TData, TContext extends {}> = Partial<
-    AccessibleAgGridReact<TData>
-> & {
-    context?: TContext;
+export type AgGridRef<TData, TContext extends {}> = {
+    aggrid: AccessibleAgGridReact<TData> | null;
+    context: TContext | null;
 };
 
 /*
@@ -97,25 +96,14 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     const theme = useTheme();
 
     const agGridRef = useRef<AgGridReact<TData>>(null);
+    const agGridRefContent = agGridRef.current;
     useImperativeHandle(
         gridRef,
         () => ({
-            ...((agGridRef.current ?? {}) as AgGridReact<TData>),
-            // destruct doesn't include functions, so we need to redeclare them
-            //apiListeners: agGridRef.current?.apiListeners,
-            registerApiListener: agGridRef.current?.registerApiListener,
-            //setGridApi: agGridRef.current?.setGridApi,
-            componentWillUnmount: agGridRef.current?.componentWillUnmount,
-            render: agGridRef.current?.render,
-            setState: agGridRef.current?.setState,
-            forceUpdate: agGridRef.current?.forceUpdate,
-            //...
-            context: agGridRef.current?.context as AgGridRef<
-                TData,
-                TContext
-            >['context'],
+            aggrid: agGridRefContent,
+            context: props.context ?? null,
         }),
-        []
+        [agGridRefContent, props.context]
     );
 
     const translations = useMemo(
@@ -140,14 +128,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
             ),
         [theme.agGridThemeOverride]
     );
-    /*const customContext = useMemo(
-        () =>
-            ({
-                ...(props.context ?? ({} as TContext)),
-                //TODO
-            } as TContext),
-        [props.context]
-    );*/
 
     return (
         // wrapping container with theme & size

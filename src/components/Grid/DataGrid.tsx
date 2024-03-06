@@ -5,17 +5,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Divider, useForkRef } from '@mui/material';
+import { Divider } from '@mui/material';
 import NoRowsOverlay from './NoRowsOverlay';
 import {
-    Dispatch,
     PropsWithChildren,
     ReactElement,
     RefObject,
-    SetStateAction,
     useCallback,
     useMemo,
-    useRef,
     useState,
 } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
@@ -24,7 +21,6 @@ import { AgGridRef } from './AgGrid/AgGrid';
 import Grid, { GridProps } from './Grid';
 import {
     ComponentStateChangedEvent,
-    GridReadyEvent,
     SelectionChangedEvent,
 } from 'ag-grid-community/dist/lib/events';
 import { GridButtonRefresh } from './buttons/ButtonRefresh';
@@ -38,8 +34,14 @@ type FullDataGridProps<TData, TContext extends {}> = GridProps<
     NoRowOverlay
 >;
 
+type FnAction<R> = () => Promise<R>;
+type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
 type DataGridExposed = {
-    actionThenRefresh: (action: () => Promise<unknown>) => void;
+    refresh: () => Promise<void>;
+    queryAction: (
+        action: FnAction<void>,
+        onerror?: CatchError<void>
+    ) => Promise<void>;
 };
 
 export interface DataGridProps<TData, TContext extends {}>
@@ -48,7 +50,7 @@ export interface DataGridProps<TData, TContext extends {}>
     //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
-    removeElement?: (dataLine: TData) => Promise<never>;
+    removeElement?: (dataLine: TData) => Promise<void>;
     addBtn?: () => ReactElement;
 }
 
@@ -85,22 +87,15 @@ function onComponentStateChanged<TData, TContext>(
     }
 }
 
+/**
+ * Generic near CRUD (no update part) Grid
+ */
 /*
  * Exposed to grid pre-configuration:
  *  * common columns config
  *  * configuration with formatter i18n for columns with timestamp
  * Add common buttons in toolbar (with management of states)
  * Manage also the progressbar animation:
- *   * "loading" have two states: performing action, and loading/refreshing data
- *   * full flow state with (action, loader) =
- *      - isAction = true                 <=== start here with actionWithRefresh
- *      - gridApi.showLoadingOverlay()
- *      - action()
- *      - gridApi.hideOverlay()
- *      - isAction = false
- *      - gridApi.showLoadingOverlay()    <=== start here with refresh
- *      - loadDataAndSave()
- *      - gridApi.hideOverlay()
  */
 //TODO optionally save grid state to just show/hide in tabs without losing grid state
 export default function DataGrid<TData, TContext extends {} = {}>(
@@ -117,84 +112,62 @@ export default function DataGrid<TData, TContext extends {} = {}>(
     } = props;
 
     const { snackError } = useSnackMessage();
-    const gridRef = useRef<DataGridRef<TData, TContext>>(null);
-    const handleGridRef = useForkRef(accessRef, gridRef);
 
     const [data, setData] = useState<TData[] | null>(null);
     const [rowsSelection, setRowsSelection] = useState<TData[]>([]);
+    const [progress, setProgress] = useState<number | null>(null);
 
-    const [loadingAction, setLoadingAction] = useState<boolean>(false);
-
-    function loadDataAndSave<TData>(
-        loader: () => Promise<TData[]>,
-        setData: Dispatch<SetStateAction<TData[] | null>>,
-        snackError: (snackInputs: unknown) => void
-    ): Promise<void> {
-        return loader().then(setData, (error) => {
-            snackError({
-                messageTxt: error.message,
-                headerId: 'table.error.retrieve',
+    const loadDataAndSave = useCallback(
+        function loadDataAndSave(): Promise<void> {
+            return dataLoader().then(setData, (error) => {
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'table.error.retrieve',
+                });
+                //setData(null);
+                //TODO what to do with "old" data?
             });
-            //setData(null);
-            //TODO what to do with "old" data?
-        });
-    }
-
-    const actionWithLoadingState = useCallback(function actionWithState(
-        action: () => Promise<unknown>,
-        notHideOverlay?: true
-    ) {
-        console.debug(
-            '[DEBUG]',
-            'actionWithLoadingState()',
-            action,
-            notHideOverlay
-        );
-        //TODO how to block simultaneous calls?
-        //gridRef.current?.api?.showLoadingOverlay();
-        setLoadingAction(true);
-        return action().finally(() => {
-            console.debug('[DEBUG]', 'actionWithLoadingState() -> finally');
-            if (!notHideOverlay) {
-                setLoadingAction(false);
-            }
-        });
-    },
-    []);
-    const refreshWithLoadingState = useCallback(
-        function actionWithState(notManageOverlay?: true) {
-            console.debug(
-                '[DEBUG]',
-                'refreshWithLoadingState()',
-                notManageOverlay
-            );
-            //TODO how to block simultaneous calls?
-            //gridRef.current?.api?.showLoadingOverlay();
-            if (!notManageOverlay) {
-                gridRef.current?.api?.showLoadingOverlay();
-            }
-            return loadDataAndSave(dataLoader, setData, snackError).finally(
-                () => {
-                    console.debug(
-                        '[DEBUG]',
-                        'refreshWithLoadingState() -> finally'
-                    );
-                    if (!notManageOverlay) {
-                        setLoadingAction(false);
-                    }
-                }
-            );
         },
         [dataLoader, snackError]
     );
-    const actionThenRefresh = useCallback(
-        function actionThenRefresh(action: () => Promise<unknown>) {
-            console.debug('[DEBUG]', 'actionThenRefresh()', action);
-            actionWithLoadingState(action).then(() =>
-                refreshWithLoadingState()
-            );
-        },
-        [actionWithLoadingState, refreshWithLoadingState]
+
+    const setProgressDisable = useCallback(() => setProgress(null), []);
+    const setProgressQuery = useCallback(() => setProgress(Number.NaN), []);
+    const setProgressLoading = useCallback(() => setProgress(-1), []);
+
+    const loadingAction = useCallback(
+        (action: FnAction<void>, onerror?: CatchError<void>): Promise<void> =>
+            new Promise<void>((resolve, reject) => {
+                try {
+                    setProgressLoading();
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            })
+                .then(action, onerror)
+                .catch(onerror)
+                .finally(setProgressDisable),
+        [setProgressDisable, setProgressLoading]
+    );
+    const queryAction: DataGridExposed['queryAction'] = useCallback(
+        (action, onerror?) =>
+            new Promise<void>((resolve, reject) => {
+                try {
+                    setProgressQuery();
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            })
+                .then(action, onerror)
+                .catch(onerror)
+                .finally(setProgressDisable),
+        [setProgressDisable, setProgressQuery]
+    );
+    const refresh = useCallback(
+        () => loadingAction(loadDataAndSave),
+        [loadDataAndSave, loadingAction]
     );
 
     return (
@@ -204,18 +177,11 @@ export default function DataGrid<TData, TContext extends {} = {}>(
                 TContext & DataGridExposed,
                 NoRowOverlay
             >)}
-            ref={handleGridRef}
+            ref={props.accessRef}
             rowData={data}
             defaultColDef={defaultColDef as AgColDef<TData>}
             alwaysShowVerticalScroll={true}
-            onGridReady={useCallback(
-                (event: GridReadyEvent<TData, TContext>) => {
-                    console.debug('[DEBUG]', 'gridReady()', event);
-                    loadDataAndSave(dataLoader, setData, snackError);
-                    //event.api.addEventListener('componentStateChanged', onComponentStateChanged);
-                },
-                [dataLoader, snackError]
-            )}
+            onGridReady={refresh}
             rowSelection="single" //TODO multiple with delete action
             onSelectionChanged={useCallback(
                 (event: SelectionChangedEvent<TData, TContext>) =>
@@ -227,12 +193,13 @@ export default function DataGrid<TData, TContext extends {} = {}>(
                 useMemo(
                     () => ({
                         ...(context ?? {}),
-                        actionThenRefresh,
+                        refresh: refresh,
+                        queryAction: queryAction,
                     }),
-                    [context, actionThenRefresh]
+                    [context, queryAction, refresh]
                 ) as TContext & DataGridExposed
             }
-            //TODO progress={loadingAction ? 'query' : 'indeterminate'}
+            progress={progress}
             noRowsOverlayComponent={
                 (!gridProps.overlayNoRowsTemplate &&
                     !gridProps.noRowsOverlayComponent &&
@@ -241,15 +208,25 @@ export default function DataGrid<TData, TContext extends {} = {}>(
             }
             noRowsOverlayComponentParams={undefined}
         >
-            <GridButtonRefresh refresh={refreshWithLoadingState} />
+            <GridButtonRefresh refresh={refresh} />
             <GridButtonDelete
-                onClick={useCallback(() => {
-                    actionThenRefresh(() =>
-                        Promise.all(rowsSelection.map(removeElement!))
-                    );
-                }, [actionThenRefresh, removeElement, rowsSelection])}
+                onClick={useCallback(
+                    () =>
+                        queryAction(() =>
+                            Promise.all(rowsSelection.map(removeElement!)).then(
+                                (values) => {}
+                            )
+                        ).then(() => loadingAction(loadDataAndSave)),
+                    [
+                        loadDataAndSave,
+                        loadingAction,
+                        queryAction,
+                        removeElement,
+                        rowsSelection,
+                    ]
+                )}
                 disabled={useMemo(
-                    () => !removeElement && rowsSelection.length <= 0,
+                    () => !removeElement || rowsSelection.length <= 0,
                     [removeElement, rowsSelection.length]
                 )}
             />
