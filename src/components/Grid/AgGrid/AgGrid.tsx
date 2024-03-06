@@ -79,10 +79,6 @@ interface AgGridWithRef
     >;
 }
 
-//TODO @ag-grid-community/core
-//TODO CsvExportModule
-//TODO @ag-grid-community/react
-//TODO ClientSideRowModelModule -> https://ag-grid.com/javascript-data-grid/client-side-model/
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     TData,
     TContext extends {} = {},
@@ -104,11 +100,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
             context: props.context ?? null,
         }),
         [agGridRefContent, props.context]
-    );
-
-    const translations = useMemo(
-        () => messages[intl.locale] ?? messages[intl.defaultLocale],
-        [intl.locale, intl.defaultLocale]
     );
 
     const customTheme = useMemo(
@@ -138,25 +129,15 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                     //ClientSideRowModelModule implicitly recognized?
                     CsvExportModule,
                 ]}
-                localeText={translations}
-                /*getLocaleText={(params) =>
-                    intl.formatMessage(
-                        { id: params.key, defaultMessage: params.defaultValue },
-                        Array.reduce(
-                            params.variableValues ?? [],
-                            (acc, value, idx, array) => ({
-                                ...acc,
-                                [`var${idx}`]: value,
-                            }),
-                            {}
-                        )
-                    )
+                /*localeText={
+                    messages[intl.locale] ??
+                    messages[intl.defaultLocale] ??
+                    messages[LANG_ENGLISH]
                 }*/
                 {...props} //destruct props to optimize react props change detection
                 debug={
                     process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
                 }
-                //context={customContext}
                 defaultCsvExportParams={useSecuredCsvExportParams(
                     props.defaultCsvExportParams
                 )}
@@ -166,14 +147,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     );
 });
 export default AgGrid;
-/*export default function AgGrid<TData, TContext = {}>({
-    ref,
-    ...props
-}: AgGridProps<TData, TContext> & {
-    ref: Ref<AgGridRef<TData>>;
-}) {
-    return <AgGridRef<TData, TContext> ref={ref} {...props} />;
-}*/
 
 function counterCsvInjection(value: string): string {
     return value ? value.replace(/^[+\-=@\t\r]/, '_') : value;

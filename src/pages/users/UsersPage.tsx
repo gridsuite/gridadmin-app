@@ -45,7 +45,6 @@ function getRowId(params: GetRowIdParams<UserInfos>): string {
 }
 
 const UsersPage: FunctionComponent = () => {
-    //const data = useLoaderData() as DeferredData;
     const intl = useIntl();
     const { snackError } = useSnackMessage();
     const gridRef = useRef<DataGridRef<UserInfos>>(null);
@@ -91,7 +90,7 @@ const UsersPage: FunctionComponent = () => {
                 initialSort: 'asc',
             },
         ],
-        [intl.locale]
+        [intl]
     );
 
     const deleteUser = useCallback(
@@ -125,16 +124,9 @@ const UsersPage: FunctionComponent = () => {
         },
         [gridContext, snackError]
     );
-    const {
-        register,
-        setValue,
-        handleSubmit,
-        formState: { errors },
-        control,
-        reset,
-        setFocus,
-        clearErrors,
-    } = useForm<{ user: string }>({
+    const { handleSubmit, control, reset, clearErrors } = useForm<{
+        user: string;
+    }>({
         defaultValues: { user: '' }, //need default not undefined value for html input, else react error at runtime
     });
     const [open, setOpen] = useState(false);

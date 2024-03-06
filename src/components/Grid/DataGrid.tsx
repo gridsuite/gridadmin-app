@@ -19,10 +19,7 @@ import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AgColDef } from './AgGrid/AgGrid.type';
 import { AgGridRef } from './AgGrid/AgGrid';
 import Grid, { GridProps } from './Grid';
-import {
-    ComponentStateChangedEvent,
-    SelectionChangedEvent,
-} from 'ag-grid-community/dist/lib/events';
+import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonRefresh } from './buttons/ButtonRefresh';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { GridButtonAdd } from './buttons/ButtonAdd';
@@ -69,23 +66,6 @@ const defaultColDef: AgColDef<unknown> = {
     sortable: true,
     enableCellChangeFlash: process.env.REACT_APP_DEBUG_AGGRID === 'true',
 };
-
-/**
- * When AgGridReact props change, maybe rowData after a refresh, show no-rows overlay in this case
- * because code call hideOverlay from api...
- */
-function onComponentStateChanged<TData, TContext>(
-    event: ComponentStateChangedEvent<TData, TContext>
-): void {
-    if (
-        event.api.getInfiniteRowCount()! > 0 ||
-        event.api.getDisplayedRowCount() > 0
-    ) {
-        event.api.showNoRowsOverlay();
-    } else {
-        event.api.hideOverlay();
-    }
-}
 
 /**
  * Generic near CRUD (no update part) Grid
@@ -188,7 +168,6 @@ export default function DataGrid<TData, TContext extends {} = {}>(
                     setRowsSelection(event.api.getSelectedRows() ?? []),
                 []
             )}
-            //immutableData={true}
             context={
                 useMemo(
                     () => ({
@@ -237,7 +216,6 @@ export default function DataGrid<TData, TContext extends {} = {}>(
                     {children}
                 </>
             )}
-            {/*<Box sx={{ flex: 1 }} />*/}
         </Grid>
     );
 }
