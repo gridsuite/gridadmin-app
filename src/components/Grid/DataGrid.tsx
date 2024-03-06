@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import { Divider, useForkRef } from '@mui/material';
 import NoRowsOverlay from './NoRowsOverlay';
 import {
@@ -31,12 +38,13 @@ type FullDataGridProps<TData, TContext extends {}> = GridProps<
     NoRowOverlay
 >;
 
-export type DataGridExposed = {
+type DataGridExposed = {
     actionThenRefresh: (action: () => Promise<unknown>) => void;
 };
 
-interface DataGridProps<TData, TContext extends {}>
-    extends Omit<FullDataGridProps<TData, TContext>, 'rowData'> {
+export interface DataGridProps<TData, TContext extends {}>
+    extends Omit<FullDataGridProps<TData, TContext>, 'rowData'>,
+        PropsWithChildren<{}> {
     //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
@@ -96,7 +104,7 @@ function onComponentStateChanged<TData, TContext>(
  */
 //TODO optionally save grid state to just show/hide in tabs without losing grid state
 export default function DataGrid<TData, TContext extends {} = {}>(
-    props: Readonly<PropsWithChildren<DataGridProps<TData, TContext>>>
+    props: Readonly<DataGridProps<TData, TContext>>
 ): ReactElement {
     const {
         context,

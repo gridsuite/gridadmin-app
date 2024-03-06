@@ -527,6 +527,7 @@ export const AG_GRID_LOCALE_EN = {
     november: 'November',
     december: 'December',
 };
+export default AG_GRID_LOCALE_EN;
 
 export type AgGridLocale = typeof AG_GRID_LOCALE_EN;
 export type AgGridLocaleKeys = keyof AgGridLocale;

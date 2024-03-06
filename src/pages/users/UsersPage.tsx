@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {
     FunctionComponent,
     useCallback,
@@ -21,13 +28,16 @@ import {
     Typography,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
-import DataGrid, { DataGridRef } from '../../components/Grid/DataGrid';
+import {
+    AgColDef,
+    DataGrid,
+    DataGridRef,
+    GridButtonAdd,
+} from '../../components/Grid';
 import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import GridToolbarBtnAdd from '../../components/Grid/buttons/ButtonAdd';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
-import { AgColDef } from '../../components/Grid/AgGrid/AgGrid.type';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
 
 function getRowId(params: GetRowIdParams<UserInfos>): string {
@@ -138,7 +148,7 @@ const UsersPage: FunctionComponent = () => {
 
     const buttonAdd = useCallback(
         () => (
-            <GridToolbarBtnAdd
+            <GridButtonAdd
                 labelId="users.table.toolbar.add.label"
                 textId="users.table.toolbar.add"
                 tooltipTextId="users.table.toolbar.add.tooltip"

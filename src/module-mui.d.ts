@@ -4,7 +4,7 @@ import {
     Theme as MuiTheme,
     ThemeOptions as MuiThemeOptions,
 } from '@mui/material/styles/createTheme';
-import { AgGridClasses, AgGridCss } from './components/Grid/AgGrid/ag-theme-alpine';
+import { AgGridClasses, AgGridCss } from './components/Grid';
 
 declare module '@mui/material/styles/createTheme' {
     export * from '@mui/material/styles/createTheme';

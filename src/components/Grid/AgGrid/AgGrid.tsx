@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import 'ag-grid-community/styles/ag-grid.min.css';
 import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
 import 'ag-grid-community/styles/agGridMaterialFont.min.css';
@@ -148,7 +155,7 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
             <AgGridReact<TData>
                 ref={agGridRef}
                 modules={[
-                    //ClientSideRowModelModule,
+                    //ClientSideRowModelModule implicitly recognized?
                     CsvExportModule,
                 ]}
                 localeText={translations}

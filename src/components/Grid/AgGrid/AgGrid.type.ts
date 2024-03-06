@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {
     ColDef,
     GridOptions,
@@ -662,7 +669,9 @@ export interface AgColDef<TData, TValue = any, TContext = any>
         | ICellRendererFunc<TData, TValue, TContext>;
     //TODO discriminative conditional type on cellRenderer value
     cellRendererParams?:
-        | (Partial<ICellRendererParams<TData, TValue, TContext>> & { [key: string]: any })
+        | (Partial<ICellRendererParams<TData, TValue, TContext>> & {
+              [key: string]: any;
+          })
         | IGroupCellRendererParams<TData, TValue>
         | ICheckboxCellRendererParams<TData, TContext>;
 

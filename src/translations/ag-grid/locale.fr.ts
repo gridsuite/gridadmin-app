@@ -529,3 +529,4 @@ export const AG_GRID_LOCALE_FR: AgGridLocale = {
     november: 'Novembre',
     december: 'Décembre',
 };
+export default AG_GRID_LOCALE_FR;
