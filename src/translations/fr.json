@@ -47,5 +47,5 @@
     "users.table.toolbar.add.tooltip": "Ajouter un utilisateur",
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
-    "users.form.field.username.label": ":ID utilisateur"
+    "users.form.field.username.label": "ID utilisateur"
 }

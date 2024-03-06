@@ -16,7 +16,7 @@ code {
    Except iframes have a border value set to 2 which can cause a slight offset to the UI. 
    This rule prevent the iframe to cause an unwanted offset.
    It can be removed if oidc-client-js is no longer the authentification library in use in this project. */
-   
+
 body > iframe[width='0'][height='0'] {
     border: 0;
 }

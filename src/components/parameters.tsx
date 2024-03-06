@@ -116,7 +116,7 @@ const Parameters: FunctionComponent<
             open={props.showParameters}
             onClose={props.hideParameters}
             aria-labelledby="form-dialog-title"
-            maxWidth={'md'}
+            maxWidth="md"
             fullWidth={true}
         >
             <DialogTitle id="form-dialog-title">

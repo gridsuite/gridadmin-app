@@ -10,7 +10,7 @@ export function getToken(user?: User): Token {
 
 export function getUser(): User {
     const state: AppState = store.getState();
-    return state.user; //?? state.userManager?.instance?.getUser().then();
+    return state.user;
 }
 
 export function extractUserSub(user: User): Promise<unknown> {

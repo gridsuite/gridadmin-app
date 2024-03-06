@@ -135,6 +135,7 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
     return (
         <IntlProvider
             locale={computedLanguage}
+            defaultLocale={LANG_ENGLISH}
             messages={messages[computedLanguage]}
         >
             <StyledEngineProvider injectFirst>
