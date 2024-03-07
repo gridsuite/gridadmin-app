@@ -59,7 +59,6 @@ const UsersPage: FunctionComponent = () => {
                     id: 'users.table.id.description',
                 }),
                 headerCheckboxSelection: true,
-                //initialSortIndex: 2,
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -68,8 +67,6 @@ const UsersPage: FunctionComponent = () => {
             {
                 field: 'isAdmin',
                 cellDataType: 'boolean',
-                //checkboxSelection: true,
-                //cellRenderer: 'agCheckboxCellRenderer',
                 cellRendererParams: {
                     disabled: true,
                 },
@@ -106,7 +103,6 @@ const UsersPage: FunctionComponent = () => {
 
     const addUser = useCallback(
         (id: string) => {
-            console.log(gridRef);
             gridContext
                 ?.queryAction(() =>
                     UserAdminSrv.addUser(id).catch((error) =>
@@ -114,7 +110,7 @@ const UsersPage: FunctionComponent = () => {
                             messageTxt: `Error while adding user "${id}"${
                                 error.message && ':\n' + error.message
                             }`,
-                            headerId: 'users.table.error.delete',
+                            headerId: 'users.table.error.add',
                         })
                     )
                 )
@@ -135,9 +131,6 @@ const UsersPage: FunctionComponent = () => {
         clearErrors();
     };
     const onSubmit: SubmitHandler<{ user: string }> = (data) => {
-        console.groupCollapsed('onSubmit(...)');
-        console.dir(data);
-        console.groupEnd();
         addUser(data.user.trim());
         handleClose();
     };

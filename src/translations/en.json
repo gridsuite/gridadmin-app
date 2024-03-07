@@ -25,15 +25,6 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Unknown",
 
-    "connections.title": "Connections history",
-    "connections.table.id.description": "User login",
-    "connections.table.firstConnection": "First see",
-    "connections.table.firstConnection.description": "The first time the user try to connect",
-    "connections.table.lastConnection": "Last see",
-    "connections.table.lastConnection.description": "The last time the user try to connect",
-    "connections.table.allowed": "Allowed",
-    "connections.table.allowed.description": "Is the user as authorized last time?",
-
     "users.title": "List of GridSuite users",
     "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",

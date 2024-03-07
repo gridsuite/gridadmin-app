@@ -36,7 +36,6 @@ type DataGridExposed = {
 export interface DataGridProps<TData, TContext extends {}>
     extends Omit<GridTableProps<TData>, 'rowData'>,
         PropsWithChildren<{}> {
-    //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
     removeElements?: (dataLines: TData[]) => Promise<void>;

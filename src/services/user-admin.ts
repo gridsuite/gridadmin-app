@@ -94,23 +94,3 @@ export function addUser(sub: string): Promise<void> {
             throw reason;
         });
 }
-
-export type UserConnection = {
-    sub: string;
-    firstConnection: string; //$date-time
-    lastConnection: string; //$date-time
-    isAccepted: boolean;
-};
-
-export function fetchUsersConnections(): Promise<UserConnection[]> {
-    console.debug(`Fetching users connections...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/connections`, {
-        headers: {
-            Accept: 'application/json',
-        },
-        cache: 'default',
-    }).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
-        throw reason;
-    });
-}

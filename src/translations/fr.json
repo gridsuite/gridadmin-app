@@ -25,15 +25,6 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Inconnu",
 
-    "connections.title": "Historique des connexions",
-    "connections.table.id.description": "Identifiant de l'utilisateur",
-    "connections.table.firstConnection": "1ᵉʳᵉ connexion",
-    "connections.table.firstConnection.description": "La première tentative de connexion de l'utilisateur",
-    "connections.table.lastConnection": "Dernière conn.",
-    "connections.table.lastConnection.description": "La dernière tentative de connexion de l'utilisateur",
-    "connections.table.allowed": "Autorisé",
-    "connections.table.allowed.description": "Si l'utilisateur fût autorisé lors de sa dernière tentative de connexion",
-
     "users.title": "Liste des utilisateurs",
     "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",

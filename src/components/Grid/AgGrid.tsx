@@ -84,11 +84,15 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
         () =>
             deepmerge(
                 {
+                    // default overridable style
                     width: '100%',
                     height: '100%',
-                    //@media print -> page-break-inside: avoid
+                    '@media print': {
+                        pageBreakInside: 'avoid',
+                    },
                 },
                 deepmerge(theme.agGridThemeOverride ?? {}, {
+                    // not overridable important fix on theme
                     '--ag-icon-font-family': 'agGridMaterial !important',
                     '& *': {
                         '--ag-icon-font-family': 'agGridMaterial !important',
