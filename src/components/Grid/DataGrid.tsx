@@ -20,7 +20,6 @@ import { AgGridRef } from './AgGrid';
 import Grid, { GridProps } from './Grid';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonDelete } from './buttons/ButtonDelete';
-import { GridButtonAdd } from './buttons/ButtonAdd';
 import { ColDef } from 'ag-grid-community';
 
 type FnAction<R> = () => Promise<R>;
@@ -143,6 +142,29 @@ export default function DataGrid<TData, TContext extends {} = {}>(
         [loadDataAndSave, loadingAction]
     );
 
+    const btnDelete = useMemo(
+        () =>
+            removeElement ? (
+                <GridButtonDelete
+                    onClick={() =>
+                        queryAction(() =>
+                            Promise.all(rowsSelection.map(removeElement)).then(
+                                (values) => {}
+                            )
+                        ).then(() => loadingAction(loadDataAndSave))
+                    }
+                    disabled={!removeElement || rowsSelection.length <= 0}
+                />
+            ) : undefined,
+        [
+            loadDataAndSave,
+            loadingAction,
+            queryAction,
+            removeElement,
+            rowsSelection,
+        ]
+    );
+
     return (
         <Grid<TData, TContext & DataGridExposed>
             {...gridProps}
@@ -176,28 +198,8 @@ export default function DataGrid<TData, TContext extends {} = {}>(
             }
             noRowsOverlayComponentParams={undefined}
         >
-            <GridButtonDelete
-                onClick={useCallback(
-                    () =>
-                        queryAction(() =>
-                            Promise.all(rowsSelection.map(removeElement!)).then(
-                                (values) => {}
-                            )
-                        ).then(() => loadingAction(loadDataAndSave)),
-                    [
-                        loadDataAndSave,
-                        loadingAction,
-                        queryAction,
-                        removeElement,
-                        rowsSelection,
-                    ]
-                )}
-                disabled={useMemo(
-                    () => !removeElement || rowsSelection.length <= 0,
-                    [removeElement, rowsSelection.length]
-                )}
-            />
-            {addBtn?.() ?? <GridButtonAdd />}
+            {btnDelete}
+            {addBtn?.()}
             {children && (
                 <>
                     <Divider orientation="vertical" variant="middle" flexItem />
