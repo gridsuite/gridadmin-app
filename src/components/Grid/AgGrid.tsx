@@ -13,7 +13,6 @@ import {
     ForwardedRef,
     forwardRef,
     FunctionComponent,
-    JSXElementConstructor,
     PropsWithoutRef,
     ReactNode,
     RefAttributes,
@@ -24,13 +23,13 @@ import {
 import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { useIntl } from 'react-intl';
-import { AgGridProps } from './AgGrid.type';
 import { LANG_FRENCH } from '@gridsuite/commons-ui';
 import {
     AG_GRID_LOCALE_FR,
     AgGridLocale,
-} from '../../../translations/ag-grid/locales';
+} from '../../translations/ag-grid/locales';
 import deepmerge from '@mui/utils/deepmerge/deepmerge';
+import { GridOptions } from 'ag-grid-community';
 
 const messages: Record<string, AgGridLocale> = {
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
@@ -51,33 +50,20 @@ export type AgGridRef<TData, TContext extends {}> = {
  */
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
-interface AgGridWithRef
-    extends FunctionComponent<AgGridProps<unknown, any, any, any>> {
-    <
-        TData,
-        TContext extends {},
-        LdgCmpnt extends JSXElementConstructor<any>,
-        NoCmpnt extends JSXElementConstructor<any>
-    >(
-        props: PropsWithoutRef<
-            AgGridProps<TData, TContext, LdgCmpnt, NoCmpnt>
-        > &
+interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
+    <TData, TContext extends {}>(
+        props: PropsWithoutRef<GridOptions<TData>> &
             RefAttributes<AgGridRef<TData, TContext>>
     ): ReturnType<
-        ForwardRefComponent<
-            AgGridProps<TData, TContext, LdgCmpnt, NoCmpnt>,
-            AgGridRef<TData, TContext>
-        >
+        ForwardRefComponent<GridOptions<TData>, AgGridRef<TData, TContext>>
     >;
 }
 
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     TData,
-    TContext extends {} = {},
-    LdgCmpnt extends JSXElementConstructor<any> = any,
-    NoCmpnt extends JSXElementConstructor<any> = any
+    TContext extends {} = {}
 >(
-    props: AgGridProps<TData, TContext, LdgCmpnt, NoCmpnt>,
+    props: GridOptions<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
     const intl = useIntl();

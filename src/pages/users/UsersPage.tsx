@@ -28,17 +28,13 @@ import {
     Typography,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
-import {
-    AgColDef,
-    DataGrid,
-    DataGridRef,
-    GridButtonAdd,
-} from '../../components/Grid';
+import { DataGrid, DataGridRef, GridButtonAdd } from '../../components/Grid';
 import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
+import { ColDef } from 'ag-grid-community';
 
 function getRowId(params: GetRowIdParams<UserInfos>): string {
     return params.data.sub;
@@ -51,7 +47,7 @@ const UsersPage: FunctionComponent = () => {
     const gridContext = gridRef.current?.context;
 
     const columns = useMemo(
-        (): AgColDef<UserInfos>[] => [
+        (): ColDef<UserInfos>[] => [
             {
                 field: 'sub',
                 cellDataType: 'text',

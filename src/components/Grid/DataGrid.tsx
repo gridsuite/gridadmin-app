@@ -16,20 +16,13 @@ import {
     useState,
 } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import { AgColDef } from './AgGrid/AgGrid.type';
-import { AgGridRef } from './AgGrid/AgGrid';
+import { AgGridRef } from './AgGrid';
 import Grid, { GridProps } from './Grid';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonRefresh } from './buttons/ButtonRefresh';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { GridButtonAdd } from './buttons/ButtonAdd';
-
-type NoRowOverlay = typeof NoRowsOverlay;
-type FullDataGridProps<TData, TContext extends {}> = GridProps<
-    TData,
-    TContext,
-    NoRowOverlay
->;
+import { ColDef } from 'ag-grid-community';
 
 type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
@@ -42,7 +35,7 @@ type DataGridExposed = {
 };
 
 export interface DataGridProps<TData, TContext extends {}>
-    extends Omit<FullDataGridProps<TData, TContext>, 'rowData'>,
+    extends Omit<GridProps<TData>, 'rowData'>,
         PropsWithChildren<{}> {
     //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
@@ -56,7 +49,7 @@ export type DataGridRef<TData, TContext extends {} = {}> = AgGridRef<
     TContext & DataGridExposed
 >;
 
-const defaultColDef: AgColDef<unknown> = {
+const defaultColDef: ColDef<unknown> = {
     editable: false,
     resizable: true,
     minWidth: 50,
@@ -151,15 +144,11 @@ export default function DataGrid<TData, TContext extends {} = {}>(
     );
 
     return (
-        <Grid<TData, TContext & DataGridExposed, NoRowOverlay>
-            {...(gridProps as GridProps<
-                TData,
-                TContext & DataGridExposed,
-                NoRowOverlay
-            >)}
+        <Grid<TData, TContext & DataGridExposed>
+            {...gridProps}
             ref={props.accessRef}
             rowData={data}
-            defaultColDef={defaultColDef as AgColDef<TData>}
+            defaultColDef={defaultColDef as ColDef<TData>}
             alwaysShowVerticalScroll={true}
             onGridReady={refresh}
             rowSelection="single" //TODO multiple with delete action

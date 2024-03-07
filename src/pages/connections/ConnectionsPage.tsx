@@ -11,7 +11,8 @@ import { FunctionComponent, useMemo, useRef } from 'react';
 import DataGrid, { DataGridRef } from '../../components/Grid/DataGrid';
 import { UserAdminSrv, UserConnection } from '../../services';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
-import { AgColDef, GridColumnTypes } from '../../components/Grid';
+import { GridColumnTypes } from '../../components/Grid';
+import { ColDef } from 'ag-grid-community';
 
 function getRowId(params: GetRowIdParams<UserConnection>): string {
     return params.data.sub;
@@ -21,7 +22,7 @@ export const ConnectionsPage: FunctionComponent = () => {
     const intl = useIntl();
     const gridRef = useRef<DataGridRef<UserConnection>>(null);
 
-    const columns: AgColDef<UserConnection>[] = useMemo(
+    const columns: ColDef<UserConnection>[] = useMemo(
         () => [
             {
                 field: 'sub',

@@ -5,11 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-export type * from './AgGrid/ag-theme-alpine';
-export type * from './AgGrid/AgGrid.type';
-
-/*export { AgGrid } from './AgGrid/AgGrid';
-export type { AgGridRef } from './AgGrid/AgGrid';*/
+/*export { AgGrid } from './AgGrid';
+export type { AgGridRef } from './AgGrid';*/
 
 export { GridButtonAdd } from './buttons/ButtonAdd';
 export type { GridButtonAddProps } from './buttons/ButtonAdd';

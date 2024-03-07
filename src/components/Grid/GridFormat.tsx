@@ -7,14 +7,14 @@
 
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import {
+    ColTypeDef,
     ValueFormatterFunc,
     ValueFormatterParams,
 } from 'ag-grid-community/dist/lib/entities/colDef';
 import { FunctionComponent, useCallback, useMemo } from 'react';
 import { Chip, ChipProps } from '@mui/material';
 import { Check, Close, QuestionMark } from '@mui/icons-material';
-import { AgColTypeDef } from './AgGrid/AgGrid.type';
-import { IDateFilterParams } from 'ag-grid-community';
+import { ICellRendererFunc, IDateFilterParams } from 'ag-grid-community';
 
 export enum GridColumnTypes {
     // default of ag-grid
@@ -68,7 +68,7 @@ const BoolValue: FunctionComponent<{
 
 export function useColumnTypes<TData>(): Record<
     GridColumnTypes,
-    AgColTypeDef<TData>
+    ColTypeDef<TData>
 > {
     const intl = useIntl();
     const timestampFormat: ValueFormatterFunc<
@@ -83,10 +83,10 @@ export function useColumnTypes<TData>(): Record<
                 //TODO
                 //filter: '', //agNumberColumnFilter agTextColumnFilter
                 //align: 'left',
-                cellRenderer: (params) =>
+                cellRenderer: ((params) =>
                     (
                         <BoolValue value={params.value} />
-                    ) as unknown as HTMLElement,
+                    ) as unknown as HTMLElement) as ICellRendererFunc,
             },
             [GridColumnTypes.Timestamp]: {
                 cellDataType: 'dateString',

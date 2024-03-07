@@ -9,16 +9,15 @@ import {
     ForwardedRef,
     forwardRef,
     FunctionComponent,
-    JSXElementConstructor,
     PropsWithChildren,
     PropsWithoutRef,
     ReactNode,
     RefAttributes,
 } from 'react';
 import { AppBar, Box, LinearProgress, Toolbar } from '@mui/material';
-import { AgGridProps } from './AgGrid/AgGrid.type';
-import AgGrid, { AgGridRef } from './AgGrid/AgGrid';
+import { AgGrid, AgGridRef } from './AgGrid';
 import { useColumnTypes } from './GridFormat';
+import { GridOptions } from 'ag-grid-community';
 
 export interface GridProgressProps {
     /**
@@ -27,12 +26,9 @@ export interface GridProgressProps {
     progress: null | number;
 }
 
-export interface GridProps<
-    TData,
-    TContext extends {},
-    NoCmpnt extends JSXElementConstructor<any>
-> extends Omit<
-            AgGridProps<TData, TContext, any, NoCmpnt>,
+export interface GridProps<TData>
+    extends Omit<
+            GridOptions<TData>,
             | 'overlayLoadingTemplate'
             | 'loadingOverlayComponent'
             | 'loadingOverlayComponentParams'
@@ -46,17 +42,12 @@ export interface GridProps<
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
 interface GridWithRef
-    extends FunctionComponent<PropsWithChildren<GridProps<unknown, any, any>>> {
-    <TData, TContext extends {}, NoCmpnt extends JSXElementConstructor<any>>(
-        props: PropsWithoutRef<
-            PropsWithChildren<GridProps<TData, TContext, NoCmpnt>>
-        > &
+    extends FunctionComponent<PropsWithChildren<GridProps<unknown>>> {
+    <TData, TContext extends {}>(
+        props: PropsWithoutRef<PropsWithChildren<GridProps<TData>>> &
             RefAttributes<AgGridRef<TData, TContext>>
     ): ReturnType<
-        ForwardRefComponent<
-            GridProps<TData, TContext, NoCmpnt>,
-            AgGridRef<TData, TContext>
-        >
+        ForwardRefComponent<GridProps<TData>, AgGridRef<TData, TContext>>
     >;
 }
 
@@ -66,10 +57,9 @@ interface GridWithRef
  */
 export const Grid: GridWithRef = forwardRef(function AgGridToolbar<
     TData,
-    TContext extends {} = {},
-    NoCmpnt extends JSXElementConstructor<any> = any
+    TContext extends {} = {}
 >(
-    props: PropsWithChildren<GridProps<TData, TContext, NoCmpnt>>,
+    props: PropsWithChildren<GridProps<TData>>,
     gridRef: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
     const { children: toolbarContent, progress, ...agGridProps } = props;
@@ -95,7 +85,7 @@ export const Grid: GridWithRef = forwardRef(function AgGridToolbar<
                 </Toolbar>
             </AppBar>
             <GridProgress progress={progress ?? null} />
-            <AgGrid<TData, TContext, any, NoCmpnt>
+            <AgGrid<TData, TContext>
                 columnTypes={columnTypes}
                 {...agGridProps}
                 ref={gridRef}
