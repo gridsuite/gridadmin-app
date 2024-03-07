@@ -26,12 +26,11 @@ import { AgGridReact } from 'ag-grid-react';
 import { CsvExportModule, ProcessCellForExportParams } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
 import { AgGridProps } from './AgGrid.type';
-import { LANG_ENGLISH, LANG_FRENCH } from '@gridsuite/commons-ui';
+import { LANG_FRENCH } from '@gridsuite/commons-ui';
 import {
-    AG_GRID_LOCALE_EN,
+    AG_GRID_LOCALE_FR,
     AgGridLocale,
-} from '../../../translations/ag-grid/locale.en';
-import { AG_GRID_LOCALE_FR } from '../../../translations/ag-grid/locale.fr';
+} from '../../../translations/ag-grid/locales';
 import {
     ProcessGroupHeaderForExportParams,
     ProcessHeaderForExportParams,
@@ -40,7 +39,6 @@ import {
 import deepmerge from '@mui/utils/deepmerge/deepmerge';
 
 const messages: Record<string, AgGridLocale> = {
-    [LANG_ENGLISH]: AG_GRID_LOCALE_EN,
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
 };
 
@@ -129,11 +127,11 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                     //ClientSideRowModelModule implicitly recognized?
                     CsvExportModule,
                 ]}
-                /*localeText={
+                localeText={
                     messages[intl.locale] ??
                     messages[intl.defaultLocale] ??
-                    messages[LANG_ENGLISH]
-                }*/
+                    undefined
+                }
                 {...props} //destruct props to optimize react props change detection
                 debug={
                     process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
