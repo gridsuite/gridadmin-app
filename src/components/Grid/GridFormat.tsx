@@ -80,8 +80,7 @@ export function useColumnTypes<TData>(): Record<
     return useMemo(
         () => ({
             [GridColumnTypes.BoolIcons]: {
-                //TODO
-                //filter: '', //agNumberColumnFilter agTextColumnFilter
+                //filter: 'agNumberColumnFilter' / 'agTextColumnFilter'
                 //align: 'left',
                 cellRenderer: ((params) =>
                     (

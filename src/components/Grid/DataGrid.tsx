@@ -19,7 +19,6 @@ import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AgGridRef } from './AgGrid';
 import Grid, { GridProps } from './Grid';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
-import { GridButtonRefresh } from './buttons/ButtonRefresh';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { GridButtonAdd } from './buttons/ButtonAdd';
 import { ColDef } from 'ag-grid-community';
@@ -70,7 +69,7 @@ const defaultColDef: ColDef<unknown> = {
  * Add common buttons in toolbar (with management of states)
  * Manage also the progressbar animation:
  */
-//TODO optionally save grid state to just show/hide in tabs without losing grid state
+//IDEA: optionally save grid state to just show/hide in tabs without losing grid state
 export default function DataGrid<TData, TContext extends {} = {}>(
     props: Readonly<DataGridProps<TData, TContext>>
 ): ReactElement {
@@ -86,6 +85,7 @@ export default function DataGrid<TData, TContext extends {} = {}>(
 
     const { snackError } = useSnackMessage();
 
+    //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
     const [rowsSelection, setRowsSelection] = useState<TData[]>([]);
     const [progress, setProgress] = useState<number | null>(null);
@@ -176,7 +176,6 @@ export default function DataGrid<TData, TContext extends {} = {}>(
             }
             noRowsOverlayComponentParams={undefined}
         >
-            <GridButtonRefresh refresh={refresh} />
             <GridButtonDelete
                 onClick={useCallback(
                     () =>

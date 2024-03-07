@@ -116,6 +116,7 @@ const UsersPage: FunctionComponent = () => {
                         })
                     )
                 )
+                //TODO replace manual refresh by notification in DataGrid component
                 .then(() => gridContext?.refresh?.());
         },
         [gridContext, snackError]
