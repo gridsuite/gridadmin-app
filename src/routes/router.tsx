@@ -33,14 +33,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
-import { Connections, Users } from '../pages';
+import { Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 
 export enum MainPaths {
     users = 'users',
-    connections = 'connections',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -58,13 +57,6 @@ export function appRoutes(): RouteObject[] {
                     element: <Users />,
                     handle: {
                         appBar_tab: MainPaths.users,
-                    },
-                },
-                {
-                    path: `/${MainPaths.connections}`,
-                    element: <Connections />,
-                    handle: {
-                        appBar_tab: MainPaths.connections,
                     },
                 },
             ],

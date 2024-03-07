@@ -29,7 +29,7 @@ import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { FormattedMessage } from 'react-intl';
 import { Tab, TabProps, Tabs } from '@mui/material';
-import { History, PeopleAlt } from '@mui/icons-material';
+import { PeopleAlt } from '@mui/icons-material';
 import { MainPaths } from '../../routes';
 
 const TabNavLink: FunctionComponent<TabProps & { href: string }> = (
@@ -54,16 +54,6 @@ const tabs = new Map<MainPaths, ReactElement>([
             href={`/${MainPaths.users}`}
             value={MainPaths.users}
             key={`tab-${MainPaths.users}`}
-        />,
-    ],
-    [
-        MainPaths.connections,
-        <TabNavLink
-            icon={<History />}
-            label={<FormattedMessage id="appBar.tabs.connections" />}
-            href={`/${MainPaths.connections}`}
-            value={MainPaths.connections}
-            key={`tab-${MainPaths.connections}`}
         />,
     ],
 ]);
