@@ -5,6 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { LiteralUnion } from 'type-fest';
+
 export const COMMON_APP_NAME = 'common';
 export const APP_NAME = 'Admin';
 
@@ -13,10 +15,10 @@ export const PARAM_LANGUAGE = 'language';
 
 const COMMON_CONFIG_PARAMS_NAMES = new Set([PARAM_THEME, PARAM_LANGUAGE]);
 
-export type AppConfigParameter =
-    | typeof PARAM_THEME
-    | typeof PARAM_LANGUAGE
-    | (string & {});
+export type AppConfigParameter = LiteralUnion<
+    typeof PARAM_THEME | typeof PARAM_LANGUAGE,
+    string
+>;
 
 export type AppConfigType = typeof COMMON_APP_NAME | typeof APP_NAME;
 
