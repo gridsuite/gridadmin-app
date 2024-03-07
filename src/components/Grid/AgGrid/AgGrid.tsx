@@ -23,7 +23,6 @@ import {
 } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
-import { CsvExportModule, ProcessCellForExportParams } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
 import { AgGridProps } from './AgGrid.type';
 import { LANG_FRENCH } from '@gridsuite/commons-ui';
@@ -31,11 +30,6 @@ import {
     AG_GRID_LOCALE_FR,
     AgGridLocale,
 } from '../../../translations/ag-grid/locales';
-import {
-    ProcessGroupHeaderForExportParams,
-    ProcessHeaderForExportParams,
-    ProcessRowGroupForExportParams,
-} from 'ag-grid-community/dist/lib/interfaces/exportParams';
 import deepmerge from '@mui/utils/deepmerge/deepmerge';
 
 const messages: Record<string, AgGridLocale> = {
@@ -123,10 +117,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
         <Box component="div" className={theme.agGridTheme} sx={customTheme}>
             <AgGridReact<TData>
                 ref={agGridRef}
-                modules={[
-                    //ClientSideRowModelModule implicitly recognized?
-                    CsvExportModule,
-                ]}
                 localeText={
                     messages[intl.locale] ??
                     messages[intl.defaultLocale] ??
@@ -136,99 +126,9 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                 debug={
                     process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
                 }
-                defaultCsvExportParams={useSecuredCsvExportParams(
-                    props.defaultCsvExportParams
-                )}
                 reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />
         </Box>
     );
 });
 export default AgGrid;
-
-function counterCsvInjection(value: string): string {
-    return value ? value.replace(/^[+\-=@\t\r]/, '_') : value;
-}
-
-/*
- * https://www.ag-grid.com/react-data-grid/csv-export/#security-concerns
- */
-function useSecuredCsvExportParams<TData, TContext extends {}>(
-    defaultCsvExportParams: AgGridProps<
-        TData,
-        TContext
-    >['defaultCsvExportParams']
-) {
-    const processCellCallback = defaultCsvExportParams?.processCellCallback;
-    const customProcessCellCallback = useMemo(
-        () =>
-            (processCellCallback &&
-                ((params: ProcessCellForExportParams<TData, TContext>) => {
-                    let result = processCellCallback?.(params);
-                    return result ? counterCsvInjection(result) : result;
-                })) ||
-            undefined,
-        [processCellCallback]
-    );
-
-    const processHeaderCallback = defaultCsvExportParams?.processHeaderCallback;
-    const customProcessHeaderCallback = useMemo(
-        () =>
-            (processHeaderCallback &&
-                ((params: ProcessHeaderForExportParams<TData, TContext>) => {
-                    let result = processHeaderCallback?.(params);
-                    return result ? counterCsvInjection(result) : result;
-                })) ||
-            undefined,
-        [processHeaderCallback]
-    );
-
-    const processGroupHeaderCallback =
-        defaultCsvExportParams?.processGroupHeaderCallback;
-    const customProcessGroupHeaderCallback = useMemo(
-        () =>
-            (processGroupHeaderCallback &&
-                ((
-                    params: ProcessGroupHeaderForExportParams<TData, TContext>
-                ) => {
-                    let result = processGroupHeaderCallback?.(params);
-                    return result ? counterCsvInjection(result) : result;
-                })) ||
-            undefined,
-        [processGroupHeaderCallback]
-    );
-
-    const processRowGroupCallback =
-        defaultCsvExportParams?.processRowGroupCallback;
-    const customProcessRowGroupCallback = useMemo(
-        () =>
-            (processRowGroupCallback &&
-                ((params: ProcessRowGroupForExportParams<TData, TContext>) => {
-                    let result = processRowGroupCallback?.(params);
-                    return result ? counterCsvInjection(result) : result;
-                })) ||
-            undefined,
-        [processRowGroupCallback]
-    );
-
-    return useMemo(
-        () =>
-            defaultCsvExportParams === undefined
-                ? undefined
-                : {
-                      ...defaultCsvExportParams,
-                      processCellCallback: customProcessCellCallback,
-                      processHeaderCallback: customProcessHeaderCallback,
-                      processGroupHeaderCallback:
-                          customProcessGroupHeaderCallback,
-                      processRowGroupCallback: customProcessRowGroupCallback,
-                  },
-        [
-            customProcessCellCallback,
-            customProcessGroupHeaderCallback,
-            customProcessHeaderCallback,
-            customProcessRowGroupCallback,
-            defaultCsvExportParams,
-        ]
-    );
-}
