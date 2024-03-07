@@ -5,11 +5,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { capitalize, useTheme } from '@mui/material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
-import Parameters, { useParameterState } from '../parameters';
-import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
+import { useParameterState } from '../parameters';
+import {
+    APP_NAME,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+} from '../../utils/config-params';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppsMetadataSrv, MetadataJson, StudySrv } from '../../services';
@@ -37,10 +41,6 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     const [languageLocal, handleChangeLanguage] =
         useParameterState(PARAM_LANGUAGE);
 
-    const [showParameters, setShowParameters] = useState(false);
-    const displayParameters = useCallback(() => setShowParameters(true), []);
-    const hideParameters = useCallback(() => setShowParameters(false), []);
-
     useEffect(() => {
         if (props.user !== null) {
             AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
@@ -50,42 +50,31 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     }, [props.user]);
 
     return (
-        <>
-            <TopBar
-                appName={capitalize(APP_NAME)}
-                appColor="#FD3745"
-                appLogo={
-                    theme.palette.mode === 'light' ? (
-                        <GridAdminLogoLight />
-                    ) : (
-                        <GridAdminLogoDark />
-                    )
-                }
-                appVersion={AppPackage.version}
-                appLicense={AppPackage.license}
-                onParametersClick={displayParameters}
-                onLogoutClick={() =>
-                    logout(dispatch, props.userManager.instance)
-                }
-                onLogoClick={() => navigate('/', { replace: true })}
-                user={props.user}
-                appsAndUrls={appsAndUrls}
-                globalVersionPromise={() =>
-                    AppsMetadataSrv.fetchVersion().then(
-                        (res) => res?.deployVersion
-                    )
-                }
-                additionalModulesPromise={StudySrv.getServersInfos}
-                onThemeClick={handleChangeTheme}
-                theme={themeLocal}
-                onLanguageClick={handleChangeLanguage}
-                language={languageLocal}
-            />
-            <Parameters
-                showParameters={showParameters}
-                hideParameters={hideParameters}
-            />
-        </>
+        <TopBar
+            appName={capitalize(APP_NAME)}
+            appColor="#FD3745"
+            appLogo={
+                theme.palette.mode === 'light' ? (
+                    <GridAdminLogoLight />
+                ) : (
+                    <GridAdminLogoDark />
+                )
+            }
+            appVersion={AppPackage.version}
+            appLicense={AppPackage.license}
+            onLogoutClick={() => logout(dispatch, props.userManager.instance)}
+            onLogoClick={() => navigate('/', { replace: true })}
+            user={props.user}
+            appsAndUrls={appsAndUrls}
+            globalVersionPromise={() =>
+                AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion)
+            }
+            additionalModulesPromise={StudySrv.getServersInfos}
+            onThemeClick={handleChangeTheme}
+            theme={themeLocal}
+            onLanguageClick={handleChangeLanguage}
+            language={languageLocal}
+        />
     );
 };
 export default AppTopBar;
