@@ -125,17 +125,16 @@ const AppTopBar: FunctionComponent = () => {
                 onLanguageClick={handleChangeLanguage}
                 language={languageLocal}
             >
-                <nav>
-                    <Tabs
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        aria-label="Main navigation menu"
-                        sx={{ visibility: !user ? 'hidden' : undefined }}
-                        value={selectedTabValue}
-                    >
-                        {[...tabs.values()]}
-                    </Tabs>
-                </nav>
+                <Tabs
+                    component="nav"
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="Main navigation menu"
+                    sx={{ visibility: !user ? 'hidden' : undefined }}
+                    value={selectedTabValue}
+                >
+                    {[...tabs.values()]}
+                </Tabs>
             </TopBar>
             <Parameters
                 showParameters={showParameters}

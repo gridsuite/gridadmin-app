@@ -15,8 +15,7 @@ module.exports = {
         ],
     },
     transformIgnorePatterns: [
+        // see https://www.ag-grid.com/react-data-grid/testing/
         '/node_modules/(?!(@ag-grid-community|@ag-grid-enterprise)/)',
     ],
 };
-
-// see https://www.ag-grid.com/react-data-grid/testing/
