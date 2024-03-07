@@ -18,6 +18,7 @@ import { AppBar, Box, Grid, LinearProgress, Toolbar } from '@mui/material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { useColumnTypes } from './GridFormat';
 import { GridOptions } from 'ag-grid-community';
+import { Theme } from '@mui/material/styles';
 
 export interface GridProgressProps {
     /**
@@ -72,7 +73,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             alignItems="stretch"
         >
             <Grid xs="auto">
-                <AppBar position="static">
+                <AppBar position="static" color="default">
                     <Toolbar
                         variant="dense"
                         sx={{
@@ -106,25 +107,44 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
 });
 export default GridTable;
 
+function GridProgressStyle(theme: Theme) {
+    // https://github.com/mui/material-ui/blob/master/packages/mui-material/src/AppBar/AppBar.js#L39-L40
+    const backgroundColorDefault =
+        theme.palette.mode === 'light'
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900];
+    return {
+        backgroundColor: backgroundColorDefault,
+        color: theme.palette.getContrastText(backgroundColorDefault),
+    };
+}
+
 const GridProgress: FunctionComponent<GridProgressProps> = (props, context) => {
     if (props.progress === null || props.progress === undefined) {
         // simulate a disabled state
         //TODO css to match color with AppBar background (.MuiLinearProgress-root, .MuiLinearProgress-determinate)
         return (
-            <LinearProgress color="inherit" variant="determinate" value={0} />
+            <LinearProgress
+                variant="determinate"
+                value={0}
+                sx={GridProgressStyle}
+            />
         );
     } else if (Number.isNaN(props.progress)) {
         // animation from right to left
-        return <LinearProgress variant="query" />;
+        return <LinearProgress variant="query" sx={GridProgressStyle} />;
     } else if (props.progress < 0) {
         // animation from left to right
-        return <LinearProgress variant="indeterminate" />;
+        return (
+            <LinearProgress variant="indeterminate" sx={GridProgressStyle} />
+        );
     } /*if (props.progress >= 0)*/ else {
         // animation dashed
         return (
             <LinearProgress
                 variant="buffer"
                 valueBuffer={props.progress * 100.0}
+                sx={GridProgressStyle}
             />
         );
     }

@@ -21,6 +21,7 @@ import { GridTable, GridTableProps } from './GridTable';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { ColDef } from 'ag-grid-community';
+import { useStateWithLabel } from '../../utils/react';
 
 type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
@@ -87,7 +88,10 @@ export default function DataGrid<TData, TContext extends {} = {}>(
     //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
     const [rowsSelection, setRowsSelection] = useState<TData[]>([]);
-    const [progress, setProgress] = useState<number | null>(null);
+    const [progress, setProgress] = useStateWithLabel<number | null>(
+        'progress',
+        null
+    );
 
     const loadDataAndSave = useCallback(
         function loadDataAndSave(): Promise<void> {
@@ -103,9 +107,18 @@ export default function DataGrid<TData, TContext extends {} = {}>(
         [dataLoader, snackError]
     );
 
-    const setProgressDisable = useCallback(() => setProgress(null), []);
-    const setProgressQuery = useCallback(() => setProgress(Number.NaN), []);
-    const setProgressLoading = useCallback(() => setProgress(-1), []);
+    const setProgressDisable = useCallback(
+        () => setProgress(null),
+        [setProgress]
+    );
+    const setProgressQuery = useCallback(
+        () => setProgress(Number.NaN),
+        [setProgress]
+    );
+    const setProgressLoading = useCallback(
+        () => setProgress(-1),
+        [setProgress]
+    );
 
     const loadingAction = useCallback(
         (action: FnAction<void>, onerror?: CatchError<void>): Promise<void> =>
