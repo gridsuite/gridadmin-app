@@ -6,18 +6,21 @@
  */
 
 import App from './app';
-import { FunctionComponent } from 'react';
-import { CssBaseline } from '@mui/material';
+import { FunctionComponent, useMemo } from 'react';
+import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import {
     createTheme,
     StyledEngineProvider,
     Theme,
     ThemeProvider,
 } from '@mui/material/styles';
+import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
 import {
     card_error_boundary_en,
     card_error_boundary_fr,
     CardErrorBoundary,
+    LANG_ENGLISH,
+    LANG_FRENCH,
     LIGHT_THEME,
     login_en,
     login_fr,
@@ -36,7 +39,7 @@ import { PARAM_THEME } from '../../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
 import { AppState } from '../../redux/reducer';
 
-const lightTheme: Theme = createTheme({
+const lightTheme: ThemeOptions = {
     palette: {
         mode: 'light',
     },
@@ -60,9 +63,9 @@ const lightTheme: Theme = createTheme({
         color: 'blue',
     },
     mapboxStyle: 'mapbox://styles/mapbox/light-v9',
-});
+};
 
-const darkTheme: Theme = createTheme({
+const darkTheme: ThemeOptions = {
     palette: {
         mode: 'dark',
     },
@@ -86,14 +89,15 @@ const darkTheme: Theme = createTheme({
         color: 'green',
     },
     mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
-});
+};
 
-const getMuiTheme = (theme: string): Theme => {
-    if (theme === LIGHT_THEME) {
-        return lightTheme;
-    } else {
-        return darkTheme;
-    }
+const getMuiTheme = (theme: unknown, locale: SupportedLanguages): Theme => {
+    return responsiveFontSizes(
+        createTheme(
+            theme === LIGHT_THEME ? lightTheme : darkTheme,
+            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS // MUI core translations
+        )
+    );
 };
 
 const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
@@ -118,14 +122,19 @@ const AppWrapperWithRedux: FunctionComponent = () => {
         (state: AppState) => state.computedLanguage
     );
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
+    const themeCompiled = useMemo(
+        () => getMuiTheme(theme, computedLanguage),
+        [computedLanguage, theme]
+    );
     return (
         <IntlProvider
             locale={computedLanguage}
+            defaultLocale={LANG_ENGLISH}
             messages={messages[computedLanguage]}
         >
             <BrowserRouter basename={basename}>
                 <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={getMuiTheme(theme)}>
+                    <ThemeProvider theme={themeCompiled}>
                         <SnackbarProvider hideIconVariant={false}>
                             <CssBaseline />
                             <CardErrorBoundary>
