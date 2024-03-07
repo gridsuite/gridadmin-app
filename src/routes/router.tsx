@@ -71,7 +71,7 @@ export function appRoutes(): RouteObject[] {
         },
         {
             path: '*',
-            element: <FormattedMessage tagName="h1" id="PageNotFound" />,
+            element: <FormattedMessage tagName="h1" id="pageNotFound" />,
             errorElement: <ErrorPage />,
         },
     ];
