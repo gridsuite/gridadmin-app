@@ -8,15 +8,15 @@
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { capitalize, useTheme } from '@mui/material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
-import Parameters, { useParameterState } from './parameters';
-import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
+import Parameters, { useParameterState } from '../parameters';
+import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppsMetadataSrv, MetadataJson, StudySrv } from '../services';
-import { ReactComponent as GridAdminLogoLight } from '../images/GridAdmin_logo_light.svg';
-import { ReactComponent as GridAdminLogoDark } from '../images/GridAdmin_logo_dark.svg';
-import AppPackage from '../../package.json';
-import { AppState } from '../redux/reducer';
+import { AppsMetadataSrv, MetadataJson, StudySrv } from '../../services';
+import { ReactComponent as GridAdminLogoLight } from '../../images/GridAdmin_logo_light.svg';
+import { ReactComponent as GridAdminLogoDark } from '../../images/GridAdmin_logo_dark.svg';
+import AppPackage from '../../../package.json';
+import { AppState } from '../../redux/reducer';
 
 export type AppTopBarProps = {
     user?: AppState['user'];
