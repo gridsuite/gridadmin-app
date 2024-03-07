@@ -6,7 +6,7 @@ import { act } from 'react-dom/test-utils';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
-import App from './App/app';
+import App from './app';
 import { store } from '../redux/store';
 import {
     createTheme,

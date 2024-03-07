@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
+import React, {
     FunctionComponent,
     PropsWithChildren,
     ReactElement,
@@ -116,7 +116,7 @@ const Parameters: FunctionComponent<
             open={props.showParameters}
             onClose={props.hideParameters}
             aria-labelledby="form-dialog-title"
-            maxWidth="md"
+            maxWidth={'md'}
             fullWidth={true}
         >
             <DialogTitle id="form-dialog-title">

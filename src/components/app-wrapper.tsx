@@ -31,15 +31,15 @@ import {
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
-import messages_en from '../../translations/en.json';
-import messages_fr from '../../translations/fr.json';
-import messages_plugins_en from '../../plugins/translations/en.json';
-import messages_plugins_fr from '../../plugins/translations/fr.json';
-import { store } from '../../redux/store';
-import { PARAM_THEME } from '../../utils/config-params';
+import messages_en from '../translations/en.json';
+import messages_fr from '../translations/fr.json';
+import messages_plugins_en from '../plugins/translations/en.json';
+import messages_plugins_fr from '../plugins/translations/fr.json';
+import { store } from '../redux/store';
+import { PARAM_THEME } from '../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
-import { AppState } from '../../redux/reducer';
-import { AppWithAuthRouter } from '../../routes';
+import { AppState } from '../redux/reducer';
+import { AppWithAuthRouter } from '../routes';
 
 const lightTheme: ThemeOptions = {
     palette: {

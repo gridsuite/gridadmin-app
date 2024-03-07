@@ -32,11 +32,13 @@ import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
-import { App } from '../components/App';
+import AppComponent from '../components/app';
 import { Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
+
+type App = typeof AppComponent;
 
 export enum MainPaths {
     users = 'users',
