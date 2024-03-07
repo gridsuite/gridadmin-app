@@ -171,7 +171,7 @@ const App: FunctionComponent = () => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME.toLowerCase())
+            ConfigSrv.fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

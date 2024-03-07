@@ -6,17 +6,17 @@
  */
 
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { capitalize, useTheme } from '@mui/material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
 import Parameters, { useParameterState } from './parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppsMetadataSrv, MetadataJson, StudySrv } from '../services';
-import { useNavigate } from 'react-router-dom';
 import { ReactComponent as GridAdminLogoLight } from '../images/GridAdmin_logo_light.svg';
 import { ReactComponent as GridAdminLogoDark } from '../images/GridAdmin_logo_dark.svg';
 import AppPackage from '../../package.json';
 import { AppState } from '../redux/reducer';
-import { useTheme } from '@mui/material';
 
 export type AppTopBarProps = {
     user?: AppState['user'];
@@ -52,7 +52,7 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     return (
         <>
             <TopBar
-                appName={APP_NAME}
+                appName={capitalize(APP_NAME)}
                 appColor="#FD3745"
                 appLogo={
                     theme.palette.mode === 'light' ? (
