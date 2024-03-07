@@ -5,33 +5,31 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { LIGHT_THEME, logout, TopBar } from '@gridsuite/commons-ui';
 import Parameters, { useParameterState } from './parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppsMetadataSrv, StudySrv } from '../services';
+import { AppsMetadataSrv, MetadataJson, StudySrv } from '../services';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as PowsyblLogo } from '../images/powsybl_logo.svg';
 import AppPackage from '../../package.json';
 import { AppState } from '../redux/reducer';
-import { UserManager } from 'oidc-client';
 
 export type AppTopBarProps = {
     user?: AppState['user'];
     userManager: {
-        instance: UserManager | null;
+        instance: unknown | null;
         error: string | null;
     };
 };
+
 const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
-    const [appsAndUrls, setAppsAndUrls] = useState<
-        Awaited<ReturnType<typeof AppsMetadataSrv.fetchAppsAndUrls>>
-    >([]);
+    const [appsAndUrls, setAppsAndUrls] = useState<MetadataJson[]>([]);
 
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
 
@@ -41,6 +39,8 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
         useParameterState(PARAM_LANGUAGE);
 
     const [showParameters, setShowParameters] = useState(false);
+    const displayParameters = useCallback(() => setShowParameters(true), []);
+    const hideParameters = useCallback(() => setShowParameters(false), []);
 
     useEffect(() => {
         if (props.user !== null) {
@@ -64,7 +64,7 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
                 }
                 appVersion={AppPackage.version}
                 appLicense={AppPackage.license}
-                onParametersClick={() => setShowParameters(true)}
+                onParametersClick={displayParameters}
                 onLogoutClick={() =>
                     logout(dispatch, props.userManager.instance)
                 }
@@ -84,7 +84,7 @@ const AppTopBar: FunctionComponent<AppTopBarProps> = (props) => {
             />
             <Parameters
                 showParameters={showParameters}
-                hideParameters={() => setShowParameters(false)}
+                hideParameters={hideParameters}
             />
         </>
     );

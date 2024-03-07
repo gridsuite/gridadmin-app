@@ -6,7 +6,8 @@
  */
 
 import App from './app';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
+import { CssBaseline } from '@mui/material';
 import {
     createTheme,
     StyledEngineProvider,
@@ -27,12 +28,12 @@ import {
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
+import { SupportedLanguages } from '../utils/language';
 import messages_en from '../translations/en.json';
 import messages_fr from '../translations/fr.json';
 import messages_plugins_en from '../plugins/translations/en.json';
 import messages_plugins_fr from '../plugins/translations/fr.json';
 import { store } from '../redux/store';
-import CssBaseline from '@mui/material/CssBaseline';
 import { PARAM_THEME } from '../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
 import { AppState } from '../redux/reducer';
@@ -89,7 +90,7 @@ const darkTheme: Theme = createTheme({
     mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
 });
 
-const getMuiTheme = (theme: unknown): Theme => {
+const getMuiTheme = (theme: string): Theme => {
     if (theme === LIGHT_THEME) {
         return lightTheme;
     } else {
@@ -97,7 +98,7 @@ const getMuiTheme = (theme: unknown): Theme => {
     }
 };
 
-const messages: Record<string, IntlConfig['messages']> = {
+const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
     en: {
         ...messages_en,
         ...login_en,
@@ -114,7 +115,7 @@ const messages: Record<string, IntlConfig['messages']> = {
     },
 };
 
-const basename = new URL(document.querySelector('base')?.href || '').pathname;
+const basename = new URL(document.querySelector('base')?.href ?? '').pathname;
 
 const AppWrapperWithRedux: FunctionComponent = () => {
     const computedLanguage = useSelector(

@@ -5,12 +5,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { ReqResponse } from '../utils/api-rest';
+import { getErrorMessage } from '../utils/error';
+import { Url } from '../utils/api-rest';
 
-export type EnvJson = typeof import('../../public/env.json');
+export type EnvJson = typeof import('../../public/env.json') & {
+    // https://github.com/gridsuite/deployment/blob/main/docker-compose/env.json
+    // https://github.com/gridsuite/deployment/blob/main/k8s/live/azure-dev/env.json
+    // https://github.com/gridsuite/deployment/blob/main/k8s/live/azure-integ/env.json
+    // https://github.com/gridsuite/deployment/blob/main/k8s/live/local/env.json
+    appsMetadataServerUrl?: Url;
+    mapBoxToken?: string;
+    //[key: string]: string;
+};
 
 function fetchEnv(): Promise<EnvJson> {
-    return fetch('/env.json').then((res: ReqResponse) => res.json());
+    return fetch('env.json').then((res: Response) => res.json());
 }
 
 export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
@@ -19,8 +28,8 @@ export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/authentication.json`)
         )
-        .then((res: ReqResponse) => res.json())
-        .then((res: Record<string, any>) => {
+        .then((res: Response) => res.json())
+        .then((res: { authorizationCodeFlowFeatureFlag: boolean }) => {
             console.log(
                 `Authorization code flow is ${
                     res.authorizationCodeFlowFeatureFlag
@@ -28,7 +37,7 @@ export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
                         : 'disabled'
                 }`
             );
-            return res.authorizationCodeFlowFeatureFlag;
+            return res.authorizationCodeFlowFeatureFlag || false;
         })
         .catch((error) => {
             console.error(error);
@@ -39,24 +48,65 @@ export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
         });
 }
 
-export function fetchVersion(): Promise<Record<string, any>> {
+export type VersionJson = {
+    deployVersion?: string;
+};
+
+export function fetchVersion(): Promise<VersionJson> {
     console.info(`Fetching global metadata...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/version.json`)
         )
-        .then((response: ReqResponse) => response.json())
-        .catch((reason) => {
-            console.error(`Error while fetching the version : ${reason}`);
-            return reason;
+        .then((response: Response) => response.json())
+        .catch((error) => {
+            console.error(
+                `Error while fetching the version : ${getErrorMessage(error)}`
+            );
+            throw error;
         });
 }
 
-export function fetchAppsAndUrls(): Promise<Array<Record<string, any>>> {
+export type MetadataCommon = {
+    name: string;
+    url: Url;
+    appColor: string;
+    hiddenInAppsMenu: boolean;
+};
+
+export type MetadataStudy = MetadataCommon & {
+    readonly name: 'Study';
+    resources?: {
+        types: string[];
+        path: string;
+    }[];
+    predefinedEquipmentProperties?: {
+        substation?: {
+            region?: string[];
+            tso?: string[];
+            totallyFree?: unknown[];
+            Demo?: string[];
+        };
+        load?: {
+            codeOI?: string[];
+        };
+    };
+    defaultParametersValues?: {
+        fluxConvention?: string;
+        enableDeveloperMode?: string; //maybe 'true'|'false' type?
+        mapManualRefresh?: string; //maybe 'true'|'false' type?
+    };
+};
+
+// https://github.com/gridsuite/deployment/blob/main/docker-compose/docker-compose.base.yml
+// https://github.com/gridsuite/deployment/blob/main/k8s/resources/common/config/apps-metadata.json
+export type MetadataJson = MetadataCommon | MetadataStudy;
+
+export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
     console.info(`Fetching apps and urls...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`)
         )
-        .then((response: ReqResponse) => response.json());
+        .then((response: Response) => response.json());
 }

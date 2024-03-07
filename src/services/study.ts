@@ -6,6 +6,8 @@
  */
 
 import { backendFetchJson, Token } from '../utils/api-rest';
+import { getErrorMessage } from '../utils/error';
+import { APP_NAME } from '../utils/config-params';
 
 const STUDY_URL = `${process.env.REACT_APP_API_GATEWAY}/study/v1`;
 
@@ -19,7 +21,7 @@ export type ServerAbout = {
 
 export function getServersInfos(token: Token): Promise<ServerAbout[]> {
     return backendFetchJson(
-        `${STUDY_URL}/servers/about`,
+        `${STUDY_URL}/servers/about?view=${APP_NAME}`,
         {
             headers: {
                 Accept: 'application/json',
@@ -28,8 +30,10 @@ export function getServersInfos(token: Token): Promise<ServerAbout[]> {
             cache: 'default',
         },
         token
-    ).catch((reason) => {
-        console.error(`Error while fetching the servers infos : ${reason}`);
-        return reason;
-    });
+    ).catch((error) => {
+        console.error(
+            `Error while fetching the servers infos : ${getErrorMessage(error)}`
+        );
+        throw error;
+    }) as Promise<ServerAbout[]>;
 }

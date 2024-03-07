@@ -10,12 +10,12 @@ import { store } from '../redux/store';
 
 export type Token = string;
 
-export function getToken(): Token {
+export function getToken(): Token | null {
     const state: AppState = store.getState();
-    return state.user?.id_token;
+    return state.user?.id_token ?? null;
 }
 
-export function parseError(text: string): any {
+export function parseError(text: string) {
     try {
         return JSON.parse(text);
     } catch (err) {

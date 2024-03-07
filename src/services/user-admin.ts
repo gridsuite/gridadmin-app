@@ -5,16 +5,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, ReqResponse } from '../utils/api-rest';
+import { backendFetch } from '../utils/api-rest';
+import { User } from '../utils/auth';
 
 const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/user-admin`;
 
-export function fetchValidateUser(user: Record<string, any>): Promise<boolean> {
+export function fetchValidateUser(user: User): Promise<boolean> {
     const sub = user?.profile?.sub;
     if (!sub) {
         return Promise.reject(
             new Error(
-                `Fetching access for missing user.profile.sub : ${JSON.stringify(
+                `Error : Fetching access for missing user.profile.sub : ${JSON.stringify(
                     user
                 )}`
             )
@@ -26,7 +27,7 @@ export function fetchValidateUser(user: Record<string, any>): Promise<boolean> {
     console.debug(CheckAccessUrl);
 
     return backendFetch(CheckAccessUrl, { method: 'head' }, user?.id_token)
-        .then((response: ReqResponse) => {
+        .then((response: Response) => {
             //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
             return response.status === 200;
         })

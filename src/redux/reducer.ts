@@ -32,20 +32,22 @@ import {
 } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
+import { LanguageParameters, SupportedLanguages } from '../utils/language';
+import { User } from '../utils/auth';
 
 export type AppState = {
-    computedLanguage: ReturnType<typeof getLocalStorageComputedLanguage>;
-    [PARAM_THEME]: ReturnType<typeof getLocalStorageTheme>;
-    [PARAM_LANGUAGE]: ReturnType<typeof getLocalStorageLanguage>;
+    computedLanguage: SupportedLanguages;
+    [PARAM_THEME]: string;
+    [PARAM_LANGUAGE]: LanguageParameters;
 
-    user: Record<string, any> | null;
-    signInCallbackError: any;
-    authenticationRouterError: any;
+    user: User | null; //TODO use true definition when commons-ui passed to typescript
+    signInCallbackError: unknown;
+    authenticationRouterError: unknown;
     showAuthenticationRouterLogin: boolean;
 };
 
 const initialState: AppState = {
-    computedLanguage: getLocalStorageComputedLanguage(),
+    // authentication
     user: null,
     signInCallbackError: null,
     authenticationRouterError: null,
@@ -54,6 +56,7 @@ const initialState: AppState = {
     // params
     [PARAM_THEME]: getLocalStorageTheme(),
     [PARAM_LANGUAGE]: getLocalStorageLanguage(),
+    computedLanguage: getLocalStorageComputedLanguage(),
 };
 
 export type Actions = AnyAction | ThemeAction | ComputedLanguageAction;
