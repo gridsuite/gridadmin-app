@@ -14,7 +14,7 @@ import {
     ReactNode,
     RefAttributes,
 } from 'react';
-import { AppBar, Box, LinearProgress, Toolbar } from '@mui/material';
+import { AppBar, Box, Grid, LinearProgress, Toolbar } from '@mui/material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { useColumnTypes } from './GridFormat';
 import { GridOptions } from 'ag-grid-community';
@@ -26,7 +26,7 @@ export interface GridProgressProps {
     progress: null | number;
 }
 
-export interface GridProps<TData>
+export interface GridTableProps<TData>
     extends Omit<
             GridOptions<TData>,
             | 'overlayLoadingTemplate'
@@ -41,13 +41,13 @@ export interface GridProps<TData>
  */
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
-interface GridWithRef
-    extends FunctionComponent<PropsWithChildren<GridProps<unknown>>> {
+interface GridTableWithRef
+    extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
     <TData, TContext extends {}>(
-        props: PropsWithoutRef<PropsWithChildren<GridProps<TData>>> &
+        props: PropsWithoutRef<PropsWithChildren<GridTableProps<TData>>> &
             RefAttributes<AgGridRef<TData, TContext>>
     ): ReturnType<
-        ForwardRefComponent<GridProps<TData>, AgGridRef<TData, TContext>>
+        ForwardRefComponent<GridTableProps<TData>, AgGridRef<TData, TContext>>
     >;
 }
 
@@ -55,45 +55,56 @@ interface GridWithRef
  * Common part for a Grid with toolbar
  * @param props
  */
-export const Grid: GridWithRef = forwardRef(function AgGridToolbar<
+export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
     TData,
     TContext extends {} = {}
 >(
-    props: PropsWithChildren<GridProps<TData>>,
+    props: PropsWithChildren<GridTableProps<TData>>,
     gridRef: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
     const { children: toolbarContent, progress, ...agGridProps } = props;
     const columnTypes = useColumnTypes<TData>();
     return (
-        <Box sx={{ flexGrow: 1, width: '100%', height: '100%' }}>
-            <AppBar position="static">
-                <Toolbar
-                    variant="dense"
-                    sx={{
-                        '& > *': {
-                            marginRight: '0.2em',
-                            '&:last-child': {
-                                marginRight: 0,
+        <Grid
+            container
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="stretch"
+        >
+            <Grid xs="auto">
+                <AppBar position="static">
+                    <Toolbar
+                        variant="dense"
+                        sx={{
+                            '& > *': {
+                                marginRight: '0.2em',
+                                '&:last-child': {
+                                    marginRight: 0,
+                                },
                             },
-                        },
-                    }}
-                >
-                    {/*TODO button reset grid filter/sort/column-hide/rows-selection ...*/}
-                    {/*<Divider orientation="vertical" variant="middle" flexItem />*/}
-                    {toolbarContent}
-                    <Box sx={{ flexGrow: 1 }} />
-                </Toolbar>
-            </AppBar>
-            <GridProgress progress={progress ?? null} />
-            <AgGrid<TData, TContext>
-                columnTypes={columnTypes}
-                {...agGridProps}
-                ref={gridRef}
-            />
-        </Box>
+                        }}
+                    >
+                        {/*TODO button reset grid filter/sort/column-hide/rows-selection ...*/}
+                        {/*<Divider orientation="vertical" variant="middle" flexItem />*/}
+                        {toolbarContent}
+                        <Box sx={{ flexGrow: 1 }} />
+                    </Toolbar>
+                </AppBar>
+            </Grid>
+            <Grid item xs="auto">
+                <GridProgress progress={progress ?? null} />
+            </Grid>
+            <Grid item xs>
+                <AgGrid<TData, TContext>
+                    columnTypes={columnTypes}
+                    {...agGridProps}
+                    ref={gridRef}
+                />
+            </Grid>
+        </Grid>
     );
 });
-export default Grid;
+export default GridTable;
 
 const GridProgress: FunctionComponent<GridProgressProps> = (props, context) => {
     if (props.progress === null || props.progress === undefined) {

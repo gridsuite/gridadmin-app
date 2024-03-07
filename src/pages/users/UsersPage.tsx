@@ -163,7 +163,7 @@ const UsersPage: FunctionComponent = () => {
                     <FormattedMessage id="users.title" />
                 </Typography>
             </Grid>
-            <Grid item xs sx={{ width: 1 }}>
+            <Grid item container xs sx={{ width: 1 }}>
                 <DataGrid<UserInfos>
                     accessRef={gridRef}
                     dataLoader={UserAdminSrv.fetchUsers}

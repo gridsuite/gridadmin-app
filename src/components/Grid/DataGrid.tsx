@@ -17,7 +17,7 @@ import {
 } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AgGridRef } from './AgGrid';
-import Grid, { GridProps } from './Grid';
+import { GridTable, GridTableProps } from './GridTable';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { ColDef } from 'ag-grid-community';
@@ -33,7 +33,7 @@ type DataGridExposed = {
 };
 
 export interface DataGridProps<TData, TContext extends {}>
-    extends Omit<GridProps<TData>, 'rowData'>,
+    extends Omit<GridTableProps<TData>, 'rowData'>,
         PropsWithChildren<{}> {
     //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
@@ -164,7 +164,7 @@ export default function DataGrid<TData, TContext extends {} = {}>(
     );
 
     return (
-        <Grid<TData, TContext & DataGridExposed>
+        <GridTable<TData, TContext & DataGridExposed>
             {...gridProps}
             ref={props.accessRef}
             rowData={data}
@@ -204,6 +204,6 @@ export default function DataGrid<TData, TContext extends {} = {}>(
                     {children}
                 </>
             )}
-        </Grid>
+        </GridTable>
     );
 }

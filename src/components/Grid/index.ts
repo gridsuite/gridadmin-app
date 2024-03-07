@@ -15,8 +15,8 @@ export type { GridButtonAddProps } from './buttons/ButtonAdd';
 
 export { default as NoRowsOverlay } from './NoRowsOverlay';
 export { GridColumnTypes } from './GridFormat';
-export { Grid } from './Grid';
-export type { GridProps } from './Grid';
+export { GridTable } from './GridTable';
+export type { GridTableProps } from './GridTable';
 
 export { default as DataGrid } from './DataGrid';
 export type { DataGridProps, DataGridRef } from './DataGrid';
