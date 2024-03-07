@@ -19,9 +19,7 @@ export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
         { debug: process.env.REACT_APP_DEBUG_REQUESTS === 'true' }
     );
     reconnectingWebSocket.onopen = function (event: Event) {
-        console.info(
-            `Connected Websocket update config ui ${webSocketUrl} ...`
-        );
+        console.info(`Connected Websocket update config ui: ${webSocketUrl}`);
     };
     return reconnectingWebSocket;
 }

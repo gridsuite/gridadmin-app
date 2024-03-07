@@ -32,7 +32,7 @@ export function getServersInfos(token: Token): Promise<ServerAbout[]> {
         token
     ).catch((error) => {
         console.error(
-            `Error while fetching the servers infos : ${getErrorMessage(error)}`
+            `Error while fetching the servers infos: ${getErrorMessage(error)}`
         );
         throw error;
     }) as Promise<ServerAbout[]>;

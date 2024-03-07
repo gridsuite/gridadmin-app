@@ -23,14 +23,14 @@ function fetchEnv(): Promise<EnvJson> {
 }
 
 export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
-    console.info(`Fetching authorization code flow feature flag...`);
+    console.debug('Fetching authorization code flow feature flag...');
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/authentication.json`)
         )
         .then((res: Response) => res.json())
         .then((res: { authorizationCodeFlowFeatureFlag: boolean }) => {
-            console.log(
+            console.info(
                 `Authorization code flow is ${
                     res.authorizationCodeFlowFeatureFlag
                         ? 'enabled'
@@ -40,9 +40,13 @@ export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
             return res.authorizationCodeFlowFeatureFlag || false;
         })
         .catch((error) => {
-            console.error(error);
+            console.error(
+                `Error while fetching the authentication code flow: ${getErrorMessage(
+                    error
+                )}`
+            );
             console.warn(
-                `Something wrong happened when retrieving authentication.json: authorization code flow will be disabled`
+                'Something wrong happened when retrieving authentication.json: authorization code flow will be disabled'
             );
             return false;
         });
@@ -53,7 +57,7 @@ export type VersionJson = {
 };
 
 export function fetchVersion(): Promise<VersionJson> {
-    console.info(`Fetching global metadata...`);
+    console.debug(`Fetching global metadata...`);
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/version.json`)
@@ -61,7 +65,7 @@ export function fetchVersion(): Promise<VersionJson> {
         .then((response: Response) => response.json())
         .catch((error) => {
             console.error(
-                `Error while fetching the version : ${getErrorMessage(error)}`
+                `Error while fetching the version: ${getErrorMessage(error)}`
             );
             throw error;
         });
@@ -103,7 +107,7 @@ export type MetadataStudy = MetadataCommon & {
 export type MetadataJson = MetadataCommon | MetadataStudy;
 
 export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
-    console.info(`Fetching apps and urls...`);
+    console.debug('Fetching apps and urls...');
     return fetchEnv()
         .then((env: EnvJson) =>
             fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`)
