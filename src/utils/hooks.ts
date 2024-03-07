@@ -22,3 +22,11 @@ export function useStateWithLabel<S>(
     useDebugValue(`${label}: ${value}`);
     return [value, setValue];
 }
+
+export function useDebugRender(label: string) {
+    if (process.env.NODE_ENV !== 'production') {
+        label = `${label} render`;
+        console.count?.(label);
+        console.timeStamp?.(label);
+    }
+}

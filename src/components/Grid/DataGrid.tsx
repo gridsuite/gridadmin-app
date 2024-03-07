@@ -21,7 +21,7 @@ import { GridTable, GridTableProps } from './GridTable';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 import { GridButtonDelete } from './buttons/ButtonDelete';
 import { ColDef } from 'ag-grid-community';
-import { useStateWithLabel } from '../../utils/react';
+import { useStateWithLabel } from '../../utils/hooks';
 
 type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;

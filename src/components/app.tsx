@@ -12,6 +12,7 @@ import {
     useEffect,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Grid } from '@mui/material';
 import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
 import {
     selectComputedLanguage,
@@ -34,12 +35,10 @@ import {
 import { getComputedLanguage } from '../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { Grid } from '@mui/material';
+import { useDebugRender } from '../utils/hooks';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
-    console.count('app render');
-    console?.timeStamp('app render');
-
+    useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch();
     const user = useSelector((state: AppState) => state.user);
