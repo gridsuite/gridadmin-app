@@ -38,7 +38,7 @@ export interface DataGridProps<TData, TContext extends {}>
     //context: NonNullable<FullDataGridProps<TData, TContext>['context']>; //required
     accessRef: RefObject<DataGridRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
-    removeElement?: (dataLine: TData) => Promise<void>;
+    removeElements?: (dataLines: TData[]) => Promise<void>;
     addBtn?: () => ReactElement;
 }
 
@@ -76,7 +76,7 @@ export default function DataGrid<TData, TContext extends {} = {}>(
         context,
         accessRef,
         dataLoader,
-        removeElement,
+        removeElements,
         addBtn,
         children,
         ...gridProps
@@ -144,23 +144,21 @@ export default function DataGrid<TData, TContext extends {} = {}>(
 
     const btnDelete = useMemo(
         () =>
-            removeElement ? (
+            removeElements ? (
                 <GridButtonDelete
                     onClick={() =>
-                        queryAction(() =>
-                            Promise.all(rowsSelection.map(removeElement)).then(
-                                (values) => {}
-                            )
-                        ).then(() => loadingAction(loadDataAndSave))
+                        queryAction(() => removeElements(rowsSelection))
+                            //TODO replace manual refresh by notifications
+                            .then(() => loadingAction(loadDataAndSave))
                     }
-                    disabled={!removeElement || rowsSelection.length <= 0}
+                    disabled={!removeElements || rowsSelection.length <= 0}
                 />
             ) : undefined,
         [
             loadDataAndSave,
             loadingAction,
             queryAction,
-            removeElement,
+            removeElements,
             rowsSelection,
         ]
     );
@@ -173,7 +171,7 @@ export default function DataGrid<TData, TContext extends {} = {}>(
             defaultColDef={defaultColDef as ColDef<TData>}
             alwaysShowVerticalScroll={true}
             onGridReady={refresh}
-            rowSelection="single" //TODO multiple with delete action
+            rowSelection="multiple"
             onSelectionChanged={useCallback(
                 (event: SelectionChangedEvent<TData, TContext>) =>
                     setRowsSelection(event.api.getSelectedRows() ?? []),

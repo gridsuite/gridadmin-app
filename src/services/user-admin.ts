@@ -69,6 +69,22 @@ export function deleteUser(sub: string): Promise<void> {
         });
 }
 
+export function deleteUsers(subs: string[]): Promise<void> {
+    console.debug(`Deleting sub users "${JSON.stringify(subs)}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/users`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subs),
+    })
+        .then((response: ReqResponse) => undefined)
+        .catch((reason) => {
+            console.error(`Error while deleting the servers data : ${reason}`);
+            throw reason;
+        });
+}
+
 export function addUser(sub: string): Promise<void> {
     console.debug(`Creating sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })

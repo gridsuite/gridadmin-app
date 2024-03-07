@@ -58,7 +58,7 @@ const UsersPage: FunctionComponent = () => {
                 headerTooltip: intl.formatMessage({
                     id: 'users.table.id.description',
                 }),
-                //TODO headerCheckboxSelection: true,
+                headerCheckboxSelection: true,
                 //initialSortIndex: 2,
                 filterParams: {
                     caseSensitive: false,
@@ -89,16 +89,18 @@ const UsersPage: FunctionComponent = () => {
         [intl]
     );
 
-    const deleteUser = useCallback(
-        (dataLine: UserInfos): Promise<void> =>
-            UserAdminSrv.deleteUser(dataLine.sub).catch((error) =>
+    const deleteUsers = useCallback(
+        (dataLines: UserInfos[]): Promise<void> => {
+            let subs = dataLines.map((user) => user.sub);
+            return UserAdminSrv.deleteUsers(subs).catch((error) =>
                 snackError({
-                    messageTxt: `Error while deleting user "${dataLine.sub}"${
-                        error.message && ':\n' + error.message
-                    }`,
+                    messageTxt: `Error while deleting user "${JSON.stringify(
+                        subs
+                    )}"${error.message && ':\n' + error.message}`,
                     headerId: 'users.table.error.delete',
                 })
-            ),
+            );
+        },
         [snackError]
     );
 
@@ -166,7 +168,7 @@ const UsersPage: FunctionComponent = () => {
                     accessRef={gridRef}
                     dataLoader={UserAdminSrv.fetchUsers}
                     addBtn={buttonAdd}
-                    removeElement={deleteUser}
+                    removeElements={deleteUsers}
                     columnDefs={columns}
                     gridId="table-users"
                     getRowId={getRowId}
