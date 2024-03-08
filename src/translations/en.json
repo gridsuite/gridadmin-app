@@ -1,6 +1,38 @@
 {
+    "logoutFailed": "Error: logout failed; you are still logged in.",
+    "pageNotFound": "Page not found",
+    "connected": "Connected",
     "close": "Close",
+    "ok": "OK",
+    "cancel": "Cancel",
     "parameters": "Parameters",
     "paramsChangingError": "An error occurred when changing the parameters",
-    "paramsRetrievingError": "An error occurred while retrieving the parameters"
+    "paramsRetrievingError": "An error occurred while retrieving the parameters",
+
+    "appBar.tabs.users": "Users",
+    "appBar.tabs.connections": "Connections",
+
+    "table.noRows": "No data",
+    "table.id": "ID",
+    "table.error.retrieve": "Error while retrieving data",
+    "table.toolbar.reset": "Reset",
+    "table.toolbar.reset.label": "Reset table columns & filters",
+    "table.toolbar.add": "Add",
+    "table.toolbar.add.label": "Add an element",
+    "table.toolbar.delete": "Delete",
+    "table.toolbar.delete.label": "Delete selected element(s)",
+    "table.bool.yes": "Yes",
+    "table.bool.no": "No",
+    "table.bool.unknown": "Unknown",
+
+    "users.table.id.description": "Identifiant de l'utilisateur",
+    "users.table.isAdmin": "Admin",
+    "users.table.isAdmin.description": "The users is an administrator of GridSuite",
+    "users.table.error.delete": "Error while deleting user",
+    "users.table.error.add": "Error while adding user",
+    "users.table.toolbar.add": "Add user",
+    "users.table.toolbar.add.label": "Add a user",
+    "users.form.title": "Add a user",
+    "users.form.content": "Please fill in new user data.",
+    "users.form.field.username.label": "User ID"
 }

@@ -16,9 +16,16 @@ import {
 
 import {
     ComputedLanguageAction,
+    LanguageAction,
     SELECT_COMPUTED_LANGUAGE,
     SELECT_THEME,
     ThemeAction,
+    UPDATE_USER_MANAGER_ERROR,
+    UPDATE_USER_MANAGER_INSTANCE,
+    UPDATE_USER_MANAGER_STATE,
+    UserManagerAction,
+    UserManagerErrorAction,
+    UserManagerInstanceAction,
 } from './actions';
 
 import {
@@ -34,12 +41,14 @@ import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
 import { LanguageParameters, SupportedLanguages } from '../utils/language';
 import { User } from '../utils/auth';
+import { UserManagerState } from '../routes';
 
 export type AppState = {
     computedLanguage: SupportedLanguages;
     [PARAM_THEME]: string;
     [PARAM_LANGUAGE]: LanguageParameters;
 
+    userManager: UserManagerState;
     user: User | null; //TODO use true definition when commons-ui passed to typescript
     signInCallbackError: unknown;
     authenticationRouterError: unknown;
@@ -48,6 +57,10 @@ export type AppState = {
 
 const initialState: AppState = {
     // authentication
+    userManager: {
+        instance: null,
+        error: null,
+    },
     user: null,
     signInCallbackError: null,
     authenticationRouterError: null,
@@ -59,7 +72,14 @@ const initialState: AppState = {
     computedLanguage: getLocalStorageComputedLanguage(),
 };
 
-export type Actions = AnyAction | ThemeAction | ComputedLanguageAction;
+export type Actions =
+    | AnyAction
+    | UserManagerAction
+    | UserManagerInstanceAction
+    | UserManagerErrorAction
+    | ThemeAction
+    | LanguageAction
+    | ComputedLanguageAction;
 
 export type AppStateKey = keyof AppState;
 
@@ -69,6 +89,25 @@ export const reducer: ReducerWithInitialState<AppState> = createReducer(
         [SELECT_THEME]: (state: Draft<AppState>, action: ThemeAction) => {
             state.theme = action.theme;
             saveLocalStorageTheme(state.theme);
+        },
+
+        [UPDATE_USER_MANAGER_STATE]: (
+            state: Draft<AppState>,
+            action: UserManagerAction
+        ) => {
+            state.userManager = action.userManager;
+        },
+        [UPDATE_USER_MANAGER_INSTANCE]: (
+            state: Draft<AppState>,
+            action: UserManagerInstanceAction
+        ) => {
+            state.userManager.instance = action.instance;
+        },
+        [UPDATE_USER_MANAGER_ERROR]: (
+            state: Draft<AppState>,
+            action: UserManagerErrorAction
+        ) => {
+            state.userManager.error = action.error;
         },
 
         [USER]: (state: Draft<AppState>, action: AnyAction) => {

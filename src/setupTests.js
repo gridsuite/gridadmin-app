@@ -6,3 +6,16 @@
  */
 
 global.IS_REACT_ACT_ENVIRONMENT = true;
+
+// jest.config.js
+module.exports = {
+    transform: {
+        '^.+\\.(ts|tsx|js|jsx|mjs|cjs)$': [
+            'babel-jest', // or "ts-test" or whichever transformer you're using
+        ],
+    },
+    transformIgnorePatterns: [
+        // see https://www.ag-grid.com/react-data-grid/testing/
+        '/node_modules/(?!(@ag-grid-community|@ag-grid-enterprise)/)',
+    ],
+};

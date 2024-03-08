@@ -5,7 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import AppComponent from './app';
-export type App = typeof AppComponent;
+/*export { AgGrid } from './AgGrid';
+export type { AgGridRef } from './AgGrid';*/
 
-export { AppWrapper } from './app-wrapper';
+export { GridTable, GridButton, GridButtonDelete } from './GridTable';
+export type {
+    GridTableProps,
+    GridTableRef,
+    GridButtonProps,
+} from './GridTable';

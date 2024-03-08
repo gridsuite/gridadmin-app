@@ -1,6 +1,38 @@
 {
+    "logoutFailed": "Erreur: échec de la déconnexion\u00a0; vous êtes toujours connecté(e).",
+    "pageNotFound": "Page introuvable",
+    "connected": "Connecté(e)",
     "close": "Fermer",
+    "ok": "OK",
+    "cancel": "Annuler",
     "parameters": "Paramètres",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",
-    "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres"
+    "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres",
+
+    "appBar.tabs.users": "Utilisateurs",
+    "appBar.tabs.connections": "Connexions",
+
+    "table.noRows": "No data",
+    "table.id": "ID",
+    "table.error.retrieve": "Erreur pendant la récupération des données",
+    "table.toolbar.reset": "Réinitialiser",
+    "table.toolbar.reset.label": "Réinitialiser les tries et filtres de colonnes",
+    "table.toolbar.add": "Ajouter",
+    "table.toolbar.add.label": "Ajouter un élément",
+    "table.toolbar.delete": "Supprimer",
+    "table.toolbar.delete.label": "Supprimer le(s) élément(s) sélectionné(s)",
+    "table.bool.yes": "Oui",
+    "table.bool.no": "Non",
+    "table.bool.unknown": "Inconnu",
+
+    "users.table.id.description": "Identifiant de l'utilisateur",
+    "users.table.isAdmin": "Admin",
+    "users.table.isAdmin.description": "L'utilisateur est administrateur de GridSuite",
+    "users.table.error.delete": "Erreur pendant la suppression de l'utilisateur",
+    "users.table.error.add": "Erreur pendant l'ajout de l'utilisateur",
+    "users.table.toolbar.add": "Ajouter utilisateur",
+    "users.table.toolbar.add.label": "Ajouter un utilisateur",
+    "users.form.title": "Ajouter un utilisateur",
+    "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
+    "users.form.field.username.label": "ID utilisateur"
 }

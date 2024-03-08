@@ -29,7 +29,6 @@ import {
     top_bar_fr,
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import { SupportedLanguages } from '../../utils/language';
 import messages_en from '../../translations/en.json';
@@ -38,6 +37,7 @@ import { store } from '../../redux/store';
 import { PARAM_THEME } from '../../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
 import { AppState } from '../../redux/reducer';
+import { AppWithAuthRouter } from '../../routes';
 
 const lightTheme: ThemeOptions = {
     palette: {
@@ -62,7 +62,7 @@ const lightTheme: ThemeOptions = {
     link: {
         color: 'blue',
     },
-    mapboxStyle: 'mapbox://styles/mapbox/light-v9',
+    agGridTheme: 'ag-theme-alpine',
 };
 
 const darkTheme: ThemeOptions = {
@@ -88,7 +88,7 @@ const darkTheme: ThemeOptions = {
     link: {
         color: 'green',
     },
-    mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
+    agGridTheme: 'ag-theme-alpine-dark',
 };
 
 const getMuiTheme = (theme: unknown, locale: SupportedLanguages): Theme => {
@@ -117,7 +117,10 @@ const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
 
 const basename = new URL(document.querySelector('base')?.href ?? '').pathname;
 
-const AppWrapperWithRedux: FunctionComponent = () => {
+/**
+ * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
+ */
+const AppWrapperRouterLayout: typeof App = (props, context) => {
     const computedLanguage = useSelector(
         (state: AppState) => state.computedLanguage
     );
@@ -132,28 +135,33 @@ const AppWrapperWithRedux: FunctionComponent = () => {
             defaultLocale={LANG_ENGLISH}
             messages={messages[computedLanguage]}
         >
-            <BrowserRouter basename={basename}>
-                <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={themeCompiled}>
-                        <SnackbarProvider hideIconVariant={false}>
-                            <CssBaseline />
-                            <CardErrorBoundary>
-                                <App />
-                            </CardErrorBoundary>
-                        </SnackbarProvider>
-                    </ThemeProvider>
-                </StyledEngineProvider>
-            </BrowserRouter>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={themeCompiled}>
+                    <SnackbarProvider hideIconVariant={false}>
+                        <CssBaseline />
+                        <CardErrorBoundary>
+                            <App {...props}>{props.children}</App>
+                        </CardErrorBoundary>
+                    </SnackbarProvider>
+                </ThemeProvider>
+            </StyledEngineProvider>
         </IntlProvider>
     );
 };
 
-const AppWrapper: FunctionComponent = () => {
-    return (
-        <Provider store={store}>
-            <AppWrapperWithRedux />
-        </Provider>
-    );
-};
+/**
+ * Layer managing router depending on user authentication state
+ */
+const AppWrapperWithRedux: FunctionComponent = () => (
+    <AppWithAuthRouter basename={basename} layout={AppWrapperRouterLayout} />
+);
 
+/**
+ * Layer injecting Redux store in context
+ */
+export const AppWrapper: FunctionComponent = () => (
+    <Provider store={store}>
+        <AppWrapperWithRedux />
+    </Provider>
+);
 export default AppWrapper;

@@ -7,7 +7,7 @@
 
 import { getToken, parseError, Token } from './api';
 
-export type * from './api';
+export type { Token, User } from './api';
 
 export interface ErrorWithStatus extends Error {
     status?: number;
