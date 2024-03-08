@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2020, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -7,6 +7,7 @@
 
 import { PARAM_LANGUAGE } from '../utils/config-params';
 import { Action } from 'redux';
+import { AppState } from './reducer';
 import { UserManagerState } from '../routes';
 
 export const UPDATE_USER_MANAGER_STATE = 'UPDATE_USER_MANAGER_STATE';
@@ -57,9 +58,9 @@ export function selectTheme(theme: string): ThemeAction {
 
 export const SELECT_LANGUAGE = 'SELECT_LANGUAGE';
 export type LanguageAction = Readonly<Action<typeof SELECT_LANGUAGE>> & {
-    [PARAM_LANGUAGE]: string;
+    [PARAM_LANGUAGE]: AppState['language'];
 };
-export function selectLanguage(language: string): LanguageAction {
+export function selectLanguage(language: AppState['language']): LanguageAction {
     return { type: SELECT_LANGUAGE, [PARAM_LANGUAGE]: language };
 }
 
@@ -67,10 +68,10 @@ export const SELECT_COMPUTED_LANGUAGE = 'SELECT_COMPUTED_LANGUAGE';
 export type ComputedLanguageAction = Readonly<
     Action<typeof SELECT_COMPUTED_LANGUAGE>
 > & {
-    computedLanguage: string;
+    computedLanguage: AppState['computedLanguage'];
 };
 export function selectComputedLanguage(
-    computedLanguage: string
+    computedLanguage: AppState['computedLanguage']
 ): ComputedLanguageAction {
     return {
         type: SELECT_COMPUTED_LANGUAGE,

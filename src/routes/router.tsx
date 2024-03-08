@@ -32,13 +32,12 @@ import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
-import AppComponent from '../components/app';
+import { App } from '../components/App';
 import { Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
-
-type App = typeof AppComponent;
+import { getErrorMessage } from '../utils/error';
 
 export enum MainPaths {
     users = 'users',
@@ -148,7 +147,7 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                 );
             })
             .catch((error: any) => {
-                dispatch(updateUserManagerDestructured(null, error.message));
+                dispatch(updateUserManagerDestructured(null, getErrorMessage(error)));
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
     }, [

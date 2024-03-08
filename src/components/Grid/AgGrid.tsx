@@ -28,7 +28,7 @@ import {
     AG_GRID_LOCALE_FR,
     AgGridLocale,
 } from '../../translations/ag-grid/locales';
-import deepmerge from '@mui/utils/deepmerge/deepmerge';
+import deepmerge from '@mui/utils/deepmerge';
 import { ColDef, GridOptions } from 'ag-grid-community';
 
 const messages: Record<string, AgGridLocale> = {

@@ -7,7 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import App from './app';
-import { store } from '../redux/store';
+import { store } from '../../redux/store';
 import {
     createTheme,
     StyledEngineProvider,
@@ -16,9 +16,9 @@ import {
 import { SnackbarProvider } from '@gridsuite/commons-ui';
 import { UserManagerMock } from '@gridsuite/commons-ui/es/utils/UserManagerMock';
 import { CssBaseline } from '@mui/material';
-import { appRoutes } from '../routes';
+import { appRoutes } from '../../routes';
 
-let container: Element | any = null;
+let container: HTMLElement | null = null;
 
 beforeEach(() => {
     // setup a DOM element as a render target
@@ -28,12 +28,15 @@ beforeEach(() => {
 
 afterEach(() => {
     // cleanup on exiting
-    container.remove();
+    container?.remove();
     container = null;
 });
 
 //broken test
 it.skip('renders', async () => {
+    if (container === null) {
+        throw new Error('No container was defined');
+    }
     const root = createRoot(container);
     const AppWrapperRouterLayout: FunctionComponent<
         PropsWithChildren<{}>

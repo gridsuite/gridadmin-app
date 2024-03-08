@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2021, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -6,13 +6,12 @@
  */
 
 import App from './app';
-import { FunctionComponent, useCallback } from 'react';
-import { CssBaseline, responsiveFontSizes } from '@mui/material';
+import { FunctionComponent, useMemo } from 'react';
+import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import {
     createTheme,
     StyledEngineProvider,
     Theme,
-    ThemeOptions,
     ThemeProvider,
 } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
@@ -31,15 +30,14 @@ import {
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
-import messages_en from '../translations/en.json';
-import messages_fr from '../translations/fr.json';
-import messages_plugins_en from '../plugins/translations/en.json';
-import messages_plugins_fr from '../plugins/translations/fr.json';
-import { store } from '../redux/store';
-import { PARAM_THEME } from '../utils/config-params';
+import { SupportedLanguages } from '../../utils/language';
+import messages_en from '../../translations/en.json';
+import messages_fr from '../../translations/fr.json';
+import { store } from '../../redux/store';
+import { PARAM_THEME } from '../../utils/config-params';
 import { IntlConfig } from 'react-intl/src/types';
-import { AppState } from '../redux/reducer';
-import { AppWithAuthRouter } from '../routes';
+import { AppState } from '../../redux/reducer';
+import { AppWithAuthRouter } from '../../routes';
 
 const lightTheme: ThemeOptions = {
     palette: {
@@ -95,7 +93,7 @@ const darkTheme: ThemeOptions = {
     agGridTheme: 'ag-theme-alpine-dark',
 };
 
-const getMuiTheme = (theme: unknown, locale: unknown): Theme => {
+const getMuiTheme = (theme: unknown, locale: SupportedLanguages): Theme => {
     return responsiveFontSizes(
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
@@ -104,24 +102,22 @@ const getMuiTheme = (theme: unknown, locale: unknown): Theme => {
     );
 };
 
-const messages: Record<string, IntlConfig['messages']> = {
-    [LANG_ENGLISH]: {
+const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
+    en: {
         ...messages_en,
         ...login_en,
         ...top_bar_en,
         ...card_error_boundary_en,
-        ...messages_plugins_en, // keep it at the end to allow translation overwriting
     },
-    [LANG_FRENCH]: {
+    fr: {
         ...messages_fr,
         ...login_fr,
         ...top_bar_fr,
         ...card_error_boundary_fr,
-        ...messages_plugins_fr, // keep it at the end to allow translation overwriting
     },
 };
 
-const basename = new URL(document.querySelector('base')?.href || '').pathname;
+const basename = new URL(document.querySelector('base')?.href ?? '').pathname;
 
 /**
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
@@ -131,7 +127,10 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
         (state: AppState) => state.computedLanguage
     );
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
-    const getTheme = useCallback(getMuiTheme, []);
+    const themeCompiled = useMemo(
+        () => getMuiTheme(theme, computedLanguage),
+        [computedLanguage, theme]
+    );
     return (
         <IntlProvider
             locale={computedLanguage}
@@ -139,7 +138,7 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
             messages={messages[computedLanguage]}
         >
             <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={getTheme(theme, computedLanguage)}>
+                <ThemeProvider theme={themeCompiled}>
                     <SnackbarProvider hideIconVariant={false}>
                         <CssBaseline />
                         <CardErrorBoundary>

@@ -5,52 +5,57 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { getAppName } from '../utils/config-params';
+import {
+    APP_NAME,
+    getAppName,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+} from '../utils/config-params';
 import { backendFetch, backendFetchJson } from '../utils/api-rest';
+import { LanguageParameters } from '../utils/language';
 
 const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/config`;
 
-export type ConfigParameter = {
-    //TODO check with config-server swagger
-    name: string;
-    value: any;
-    [propertiesName: string]: unknown; //temporary
-};
-export type ConfigParameters = Array<ConfigParameter>;
+// https://github.com/gridsuite/config-server/blob/main/src/main/java/org/gridsuite/config/server/dto/ParameterInfos.java
+export type ConfigParameter =
+    | {
+          readonly name: typeof PARAM_LANGUAGE;
+          value: LanguageParameters;
+      }
+    | {
+          readonly name: typeof PARAM_THEME;
+          value: string;
+      };
+export type ConfigParameters = ConfigParameter[];
 export function fetchConfigParameters(
-    appName: string
+    appName: string = APP_NAME
 ): Promise<ConfigParameters> {
-    appName = appName.toLowerCase();
     console.debug(`Fetching UI configuration params for app : ${appName}`);
-    return backendFetchJson(
-        `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters`
-    );
+    const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters`;
+    return backendFetchJson(fetchParams) as Promise<ConfigParameters>;
 }
 
-export function fetchConfigParameter(
-    name: string
-): ReturnType<typeof backendFetchJson> {
-    const appName = getAppName(name).toLowerCase();
+export function fetchConfigParameter(name: string): Promise<ConfigParameter> {
+    const appName = getAppName(name);
     console.debug(
         `Fetching UI config parameter '${name}' for app '${appName}'`
     );
-    return backendFetchJson(
-        `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}`
-    );
+    const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}`;
+    return backendFetchJson(fetchParams) as Promise<ConfigParameter>;
 }
 
 export function updateConfigParameter(
     name: string,
     value: Parameters<typeof encodeURIComponent>[0]
-): ReturnType<typeof backendFetch> {
-    const appName = getAppName(name).toLowerCase();
+): Promise<void> {
+    const appName = getAppName(name);
     console.debug(
         `Updating config parameter '${name}=${value}' for app '${appName}'`
     );
-    return backendFetch(
-        `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}?value=${encodeURIComponent(
-            value
-        )}`,
-        { method: 'put' }
-    );
+    const updateParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}?value=${encodeURIComponent(
+        value
+    )}`;
+    return backendFetch(updateParams, {
+        method: 'put',
+    }) as Promise<unknown> as Promise<void>;
 }

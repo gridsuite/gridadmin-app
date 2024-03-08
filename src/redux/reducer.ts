@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2020, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -39,22 +39,24 @@ import {
 } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
+import { LanguageParameters, SupportedLanguages } from '../utils/language';
+import { User } from '../utils/auth';
 import { UserManagerState } from '../routes';
 
 export type AppState = {
-    computedLanguage: ReturnType<typeof getLocalStorageComputedLanguage>;
-    [PARAM_THEME]: ReturnType<typeof getLocalStorageTheme>;
-    [PARAM_LANGUAGE]: ReturnType<typeof getLocalStorageLanguage>;
+    computedLanguage: SupportedLanguages;
+    [PARAM_THEME]: string;
+    [PARAM_LANGUAGE]: LanguageParameters;
 
     userManager: UserManagerState;
-    user: Record<string, any> | null;
-    signInCallbackError: any;
-    authenticationRouterError: any;
+    user: User | null; //TODO use true definition when commons-ui passed to typescript
+    signInCallbackError: unknown;
+    authenticationRouterError: unknown;
     showAuthenticationRouterLogin: boolean;
 };
 
 const initialState: AppState = {
-    computedLanguage: getLocalStorageComputedLanguage(),
+    // authentication
     userManager: {
         instance: null,
         error: null,
@@ -67,6 +69,7 @@ const initialState: AppState = {
     // params
     [PARAM_THEME]: getLocalStorageTheme(),
     [PARAM_LANGUAGE]: getLocalStorageLanguage(),
+    computedLanguage: getLocalStorageComputedLanguage(),
 };
 
 export type Actions =

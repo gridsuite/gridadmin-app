@@ -5,8 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, backendFetchJson, ReqResponse } from '../utils/api-rest';
-import { extractUserSub, getToken, getUser, User } from '../utils/api';
+import { backendFetch, backendFetchJson } from '../utils/api-rest';
+import { extractUserSub, getToken, getUser } from '../utils/api';
+import { User } from '../utils/auth';
 
 const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/user-admin/v1`;
 
@@ -24,10 +25,10 @@ export function fetchValidateUser(user: User): Promise<boolean> {
             return backendFetch(
                 `${USER_ADMIN_URL}/users/${sub}`,
                 { method: 'head' },
-                getToken(user)
+                getToken(user) ?? undefined
             );
         })
-        .then((response: ReqResponse) => {
+        .then((response: Response) => {
             //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
             return response.status === 200;
         })
@@ -56,13 +57,13 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }).catch((reason) => {
         console.error(`Error while fetching the servers data : ${reason}`);
         throw reason;
-    });
+    }) as Promise<UserInfos[]>;
 }
 
 export function deleteUser(sub: string): Promise<void> {
     console.debug(`Deleting sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })
-        .then((response: ReqResponse) => undefined)
+        .then((response: Response) => undefined)
         .catch((reason) => {
             console.error(`Error while deleting the servers data : ${reason}`);
             throw reason;
@@ -78,7 +79,7 @@ export function deleteUsers(subs: string[]): Promise<void> {
         },
         body: JSON.stringify(subs),
     })
-        .then((response: ReqResponse) => undefined)
+        .then((response: Response) => undefined)
         .catch((reason) => {
             console.error(`Error while deleting the servers data : ${reason}`);
             throw reason;
@@ -88,7 +89,7 @@ export function deleteUsers(subs: string[]): Promise<void> {
 export function addUser(sub: string): Promise<void> {
     console.debug(`Creating sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
-        .then((response: ReqResponse) => undefined)
+        .then((response: Response) => undefined)
         .catch((reason) => {
             console.error(`Error while pushing the data : ${reason}`);
             throw reason;

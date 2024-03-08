@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2020, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,24 +18,19 @@ import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
-} from '../redux/actions';
-import { AppState } from '../redux/reducer';
-import {
-    ConfigNotif,
-    ConfigParameter,
-    ConfigParameters,
-    ConfigSrv,
-} from '../services';
+} from '../../redux/actions';
+import { AppState } from '../../redux/reducer';
+import { ConfigNotif, ConfigParameters, ConfigSrv } from '../../services';
 import {
     APP_NAME,
     COMMON_APP_NAME,
     PARAM_LANGUAGE,
     PARAM_THEME,
-} from '../utils/config-params';
-import { getComputedLanguage } from '../utils/language';
+} from '../../utils/config-params';
+import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { useDebugRender } from '../utils/hooks';
+import { useDebugRender } from '../../utils/hooks';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
@@ -43,10 +38,12 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     const dispatch = useDispatch();
     const user = useSelector((state: AppState) => state.user);
 
-    const updateParams: (p: ConfigParameters) => void = useCallback(
+    const updateParams = useCallback(
         (params: ConfigParameters) => {
-            console.debug('received UI parameters : ', params);
-            params.forEach((param: ConfigParameter) => {
+            console.groupCollapsed('received UI parameters');
+            console.table(params);
+            console.groupEnd();
+            params.forEach((param) => {
                 switch (param.name) {
                     case PARAM_THEME:
                         dispatch(selectTheme(param.value));
@@ -60,14 +57,15 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                         );
                         break;
                     default:
+                        break;
                 }
             });
         },
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig: () => ReconnectingWebSocket =
-        useCallback(() => {
+    const connectNotificationsUpdateConfig =
+        useCallback((): ReconnectingWebSocket => {
             const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
@@ -101,7 +99,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME.toLowerCase())
+            ConfigSrv.fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

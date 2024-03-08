@@ -11,8 +11,8 @@ import { store } from '../redux/store';
 export type User = AppState['user'];
 export type Token = string;
 
-export function getToken(user?: User): Token {
-    return (user ?? getUser())?.id_token;
+export function getToken(user?: User): Token | null {
+    return (user ?? getUser())?.id_token ?? null;
 }
 
 export function getUser(): User {
@@ -21,21 +21,23 @@ export function getUser(): User {
 }
 
 export function extractUserSub(user: User): Promise<unknown> {
-    const sub = user?.profile?.sub;
-    if (!sub) {
-        return Promise.reject(
-            new Error(
-                `Fetching access for missing user.profile.sub : ${JSON.stringify(
-                    user
-                )}`
-            )
-        );
-    } else {
-        return Promise.resolve(sub);
-    }
+    return new Promise((resolve, reject) => {
+        const sub = user?.profile?.sub;
+        if (!sub) {
+            reject(
+                new Error(
+                    `Fetching access for missing user.profile.sub : ${JSON.stringify(
+                        user
+                    )}`
+                )
+            );
+        } else {
+            resolve(sub);
+        }
+    });
 }
 
-export function parseError(text: string): any {
+export function parseError(text: string) {
     try {
         return JSON.parse(text);
     } catch (err) {
