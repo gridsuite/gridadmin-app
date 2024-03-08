@@ -28,25 +28,25 @@ import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
-} from '../redux/actions';
-import { AppState } from '../redux/reducer';
+} from '../../redux/actions';
+import { AppState } from '../../redux/reducer';
 import {
     AppsMetadataSrv,
     ConfigNotif,
     ConfigParameters,
     ConfigSrv,
     UserAdminSrv,
-} from '../services';
+} from '../../services';
 import {
     APP_NAME,
     COMMON_APP_NAME,
     PARAM_LANGUAGE,
     PARAM_THEME,
-} from '../utils/config-params';
-import { getComputedLanguage } from '../utils/language';
+} from '../../utils/config-params';
+import { getComputedLanguage } from '../../utils/language';
 import AppTopBar, { AppTopBarProps } from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { getErrorMessage } from '../utils/error';
+import { getErrorMessage } from '../../utils/error';
 
 const App: FunctionComponent = () => {
     const { snackError } = useSnackMessage();
@@ -171,7 +171,7 @@ const App: FunctionComponent = () => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME.toLowerCase())
+            ConfigSrv.fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

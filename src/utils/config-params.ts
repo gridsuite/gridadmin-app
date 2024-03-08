@@ -8,7 +8,7 @@
 import { LiteralUnion } from 'type-fest';
 
 export const COMMON_APP_NAME = 'common';
-export const APP_NAME = 'Admin';
+export const APP_NAME = 'admin';
 
 export const PARAM_THEME = 'theme';
 export const PARAM_LANGUAGE = 'language';
