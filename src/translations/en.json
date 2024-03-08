@@ -15,6 +15,8 @@
     "table.noRows": "No data",
     "table.id": "ID",
     "table.error.retrieve": "Error while retrieving data",
+    "table.toolbar.reset": "Reset",
+    "table.toolbar.reset.label": "Reset table columns & filters",
     "table.toolbar.add": "Add",
     "table.toolbar.add.label": "Add an element",
     "table.toolbar.delete": "Delete",

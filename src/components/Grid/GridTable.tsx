@@ -16,6 +16,7 @@ import {
     useCallback,
     useId,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import {
@@ -23,27 +24,29 @@ import {
     Box,
     Button as MuiButton,
     ButtonProps,
+    ButtonTypeMap,
     Chip,
     ChipProps,
+    Divider,
+    ExtendButtonBaseTypeMap,
     Grid,
     LinearProgress,
+    Theme,
     Toolbar,
+    useForkRef,
 } from '@mui/material';
-import { AgGrid, AgGridRef } from './AgGrid';
-import { GridOptions, ICellRendererFunc } from 'ag-grid-community';
-import { Theme } from '@mui/material/styles';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Check, Close, Delete, QuestionMark } from '@mui/icons-material';
-import { useSnackMessage } from '@gridsuite/commons-ui';
-import { useStateWithLabel } from '../../utils/hooks';
-import NoRowsOverlay from './NoRowsOverlay';
 import {
     OverridableComponent,
     OverridableTypeMap,
     OverrideProps,
 } from '@mui/material/OverridableComponent';
-import { ExtendButtonBaseTypeMap } from '@mui/material/ButtonBase/ButtonBase';
-import { ButtonTypeMap } from '@mui/material/Button/Button';
+import { Check, Clear, Close, Delete, QuestionMark } from '@mui/icons-material';
+import { AgGrid, AgGridRef } from './AgGrid';
+import { GridOptions, ICellRendererFunc } from 'ag-grid-community';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useSnackMessage } from '@gridsuite/commons-ui';
+import { useStateWithLabel } from '../../utils/hooks';
+import NoRowsOverlay from './NoRowsOverlay';
 
 type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
@@ -109,9 +112,21 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
         dataLoader,
         ...agGridProps
     } = props;
-    const columnTypes = useColumnTypes<TData>(props.columnTypes);
     const { snackError } = useSnackMessage();
 
+    const agGridRef = useRef<GridTableRef<TData, TContext>>();
+    const handleRef = useForkRef(gridRef, agGridRef);
+    const onReset = useCallback(() => {
+        agGridRef.current?.aggrid?.api?.resetColumnState?.();
+        agGridRef.current?.aggrid?.api?.resetColumnGroupState?.();
+        agGridRef.current?.aggrid?.api?.resetQuickFilter?.();
+        agGridRef.current?.aggrid?.api?.setFilterModel?.(null);
+        agGridRef.current?.aggrid?.api?.deselectAll?.();
+        agGridRef.current?.aggrid?.api?.resetRowHeights?.();
+        agGridRef.current?.aggrid?.api?.clearFocusedCell?.();
+    }, []);
+
+    const columnTypes = useColumnTypes<TData>(props.columnTypes);
     //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
     const [progress, setProgress] = useStateWithLabel<number | null>(
@@ -192,18 +207,33 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                 <AppBar position="static" color="default">
                     <Toolbar
                         variant="dense"
+                        disableGutters
                         sx={{
+                            marginLeft: 1,
                             '& > *': {
-                                marginRight: '0.2em',
+                                marginRight: 1,
                                 '&:last-child': {
                                     marginRight: 0,
                                 },
                             },
                         }}
                     >
-                        {/*TODO button reset grid filter/sort/column-hide/rows-selection ...*/}
-                        {/*<Divider orientation="vertical" variant="middle" flexItem />*/}
-                        {toolbarContent}
+                        <GridButton
+                            textId="table.toolbar.reset"
+                            labelId="table.toolbar.reset.label"
+                            onClick={onReset}
+                            startIcon={<Clear fontSize="small" />}
+                        />
+                        {toolbarContent && (
+                            <>
+                                <Divider
+                                    orientation="vertical"
+                                    variant="middle"
+                                    flexItem
+                                />
+                                {toolbarContent}
+                            </>
+                        )}
                         <Box sx={{ flexGrow: 1 }} />
                     </Toolbar>
                 </AppBar>
@@ -215,7 +245,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                 <AgGrid<TData, TContext & GridTableExposed>
                     columnTypes={columnTypes}
                     {...agGridProps}
-                    ref={gridRef}
+                    ref={handleRef}
                     rowData={data}
                     alwaysShowVerticalScroll={true}
                     onGridReady={refresh}
@@ -264,7 +294,6 @@ function GridProgressStyle(theme: Theme) {
 const GridProgress: FunctionComponent<GridProgressProps> = (props, context) => {
     if (props.progress === null || props.progress === undefined) {
         // simulate a disabled state
-        //TODO css to match color with AppBar background (.MuiLinearProgress-root, .MuiLinearProgress-determinate)
         return (
             <LinearProgress
                 variant="determinate"
