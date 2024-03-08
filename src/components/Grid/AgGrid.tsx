@@ -29,7 +29,7 @@ import {
     AgGridLocale,
 } from '../../translations/ag-grid/locales';
 import deepmerge from '@mui/utils/deepmerge/deepmerge';
-import { GridOptions } from 'ag-grid-community';
+import { ColDef, GridOptions } from 'ag-grid-community';
 
 const messages: Record<string, AgGridLocale> = {
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
@@ -102,6 +102,15 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
         [theme.agGridThemeOverride]
     );
 
+    const defaultColDef = useMemo<ColDef<TData>>(
+        () => ({
+            ...props.defaultColDef,
+            enableCellChangeFlash:
+                process.env.REACT_APP_DEBUG_AGGRID === 'true',
+        }),
+        [props.defaultColDef]
+    );
+
     return (
         // wrapping container with theme & size
         <Box component="div" className={theme.agGridTheme} sx={customTheme}>
@@ -116,6 +125,7 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                 debug={
                     process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
                 }
+                defaultColDef={defaultColDef}
                 reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />
         </Box>

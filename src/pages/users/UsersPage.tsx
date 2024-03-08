@@ -28,13 +28,30 @@ import {
     Typography,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
-import { DataGrid, DataGridRef, GridButtonAdd } from '../../components/Grid';
+import {
+    GridButton,
+    GridButtonDelete,
+    GridColumnTypes,
+    GridTable,
+    GridTableRef,
+} from '../../components/Grid';
 import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
 import { ColDef } from 'ag-grid-community';
+import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
+
+const defaultColDef: ColDef<UserInfos> = {
+    editable: false,
+    resizable: true,
+    minWidth: 50,
+    cellRenderer: 'agAnimateSlideCellRenderer', //'agAnimateShowChangeCellRenderer'
+    showDisabledCheckboxes: true,
+    rowDrag: false,
+    sortable: true,
+};
 
 function getRowId(params: GetRowIdParams<UserInfos>): string {
     return params.data.sub;
@@ -43,7 +60,7 @@ function getRowId(params: GetRowIdParams<UserInfos>): string {
 const UsersPage: FunctionComponent = () => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
-    const gridRef = useRef<DataGridRef<UserInfos>>(null);
+    const gridRef = useRef<GridTableRef<UserInfos>>(null);
     const gridContext = gridRef.current?.context;
 
     const columns = useMemo(
@@ -66,6 +83,7 @@ const UsersPage: FunctionComponent = () => {
             },
             {
                 field: 'isAdmin',
+                type: GridColumnTypes.BoolIcons,
                 cellDataType: 'boolean',
                 cellRendererParams: {
                     disabled: true,
@@ -86,19 +104,28 @@ const UsersPage: FunctionComponent = () => {
         [intl]
     );
 
+    const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
     const deleteUsers = useCallback(
-        (dataLines: UserInfos[]): Promise<void> => {
-            let subs = dataLines.map((user) => user.sub);
-            return UserAdminSrv.deleteUsers(subs).catch((error) =>
-                snackError({
-                    messageTxt: `Error while deleting user "${JSON.stringify(
-                        subs
-                    )}"${error.message && ':\n' + error.message}`,
-                    headerId: 'users.table.error.delete',
+        (): Promise<void> | undefined =>
+            gridContext
+                ?.queryAction(() => {
+                    let subs = rowsSelection.map((user) => user.sub);
+                    return UserAdminSrv.deleteUsers(subs).catch((error) =>
+                        snackError({
+                            messageTxt: `Error while deleting user "${JSON.stringify(
+                                subs
+                            )}"${error.message && ':\n' + error.message}`,
+                            headerId: 'users.table.error.delete',
+                        })
+                    );
                 })
-            );
-        },
-        [snackError]
+                //TODO replace manual refresh by notification in GridTable component
+                .then(() => gridContext?.refresh?.()),
+        [gridContext, rowsSelection, snackError]
+    );
+    const deleteUsersDisabled = useMemo(
+        () => rowsSelection.length <= 0,
+        [rowsSelection.length]
     );
 
     const addUser = useCallback(
@@ -114,7 +141,7 @@ const UsersPage: FunctionComponent = () => {
                         })
                     )
                 )
-                //TODO replace manual refresh by notification in DataGrid component
+                //TODO replace manual refresh by notification in GridTable component
                 .then(() => gridContext?.refresh?.());
         },
         [gridContext, snackError]
@@ -136,19 +163,6 @@ const UsersPage: FunctionComponent = () => {
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
-    const buttonAdd = useCallback(
-        () => (
-            <GridButtonAdd
-                labelId="users.table.toolbar.add.label"
-                textId="users.table.toolbar.add"
-                tooltipTextId="users.table.toolbar.add.tooltip"
-                onClick={() => setOpen(true)}
-                icon={PersonAdd}
-            />
-        ),
-        []
-    );
-
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item xs="auto" component="header">
@@ -157,15 +171,32 @@ const UsersPage: FunctionComponent = () => {
                 </Typography>
             </Grid>
             <Grid item container xs sx={{ width: 1 }}>
-                <DataGrid<UserInfos>
-                    accessRef={gridRef}
+                <GridTable<UserInfos, {}>
+                    ref={gridRef}
                     dataLoader={UserAdminSrv.fetchUsers}
-                    addBtn={buttonAdd}
-                    removeElements={deleteUsers}
                     columnDefs={columns}
+                    defaultColDef={defaultColDef}
                     gridId="table-users"
                     getRowId={getRowId}
-                />
+                    rowSelection="multiple"
+                    onSelectionChanged={useCallback(
+                        (event: SelectionChangedEvent<UserInfos, {}>) =>
+                            setRowsSelection(event.api.getSelectedRows() ?? []),
+                        []
+                    )}
+                >
+                    <GridButton
+                        labelId="users.table.toolbar.add.label"
+                        textId="users.table.toolbar.add"
+                        startIcon={<PersonAdd fontSize="small" />}
+                        color="primary"
+                        onClick={useCallback(() => setOpen(true), [])}
+                    />
+                    <GridButtonDelete
+                        onClick={deleteUsers}
+                        disabled={deleteUsersDisabled}
+                    />
+                </GridTable>
                 <Dialog
                     open={open}
                     onClose={handleClose}
