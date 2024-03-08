@@ -8,12 +8,7 @@
 /*export { AgGrid } from './AgGrid';
 export type { AgGridRef } from './AgGrid';*/
 
-export {
-    GridTable,
-    GridColumnTypes,
-    GridButton,
-    GridButtonDelete,
-} from './GridTable';
+export { GridTable, GridButton, GridButtonDelete } from './GridTable';
 export type {
     GridTableProps,
     GridTableRef,

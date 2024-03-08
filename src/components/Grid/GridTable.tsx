@@ -25,8 +25,6 @@ import {
     Button as MuiButton,
     ButtonProps,
     ButtonTypeMap,
-    Chip,
-    ChipProps,
     Divider,
     ExtendButtonBaseTypeMap,
     Grid,
@@ -40,10 +38,10 @@ import {
     OverridableTypeMap,
     OverrideProps,
 } from '@mui/material/OverridableComponent';
-import { Check, Clear, Close, Delete, QuestionMark } from '@mui/icons-material';
+import { Clear, Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
-import { GridOptions, ICellRendererFunc } from 'ag-grid-community';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { GridOptions } from 'ag-grid-community';
+import { useIntl } from 'react-intl';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { useStateWithLabel } from '../../utils/hooks';
 
@@ -125,7 +123,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
         agGridRef.current?.aggrid?.api?.clearFocusedCell?.();
     }, []);
 
-    const columnTypes = useColumnTypes<TData>(props.columnTypes);
     //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
     const [progress, setProgress] = useStateWithLabel<number | null>(
@@ -242,7 +239,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             </Grid>
             <Grid item xs>
                 <AgGrid<TData, TContext & GridTableExposed>
-                    columnTypes={columnTypes}
                     {...agGridProps}
                     ref={handleRef}
                     rowData={data}
@@ -311,60 +307,6 @@ const GridProgress: FunctionComponent<GridProgressProps> = (props, context) => {
             />
         );
     }
-};
-
-export enum GridColumnTypes {
-    // default of ag-grid
-    // ...
-    // custom components
-    BoolIcons = 'boolIcons',
-}
-
-function useColumnTypes<TData>(
-    childColumnTypes: GridOptions<TData>['columnTypes']
-): Required<GridOptions<TData>['columnTypes']> {
-    //https://www.ag-grid.com/react-data-grid/components/
-    return useMemo(
-        () => ({
-            [GridColumnTypes.BoolIcons]: {
-                //filter: 'agNumberColumnFilter' / 'agTextColumnFilter'
-                //align: 'left',
-                cellRenderer: ((params) =>
-                    (
-                        <BoolValue value={params.value} />
-                    ) as unknown as HTMLElement) as ICellRendererFunc,
-            },
-            ...(childColumnTypes ?? {}),
-        }),
-        [childColumnTypes]
-    );
-}
-
-const BoolValue: FunctionComponent<{
-    value: boolean | null | undefined;
-}> = (props, context) => {
-    const conf = ((value: unknown): Partial<ChipProps> => {
-        switch (value) {
-            case true:
-                return {
-                    label: <FormattedMessage id="table.bool.yes" />,
-                    icon: <Check fontSize="small" color="success" />,
-                    color: 'success',
-                };
-            case false:
-                return {
-                    label: <FormattedMessage id="table.bool.no" />,
-                    icon: <Close fontSize="small" color="error" />,
-                    color: 'error',
-                };
-            default:
-                return {
-                    label: <FormattedMessage id="table.bool.unknown" />,
-                    icon: <QuestionMark fontSize="small" />,
-                };
-        }
-    })(props.value);
-    return <Chip variant="outlined" size="small" {...conf} />;
 };
 
 export type GridButtonProps = Omit<

@@ -31,7 +31,6 @@ import { AccountCircle, PersonAdd } from '@mui/icons-material';
 import {
     GridButton,
     GridButtonDelete,
-    GridColumnTypes,
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
@@ -40,7 +39,7 @@ import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 
 const defaultColDef: ColDef<UserInfos> = {
@@ -83,11 +82,11 @@ const UsersPage: FunctionComponent = () => {
             },
             {
                 field: 'isAdmin',
-                type: GridColumnTypes.BoolIcons,
                 cellDataType: 'boolean',
+                //detected as cellRenderer: 'agCheckboxCellRenderer',
                 cellRendererParams: {
                     disabled: true,
-                },
+                } as ICheckboxCellRendererParams<UserInfos, {}>,
                 flex: 1,
                 headerName: intl.formatMessage({
                     id: 'users.table.isAdmin',
