@@ -1,16 +1,11 @@
-/**
+/*
  * Copyright (c) 2020, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, {
-    FunctionComponent,
-    useCallback,
-    useEffect,
-    useState,
-} from 'react';
+import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Navigate,
@@ -36,14 +31,12 @@ import {
 } from '../redux/actions';
 import { AppState } from '../redux/reducer';
 import {
-    ConfigSrv,
-    ConfigNotif,
-    ConfigParameter,
-    ConfigParameters,
-    UserAdminSrv,
     AppsMetadataSrv,
+    ConfigNotif,
+    ConfigParameters,
+    ConfigSrv,
+    UserAdminSrv,
 } from '../services';
-import { UserManager } from 'oidc-client';
 import {
     APP_NAME,
     COMMON_APP_NAME,
@@ -53,11 +46,19 @@ import {
 import { getComputedLanguage } from '../utils/language';
 import AppTopBar, { AppTopBarProps } from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { getErrorMessage } from '../utils/error';
 
 const App: FunctionComponent = () => {
     const { snackError } = useSnackMessage();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const user = useSelector((state: AppState) => state.user);
+
+    const [userManager, setUserManager] = useState<
+        AppTopBarProps['userManager']
+    >({ instance: null, error: null });
 
     const signInCallbackError = useSelector(
         (state: AppState) => state.signInCallbackError
@@ -69,20 +70,12 @@ const App: FunctionComponent = () => {
         (state: AppState) => state.showAuthenticationRouterLogin
     );
 
-    const [userManager, setUserManager] = useState<
-        AppTopBarProps['userManager']
-    >({ instance: null, error: null });
-
-    const navigate = useNavigate();
-
-    const dispatch = useDispatch();
-
-    const location = useLocation();
-
-    const updateParams: (p: ConfigParameters) => void = useCallback(
+    const updateParams = useCallback(
         (params: ConfigParameters) => {
-            console.debug('received UI parameters : ', params);
-            params.forEach((param: ConfigParameter) => {
+            console.groupCollapsed('received UI parameters');
+            console.table(params);
+            console.groupEnd();
+            params.forEach((param) => {
                 switch (param.name) {
                     case PARAM_THEME:
                         dispatch(selectTheme(param.value));
@@ -96,14 +89,15 @@ const App: FunctionComponent = () => {
                         );
                         break;
                     default:
+                        break;
                 }
             });
         },
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig: () => ReconnectingWebSocket =
-        useCallback(() => {
+    const connectNotificationsUpdateConfig =
+        useCallback((): ReconnectingWebSocket => {
             const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
@@ -132,7 +126,7 @@ const App: FunctionComponent = () => {
             path: '/silent-renew-callback',
         })
     );
-    const [initialMatchSignInCallbackUrl] = useState(
+    const [initialMatchSigninCallbackUrl] = useState(
         useMatch({
             path: '/sign-in-callback',
         })
@@ -147,20 +141,23 @@ const App: FunctionComponent = () => {
                     fetch('idpSettings.json'),
                     UserAdminSrv.fetchValidateUser,
                     authorizationCodeFlowEnabled,
-                    initialMatchSignInCallbackUrl != null
+                    initialMatchSigninCallbackUrl != null
                 )
             )
-            .then((userManager: UserManager | undefined) => {
-                setUserManager({ instance: userManager || null, error: null });
+            .then((userManager) => {
+                setUserManager({ instance: userManager ?? null, error: null });
             })
-            .catch((error: any) => {
-                setUserManager({ instance: null, error: error.message });
+            .catch((error: unknown) => {
+                setUserManager({
+                    instance: null,
+                    error: getErrorMessage(error),
+                });
             });
-        // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
+        // Note: initialMatchSilentRenewCallbackUrl & initialMatchSigninCallbackUrl won't change
     }, [
         dispatch,
         initialMatchSilentRenewCallbackUrl,
-        initialMatchSignInCallbackUrl,
+        initialMatchSigninCallbackUrl,
     ]);
 
     useEffect(() => {

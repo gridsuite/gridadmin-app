@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2020, RTE (http://www.rte-france.com)
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -13,11 +13,10 @@ export interface ErrorWithStatus extends Error {
     status?: number;
 }
 
-export type Url = Exclude<Parameters<typeof fetch>[0], Request>; //string | URL;
-export type InitRequest = Partial<Parameters<typeof fetch>[1]>; //Partial<RequestInit>;
-export type ReqResponse = Awaited<ReturnType<typeof fetch>>;
+export type Url = string | URL;
+export type InitRequest = Partial<RequestInit>;
 
-function handleError(response: ReqResponse): Promise<never> {
+function handleError(response: Response): Promise<never> {
     return response.text().then((text: string) => {
         const errorName = 'HttpResponseError : ';
         let error: ErrorWithStatus;
@@ -50,8 +49,8 @@ function prepareRequest(init?: InitRequest, token?: Token): RequestInit {
     return initCopy;
 }
 
-function safeFetch(url: Url, initCopy?: InitRequest): ReturnType<typeof fetch> {
-    return fetch(url, initCopy).then((response: ReqResponse) =>
+function safeFetch(url: Url, initCopy?: InitRequest) {
+    return fetch(url, initCopy).then((response: Response) =>
         response.ok ? response : handleError(response)
     );
 }
@@ -60,7 +59,7 @@ export function backendFetch(
     url: Url,
     init?: InitRequest,
     token?: Token
-): ReturnType<typeof safeFetch> {
+): Promise<Response> {
     return safeFetch(url, prepareRequest(init, token));
 }
 
@@ -68,8 +67,8 @@ export function backendFetchText(
     url: Url,
     init?: InitRequest,
     token?: Token
-): ReturnType<Body['text']> {
-    return backendFetch(url, init, token).then((safeResponse: ReqResponse) =>
+): Promise<string> {
+    return backendFetch(url, init, token).then((safeResponse: Response) =>
         safeResponse.text()
     );
 }
@@ -78,8 +77,8 @@ export function backendFetchJson(
     url: Url,
     init?: InitRequest,
     token?: Token
-): ReturnType<Body['json']> {
-    return backendFetch(url, init, token).then((safeResponse: ReqResponse) =>
+): Promise<unknown> {
+    return backendFetch(url, init, token).then((safeResponse: Response) =>
         safeResponse.json()
     );
 }

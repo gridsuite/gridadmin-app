@@ -16,7 +16,7 @@ import {
 import { SnackbarProvider } from '@gridsuite/commons-ui';
 import { CssBaseline } from '@mui/material';
 
-let container: Element | any = null;
+let container: HTMLElement | null = null;
 
 beforeEach(() => {
     // setup a DOM element as a render target
@@ -26,11 +26,14 @@ beforeEach(() => {
 
 afterEach(() => {
     // cleanup on exiting
-    container.remove();
+    container?.remove();
     container = null;
 });
 
 it('renders', async () => {
+    if (container === null) {
+        throw new Error('No container was defined');
+    }
     const root = createRoot(container);
     await act(async () =>
         root.render(

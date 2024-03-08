@@ -1,42 +1,61 @@
-import { getAppName } from '../utils/config-params';
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+import {
+    APP_NAME,
+    getAppName,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+} from '../utils/config-params';
 import { backendFetch, backendFetchJson } from '../utils/api-rest';
+import { LanguageParameters } from '../utils/language';
 
 const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/config`;
 
-export type ConfigParameter = {
-    //TODO check with config-server swagger
-    name: string;
-    value: any;
-    [propertiesName: string]: unknown; //temporary
-};
-export type ConfigParameters = Array<ConfigParameter>;
+// https://github.com/gridsuite/config-server/blob/main/src/main/java/org/gridsuite/config/server/dto/ParameterInfos.java
+export type ConfigParameter =
+    | {
+          readonly name: typeof PARAM_LANGUAGE;
+          value: LanguageParameters;
+      }
+    | {
+          readonly name: typeof PARAM_THEME;
+          value: string;
+      };
+export type ConfigParameters = ConfigParameter[];
 export function fetchConfigParameters(
-    appName: string
+    appName: string = APP_NAME
 ): Promise<ConfigParameters> {
-    console.info(`Fetching UI configuration params for app : ${appName}`);
+    console.debug(`Fetching UI configuration params for app : ${appName}`);
     const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters`;
-    return backendFetchJson(fetchParams);
+    return backendFetchJson(fetchParams) as Promise<ConfigParameters>;
 }
 
-export function fetchConfigParameter(
-    name: string
-): ReturnType<typeof backendFetchJson> {
+export function fetchConfigParameter(name: string): Promise<ConfigParameter> {
     const appName = getAppName(name);
-    console.info(`Fetching UI config parameter '${name}' for app '${appName}'`);
+    console.debug(
+        `Fetching UI config parameter '${name}' for app '${appName}'`
+    );
     const fetchParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}`;
-    return backendFetchJson(fetchParams);
+    return backendFetchJson(fetchParams) as Promise<ConfigParameter>;
 }
 
 export function updateConfigParameter(
     name: string,
     value: Parameters<typeof encodeURIComponent>[0]
-): ReturnType<typeof backendFetch> {
+): Promise<void> {
     const appName = getAppName(name);
-    console.info(
+    console.debug(
         `Updating config parameter '${name}=${value}' for app '${appName}'`
     );
     const updateParams = `${PREFIX_CONFIG_QUERIES}/v1/applications/${appName}/parameters/${name}?value=${encodeURIComponent(
         value
     )}`;
-    return backendFetch(updateParams, { method: 'put' });
+    return backendFetch(updateParams, {
+        method: 'put',
+    }) as Promise<unknown> as Promise<void>;
 }
