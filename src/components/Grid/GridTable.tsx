@@ -16,7 +16,6 @@ import {
     useCallback,
     useId,
     useMemo,
-    useRef,
     useState,
 } from 'react';
 import {
@@ -25,20 +24,18 @@ import {
     Button as MuiButton,
     ButtonProps,
     ButtonTypeMap,
-    Divider,
     ExtendButtonBaseTypeMap,
     Grid,
     LinearProgress,
     Theme,
     Toolbar,
-    useForkRef,
 } from '@mui/material';
 import {
     OverridableComponent,
     OverridableTypeMap,
     OverrideProps,
 } from '@mui/material/OverridableComponent';
-import { Clear, Delete } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
@@ -110,18 +107,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
         ...agGridProps
     } = props;
     const { snackError } = useSnackMessage();
-
-    const agGridRef = useRef<GridTableRef<TData, TContext>>();
-    const handleRef = useForkRef(gridRef, agGridRef);
-    const onReset = useCallback(() => {
-        agGridRef.current?.aggrid?.api?.resetColumnState?.();
-        agGridRef.current?.aggrid?.api?.resetColumnGroupState?.();
-        agGridRef.current?.aggrid?.api?.resetQuickFilter?.();
-        agGridRef.current?.aggrid?.api?.setFilterModel?.(null);
-        agGridRef.current?.aggrid?.api?.deselectAll?.();
-        agGridRef.current?.aggrid?.api?.resetRowHeights?.();
-        agGridRef.current?.aggrid?.api?.clearFocusedCell?.();
-    }, []);
 
     //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
@@ -214,22 +199,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                             },
                         }}
                     >
-                        <GridButton
-                            textId="table.toolbar.reset"
-                            labelId="table.toolbar.reset.label"
-                            onClick={onReset}
-                            startIcon={<Clear fontSize="small" />}
-                        />
-                        {toolbarContent && (
-                            <>
-                                <Divider
-                                    orientation="vertical"
-                                    variant="middle"
-                                    flexItem
-                                />
-                                {toolbarContent}
-                            </>
-                        )}
+                        {toolbarContent}
                         <Box sx={{ flexGrow: 1 }} />
                     </Toolbar>
                 </AppBar>
@@ -240,7 +210,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             <Grid item xs>
                 <AgGrid<TData, TContext & GridTableExposed>
                     {...agGridProps}
-                    ref={handleRef}
+                    ref={gridRef}
                     rowData={data}
                     alwaysShowVerticalScroll={true}
                     onGridReady={refresh}
