@@ -74,35 +74,35 @@ export type AgGridLocaleKeys =
 
 export const AG_GRID_LOCALE_FR: AgGridLocale = {
     // Set Filter
-    selectAll: '(Select All)',
-    selectAllSearchResults: '(Select All Search Results)',
-    addCurrentSelectionToFilter: 'Add current selection to filter',
-    searchOoo: 'Search...',
-    blanks: '(Blanks)',
-    noMatches: 'No matches',
+    selectAll: '(Tout sélectionner)',
+    selectAllSearchResults: '(Sélectionner tout les résultats)',
+    addCurrentSelectionToFilter: 'Ajouter la sélection au filtre',
+    searchOoo: 'Rechercher ...',
+    blanks: '(Vide)',
+    noMatches: 'Pas de correspondance',
 
     // Number Filter & Text Filter
-    filterOoo: 'Filter...',
-    equals: 'Equals',
-    notEqual: 'Does not equal',
-    blank: 'Blank',
-    notBlank: 'Not blank',
-    empty: 'Choose one',
+    filterOoo: 'Filtre...',
+    equals: 'Égal',
+    notEqual: 'Pas égal à',
+    blank: 'Vide',
+    notBlank: 'Non vide',
+    empty: 'Choix ...',
 
     // Number Filter
-    lessThan: 'Less than',
-    greaterThan: 'Greater than',
-    lessThanOrEqual: 'Less than or equal to',
-    greaterThanOrEqual: 'Greater than or equal to',
-    inRange: 'Between',
-    inRangeStart: 'From',
-    inRangeEnd: 'To',
+    lessThan: 'Moins que',
+    greaterThan: 'Plus que',
+    lessThanOrEqual: 'Moins ou égal à',
+    greaterThanOrEqual: 'Plus ou égal à',
+    inRange: 'Entre',
+    inRangeStart: 'De',
+    inRangeEnd: 'À',
 
     // Text Filter
-    contains: 'Contains',
-    notContains: 'Does not contain',
-    startsWith: 'Begins with',
-    endsWith: 'Ends with',
+    contains: 'Contiens',
+    notContains: 'Ne contiens pas',
+    startsWith: 'Commence par',
+    endsWith: 'Se termine par',
 
     // Date Filter
     dateFormatOoo: 'yyyy/mm/dd',
@@ -123,19 +123,19 @@ export const AG_GRID_LOCALE_FR: AgGridLocale = {
     group: 'Groupe',
 
     // Other
-    loadingOoo: 'Loading...',
+    loadingOoo: 'Chargement ...',
     loadingError: 'ERR',
-    noRowsToShow: 'No Rows To Show',
-    enabled: 'Enabled',
+    noRowsToShow: 'Pas de lignes à montrer',
+    enabled: 'Activer',
 
     // Enterprise Menu Aggregation and Status Bar
-    to: 'to',
-    of: 'of',
+    to: 'à',
+    of: 'de',
     page: 'Page',
-    nextPage: 'Next Page',
-    lastPage: 'Last Page',
-    firstPage: 'First Page',
-    previousPage: 'Previous Page',
+    nextPage: 'Page suivante',
+    lastPage: 'Dernière Page',
+    firstPage: 'Première Page',
+    previousPage: 'Page précédente',
 
     // ARIA
     ariaChecked: 'coché',
@@ -170,7 +170,7 @@ export const AG_GRID_LOCALE_FR: AgGridLocale = {
     // ARIA Labels for Dialogs
     ariaLabelColumnMenu: 'Menu de colonne',
     ariaLabelColumnFilter: 'Column Filter',
-    ariaLabelDialog: 'Dialog',
+    ariaLabelDialog: 'Dialogue',
     ariaLabelSelectField: 'Sélectionner Champ',
     ariaLabelTooltip: 'Tooltip',
 

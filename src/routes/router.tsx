@@ -147,7 +147,9 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                 );
             })
             .catch((error: any) => {
-                dispatch(updateUserManagerDestructured(null, getErrorMessage(error)));
+                dispatch(
+                    updateUserManagerDestructured(null, getErrorMessage(error))
+                );
             });
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
     }, [
