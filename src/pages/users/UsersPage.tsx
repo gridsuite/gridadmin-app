@@ -107,7 +107,7 @@ const UsersPage: FunctionComponent = () => {
     const deleteUsers = useCallback(
         (): Promise<void> | undefined =>
             gridContext
-                ?.queryAction(() => {
+                ?.runningAction(() => {
                     let subs = rowsSelection.map((user) => user.sub);
                     return UserAdminSrv.deleteUsers(subs).catch((error) =>
                         snackError({
@@ -130,7 +130,7 @@ const UsersPage: FunctionComponent = () => {
     const addUser = useCallback(
         (id: string) => {
             gridContext
-                ?.queryAction(() =>
+                ?.runningAction(() =>
                     UserAdminSrv.addUser(id).catch((error) =>
                         snackError({
                             messageTxt: `Error while adding user "${id}"${

@@ -26,8 +26,6 @@ import {
     ButtonTypeMap,
     ExtendButtonBaseTypeMap,
     Grid,
-    LinearProgress,
-    Theme,
     Toolbar,
 } from '@mui/material';
 import {
@@ -46,7 +44,7 @@ type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
 type GridTableExposed = {
     refresh: () => Promise<void>;
-    queryAction: (
+    runningAction: (
         action: FnAction<void>,
         onerror?: CatchError<void>
     ) => Promise<void>;
@@ -58,13 +56,7 @@ export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<
 >;
 
 export interface GridTableProps<TData>
-    extends Omit<
-            GridOptions<TData>,
-            | 'rowData'
-            | 'overlayLoadingTemplate'
-            | 'loadingOverlayComponent'
-            | 'loadingOverlayComponentParams'
-        >,
+    extends Omit<GridOptions<TData>, 'rowData'>,
         PropsWithChildren<{}> {
     //accessRef: RefObject<GridTableRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
@@ -110,9 +102,9 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
 
     //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
-    const [progress, setProgress] = useStateWithLabel<number | null>(
-        'progress',
-        null
+    const [doingAction, setDoingAction] = useStateWithLabel<boolean>(
+        'doing action',
+        false
     );
 
     const loadDataAndSave = useCallback(
@@ -129,24 +121,11 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
         [dataLoader, snackError]
     );
 
-    const setProgressDisable = useCallback(
-        () => setProgress(null),
-        [setProgress]
-    );
-    const setProgressQuery = useCallback(
-        () => setProgress(Number.NaN),
-        [setProgress]
-    );
-    const setProgressLoading = useCallback(
-        () => setProgress(-1),
-        [setProgress]
-    );
-
-    const loadingAction = useCallback(
+    const runningAction = useCallback(
         (action: FnAction<void>, onerror?: CatchError<void>): Promise<void> =>
             new Promise<void>((resolve, reject) => {
                 try {
-                    setProgressLoading();
+                    setDoingAction(true);
                     resolve();
                 } catch (err) {
                     reject(err);
@@ -154,27 +133,12 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             })
                 .then(action, onerror)
                 .catch(onerror)
-                .finally(setProgressDisable),
-        [setProgressDisable, setProgressLoading]
-    );
-    const queryAction: GridTableExposed['queryAction'] = useCallback(
-        (action, onerror?) =>
-            new Promise<void>((resolve, reject) => {
-                try {
-                    setProgressQuery();
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            })
-                .then(action, onerror)
-                .catch(onerror)
-                .finally(setProgressDisable),
-        [setProgressDisable, setProgressQuery]
+                .finally(() => setDoingAction(false)),
+        [setDoingAction]
     );
     const refresh = useCallback(
-        () => loadingAction(loadDataAndSave),
-        [loadDataAndSave, loadingAction]
+        () => runningAction(loadDataAndSave),
+        [loadDataAndSave, runningAction]
     );
 
     return (
@@ -183,6 +147,13 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
+            sx={
+                doingAction
+                    ? {
+                          '& *': { cursor: 'wait' },
+                      }
+                    : undefined
+            }
         >
             <Grid item xs="auto">
                 <AppBar position="static" color="default">
@@ -204,9 +175,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                     </Toolbar>
                 </AppBar>
             </Grid>
-            <Grid item xs="auto">
-                <GridProgress progress={progress ?? null} />
-            </Grid>
             <Grid item xs>
                 <AgGrid<TData, TContext & GridTableExposed>
                     {...agGridProps}
@@ -219,9 +187,9 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                             ({
                                 ...((context ?? {}) as TContext),
                                 refresh: refresh,
-                                queryAction: queryAction,
+                                runningAction: runningAction,
                             } as TContext & GridTableExposed),
-                        [context, queryAction, refresh]
+                        [context, runningAction, refresh]
                     )}
                 />
             </Grid>
@@ -229,55 +197,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
     );
 });
 export default GridTable;
-
-interface GridProgressProps {
-    /**
-     * intended to be a percent number in range [0;1] or null or NaN
-     */
-    progress: null | number;
-}
-
-function GridProgressStyle(theme: Theme) {
-    // https://github.com/mui/material-ui/blob/master/packages/mui-material/src/AppBar/AppBar.js#L39-L40
-    const backgroundColorDefault =
-        theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[900];
-    return {
-        backgroundColor: backgroundColorDefault,
-        color: theme.palette.getContrastText(backgroundColorDefault),
-    };
-}
-
-const GridProgress: FunctionComponent<GridProgressProps> = (props, context) => {
-    if (props.progress === null || props.progress === undefined) {
-        // simulate a disabled state
-        return (
-            <LinearProgress
-                variant="determinate"
-                value={0}
-                sx={GridProgressStyle}
-            />
-        );
-    } else if (Number.isNaN(props.progress)) {
-        // animation from right to left
-        return <LinearProgress variant="query" sx={GridProgressStyle} />;
-    } else if (props.progress < 0) {
-        // animation from left to right
-        return (
-            <LinearProgress variant="indeterminate" sx={GridProgressStyle} />
-        );
-    } /*if (props.progress >= 0)*/ else {
-        // animation dashed
-        return (
-            <LinearProgress
-                variant="buffer"
-                valueBuffer={props.progress * 100.0}
-                sx={GridProgressStyle}
-            />
-        );
-    }
-};
 
 export type GridButtonProps = Omit<
     ButtonProps,
