@@ -25,7 +25,6 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Unknown",
 
-    "users.title": "List of GridSuite users",
     "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "The users is an administrator of GridSuite",

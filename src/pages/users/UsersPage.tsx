@@ -25,7 +25,6 @@ import {
     Paper,
     PaperProps,
     TextField,
-    Typography,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
 import {
@@ -104,24 +103,19 @@ const UsersPage: FunctionComponent = () => {
     );
 
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
-    const deleteUsers = useCallback(
-        (): Promise<void> | undefined =>
-            gridContext
-                ?.runningAction(() => {
-                    let subs = rowsSelection.map((user) => user.sub);
-                    return UserAdminSrv.deleteUsers(subs).catch((error) =>
-                        snackError({
-                            messageTxt: `Error while deleting user "${JSON.stringify(
-                                subs
-                            )}"${error.message && ':\n' + error.message}`,
-                            headerId: 'users.table.error.delete',
-                        })
-                    );
+    const deleteUsers = useCallback((): Promise<void> | undefined => {
+        let subs = rowsSelection.map((user) => user.sub);
+        return UserAdminSrv.deleteUsers(subs)
+            .catch((error) =>
+                snackError({
+                    messageTxt: `Error while deleting user "${JSON.stringify(
+                        subs
+                    )}"${error.message && ':\n' + error.message}`,
+                    headerId: 'users.table.error.delete',
                 })
-                //TODO replace manual refresh by notification in GridTable component
-                .then(() => gridContext?.refresh?.()),
-        [gridContext, rowsSelection, snackError]
-    );
+            )
+            .then(() => gridContext?.refresh?.());
+    }, [gridContext, rowsSelection, snackError]);
     const deleteUsersDisabled = useMemo(
         () => rowsSelection.length <= 0,
         [rowsSelection.length]
@@ -129,18 +123,15 @@ const UsersPage: FunctionComponent = () => {
 
     const addUser = useCallback(
         (id: string) => {
-            gridContext
-                ?.runningAction(() =>
-                    UserAdminSrv.addUser(id).catch((error) =>
-                        snackError({
-                            messageTxt: `Error while adding user "${id}"${
-                                error.message && ':\n' + error.message
-                            }`,
-                            headerId: 'users.table.error.add',
-                        })
-                    )
+            UserAdminSrv.addUser(id)
+                .catch((error) =>
+                    snackError({
+                        messageTxt: `Error while adding user "${id}"${
+                            error.message && ':\n' + error.message
+                        }`,
+                        headerId: 'users.table.error.add',
+                    })
                 )
-                //TODO replace manual refresh by notification in GridTable component
                 .then(() => gridContext?.refresh?.());
         },
         [gridContext, snackError]

@@ -38,16 +38,9 @@ import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import { useStateWithLabel } from '../../utils/hooks';
 
-type FnAction<R> = () => Promise<R>;
-type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
 type GridTableExposed = {
     refresh: () => Promise<void>;
-    runningAction: (
-        action: FnAction<void>,
-        onerror?: CatchError<void>
-    ) => Promise<void>;
 };
 
 export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<
@@ -100,12 +93,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
     } = props;
     const { snackError } = useSnackMessage();
 
-    //TODO refresh on notification change from user-admin-server (add, delete, ...)
     const [data, setData] = useState<TData[] | null>(null);
-    const [doingAction, setDoingAction] = useStateWithLabel<boolean>(
-        'doing action',
-        false
-    );
 
     const loadDataAndSave = useCallback(
         function loadDataAndSave(): Promise<void> {
@@ -114,31 +102,9 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                     messageTxt: error.message,
                     headerId: 'table.error.retrieve',
                 });
-                //setData(null);
-                //TODO what to do with "old" data?
             });
         },
         [dataLoader, snackError]
-    );
-
-    const runningAction = useCallback(
-        (action: FnAction<void>, onerror?: CatchError<void>): Promise<void> =>
-            new Promise<void>((resolve, reject) => {
-                try {
-                    setDoingAction(true);
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            })
-                .then(action, onerror)
-                .catch(onerror)
-                .finally(() => setDoingAction(false)),
-        [setDoingAction]
-    );
-    const refresh = useCallback(
-        () => runningAction(loadDataAndSave),
-        [loadDataAndSave, runningAction]
     );
 
     return (
@@ -147,13 +113,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
-            sx={
-                doingAction
-                    ? {
-                          '& *': { cursor: 'wait' },
-                      }
-                    : undefined
-            }
         >
             <Grid item xs="auto">
                 <AppBar position="static" color="default">
@@ -163,7 +122,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                         sx={(theme) => ({
                             marginLeft: 1,
                             '& > *': {
-                            // mui's button set it own margin on itself...
+                                // mui's button set it own margin on itself...
                                 marginRight: `${theme.spacing(1)} !important`,
                                 '&:last-child': {
                                     marginRight: '0 !important',
@@ -182,15 +141,14 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                     ref={gridRef}
                     rowData={data}
                     alwaysShowVerticalScroll={true}
-                    onGridReady={refresh}
+                    onGridReady={loadDataAndSave}
                     context={useMemo(
                         () =>
                             ({
                                 ...((context ?? {}) as TContext),
-                                refresh: refresh,
-                                runningAction: runningAction,
+                                refresh: loadDataAndSave,
                             } as TContext & GridTableExposed),
-                        [context, runningAction, refresh]
+                        [context, loadDataAndSave]
                     )}
                 />
             </Grid>

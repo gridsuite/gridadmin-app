@@ -62,7 +62,6 @@ const lightTheme: ThemeOptions = {
     link: {
         color: 'blue',
     },
-    mapboxStyle: 'mapbox://styles/mapbox/light-v9',
     agGridTheme: 'ag-theme-alpine',
 };
 
@@ -89,7 +88,6 @@ const darkTheme: ThemeOptions = {
     link: {
         color: 'green',
     },
-    mapboxStyle: 'mapbox://styles/mapbox/dark-v9',
     agGridTheme: 'ag-theme-alpine-dark',
 };
 
