@@ -164,11 +164,6 @@ const UsersPage: FunctionComponent = () => {
 
     return (
         <Grid item container direction="column" spacing={2} component="section">
-            <Grid item xs="auto" component="header">
-                <Typography variant="h2">
-                    <FormattedMessage id="users.title" />
-                </Typography>
-            </Grid>
             <Grid item container xs sx={{ width: 1 }}>
                 <GridTable<UserInfos, {}>
                     ref={gridRef}

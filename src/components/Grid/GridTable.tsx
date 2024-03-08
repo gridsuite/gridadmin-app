@@ -160,15 +160,16 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                     <Toolbar
                         variant="dense"
                         disableGutters
-                        sx={{
+                        sx={(theme) => ({
                             marginLeft: 1,
                             '& > *': {
-                                marginRight: 1,
+                            // mui's button set it own margin on itself...
+                                marginRight: `${theme.spacing(1)} !important`,
                                 '&:last-child': {
-                                    marginRight: 0,
+                                    marginRight: '0 !important',
                                 },
                             },
-                        }}
+                        })}
                     >
                         {toolbarContent}
                         <Box sx={{ flexGrow: 1 }} />

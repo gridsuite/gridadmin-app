@@ -7,6 +7,11 @@
 
 import { Dispatch, SetStateAction, useDebugValue, useState } from 'react';
 
+/**
+ * State with a lebel in DevTools
+ * @param label
+ * @param initialValue
+ */
 export function useStateWithLabel<S>(
     label: string,
     initialValue: S | (() => S)
@@ -24,9 +29,10 @@ export function useStateWithLabel<S>(
 }
 
 export function useDebugRender(label: string) {
-    if (process.env.NODE_ENV !== 'production') {
+    // uncomment when you want the output in the console
+    /*if (process.env.NODE_ENV !== 'production') {
         label = `${label} render`;
         console.count?.(label);
         console.timeStamp?.(label);
-    }
+    }*/
 }

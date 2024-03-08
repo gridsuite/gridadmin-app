@@ -16,6 +16,7 @@ import {
     PropsWithoutRef,
     ReactNode,
     RefAttributes,
+    useId,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -30,6 +31,7 @@ import {
 } from '../../translations/ag-grid/locales';
 import deepmerge from '@mui/utils/deepmerge';
 import { ColDef, GridOptions } from 'ag-grid-community';
+import { useDebugRender } from '../../utils/hooks';
 
 const messages: Record<string, AgGridLocale> = {
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
@@ -68,6 +70,9 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
 ): ReactNode {
     const intl = useIntl();
     const theme = useTheme();
+
+    const id = useId();
+    useDebugRender(`ag-grid(${id}) ${props.gridId}`);
 
     const agGridRef = useRef<AgGridReact<TData>>(null);
     const agGridRefContent = agGridRef.current;
