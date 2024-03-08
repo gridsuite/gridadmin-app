@@ -25,15 +25,12 @@ import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { useIntl } from 'react-intl';
 import { LANG_FRENCH } from '@gridsuite/commons-ui';
-import {
-    AG_GRID_LOCALE_FR,
-    AgGridLocale,
-} from '../../translations/ag-grid/locales';
+import { AG_GRID_LOCALE_FR } from '../../translations/ag-grid/locales';
 import deepmerge from '@mui/utils/deepmerge';
-import { ColDef, GridOptions } from 'ag-grid-community';
+import { GridOptions } from 'ag-grid-community';
 import { useDebugRender } from '../../utils/hooks';
 
-const messages: Record<string, AgGridLocale> = {
+const messages: Record<string, Record<string, string>> = {
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
 };
 
@@ -107,15 +104,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
         [theme.agGridThemeOverride]
     );
 
-    const defaultColDef = useMemo<ColDef<TData>>(
-        () => ({
-            ...props.defaultColDef,
-            enableCellChangeFlash:
-                process.env.REACT_APP_DEBUG_AGGRID === 'true',
-        }),
-        [props.defaultColDef]
-    );
-
     return (
         // wrapping container with theme & size
         <Box component="div" className={theme.agGridTheme} sx={customTheme}>
@@ -130,7 +118,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                 debug={
                     process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
                 }
-                defaultColDef={defaultColDef}
                 reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />
         </Box>
