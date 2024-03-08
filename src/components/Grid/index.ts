@@ -8,7 +8,6 @@
 /*export { AgGrid } from './AgGrid';
 export type { AgGridRef } from './AgGrid';*/
 
-export { default as NoRowsOverlay } from './NoRowsOverlay';
 export {
     GridTable,
     GridColumnTypes,

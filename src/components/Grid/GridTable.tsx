@@ -46,7 +46,6 @@ import { GridOptions, ICellRendererFunc } from 'ag-grid-community';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { useStateWithLabel } from '../../utils/hooks';
-import NoRowsOverlay from './NoRowsOverlay';
 
 type FnAction<R> = () => Promise<R>;
 type CatchError<R, E = any> = (reason: E) => R | PromiseLike<R>;
@@ -258,13 +257,6 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                             } as TContext & GridTableExposed),
                         [context, queryAction, refresh]
                     )}
-                    noRowsOverlayComponent={
-                        (!agGridProps.overlayNoRowsTemplate &&
-                            !agGridProps.noRowsOverlayComponent &&
-                            NoRowsOverlay) ||
-                        undefined
-                    }
-                    noRowsOverlayComponentParams={undefined}
                 />
             </Grid>
         </Grid>
