@@ -115,7 +115,7 @@ const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
     },
 };
 
-const basename = new URL(document.querySelector('base')?.href ?? '').pathname;
+const basename = new URL(document.baseURI ?? '').pathname;
 
 /**
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)

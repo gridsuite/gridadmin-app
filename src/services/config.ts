@@ -11,10 +11,10 @@ import {
     PARAM_LANGUAGE,
     PARAM_THEME,
 } from '../utils/config-params';
-import { backendFetch, backendFetchJson } from '../utils/api-rest';
+import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { LanguageParameters } from '../utils/language';
 
-const PREFIX_CONFIG_QUERIES = `${process.env.REACT_APP_API_GATEWAY}/config`;
+const PREFIX_CONFIG_QUERIES = `${getRestBase()}/config`;
 
 // https://github.com/gridsuite/config-server/blob/main/src/main/java/org/gridsuite/config/server/dto/ParameterInfos.java
 export type ConfigParameter =

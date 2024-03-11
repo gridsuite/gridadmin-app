@@ -9,10 +9,10 @@ import ReconnectingWebSocket, { Event } from 'reconnecting-websocket';
 import { APP_NAME } from '../utils/config-params';
 import { getUrlWithToken, getWsBase } from '../utils/api-ws';
 
-const PREFIX_CONFIG_NOTIFICATION_WS = `${process.env.REACT_APP_WS_GATEWAY}/config-notification`;
+const PREFIX_CONFIG_NOTIFICATION_WS = `${getWsBase()}/config-notification`;
 
 export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
-    const webSocketUrl = `${getWsBase()}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?appName=${APP_NAME}`;
+    const webSocketUrl = `${PREFIX_CONFIG_NOTIFICATION_WS}/notify?appName=${APP_NAME}`;
     const reconnectingWebSocket = new ReconnectingWebSocket(
         () => getUrlWithToken(webSocketUrl),
         undefined,

@@ -10,9 +10,11 @@ import { getToken } from './api';
 export type * from './api';
 
 export function getWsBase(): string {
-    return document.baseURI
-        .replace(/^http(s?):\/\//, 'ws$1://')
-        .replace(/\/$/, '');
+    return (
+        document.baseURI
+            .replace(/^http(s?):\/\//, 'ws$1://')
+            .replace(/\/+$/, '') + process.env.REACT_APP_WS_GATEWAY
+    );
 }
 
 export function getUrlWithToken(baseUrl: string): string {
