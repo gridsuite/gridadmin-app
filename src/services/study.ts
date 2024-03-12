@@ -5,11 +5,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetchJson, Token } from '../utils/api-rest';
+import { backendFetchJson, getRestBase, Token } from '../utils/api-rest';
 import { getErrorMessage } from '../utils/error';
 import { APP_NAME } from '../utils/config-params';
 
-const STUDY_URL = `${process.env.REACT_APP_API_GATEWAY}/study/v1`;
+const STUDY_URL = `${getRestBase()}/study/v1`;
 
 //TODO delete when commons-ui will be in typescript
 export type ServerAbout = {

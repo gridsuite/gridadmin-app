@@ -5,11 +5,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, backendFetchJson } from '../utils/api-rest';
+import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { User } from '../utils/auth';
 
-const USER_ADMIN_URL = `${process.env.REACT_APP_API_GATEWAY}/user-admin/v1`;
+const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 
 export function getUserSub(): Promise<unknown> {
     return extractUserSub(getUser());
