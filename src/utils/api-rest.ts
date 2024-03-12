@@ -17,6 +17,7 @@ export type Url = string | URL;
 export type InitRequest = Partial<RequestInit>;
 
 export function getRestBase(): string {
+    // We use the `baseURI` (from `<base/>` in index.html) to build the URL, which is corrected by httpd/nginx
     return (
         document.baseURI.replace(/\/+$/, '') + process.env.REACT_APP_API_GATEWAY
     );
