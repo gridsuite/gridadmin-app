@@ -83,79 +83,69 @@ export type Actions =
 
 export type AppStateKey = keyof AppState;
 
-export const reducer: ReducerWithInitialState<AppState> = createReducer(
-    initialState,
-    {
-        [SELECT_THEME]: (state: Draft<AppState>, action: ThemeAction) => {
-            state.theme = action.theme;
-            saveLocalStorageTheme(state.theme);
-        },
+export const reducer: ReducerWithInitialState<AppState> = createReducer(initialState, (builder) => {
+    builder.addCase(SELECT_THEME, (state: Draft<AppState>, action: ThemeAction) => {
+        state.theme = action.theme;
+        saveLocalStorageTheme(state.theme);
+    });
 
-        [UPDATE_USER_MANAGER_STATE]: (
-            state: Draft<AppState>,
-            action: UserManagerAction
-        ) => {
+    builder.addCase(
+        UPDATE_USER_MANAGER_STATE,
+        (state: Draft<AppState>, action: UserManagerAction) => {
             state.userManager = action.userManager;
-        },
-        [UPDATE_USER_MANAGER_INSTANCE]: (
-            state: Draft<AppState>,
-            action: UserManagerInstanceAction
-        ) => {
+        }
+    );
+
+    builder.addCase(
+        UPDATE_USER_MANAGER_INSTANCE,
+        (state: Draft<AppState>, action: UserManagerInstanceAction) => {
             state.userManager.instance = action.instance;
-        },
-        [UPDATE_USER_MANAGER_ERROR]: (
-            state: Draft<AppState>,
-            action: UserManagerErrorAction
-        ) => {
+        }
+    );
+
+    builder.addCase(
+        UPDATE_USER_MANAGER_ERROR,
+        (state: Draft<AppState>, action: UserManagerErrorAction) => {
             state.userManager.error = action.error;
-        },
+        }
+    );
 
-        [USER]: (state: Draft<AppState>, action: AnyAction) => {
-            state.user = action.user;
-        },
+    builder.addCase(USER, (state: Draft<AppState>, action: AnyAction) => {
+        state.user = action.user;
+    });
 
-        [SIGNIN_CALLBACK_ERROR]: (
-            state: Draft<AppState>,
-            action: AnyAction
-        ) => {
-            state.signInCallbackError = action.signInCallbackError;
-        },
+    builder.addCase(SIGNIN_CALLBACK_ERROR, (state: Draft<AppState>, action: AnyAction) => {
+        state.signInCallbackError = action.signInCallbackError;
+    });
 
-        [UNAUTHORIZED_USER_INFO]: (
-            state: Draft<AppState>,
-            action: AnyAction
-        ) => {
-            state.authenticationRouterError = action.authenticationRouterError;
-        },
+    builder.addCase(UNAUTHORIZED_USER_INFO, (state: Draft<AppState>, action: AnyAction) => {
+        state.authenticationRouterError = action.authenticationRouterError;
+    });
 
-        [LOGOUT_ERROR]: (state: Draft<AppState>, action: AnyAction) => {
-            state.authenticationRouterError = action.authenticationRouterError;
-        },
+    builder.addCase(LOGOUT_ERROR, (state: Draft<AppState>, action: AnyAction) => {
+        state.authenticationRouterError = action.authenticationRouterError;
+    });
 
-        [USER_VALIDATION_ERROR]: (
-            state: Draft<AppState>,
-            action: AnyAction
-        ) => {
-            state.authenticationRouterError = action.authenticationRouterError;
-        },
+    builder.addCase(USER_VALIDATION_ERROR, (state: Draft<AppState>, action: AnyAction) => {
+        state.authenticationRouterError = action.authenticationRouterError;
+    });
 
-        [RESET_AUTHENTICATION_ROUTER_ERROR]: (
-            state: Draft<AppState>,
-            action: AnyAction
-        ) => {
+    builder.addCase(
+        RESET_AUTHENTICATION_ROUTER_ERROR,
+        (state: Draft<AppState>, action: AnyAction) => {
             state.authenticationRouterError = null;
-        },
+        }
+    );
 
-        [SHOW_AUTH_INFO_LOGIN]: (state: Draft<AppState>, action: AnyAction) => {
-            state.showAuthenticationRouterLogin =
-                action.showAuthenticationRouterLogin;
-        },
+    builder.addCase(SHOW_AUTH_INFO_LOGIN, (state: Draft<AppState>, action: AnyAction) => {
+        state.showAuthenticationRouterLogin =
+            action.showAuthenticationRouterLogin;
+    });
 
-        [SELECT_COMPUTED_LANGUAGE]: (
-            state: Draft<AppState>,
-            action: ComputedLanguageAction
-        ) => {
+    builder.addCase(
+        SELECT_COMPUTED_LANGUAGE,
+        (state: Draft<AppState>, action: ComputedLanguageAction) => {
             state.computedLanguage = action.computedLanguage;
-        },
-    }
-);
+        }
+    );
+});
