@@ -49,7 +49,7 @@ export type AppState = {
     [PARAM_LANGUAGE]: LanguageParameters;
 
     userManager: UserManagerState;
-    user: User | null; //TODO use true definition when commons-ui passed to typescript
+    user: User | null; //TODO delete when migrated into commons-ui
     signInCallbackError: unknown;
     authenticationRouterError: unknown;
     showAuthenticationRouterLogin: boolean;
