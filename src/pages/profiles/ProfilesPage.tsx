@@ -26,22 +26,22 @@ import {
     PaperProps,
     TextField,
 } from '@mui/material';
-import { AccountCircle, PersonAdd } from '@mui/icons-material';
+import { AccountCircle, ManageAccounts } from '@mui/icons-material';
 import {
     GridButton,
     GridButtonDelete,
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos } from '../../services';
+import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
 
-const defaultColDef: ColDef<UserInfos> = {
+const defaultColDef: ColDef<UserProfile> = {
     editable: false,
     resizable: true,
     minWidth: 50,
@@ -51,76 +51,42 @@ const defaultColDef: ColDef<UserInfos> = {
     sortable: true,
 };
 
-function getRowId(params: GetRowIdParams<UserInfos>): string {
-    return params.data.sub;
+function getRowId(params: GetRowIdParams<UserProfile>): string {
+    return params.data.name;
 }
 
-const UsersPage: FunctionComponent = () => {
+const ProfilesPage: FunctionComponent = () => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
-    const gridRef = useRef<GridTableRef<UserInfos>>(null);
+    const gridRef = useRef<GridTableRef<UserProfile>>(null);
     const gridContext = gridRef.current?.context;
 
     const columns = useMemo(
-        (): ColDef<UserInfos>[] => [
+        (): ColDef<UserProfile>[] => [
             {
-                field: 'sub',
+                field: 'name',
                 cellDataType: 'text',
+                editable: true,
                 flex: 3,
                 lockVisible: true,
                 filter: true,
                 headerName: intl.formatMessage({ id: 'table.id' }),
                 headerTooltip: intl.formatMessage({
-                    id: 'users.table.id.description',
+                    id: 'profiles.table.id.description',
                 }),
                 headerCheckboxSelection: true,
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
-                } as TextFilterParams<UserInfos>,
-            },
-            {
-                field: 'profileName',
-                cellDataType: 'text',
-                flex: 1,
-                filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.profileName',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.profileName.description',
-                }),
-                filterParams: {
-                    caseSensitive: false,
-                    trimInput: true,
-                } as TextFilterParams<UserInfos>,
-            },
-            {
-                field: 'isAdmin',
-                cellDataType: 'boolean',
-                //detected as cellRenderer: 'agCheckboxCellRenderer',
-                cellRendererParams: {
-                    disabled: true,
-                } as ICheckboxCellRendererParams<UserInfos, {}>,
-                flex: 1,
-                headerName: intl.formatMessage({
-                    id: 'users.table.isAdmin',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.isAdmin.description',
-                }),
-                sortable: false,
-                filter: true,
-                initialSortIndex: 1,
-                initialSort: 'asc',
+                } as TextFilterParams<UserProfile>,
             },
         ],
         [intl]
     );
 
-    const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
+    const [rowsSelection, setRowsSelection] = useState<UserProfile[]>([]);
     const deleteUsers = useCallback((): Promise<void> | undefined => {
-        let subs = rowsSelection.map((user) => user.sub);
+        let subs = rowsSelection.map((user) => user.name);
         return UserAdminSrv.deleteUsers(subs)
             .catch((error) =>
                 snackError({
@@ -172,24 +138,24 @@ const UsersPage: FunctionComponent = () => {
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
-                <GridTable<UserInfos, {}>
+                <GridTable<UserProfile, {}>
                     ref={gridRef}
-                    dataLoader={UserAdminSrv.fetchUsers}
+                    dataLoader={UserAdminSrv.fetchProfiles}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
                     gridId="table-users"
                     getRowId={getRowId}
                     rowSelection="multiple"
                     onSelectionChanged={useCallback(
-                        (event: SelectionChangedEvent<UserInfos, {}>) =>
+                        (event: SelectionChangedEvent<UserProfile, {}>) =>
                             setRowsSelection(event.api.getSelectedRows() ?? []),
                         []
                     )}
                 >
                     <GridButton
                         labelId="users.table.toolbar.add.label"
-                        textId="users.table.toolbar.add"
-                        startIcon={<PersonAdd fontSize="small" />}
+                        textId="profiles.table.toolbar.add"
+                        startIcon={<ManageAccounts fontSize="small" />}
                         color="primary"
                         onClick={useCallback(() => setOpen(true), [])}
                     />
@@ -258,7 +224,7 @@ const UsersPage: FunctionComponent = () => {
         </Grid>
     );
 };
-export default UsersPage;
+export default ProfilesPage;
 
 /*
  * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,

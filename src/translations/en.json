@@ -10,6 +10,7 @@
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
 
     "appBar.tabs.users": "Users",
+    "appBar.tabs.profiles": "Profiles",
     "appBar.tabs.connections": "Connections",
 
     "table.noRows": "No data",
@@ -25,14 +26,19 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Unknown",
 
-    "users.table.id.description": "Identifiant de l'utilisateur",
+    "users.table.id.description": "User identifier",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "The users is an administrator of GridSuite",
+    "users.table.profileName": "Profile",
+    "users.table.profileName.description": "The user's profile",
     "users.table.error.delete": "Error while deleting user",
     "users.table.error.add": "Error while adding user",
     "users.table.toolbar.add": "Add user",
     "users.table.toolbar.add.label": "Add a user",
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
-    "users.form.field.username.label": "User ID"
+    "users.form.field.username.label": "User ID",
+
+    "profiles.table.toolbar.add": "Add profile",
+    "profiles.table.id.description": "Profile name"
 }

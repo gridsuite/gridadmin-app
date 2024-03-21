@@ -43,6 +43,7 @@ export function fetchValidateUser(user: User): Promise<boolean> {
 
 export type UserInfos = {
     sub: string;
+    profileName: string;
     isAdmin: boolean;
 };
 
@@ -94,4 +95,21 @@ export function addUser(sub: string): Promise<void> {
             console.error(`Error while pushing the data : ${reason}`);
             throw reason;
         });
+}
+
+export type UserProfile = {
+    name: string;
+};
+
+export function fetchProfiles(): Promise<UserProfile[]> {
+    console.debug(`Fetching list of profiles...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching the servers data : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile[]>;
 }
