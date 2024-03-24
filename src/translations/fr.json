@@ -5,7 +5,9 @@
     "close": "Fermer",
     "ok": "OK",
     "cancel": "Annuler",
+    "validate": "Valider",
     "parameters": "Paramètres",
+    "nameEmpty": "Le nom est vide",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",
     "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres",
 
@@ -26,6 +28,7 @@
     "table.bool.no": "Non",
     "table.bool.unknown": "Inconnu",
 
+    "users.table.id": "ID",
     "users.table.id.description": "Identifiant de l'utilisateur",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "L'utilisateur est administrateur de GridSuite",
@@ -40,5 +43,21 @@
     "users.form.field.username.label": "ID utilisateur",
 
     "profiles.table.toolbar.add": "Ajouter profil",
-    "profiles.table.id.description": "Nom du profil"
+    "profiles.table.toolbar.add.label": "Ajouter un profil",
+    "profiles.form.title": "Ajouter un profil",
+    "profiles.form.content": "Veuillez renseigner les informations du profil.",
+    "profiles.form.field.profilename.label": "Nom du profil",
+    "profiles.table.id": "Nom",
+    "profiles.table.id.description": "Nom du profil",
+    "profiles.table.error.add": "Erreur pendant l'ajout du profil",
+    "profiles.table.error.delete": "Erreur pendant la suppression de profil",
+
+    "profiles.form.modification.title": "Modifier profil",
+    "profiles.form.modification.noSelectedParameter": "Auncun paramètre selectionné.",
+    "profiles.form.modification.parameterSelectionButton": "Choisir paramètre",
+    "profiles.form.modification.parameterSelection.dialog.title": "Choisir un ",
+    "profiles.form.modification.parameterSelection.dialog.message": "Veuillez choisir un paramètre",
+    "profiles.form.modification.loadFlowSectionName": "Paramètre de loadflow",
+    "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
+    "profiles.form.modification.updateError": "Erreur lors de la modification du profil"
 }

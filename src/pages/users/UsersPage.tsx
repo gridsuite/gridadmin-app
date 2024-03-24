@@ -69,7 +69,7 @@ const UsersPage: FunctionComponent = () => {
                 flex: 3,
                 lockVisible: true,
                 filter: true,
-                headerName: intl.formatMessage({ id: 'table.id' }),
+                headerName: intl.formatMessage({ id: 'users.table.id' }),
                 headerTooltip: intl.formatMessage({
                     id: 'users.table.id.description',
                 }),
@@ -94,6 +94,7 @@ const UsersPage: FunctionComponent = () => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+                editable: true,
             },
             {
                 field: 'isAdmin',

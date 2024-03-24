@@ -8,6 +8,7 @@
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { User } from '../utils/auth';
+import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 
@@ -97,8 +98,16 @@ export function addUser(sub: string): Promise<void> {
         });
 }
 
+export type ParameterInfos = {
+    id: UUID;
+    parameterId: UUID;
+    fullName: string;
+};
+
 export type UserProfile = {
+    id: UUID;
     name: string;
+    loadFlowParameter: ParameterInfos;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
@@ -112,4 +121,72 @@ export function fetchProfiles(): Promise<UserProfile[]> {
         console.error(`Error while fetching the servers data : ${reason}`);
         throw reason;
     }) as Promise<UserProfile[]>;
+}
+
+export function getProfile(profileId: UUID): Promise<UserProfile> {
+    console.debug(`Fetching a profile...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles/${profileId}`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching the servers data : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile>;
+}
+
+export function modifyProfile(
+    profileId: UUID,
+    name: string,
+    lfParamId: UUID,
+    lfParamFullName: string
+) {
+    console.debug(`Updating a profile...`);
+
+    return backendFetch(`${USER_ADMIN_URL}/profiles/${profileId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: profileId,
+            name: name,
+            loadFlowParameter: lfParamId
+                ? {
+                      parameterId: lfParamId,
+                      fullName: lfParamFullName,
+                  }
+                : null,
+        }),
+    });
+}
+
+export function addProfile(name: string): Promise<void> {
+    console.debug(`Creating user profile "${name}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/profiles/${name}`, {
+        method: 'post',
+    })
+        .then((response: Response) => undefined)
+        .catch((reason) => {
+            console.error(`Error while pushing the data : ${reason}`);
+            throw reason;
+        });
+}
+
+export function deleteProfiles(names: string[]): Promise<void> {
+    console.debug(`Deleting profiles "${JSON.stringify(names)}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(names),
+    })
+        .then((response: Response) => undefined)
+        .catch((reason) => {
+            console.error(`Error while deleting the servers data : ${reason}`);
+            throw reason;
+        });
 }

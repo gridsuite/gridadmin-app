@@ -5,7 +5,9 @@
     "close": "Close",
     "ok": "OK",
     "cancel": "Cancel",
+    "validate": "Validate",
     "parameters": "Parameters",
+    "nameEmpty": "The name is empty",
     "paramsChangingError": "An error occurred when changing the parameters",
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
 
@@ -14,7 +16,6 @@
     "appBar.tabs.connections": "Connections",
 
     "table.noRows": "No data",
-    "table.id": "ID",
     "table.error.retrieve": "Error while retrieving data",
     "table.toolbar.reset": "Reset",
     "table.toolbar.reset.label": "Reset table columns & filters",
@@ -26,6 +27,7 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Unknown",
 
+    "users.table.id": "ID",
     "users.table.id.description": "User identifier",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "The users is an administrator of GridSuite",
@@ -40,5 +42,21 @@
     "users.form.field.username.label": "User ID",
 
     "profiles.table.toolbar.add": "Add profile",
-    "profiles.table.id.description": "Profile name"
+    "profiles.table.toolbar.add.label": "Add a profile",
+    "profiles.form.title": "Add a profile",
+    "profiles.form.content": "Please fill in new profile data.",
+    "profiles.form.field.profilename.label": "Profile name",
+    "profiles.table.id": "Name",
+    "profiles.table.id.description": "Profile name",
+    "profiles.form.modification.title": "Edit profile",
+    "profiles.table.error.add": "Error while adding profile",
+    "profiles.table.error.delete": "Error while adding profile",
+
+    "profiles.form.modification.noSelectedParameter": "No parameter selected.",
+    "profiles.form.modification.parameterSelectionButton": "Choose parameter",
+    "profiles.form.modification.parameterSelection.dialog.title": "Choose a parameter",
+    "profiles.form.modification.parameterSelection.dialog.message": "Please choose a  parameter",
+    "profiles.form.modification.loadFlowSectionName": "Loadflow parameter",
+    "profiles.form.modification.readError": "Error while reading the profile",
+    "profiles.form.modification.updateError": "Error while updating the profile"
 }

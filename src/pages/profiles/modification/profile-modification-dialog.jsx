@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+import ProfileModificationForm, {
+    LF_PARAM_FULL_NAME,
+    LF_PARAM_ID,
+    PROFILE_NAME,
+} from './profile-modification-form';
+import yup from 'components/common/yup-config';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useSnackMessage } from '@gridsuite/commons-ui';
+import { getProfile, modifyProfile } from 'services/user-admin';
+import PropTypes from 'prop-types';
+import CustomMuiDialog from '../../../components/common/custom-mui-dialog';
+
+export const FetchStatus = {
+    IDLE: 'IDLE',
+    FETCHING: 'FETCHING',
+    FETCH_SUCCESS: 'FETCH_SUCCESS',
+    FETCH_ERROR: 'FETCH_ERROR',
+};
+
+const ProfileModificationDialog = ({
+    profileId,
+    open,
+    onClose,
+    gridContext,
+}) => {
+    const { snackError } = useSnackMessage();
+    const [dataFetchStatus, setDataFetchStatus] = useState(FetchStatus.IDLE);
+
+    const formSchema = yup
+        .object()
+        .shape({
+            [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
+            [LF_PARAM_ID]: yup.string().optional(),
+            [LF_PARAM_FULL_NAME]: yup.string().optional(),
+        })
+        .required();
+
+    const formMethods = useForm({
+        resolver: yupResolver(formSchema),
+    });
+
+    const { reset } = formMethods;
+
+    const onSubmit = (profileFormData) => {
+        console.log('DBR submit', profileFormData);
+        modifyProfile(
+            profileId,
+            profileFormData[PROFILE_NAME],
+            profileFormData[LF_PARAM_ID],
+            profileFormData[LF_PARAM_FULL_NAME]
+                ? profileFormData[LF_PARAM_FULL_NAME]
+                : 'TODO'
+        )
+            .catch((error) => {
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'profiles.form.modification.updateError',
+                });
+            })
+            .then(gridContext?.refresh?.());
+    };
+
+    useEffect(() => {
+        if (profileId && open) {
+            setDataFetchStatus(FetchStatus.FETCHING);
+            getProfile(profileId)
+                .then((response) => {
+                    console.log('DBR getProfile', response);
+                    setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
+                    reset({
+                        [PROFILE_NAME]: response.name,
+                        [LF_PARAM_ID]: response.loadFlowParameter?.parameterId,
+                        [LF_PARAM_FULL_NAME]:
+                            response.loadFlowParameter?.fullName,
+                    });
+                })
+                .catch((error) => {
+                    setDataFetchStatus(FetchStatus.FETCH_ERROR);
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'profiles.form.modification.readError',
+                    });
+                });
+        }
+    }, [profileId, open, reset, snackError]);
+
+    //const isDataReady = dataFetchStatus === FetchStatus.FETCH_SUCCESS;
+
+    //{isDataReady && <ProfileModificationForm />}
+
+    return (
+        <CustomMuiDialog
+            open={open}
+            onClose={onClose}
+            onSave={onSubmit}
+            formSchema={formSchema}
+            formMethods={formMethods}
+            titleId={'profiles.form.modification.title'}
+            removeOptional={true}
+            isDataFetching={dataFetchStatus === FetchStatus.FETCHING}
+        >
+            <ProfileModificationForm />
+        </CustomMuiDialog>
+    );
+};
+
+ProfileModificationDialog.propTypes = {
+    profileId: PropTypes.string,
+    open: PropTypes.bool,
+    onClose: PropTypes.func.isRequired,
+};
+
+export default ProfileModificationDialog;
