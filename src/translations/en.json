@@ -36,6 +36,7 @@
     "users.table.error.delete": "Error while deleting user",
     "users.table.error.add": "Error while adding user",
     "users.table.toolbar.add": "Add user",
+    "users.table.profile.none": "<None>",
     "users.table.toolbar.add.label": "Add a user",
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",

@@ -38,6 +38,7 @@
     "users.table.error.add": "Erreur pendant l'ajout de l'utilisateur",
     "users.table.toolbar.add.label": "Ajouter un utilisateur",
     "users.table.toolbar.add": "Ajouter utilisateur",
+    "users.table.profile.none": "<Aucun>",
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
     "users.form.field.username.label": "ID utilisateur",

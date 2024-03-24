@@ -62,6 +62,19 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }) as Promise<UserInfos[]>;
 }
 
+export function udpateUser(userInfos: UserInfos) {
+    console.debug(`Updating a user...`);
+
+    return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfos),
+    });
+}
+
 export function deleteUser(sub: string): Promise<void> {
     console.debug(`Deleting sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })

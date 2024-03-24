@@ -8,6 +8,7 @@
 import {
     FunctionComponent,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
@@ -33,13 +34,16 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos } from '../../services';
+import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
 import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
-import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
+import {
+    CellEditingStoppedEvent,
+    SelectionChangedEvent,
+} from 'ag-grid-community/dist/lib/events';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -60,6 +64,22 @@ const UsersPage: FunctionComponent = () => {
     const { snackError } = useSnackMessage();
     const gridRef = useRef<GridTableRef<UserInfos>>(null);
     const gridContext = gridRef.current?.context;
+    const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
+
+    useEffect(() => {
+        UserAdminSrv.fetchProfiles().then((allProfiles: UserProfile[]) => {
+            console.log('DBR useEff fetchProfiles', allProfiles);
+            let profiles: string[] = [
+                intl.formatMessage({ id: 'users.table.profile.none' }),
+            ];
+            if (allProfiles?.length) {
+                profiles = profiles.concat(
+                    allProfiles.map((p: UserProfile) => p.name)
+                );
+            }
+            setprofileNameOptions(profiles);
+        });
+    }, [intl]);
 
     const columns = useMemo(
         (): ColDef<UserInfos>[] => [
@@ -95,6 +115,12 @@ const UsersPage: FunctionComponent = () => {
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
                 editable: true,
+                cellEditor: 'agSelectCellEditor',
+                cellEditorParams: () => {
+                    return {
+                        values: profileNameOptions,
+                    };
+                },
             },
             {
                 field: 'isAdmin',
@@ -116,7 +142,7 @@ const UsersPage: FunctionComponent = () => {
                 initialSort: 'asc',
             },
         ],
-        [intl]
+        [intl, profileNameOptions]
     );
 
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
@@ -170,6 +196,27 @@ const UsersPage: FunctionComponent = () => {
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
+    const handleCellEditingStopped = useCallback(
+        (event: CellEditingStoppedEvent<UserInfos>) => {
+            console.log('DBR handleCellEditingStopped', event);
+            if (event.valueChanged && event.data) {
+                UserAdminSrv.udpateUser(event.data)
+                    .catch((error) =>
+                        snackError({
+                            messageTxt: `Error while updating user "${
+                                event.data?.sub
+                            }" ${error.message && ':\n' + error.message}`,
+                            headerId: 'users.table.error.update',
+                        })
+                    )
+                    .then(() => gridContext?.refresh?.());
+            } else {
+                gridContext?.refresh?.();
+            }
+        },
+        [gridContext, snackError]
+    );
+
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
@@ -178,6 +225,7 @@ const UsersPage: FunctionComponent = () => {
                     dataLoader={UserAdminSrv.fetchUsers}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
+                    onCellEditingStopped={handleCellEditingStopped}
                     gridId="table-users"
                     getRowId={getRowId}
                     rowSelection="multiple"

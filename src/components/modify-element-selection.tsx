@@ -79,7 +79,11 @@ const ModifyElementSelection: React.FunctionComponent<
     };
 
     const handleClose = (selection: any) => {
-        console.log('DBR handleClose selected=', selection, selectedElementName);
+        console.log(
+            'DBR handleClose selected=',
+            selection,
+            selectedElementName
+        );
         if (selection.length) {
             console.log(
                 'DBR handleClose onChange=',
