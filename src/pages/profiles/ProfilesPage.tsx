@@ -33,12 +33,12 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserProfile } from '../../services';
+import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
 import {
     RowDoubleClickedEvent,
     SelectionChangedEvent,
@@ -54,7 +54,6 @@ const defaultColDef: ColDef<UserProfile> = {
     showDisabledCheckboxes: true,
     rowDrag: false,
     sortable: true,
-    //enableCellChangeFlash: false,
 };
 
 function getRowId(params: GetRowIdParams<UserProfile>): string {
@@ -88,6 +87,24 @@ const ProfilesPage: FunctionComponent = () => {
                     trimInput: true,
                 } as TextFilterParams<UserProfile>,
                 editable: false,
+            },
+            {
+                field: 'validity',
+                cellDataType: 'boolean',
+                cellRendererParams: {
+                    disabled: true,
+                } as ICheckboxCellRendererParams<UserInfos, {}>,
+                flex: 1,
+                headerName: intl.formatMessage({
+                    id: 'profiles.table.validity',
+                }),
+                headerTooltip: intl.formatMessage({
+                    id: 'profiles.table.validity.description',
+                }),
+                sortable: true,
+                filter: true,
+                initialSortIndex: 1,
+                initialSort: 'asc',
             },
         ],
         [intl]
@@ -148,7 +165,17 @@ const ProfilesPage: FunctionComponent = () => {
         setOpenProfileModificationDialog(false);
         setEditingProfileId(undefined);
         reset();
-        //gridContext?.refresh?.()
+    };
+
+    const handleUpdateProfileModificationDialog = (
+        profileFormData: UserProfile
+    ) => {
+        console.log(
+            'DBR handleUpdateProfileModificationDialog',
+            profileFormData
+        );
+        gridContext?.refresh?.();
+        handleCloseProfileModificationDialog();
     };
 
     const onRowDoubleClicked = useCallback(
@@ -168,7 +195,7 @@ const ProfilesPage: FunctionComponent = () => {
                     profileId={editingProfileId}
                     open={openProfileModificationDialog}
                     onClose={handleCloseProfileModificationDialog}
-                    gridContext={gridContext}
+                    onUpdate={handleUpdateProfileModificationDialog}
                 />
                 <GridTable<UserProfile, {}>
                     ref={gridRef}

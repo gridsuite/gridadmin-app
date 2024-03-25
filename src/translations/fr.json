@@ -50,6 +50,8 @@
     "profiles.form.field.profilename.label": "Nom du profil",
     "profiles.table.id": "Nom",
     "profiles.table.id.description": "Nom du profil",
+    "profiles.table.validity": "Validité",
+    "profiles.table.validity.description": "Validité des liens vers les paramètres",
     "profiles.table.error.add": "Erreur pendant l'ajout du profil",
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
 

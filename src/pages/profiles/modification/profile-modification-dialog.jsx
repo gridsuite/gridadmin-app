@@ -30,7 +30,7 @@ const ProfileModificationDialog = ({
     profileId,
     open,
     onClose,
-    gridContext,
+    onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
     const [dataFetchStatus, setDataFetchStatus] = useState(FetchStatus.IDLE);
@@ -66,7 +66,9 @@ const ProfileModificationDialog = ({
                     headerId: 'profiles.form.modification.updateError',
                 });
             })
-            .then(gridContext?.refresh?.());
+            .then(() => {
+                onUpdate(profileFormData);
+            });
     };
 
     useEffect(() => {

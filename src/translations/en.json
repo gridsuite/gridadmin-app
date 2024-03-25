@@ -49,6 +49,8 @@
     "profiles.form.field.profilename.label": "Profile name",
     "profiles.table.id": "Name",
     "profiles.table.id.description": "Profile name",
+    "profiles.table.validity": "Validity",
+    "profiles.table.validity.description": "Parameters links validity",
     "profiles.form.modification.title": "Edit profile",
     "profiles.table.error.add": "Error while adding profile",
     "profiles.table.error.delete": "Error while adding profile",

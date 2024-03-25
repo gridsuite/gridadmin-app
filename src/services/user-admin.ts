@@ -120,6 +120,7 @@ export type ParameterInfos = {
 export type UserProfile = {
     id: UUID;
     name: string;
+    validity: boolean;
     loadFlowParameter: ParameterInfos;
 };
 
