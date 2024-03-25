@@ -56,7 +56,9 @@
     "profiles.table.error.delete": "Error while adding profile",
 
     "profiles.form.modification.noSelectedParameter": "No parameter selected.",
+    "profiles.form.modification.invalidParameter": "Invalid parameter.",
     "profiles.form.modification.parameterSelectionButton": "Choose parameter",
+    "profiles.form.modification.parameterSelectionResetButton": "Reset",
     "profiles.form.modification.parameterSelection.dialog.title": "Choose a parameter",
     "profiles.form.modification.parameterSelection.dialog.message": "Please choose a  parameter",
     "profiles.form.modification.loadFlowSectionName": "Loadflow parameter",

@@ -7,9 +7,9 @@
 
 import { TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
-import ModifyElementSelection, {
+import ParameterSelection, {
     ElementType,
-} from '../../../components/modify-element-selection';
+} from '../../../components/parameter-selection';
 import { FormattedMessage } from 'react-intl';
 import { styled } from '@mui/system';
 
@@ -50,22 +50,9 @@ const ProfileModificationForm = () => {
             <GridSection title="profiles.form.modification.loadFlowSectionName" />
             <Grid container spacing={2}>
                 <Grid item xs={12} align={'start'}>
-                    <ModifyElementSelection
+                    <ParameterSelection
                         elementType={ElementType.LOADFLOW_PARAMETERS}
                         formParamId={LF_PARAM_ID}
-                        formParamFullName={LF_PARAM_FULL_NAME}
-                        dialogOpeningButtonLabel={
-                            'profiles.form.modification.parameterSelectionButton'
-                        }
-                        dialogTitleLabel={
-                            'profiles.form.modification.parameterSelection.dialog.title'
-                        }
-                        dialogMessageLabel={
-                            'profiles.form.modification.parameterSelection.dialog.message'
-                        }
-                        noElementMessageLabel={
-                            'profiles.form.modification.noSelectedParameter'
-                        }
                     />
                 </Grid>
             </Grid>

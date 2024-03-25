@@ -26,12 +26,7 @@ export const FetchStatus = {
     FETCH_ERROR: 'FETCH_ERROR',
 };
 
-const ProfileModificationDialog = ({
-    profileId,
-    open,
-    onClose,
-    onUpdate,
-}) => {
+const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
     const { snackError } = useSnackMessage();
     const [dataFetchStatus, setDataFetchStatus] = useState(FetchStatus.IDLE);
 

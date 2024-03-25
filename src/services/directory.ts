@@ -7,7 +7,7 @@
 
 import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
-import { ElementType } from '../components/modify-element-selection';
+import { ElementType } from '../components/parameter-selection';
 
 const DIRECTORY_URL = `${getRestBase()}/directory/v1`;
 

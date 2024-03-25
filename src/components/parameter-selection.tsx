@@ -8,10 +8,10 @@
 // TODO: copy from grid-explore => move it to commons-ui
 
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography, useTheme } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { DirectoryItemSelector } from '@gridsuite/commons-ui';
-import { useController } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
 import {
     fetchDirectoryContent,
     fetchPath,
@@ -36,46 +36,54 @@ export enum ElementType {
 export interface ModifyElementSelectionProps {
     elementType: ElementType;
     formParamId: string;
-    formParamFullName: string;
-    dialogOpeningButtonLabel: string;
-    dialogTitleLabel: string;
-    dialogMessageLabel: string;
-    noElementMessageLabel?: string;
 }
 
-const ModifyElementSelection: React.FunctionComponent<
+const ParameterSelection: React.FunctionComponent<
     ModifyElementSelectionProps
 > = (props) => {
     const intl = useIntl();
+    const theme = useTheme();
 
     const [open, setOpen] = useState<boolean>(false);
-    const [selectedElementName, setSelectedElementName] = useState('');
-
+    const [selectedElementName, setSelectedElementName] = useState<string>();
+    const [validity, setValidity] = useState<boolean>();
+    const watchParamId = useWatch({
+        name: props.formParamId,
+    });
     const ctlParamId = useController({
         name: props.formParamId,
     });
-    const ctlParamFullName = useController({
-        name: props.formParamFullName,
-    });
 
     useEffect(() => {
-        console.log('DBR useEff elementUuid=', ctlParamId.field.value);
-        if (ctlParamId.field.value) {
-            fetchPath(ctlParamId.field.value).then((res: any) => {
-                console.log('DBR useEff fetchPath res=', res);
-                setSelectedElementName(
-                    res
-                        .map((element: any) => element.elementName.trim())
-                        .reverse()
-                        .join('/')
-                );
-            });
-            //.catch((error) => setSelectedElementName('error'));
+        console.log('DBR useEff elementUuid=', watchParamId);
+        if (!watchParamId) {
+            setSelectedElementName(undefined);
+            setValidity(undefined);
+        } else {
+            fetchPath(watchParamId)
+                .then((res: any) => {
+                    console.log('DBR useEff fetchPath res=', res);
+                    setValidity(true);
+                    setSelectedElementName(
+                        res
+                            .map((element: any) => element.elementName.trim())
+                            .reverse()
+                            .join('/')
+                    );
+                })
+                .catch(() => {
+                    setSelectedElementName(undefined);
+                    setValidity(false);
+                });
         }
-    }, [ctlParamId.field.value]);
+    }, [watchParamId]);
 
     const handleSelectFolder = () => {
         setOpen(true);
+    };
+
+    const handleResetParameter = () => {
+        ctlParamId.field.onChange(undefined);
     };
 
     const handleClose = (selection: any) => {
@@ -91,7 +99,6 @@ const ModifyElementSelection: React.FunctionComponent<
                 selectedElementName
             );
             ctlParamId.field.onChange(selection[0]?.id);
-            ctlParamFullName.field.onChange(selectedElementName);
         }
         setOpen(false);
     };
@@ -105,6 +112,22 @@ const ModifyElementSelection: React.FunctionComponent<
             }}
         >
             <Button
+                onClick={handleResetParameter}
+                variant="contained"
+                sx={{
+                    padding: '10px 30px',
+                }}
+                color="primary"
+                component="label"
+                disabled={selectedElementName === undefined}
+            >
+                <FormattedMessage
+                    id={
+                        'profiles.form.modification.parameterSelectionResetButton'
+                    }
+                />
+            </Button>
+            <Button
                 onClick={handleSelectFolder}
                 variant="contained"
                 sx={{
@@ -113,21 +136,28 @@ const ModifyElementSelection: React.FunctionComponent<
                 color="primary"
                 component="label"
             >
-                <FormattedMessage id={props.dialogOpeningButtonLabel} />
+                <FormattedMessage
+                    id={'profiles.form.modification.parameterSelectionButton'}
+                />
             </Button>
             <Typography
                 sx={{
                     marginLeft: '10px',
                     fontWeight: 'bold',
+                    color:
+                        validity === false
+                            ? theme.palette.error.main
+                            : undefined,
                 }}
             >
                 {selectedElementName
                     ? selectedElementName
-                    : props?.noElementMessageLabel
-                    ? intl.formatMessage({
-                          id: props.noElementMessageLabel,
-                      })
-                    : ''}
+                    : intl.formatMessage({
+                          id:
+                              validity === false
+                                  ? 'profiles.form.modification.invalidParameter'
+                                  : 'profiles.form.modification.noSelectedParameter',
+                      })}
             </Typography>
             <DirectoryItemSelector
                 open={open}
@@ -139,10 +169,10 @@ const ModifyElementSelection: React.FunctionComponent<
                     id: 'validate',
                 })}
                 title={intl.formatMessage({
-                    id: props.dialogTitleLabel,
+                    id: 'profiles.form.modification.parameterSelection.dialog.title',
                 })}
                 contentText={intl.formatMessage({
-                    id: props.dialogMessageLabel,
+                    id: 'profiles.form.modification.parameterSelection.dialog.message',
                 })}
                 fetchDirectoryContent={fetchDirectoryContent}
                 fetchRootFolders={fetchRootFolders}
@@ -152,4 +182,4 @@ const ModifyElementSelection: React.FunctionComponent<
     );
 };
 
-export default ModifyElementSelection;
+export default ParameterSelection;
