@@ -35,7 +35,7 @@ export default function ErrorPage(): ReactElement {
                     {error.message || error?.data?.message || error.statusText}
                 </i>
             </p>
-            {isRouteErrorResponse(error) && error.error && (
+            {isRouteErrorResponse(error) && error.data.error && (
                 <pre
                     style={{
                         wordWrap: 'normal',
@@ -46,14 +46,14 @@ export default function ErrorPage(): ReactElement {
                         {(function () {
                             try {
                                 return JSON.stringify(
-                                    error.error,
+                                    error.data.error,
                                     undefined,
                                     2
                                 );
                             } catch (e) {
                                 return null;
                             }
-                        })() ?? `${error.error}`}
+                        })() ?? `${error.data.error}`}
                     </code>
                 </pre>
             )}

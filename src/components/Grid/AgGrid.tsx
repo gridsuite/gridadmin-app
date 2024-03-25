@@ -49,6 +49,7 @@ export type AgGridRef<TData, TContext extends {}> = {
  */
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
+
 interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
     <TData, TContext extends {}>(
         props: PropsWithoutRef<GridOptions<TData>> &
@@ -60,7 +61,7 @@ interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
 
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     TData,
-    TContext extends {} = {}
+    TContext extends {} = {},
 >(
     props: GridOptions<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
