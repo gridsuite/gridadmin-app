@@ -10,14 +10,14 @@ import ProfileModificationForm, {
     LF_PARAM_ID,
     PROFILE_NAME,
 } from './profile-modification-form';
-import yup from 'components/common/yup-config';
+import yup from 'utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { getProfile, modifyProfile } from 'services/user-admin';
 import PropTypes from 'prop-types';
-import CustomMuiDialog from '../../../components/common/custom-mui-dialog';
+import CustomMuiDialog from '../../../components/custom-mui-dialog';
 
 export const FetchStatus = {
     IDLE: 'IDLE',

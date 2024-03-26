@@ -7,7 +7,7 @@
 
 import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
-import { ElementType } from '../components/parameter-selection';
+import { ElementType } from '../pages/profiles/modification/parameter-selection';
 
 const EXPLORE_URL = `${getRestBase()}/explore/v1`;
 

@@ -7,9 +7,7 @@
 
 import { TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
-import ParameterSelection, {
-    ElementType,
-} from '../../../components/parameter-selection';
+import ParameterSelection, { ElementType } from './parameter-selection';
 import { FormattedMessage } from 'react-intl';
 
 export const PROFILE_NAME = 'name';
