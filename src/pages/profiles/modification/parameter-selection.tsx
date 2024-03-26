@@ -19,7 +19,7 @@ import {
 } from 'services/directory';
 import { fetchElementsInfos } from 'services/explore';
 
-// TODO remove when available in commons-ui
+// TODO remove ElementType when available in commons-ui (available soon)
 export enum ElementType {
     DIRECTORY = 'DIRECTORY',
     STUDY = 'STUDY',

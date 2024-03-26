@@ -111,17 +111,11 @@ export function addUser(sub: string): Promise<void> {
         });
 }
 
-export type ParameterInfos = {
-    id: UUID;
-    parameterId: UUID;
-    fullName: string;
-};
-
 export type UserProfile = {
     id: UUID;
     name: string;
     validity: boolean;
-    loadFlowParameter: ParameterInfos;
+    loadFlowParameterId: UUID;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
@@ -150,12 +144,7 @@ export function getProfile(profileId: UUID): Promise<UserProfile> {
     }) as Promise<UserProfile>;
 }
 
-export function modifyProfile(
-    profileId: UUID,
-    name: string,
-    lfParamId: UUID,
-    lfParamFullName: string
-) {
+export function modifyProfile(profileId: UUID, name: string, lfParamId: UUID) {
     console.debug(`Updating a profile...`);
 
     return backendFetch(`${USER_ADMIN_URL}/profiles/${profileId}`, {
@@ -167,12 +156,7 @@ export function modifyProfile(
         body: JSON.stringify({
             id: profileId,
             name: name,
-            loadFlowParameter: lfParamId
-                ? {
-                      parameterId: lfParamId,
-                      fullName: lfParamFullName,
-                  }
-                : null,
+            loadFlowParameterId: lfParamId,
         }),
     });
 }

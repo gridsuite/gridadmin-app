@@ -12,7 +12,8 @@ import { FormattedMessage } from 'react-intl';
 
 export const PROFILE_NAME = 'name';
 export const LF_PARAM_ID = 'lfParamId';
-export const LF_PARAM_FULL_NAME = 'lfFullName';
+
+// TODO: For PROFILE_NAME we could use unique-name-input (available soon in commons-ui)
 
 const ProfileModificationForm = () => {
     return (

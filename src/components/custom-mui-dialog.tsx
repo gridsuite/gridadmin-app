@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// TODO: copy from grid-explore => move it to commons-ui
+// TODO: this file is going to be available soon in commons-ui
 
 import React, { FunctionComponent } from 'react';
 import { FieldErrors, FormProvider } from 'react-hook-form';

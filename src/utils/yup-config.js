@@ -5,6 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// TODO: this file is going to be available soon in commons-ui
+
 import * as yup from 'yup';
 
 yup.setLocale({

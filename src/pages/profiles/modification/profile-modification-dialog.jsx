@@ -6,7 +6,6 @@
  */
 
 import ProfileModificationForm, {
-    LF_PARAM_FULL_NAME,
     LF_PARAM_ID,
     PROFILE_NAME,
 } from './profile-modification-form';
@@ -19,6 +18,7 @@ import { getProfile, modifyProfile } from 'services/user-admin';
 import PropTypes from 'prop-types';
 import CustomMuiDialog from '../../../components/custom-mui-dialog';
 
+// TODO remove FetchStatus when available in commons-ui (available soon)
 export const FetchStatus = {
     IDLE: 'IDLE',
     FETCHING: 'FETCHING',
@@ -35,7 +35,6 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
             [LF_PARAM_ID]: yup.string().optional(),
-            [LF_PARAM_FULL_NAME]: yup.string().optional(),
         })
         .required();
 
@@ -49,10 +48,7 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
         modifyProfile(
             profileId,
             profileFormData[PROFILE_NAME],
-            profileFormData[LF_PARAM_ID],
-            profileFormData[LF_PARAM_FULL_NAME]
-                ? profileFormData[LF_PARAM_FULL_NAME]
-                : 'TODO'
+            profileFormData[LF_PARAM_ID]
         )
             .catch((error) => {
                 snackError({
@@ -73,9 +69,9 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({
                         [PROFILE_NAME]: response.name,
-                        [LF_PARAM_ID]: response.loadFlowParameter?.parameterId,
-                        [LF_PARAM_FULL_NAME]:
-                            response.loadFlowParameter?.fullName,
+                        [LF_PARAM_ID]: response.loadFlowParameterId
+                            ? response.loadFlowParameterId
+                            : undefined,
                     });
                 })
                 .catch((error) => {
@@ -88,9 +84,7 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
         }
     }, [profileId, open, reset, snackError]);
 
-    //const isDataReady = dataFetchStatus === FetchStatus.FETCH_SUCCESS;
-
-    //{isDataReady && <ProfileModificationForm />}
+    const isDataReady = dataFetchStatus === FetchStatus.FETCH_SUCCESS;
 
     return (
         <CustomMuiDialog
@@ -103,7 +97,7 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
             removeOptional={true}
             isDataFetching={dataFetchStatus === FetchStatus.FETCHING}
         >
-            <ProfileModificationForm />
+            {isDataReady && <ProfileModificationForm />}
         </CustomMuiDialog>
     );
 };
