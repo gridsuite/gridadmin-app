@@ -5,11 +5,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// TODO: copy from grid-explore => move it to commons-ui
-
 import React, { useEffect, useState } from 'react';
-import { Button, Grid, Typography, useTheme } from '@mui/material';
-import { FormattedMessage, useIntl } from 'react-intl';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import FolderIcon from '@mui/icons-material/Folder';
+import { Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { useIntl } from 'react-intl';
 import { DirectoryItemSelector } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
 import {
@@ -35,7 +35,8 @@ export enum ElementType {
 
 export interface ModifyElementSelectionProps {
     elementType: ElementType;
-    formParamId: string;
+    parameterFormId: string;
+    parameterNameKey: string;
 }
 
 const ParameterSelection: React.FunctionComponent<
@@ -48,21 +49,19 @@ const ParameterSelection: React.FunctionComponent<
     const [selectedElementName, setSelectedElementName] = useState<string>();
     const [validity, setValidity] = useState<boolean>();
     const watchParamId = useWatch({
-        name: props.formParamId,
+        name: props.parameterFormId,
     });
     const ctlParamId = useController({
-        name: props.formParamId,
+        name: props.parameterFormId,
     });
 
     useEffect(() => {
-        console.log('DBR useEff elementUuid=', watchParamId);
         if (!watchParamId) {
             setSelectedElementName(undefined);
             setValidity(undefined);
         } else {
             fetchPath(watchParamId)
                 .then((res: any) => {
-                    console.log('DBR useEff fetchPath res=', res);
                     setValidity(true);
                     setSelectedElementName(
                         res
@@ -87,97 +86,83 @@ const ParameterSelection: React.FunctionComponent<
     };
 
     const handleClose = (selection: any) => {
-        console.log(
-            'DBR handleClose selected=',
-            selection,
-            selectedElementName
-        );
         if (selection.length) {
-            console.log(
-                'DBR handleClose onChange=',
-                selection[0]?.id,
-                selectedElementName
-            );
             ctlParamId.field.onChange(selection[0]?.id);
         }
         setOpen(false);
     };
 
     return (
-        <Grid
-            sx={{
-                marginTop: '10px',
-                display: 'flex',
-                alignItems: 'center',
-            }}
-        >
-            <Button
-                onClick={handleResetParameter}
-                variant="contained"
-                sx={{
-                    padding: '10px 30px',
-                }}
-                color="primary"
-                component="label"
-                disabled={selectedElementName === undefined}
-            >
-                <FormattedMessage
-                    id={
-                        'profiles.form.modification.parameterSelectionResetButton'
-                    }
+        <Grid container columns={24} alignItems={'center'}>
+            <Grid item xs={1}>
+                <IconButton
+                    edge="start"
+                    onClick={handleResetParameter}
+                    disableRipple={watchParamId === undefined}
+                >
+                    <Tooltip
+                        title={intl.formatMessage({
+                            id: 'profiles.form.modification.parameter.reset.tooltip',
+                        })}
+                    >
+                        <HighlightOffIcon color="action" />
+                    </Tooltip>
+                </IconButton>
+            </Grid>
+            <Grid item xs={1}>
+                <IconButton edge="start" onClick={handleSelectFolder}>
+                    <Tooltip
+                        title={intl.formatMessage({
+                            id: 'profiles.form.modification.parameter.choose.tooltip',
+                        })}
+                    >
+                        <FolderIcon color="action" />
+                    </Tooltip>
+                </IconButton>
+            </Grid>
+            <Grid item xs={20}>
+                <Typography
+                    sx={{
+                        fontWeight: 'bold',
+                        color:
+                            validity === false
+                                ? theme.palette.error.main
+                                : undefined,
+                    }}
+                >
+                    {intl.formatMessage({
+                        id: props.parameterNameKey,
+                    }) +
+                        ' : ' +
+                        (selectedElementName
+                            ? selectedElementName
+                            : intl.formatMessage({
+                                  id:
+                                      validity === false
+                                          ? 'profiles.form.modification.invalidParameter'
+                                          : 'profiles.form.modification.noSelectedParameter',
+                              }))}
+                </Typography>
+                <DirectoryItemSelector
+                    open={open}
+                    onClose={handleClose}
+                    types={[props.elementType]}
+                    onlyLeaves={props.elementType !== ElementType.DIRECTORY}
+                    multiselect={false}
+                    validationButtonText={intl.formatMessage({
+                        id: 'validate',
+                    })}
+                    title={intl.formatMessage({
+                        id: 'profiles.form.modification.parameterSelection.dialog.title',
+                    })}
+                    contentText={intl.formatMessage({
+                        id: 'profiles.form.modification.parameterSelection.dialog.message',
+                    })}
+                    fetchDirectoryContent={fetchDirectoryContent}
+                    fetchRootFolders={fetchRootFolders}
+                    fetchElementsInfos={fetchElementsInfos}
                 />
-            </Button>
-            <Button
-                onClick={handleSelectFolder}
-                variant="contained"
-                sx={{
-                    padding: '10px 30px',
-                }}
-                color="primary"
-                component="label"
-            >
-                <FormattedMessage
-                    id={'profiles.form.modification.parameterSelectionButton'}
-                />
-            </Button>
-            <Typography
-                sx={{
-                    marginLeft: '10px',
-                    fontWeight: 'bold',
-                    color:
-                        validity === false
-                            ? theme.palette.error.main
-                            : undefined,
-                }}
-            >
-                {selectedElementName
-                    ? selectedElementName
-                    : intl.formatMessage({
-                          id:
-                              validity === false
-                                  ? 'profiles.form.modification.invalidParameter'
-                                  : 'profiles.form.modification.noSelectedParameter',
-                      })}
-            </Typography>
-            <DirectoryItemSelector
-                open={open}
-                onClose={handleClose}
-                types={[props.elementType]}
-                onlyLeaves={props.elementType !== ElementType.DIRECTORY}
-                multiselect={false}
-                validationButtonText={intl.formatMessage({
-                    id: 'validate',
-                })}
-                title={intl.formatMessage({
-                    id: 'profiles.form.modification.parameterSelection.dialog.title',
-                })}
-                contentText={intl.formatMessage({
-                    id: 'profiles.form.modification.parameterSelection.dialog.message',
-                })}
-                fetchDirectoryContent={fetchDirectoryContent}
-                fetchRootFolders={fetchRootFolders}
-                fetchElementsInfos={fetchElementsInfos}
-            />
+            </Grid>
         </Grid>
     );
 };

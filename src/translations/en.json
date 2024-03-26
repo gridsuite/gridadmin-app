@@ -57,11 +57,12 @@
 
     "profiles.form.modification.noSelectedParameter": "No parameter selected.",
     "profiles.form.modification.invalidParameter": "Invalid parameter.",
-    "profiles.form.modification.parameterSelectionButton": "Choose parameter",
-    "profiles.form.modification.parameterSelectionResetButton": "Reset",
+    "profiles.form.modification.parameter.choose.tooltip": "Choose parameter",
+    "profiles.form.modification.parameter.reset.tooltip": "Set undefined parameter",
     "profiles.form.modification.parameterSelection.dialog.title": "Choose a parameter",
     "profiles.form.modification.parameterSelection.dialog.message": "Please choose a  parameter",
-    "profiles.form.modification.loadFlowSectionName": "Loadflow parameter",
+    "profiles.form.modification.defaultParameters": "Default parameters",
+    "profiles.form.modification.loadflow.name": "Loadflow",
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile"
 }

@@ -68,7 +68,6 @@ const UsersPage: FunctionComponent = () => {
 
     useEffect(() => {
         UserAdminSrv.fetchProfiles().then((allProfiles: UserProfile[]) => {
-            console.log('DBR useEff fetchProfiles', allProfiles);
             let profiles: string[] = [
                 intl.formatMessage({ id: 'users.table.profile.none' }),
             ];
@@ -198,7 +197,6 @@ const UsersPage: FunctionComponent = () => {
 
     const handleCellEditingStopped = useCallback(
         (event: CellEditingStoppedEvent<UserInfos>) => {
-            console.log('DBR handleCellEditingStopped', event);
             if (event.valueChanged && event.data) {
                 UserAdminSrv.udpateUser(event.data)
                     .catch((error) =>

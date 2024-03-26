@@ -167,13 +167,7 @@ const ProfilesPage: FunctionComponent = () => {
         reset();
     };
 
-    const handleUpdateProfileModificationDialog = (
-        profileFormData: UserProfile
-    ) => {
-        console.log(
-            'DBR handleUpdateProfileModificationDialog',
-            profileFormData
-        );
+    const handleUpdateProfileModificationDialog = () => {
         gridContext?.refresh?.();
         handleCloseProfileModificationDialog();
     };

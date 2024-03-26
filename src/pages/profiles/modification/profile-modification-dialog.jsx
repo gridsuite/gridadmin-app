@@ -46,7 +46,6 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
     const { reset } = formMethods;
 
     const onSubmit = (profileFormData) => {
-        console.log('DBR submit', profileFormData);
         modifyProfile(
             profileId,
             profileFormData[PROFILE_NAME],
@@ -62,7 +61,7 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
                 });
             })
             .then(() => {
-                onUpdate(profileFormData);
+                onUpdate();
             });
     };
 
@@ -71,7 +70,6 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
             setDataFetchStatus(FetchStatus.FETCHING);
             getProfile(profileId)
                 .then((response) => {
-                    console.log('DBR getProfile', response);
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({
                         [PROFILE_NAME]: response.name,

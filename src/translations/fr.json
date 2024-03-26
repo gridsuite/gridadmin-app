@@ -56,13 +56,14 @@
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
 
     "profiles.form.modification.title": "Modifier profil",
-    "profiles.form.modification.noSelectedParameter": "Auncun paramètre selectionné.",
+    "profiles.form.modification.noSelectedParameter": "Aucun paramètre selectionné.",
     "profiles.form.modification.invalidParameter": "Paramètre invalide.",
-    "profiles.form.modification.parameterSelectionButton": "Choisir paramètre",
-    "profiles.form.modification.parameterSelectionResetButton": "Reset",
+    "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètre",
+    "profiles.form.modification.parameter.reset.tooltip": "Mettre le paramètre indéfini",
     "profiles.form.modification.parameterSelection.dialog.title": "Choisir un paramètre",
     "profiles.form.modification.parameterSelection.dialog.message": "Veuillez choisir un paramètre",
-    "profiles.form.modification.loadFlowSectionName": "Paramètre de loadflow",
+    "profiles.form.modification.defaultParameters": "Paramètres par défaut",
+    "profiles.form.modification.loadflow.name": "Calcul de répartition",
     "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil"
 }
