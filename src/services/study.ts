@@ -11,7 +11,7 @@ import { APP_NAME } from '../utils/config-params';
 
 const STUDY_URL = `${getRestBase()}/study/v1`;
 
-//TODO delete when commons-ui will be in typescript
+//TODO delete when migrated into commons-ui
 export type ServerAbout = {
     type?: 'app' | 'server' | 'other';
     name?: string;
