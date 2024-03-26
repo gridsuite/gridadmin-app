@@ -8,7 +8,7 @@
 import { LANG_ENGLISH, LANG_FRENCH, LANG_SYSTEM } from '@gridsuite/commons-ui';
 
 const supportedLanguages: string[] = [LANG_FRENCH, LANG_ENGLISH];
-export type SupportedLanguages = typeof supportedLanguages[number];
+export type SupportedLanguages = (typeof supportedLanguages)[number];
 export type LanguageParameters = SupportedLanguages | typeof LANG_SYSTEM;
 
 export function getSystemLanguage(): SupportedLanguages {
@@ -21,7 +21,5 @@ export function getSystemLanguage(): SupportedLanguages {
 export function getComputedLanguage(
     language: LanguageParameters
 ): SupportedLanguages {
-    return language === LANG_SYSTEM
-        ? getSystemLanguage()
-        : language;
+    return language === LANG_SYSTEM ? getSystemLanguage() : language;
 }
