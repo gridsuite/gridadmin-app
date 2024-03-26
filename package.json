@@ -19,7 +19,7 @@
         "@gridsuite/commons-ui": "^0.50.1",
         "@hookform/resolvers": "^3.3.4",
         "@mui/icons-material": "^5.15.14",
-        "@mui/lab": "^5.0.0-alpha.75",
+        "@mui/lab": "^5.0.0-alpha.169",
         "@mui/material": "^5.15.14",
         "@reduxjs/toolkit": "^2.2.2",
         "@types/core-js": "^2.5.8",
