@@ -116,9 +116,7 @@ const ProfilesPage: FunctionComponent = () => {
         return UserAdminSrv.deleteProfiles(profileNames)
             .catch((error) =>
                 snackError({
-                    messageTxt: `Error while deleting profiles "${JSON.stringify(
-                        profileNames
-                    )}"${error.message && ':\n' + error.message}`,
+                    messageTxt: error.message,
                     headerId: 'profiles.table.error.delete',
                 })
             )
@@ -134,9 +132,7 @@ const ProfilesPage: FunctionComponent = () => {
             UserAdminSrv.addProfile(name)
                 .catch((error) =>
                     snackError({
-                        messageTxt: `Error while adding profile "${name}"${
-                            error.message && ':\n' + error.message
-                        }`,
+                        messageTxt: error.message,
                         headerId: 'profiles.table.error.add',
                     })
                 )
