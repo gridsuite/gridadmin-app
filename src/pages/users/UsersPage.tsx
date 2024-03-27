@@ -118,6 +118,8 @@ const UsersPage: FunctionComponent = () => {
                 cellEditorParams: () => {
                     return {
                         values: profileNameOptions,
+                        valueListMaxHeight: 400,
+                        valueListMaxWidth: 300,
                     };
                 },
             },
