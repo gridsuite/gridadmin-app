@@ -33,12 +33,14 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
+import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
+import tickInCircle from 'images/tick-in-circle.png';
+import crossInCircle from 'images/cross-in-circle.png';
 import {
     RowDoubleClickedEvent,
     SelectionChangedEvent,
@@ -91,9 +93,16 @@ const ProfilesPage: FunctionComponent = () => {
             {
                 field: 'validity',
                 cellDataType: 'boolean',
-                cellRendererParams: {
-                    disabled: true,
-                } as ICheckboxCellRendererParams<UserInfos, {}>,
+                cellRenderer: (params: any) => {
+                    return params.value == null ? (
+                        <span>-</span>
+                    ) : (
+                        <img
+                            alt={'validityImage'}
+                            src={params.value ? tickInCircle : crossInCircle}
+                        />
+                    );
+                },
                 flex: 1,
                 headerName: intl.formatMessage({
                     id: 'profiles.table.validity',

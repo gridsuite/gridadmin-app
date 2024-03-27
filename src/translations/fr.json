@@ -56,6 +56,7 @@
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
 
     "profiles.form.modification.title": "Modifier profil",
+    "profiles.form.modification.defaultParameters": "Paramètres par défaut",
     "profiles.form.modification.noSelectedParameter": "pas de paramètres selectionnés.",
     "profiles.form.modification.invalidParameter": "lien vers paramètres invalide.",
     "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètres",
