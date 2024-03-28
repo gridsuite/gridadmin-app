@@ -12,11 +12,11 @@ import ProfileModificationForm, {
 import yup from 'utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { getProfile, modifyProfile } from 'services/user-admin';
-import PropTypes from 'prop-types';
 import CustomMuiDialog from '../../../components/custom-mui-dialog';
+import { UUID } from 'crypto';
 
 // TODO remove FetchStatus when available in commons-ui (available soon)
 export const FetchStatus = {
@@ -26,7 +26,16 @@ export const FetchStatus = {
     FETCH_ERROR: 'FETCH_ERROR',
 };
 
-const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
+export interface ProfileModificationDialogProps {
+    profileId: UUID | undefined;
+    open: boolean;
+    onClose: () => void;
+    onUpdate: () => void;
+}
+
+const ProfileModificationDialog: FunctionComponent<
+    ProfileModificationDialogProps
+> = ({ profileId, open, onClose, onUpdate }) => {
     const { snackError } = useSnackMessage();
     const [dataFetchStatus, setDataFetchStatus] = useState(FetchStatus.IDLE);
 
@@ -44,21 +53,23 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
 
     const { reset } = formMethods;
 
-    const onSubmit = (profileFormData) => {
-        modifyProfile(
-            profileId,
-            profileFormData[PROFILE_NAME],
-            profileFormData[LF_PARAM_ID]
-        )
-            .catch((error) => {
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'profiles.form.modification.updateError',
+    const onSubmit = (profileFormData: any) => {
+        if (profileId) {
+            modifyProfile(
+                profileId,
+                profileFormData[PROFILE_NAME],
+                profileFormData[LF_PARAM_ID]
+            )
+                .catch((error) => {
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'profiles.form.modification.updateError',
+                    });
+                })
+                .then(() => {
+                    onUpdate();
                 });
-            })
-            .then(() => {
-                onUpdate();
-            });
+        }
     };
 
     useEffect(() => {
@@ -100,12 +111,6 @@ const ProfileModificationDialog = ({ profileId, open, onClose, onUpdate }) => {
             {isDataReady && <ProfileModificationForm />}
         </CustomMuiDialog>
     );
-};
-
-ProfileModificationDialog.propTypes = {
-    profileId: PropTypes.string,
-    open: PropTypes.bool,
-    onClose: PropTypes.func.isRequired,
 };
 
 export default ProfileModificationDialog;
