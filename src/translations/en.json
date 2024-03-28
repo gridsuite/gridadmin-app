@@ -52,7 +52,7 @@
     "profiles.table.validity": "Validity",
     "profiles.table.validity.description": "Parameters links validity",
     "profiles.table.error.add": "Error while adding profile",
-    "profiles.table.error.delete": "Error while adding profile",
+    "profiles.table.error.delete": "Error while deleting profile",
 
     "profiles.form.modification.title": "Edit profile",
     "profiles.form.modification.defaultParameters": "Default parameters",
