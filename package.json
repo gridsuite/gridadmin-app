@@ -50,7 +50,7 @@
         "yup": "^1.2.0"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "PORT=3003 react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --watchAll=false",
         "test:watch": "react-scripts test",
