@@ -8,7 +8,6 @@
 import {
     FunctionComponent,
     useCallback,
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -27,25 +26,29 @@ import {
     PaperProps,
     TextField,
 } from '@mui/material';
-import { AccountCircle, PersonAdd } from '@mui/icons-material';
+import { ManageAccounts } from '@mui/icons-material';
 import {
     GridButton,
     GridButtonDelete,
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
+import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
 import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
+import tickInCircle from 'images/tick-in-circle.png';
+import crossInCircle from 'images/cross-in-circle.png';
 import {
-    CellEditingStoppedEvent,
+    RowDoubleClickedEvent,
     SelectionChangedEvent,
 } from 'ag-grid-community/dist/lib/events';
+import ProfileModificationDialog from './modification/profile-modification-dialog';
+import { UUID } from 'crypto';
 
-const defaultColDef: ColDef<UserInfos> = {
+const defaultColDef: ColDef<UserProfile> = {
     editable: false,
     resizable: true,
     minWidth: 50,
@@ -55,121 +58,91 @@ const defaultColDef: ColDef<UserInfos> = {
     sortable: true,
 };
 
-function getRowId(params: GetRowIdParams<UserInfos>): string {
-    return params.data.sub;
+function getRowId(params: GetRowIdParams<UserProfile>): string {
+    return params.data.id;
 }
 
-const UsersPage: FunctionComponent = () => {
+const ProfilesPage: FunctionComponent = () => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
-    const gridRef = useRef<GridTableRef<UserInfos>>(null);
+    const gridRef = useRef<GridTableRef<UserProfile>>(null);
     const gridContext = gridRef.current?.context;
-    const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
-
-    useEffect(() => {
-        UserAdminSrv.fetchProfiles().then((allProfiles: UserProfile[]) => {
-            let profiles: string[] = [
-                intl.formatMessage({ id: 'users.table.profile.none' }),
-            ];
-            if (allProfiles?.length) {
-                profiles = profiles.concat(
-                    allProfiles.map((p: UserProfile) => p.name)
-                );
-            }
-            setprofileNameOptions(profiles);
-        });
-    }, [intl]);
+    const [openProfileModificationDialog, setOpenProfileModificationDialog] =
+        useState(false);
+    const [editingProfileId, setEditingProfileId] = useState<UUID>();
 
     const columns = useMemo(
-        (): ColDef<UserInfos>[] => [
+        (): ColDef<UserProfile>[] => [
             {
-                field: 'sub',
+                field: 'name',
                 cellDataType: 'text',
                 flex: 3,
                 lockVisible: true,
                 filter: true,
-                headerName: intl.formatMessage({ id: 'users.table.id' }),
+                headerName: intl.formatMessage({ id: 'profiles.table.id' }),
                 headerTooltip: intl.formatMessage({
-                    id: 'users.table.id.description',
+                    id: 'profiles.table.id.description',
                 }),
                 headerCheckboxSelection: true,
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
-                } as TextFilterParams<UserInfos>,
+                } as TextFilterParams<UserProfile>,
+                editable: false,
             },
             {
-                field: 'profileName',
-                cellDataType: 'text',
-                flex: 1,
-                filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.profileName',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.profileName.description',
-                }),
-                filterParams: {
-                    caseSensitive: false,
-                    trimInput: true,
-                } as TextFilterParams<UserInfos>,
-                editable: true,
-                cellEditor: 'agSelectCellEditor',
-                cellEditorParams: () => {
-                    return {
-                        values: profileNameOptions,
-                        valueListMaxHeight: 400,
-                        valueListMaxWidth: 300,
-                    };
-                },
-            },
-            {
-                field: 'isAdmin',
+                field: 'validity',
                 cellDataType: 'boolean',
-                //detected as cellRenderer: 'agCheckboxCellRenderer',
-                cellRendererParams: {
-                    disabled: true,
-                } as ICheckboxCellRendererParams<UserInfos, {}>,
+                cellRenderer: (params: any) => {
+                    return params.value == null ? (
+                        <span>-</span>
+                    ) : (
+                        <img
+                            alt={'validityImage'}
+                            src={params.value ? tickInCircle : crossInCircle}
+                        />
+                    );
+                },
                 flex: 1,
                 headerName: intl.formatMessage({
-                    id: 'users.table.isAdmin',
+                    id: 'profiles.table.validity',
                 }),
                 headerTooltip: intl.formatMessage({
-                    id: 'users.table.isAdmin.description',
+                    id: 'profiles.table.validity.description',
                 }),
-                sortable: false,
+                sortable: true,
                 filter: true,
                 initialSortIndex: 1,
                 initialSort: 'asc',
             },
         ],
-        [intl, profileNameOptions]
+        [intl]
     );
 
-    const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
-    const deleteUsers = useCallback((): Promise<void> | undefined => {
-        let subs = rowsSelection.map((user) => user.sub);
-        return UserAdminSrv.deleteUsers(subs)
+    const [rowsSelection, setRowsSelection] = useState<UserProfile[]>([]);
+    const deleteProfiles = useCallback((): Promise<void> | undefined => {
+        let profileNames = rowsSelection.map((userProfile) => userProfile.name);
+        return UserAdminSrv.deleteProfiles(profileNames)
             .catch((error) =>
                 snackError({
                     messageTxt: error.message,
-                    headerId: 'users.table.error.delete',
+                    headerId: 'profiles.table.error.delete',
                 })
             )
             .then(() => gridContext?.refresh?.());
     }, [gridContext, rowsSelection, snackError]);
-    const deleteUsersDisabled = useMemo(
+    const deleteProfilesDisabled = useMemo(
         () => rowsSelection.length <= 0,
         [rowsSelection.length]
     );
 
-    const addUser = useCallback(
-        (id: string) => {
-            UserAdminSrv.addUser(id)
+    const addProfile = useCallback(
+        (name: string) => {
+            UserAdminSrv.addProfile(name)
                 .catch((error) =>
                     snackError({
                         messageTxt: error.message,
-                        headerId: 'users.table.error.add',
+                        headerId: 'profiles.table.error.add',
                     })
                 )
                 .then(() => gridContext?.refresh?.());
@@ -177,9 +150,9 @@ const UsersPage: FunctionComponent = () => {
         [gridContext, snackError]
     );
     const { handleSubmit, control, reset, clearErrors } = useForm<{
-        user: string;
+        name: string;
     }>({
-        defaultValues: { user: '' }, //need default not undefined value for html input, else react error at runtime
+        defaultValues: { name: '' }, //need default not undefined value for html input, else react error at runtime
     });
     const [open, setOpen] = useState(false);
     const handleClose = () => {
@@ -187,58 +160,67 @@ const UsersPage: FunctionComponent = () => {
         reset();
         clearErrors();
     };
-    const onSubmit: SubmitHandler<{ user: string }> = (data) => {
-        addUser(data.user.trim());
+    const onSubmit: SubmitHandler<{ name: string }> = (data) => {
+        addProfile(data.name.trim());
         handleClose();
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
-    const handleCellEditingStopped = useCallback(
-        (event: CellEditingStoppedEvent<UserInfos>) => {
-            if (event.valueChanged && event.data) {
-                UserAdminSrv.udpateUser(event.data)
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'users.table.error.update',
-                        })
-                    )
-                    .then(() => gridContext?.refresh?.());
-            } else {
-                gridContext?.refresh?.();
+    const handleCloseProfileModificationDialog = () => {
+        setOpenProfileModificationDialog(false);
+        setEditingProfileId(undefined);
+        reset();
+    };
+
+    const handleUpdateProfileModificationDialog = () => {
+        gridContext?.refresh?.();
+        handleCloseProfileModificationDialog();
+    };
+
+    const onRowDoubleClicked = useCallback(
+        (event: RowDoubleClickedEvent<UserProfile>) => {
+            if (event.data) {
+                setEditingProfileId(event.data.id);
+                setOpenProfileModificationDialog(true);
             }
         },
-        [gridContext, snackError]
+        []
     );
 
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
-                <GridTable<UserInfos, {}>
+                <ProfileModificationDialog
+                    profileId={editingProfileId}
+                    open={openProfileModificationDialog}
+                    onClose={handleCloseProfileModificationDialog}
+                    onUpdate={handleUpdateProfileModificationDialog}
+                />
+                <GridTable<UserProfile, {}>
                     ref={gridRef}
-                    dataLoader={UserAdminSrv.fetchUsers}
+                    dataLoader={UserAdminSrv.fetchProfiles}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
-                    onCellEditingStopped={handleCellEditingStopped}
-                    gridId="table-users"
+                    gridId="table-profiles"
                     getRowId={getRowId}
                     rowSelection="multiple"
+                    onRowDoubleClicked={onRowDoubleClicked}
                     onSelectionChanged={useCallback(
-                        (event: SelectionChangedEvent<UserInfos, {}>) =>
+                        (event: SelectionChangedEvent<UserProfile, {}>) =>
                             setRowsSelection(event.api.getSelectedRows() ?? []),
                         []
                     )}
                 >
                     <GridButton
-                        labelId="users.table.toolbar.add.label"
-                        textId="users.table.toolbar.add"
-                        startIcon={<PersonAdd fontSize="small" />}
+                        labelId="profiles.table.toolbar.add.label"
+                        textId="profiles.table.toolbar.add"
+                        startIcon={<ManageAccounts fontSize="small" />}
                         color="primary"
                         onClick={useCallback(() => setOpen(true), [])}
                     />
                     <GridButtonDelete
-                        onClick={deleteUsers}
-                        disabled={deleteUsersDisabled}
+                        onClick={deleteProfiles}
+                        disabled={deleteProfilesDisabled}
                     />
                 </GridTable>
                 <Dialog
@@ -252,14 +234,14 @@ const UsersPage: FunctionComponent = () => {
                     )}
                 >
                     <DialogTitle>
-                        <FormattedMessage id="users.form.title" />
+                        <FormattedMessage id="profiles.form.title" />
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            <FormattedMessage id="users.form.content" />
+                            <FormattedMessage id="profiles.form.content" />
                         </DialogContentText>
                         <Controller
-                            name="user"
+                            name="name"
                             control={control}
                             rules={{ required: true, minLength: 1 }}
                             render={({ field, fieldState, formState }) => (
@@ -269,7 +251,7 @@ const UsersPage: FunctionComponent = () => {
                                     required
                                     margin="dense"
                                     label={
-                                        <FormattedMessage id="users.form.field.username.label" />
+                                        <FormattedMessage id="profiles.form.field.profilename.label" />
                                     }
                                     type="text"
                                     fullWidth
@@ -278,7 +260,7 @@ const UsersPage: FunctionComponent = () => {
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
-                                                <AccountCircle />
+                                                <ManageAccounts />
                                             </InputAdornment>
                                         ),
                                     }}
@@ -301,7 +283,7 @@ const UsersPage: FunctionComponent = () => {
         </Grid>
     );
 };
-export default UsersPage;
+export default ProfilesPage;
 
 /*
  * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,
