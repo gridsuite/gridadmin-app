@@ -5,19 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    PropsWithChildren,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
-    AuthenticationRouter,
-    getPreLoginPath,
-    initializeAuthenticationProd,
-} from '@gridsuite/commons-ui';
+import { AuthenticationRouter, getPreLoginPath, initializeAuthenticationProd } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
     Navigate,
@@ -26,7 +16,7 @@ import {
     RouterProvider,
     useLocation,
     useMatch,
-    useNavigate,
+    useNavigate
 } from 'react-router-dom';
 import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,9 +28,11 @@ import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
+import { Announcements } from '../pages/announcements';
 
 export enum MainPaths {
     users = 'users',
+    announcements = 'announcements',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -58,6 +50,13 @@ export function appRoutes(): RouteObject[] {
                     element: <Users />,
                     handle: {
                         appBar_tab: MainPaths.users,
+                    },
+                },
+                {
+                    path: `/${MainPaths.announcements}`,
+                    element: <Announcements />,
+                    handle: {
+                        appBar_tab: MainPaths.announcements,
                     },
                 },
             ],
