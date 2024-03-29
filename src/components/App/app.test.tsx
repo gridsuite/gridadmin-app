@@ -14,7 +14,6 @@ import {
     ThemeProvider,
 } from '@mui/material/styles';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
-import { UserManagerMock } from '@gridsuite/commons-ui/es/utils/UserManagerMock';
 import { CssBaseline } from '@mui/material';
 import { appRoutes } from '../../routes';
 
