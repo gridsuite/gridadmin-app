@@ -61,6 +61,7 @@ export interface GridTableProps<TData>
  */
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
+
 interface GridTableWithRef
     extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
     <TData, TContext extends {}>(
@@ -80,7 +81,7 @@ interface GridTableWithRef
  */
 export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
     TData,
-    TContext extends {} = {},
+    TContext extends {} = {}
 >(
     props: PropsWithChildren<GridTableProps<TData>>,
     gridRef: ForwardedRef<GridTableRef<TData, TContext>>
@@ -147,7 +148,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
                             ({
                                 ...((context ?? {}) as TContext),
                                 refresh: loadDataAndSave,
-                            }) as TContext & GridTableExposed,
+                            } as TContext & GridTableExposed),
                         [context, loadDataAndSave]
                     )}
                 />

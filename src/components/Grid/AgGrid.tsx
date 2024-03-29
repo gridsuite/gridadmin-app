@@ -61,7 +61,7 @@ interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
 
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
     TData,
-    TContext extends {} = {},
+    TContext extends {} = {}
 >(
     props: GridOptions<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
