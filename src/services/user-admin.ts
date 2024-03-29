@@ -8,7 +8,11 @@
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { User } from '../utils/auth';
-import { AnnouncementServerData, DURATION, MESSAGE } from '../pages/announcements/utils';
+import {
+    AnnouncementServerData,
+    DURATION,
+    MESSAGE,
+} from '../pages/announcements/utils';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 
