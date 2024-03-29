@@ -26,7 +26,7 @@
         "@types/node": "^20.11.30",
         "@types/prop-types": "^15.7.12",
         "@types/react": "^18.2.73",
-        "@types/react-dom": "^18.2.22",
+        "@types/react-dom": "^18.2.23",
         "@types/react-window": "^1.8.8",
         "ag-grid-community": "^31.1.1",
         "ag-grid-react": "^31.2.0",
@@ -94,8 +94,8 @@
         "@types/jest": "^29.5.12",
         "@types/prettier": "^3.0.0",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.1.3",
+        "eslint-plugin-prettier": "^4.2.1",
         "http-proxy-middleware": "^2.0.6",
-        "prettier": "^3.2.5"
+        "prettier": "^2.8.8"
     }
 }
