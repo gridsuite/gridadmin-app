@@ -91,7 +91,7 @@ const ProfilesPage: FunctionComponent = () => {
                 editable: false,
             },
             {
-                field: 'validity',
+                field: 'allParametersLinksValid',
                 cellDataType: 'boolean',
                 cellRenderer: (params: any) => {
                     return params.value == null ? (

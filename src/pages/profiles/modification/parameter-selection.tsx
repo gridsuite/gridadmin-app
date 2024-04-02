@@ -47,7 +47,7 @@ const ParameterSelection: React.FunctionComponent<
 
     const [open, setOpen] = useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
-    const [validity, setValidity] = useState<boolean>();
+    const [parameterLinkValid, setParameterLinkValid] = useState<boolean>();
     const watchParamId = useWatch({
         name: props.parameterFormId,
     });
@@ -58,11 +58,11 @@ const ParameterSelection: React.FunctionComponent<
     useEffect(() => {
         if (!watchParamId) {
             setSelectedElementName(undefined);
-            setValidity(undefined);
+            setParameterLinkValid(undefined);
         } else {
             fetchPath(watchParamId)
                 .then((res: any) => {
-                    setValidity(true);
+                    setParameterLinkValid(true);
                     setSelectedElementName(
                         res
                             .map((element: any) => element.elementName.trim())
@@ -72,7 +72,7 @@ const ParameterSelection: React.FunctionComponent<
                 })
                 .catch(() => {
                     setSelectedElementName(undefined);
-                    setValidity(false);
+                    setParameterLinkValid(false);
                 });
         }
     }, [watchParamId]);
@@ -125,7 +125,7 @@ const ParameterSelection: React.FunctionComponent<
                     sx={{
                         fontWeight: 'bold',
                         color:
-                            validity === false
+                            parameterLinkValid === false
                                 ? theme.palette.error.main
                                 : undefined,
                     }}
@@ -138,7 +138,7 @@ const ParameterSelection: React.FunctionComponent<
                             ? selectedElementName
                             : intl.formatMessage({
                                   id:
-                                      validity === false
+                                      parameterLinkValid === false
                                           ? 'profiles.form.modification.invalidParameter'
                                           : 'profiles.form.modification.noSelectedParameter',
                               }))}

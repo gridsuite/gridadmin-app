@@ -114,7 +114,7 @@ export function addUser(sub: string): Promise<void> {
 export type UserProfile = {
     id: UUID;
     name: string;
-    validity: boolean;
+    allParametersLinksValid: boolean;
     loadFlowParameterId: UUID;
 };
 
