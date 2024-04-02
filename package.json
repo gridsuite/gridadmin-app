@@ -40,6 +40,7 @@
         "react-intl": "^6.6.4",
         "react-redux": "^9.1.0",
         "react-router-dom": "^6.22.3",
+        "react-scripts": "^5.0.1",
         "react-window": "^1.8.10",
         "reconnecting-websocket": "^4.4.0",
         "redux": "^5.0.1",
@@ -88,7 +89,6 @@
         ]
     },
     "devDependencies": {
-        "react-scripts": "^5.0.1",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@types/eslint-config-prettier": "^6.11.3",
         "@types/eslint-plugin-prettier": "^3.1.3",
