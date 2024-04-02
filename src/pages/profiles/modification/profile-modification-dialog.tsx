@@ -72,6 +72,11 @@ const ProfileModificationDialog: FunctionComponent<
         }
     };
 
+    const onDialogClose = () => {
+        setDataFetchStatus(FetchStatus.IDLE);
+        onClose();
+    };
+
     useEffect(() => {
         if (profileId && open) {
             setDataFetchStatus(FetchStatus.FETCHING);
@@ -100,7 +105,7 @@ const ProfileModificationDialog: FunctionComponent<
     return (
         <CustomMuiDialog
             open={open}
-            onClose={onClose}
+            onClose={onDialogClose}
             onSave={onSubmit}
             formSchema={formSchema}
             formMethods={formMethods}
