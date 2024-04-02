@@ -21,7 +21,7 @@ const Announcements: FunctionComponent = () => {
     return (
         <Grid item container spacing={2} direction="column">
             <Grid item>
-                <AppBar position="static">
+                <AppBar position="static" color="default">
                     <Toolbar variant="dense">
                         <Button
                             onClick={() => setOpenDialog(true)}
