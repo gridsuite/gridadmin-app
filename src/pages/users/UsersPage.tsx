@@ -36,10 +36,13 @@ import {
 import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
-import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
-import { SelectionChangedEvent } from 'ag-grid-community/dist/lib/events';
+import {
+    ColDef,
+    GetRowIdParams,
+    ICheckboxCellRendererParams,
+    SelectionChangedEvent,
+    TextFilterParams,
+} from 'ag-grid-community';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
