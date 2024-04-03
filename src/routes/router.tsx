@@ -87,7 +87,7 @@ export function appRoutes(): RouteObject[] {
 }
 
 const AuthRouter: FunctionComponent<{
-    userManager: (typeof AuthenticationRouter)['userManager'];
+    userManager: Parameters<typeof AuthenticationRouter>[0]['userManager'];
 }> = (props, context) => {
     const signInCallbackError = useSelector(
         (state: AppState) => state.signInCallbackError
