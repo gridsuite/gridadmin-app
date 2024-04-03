@@ -7,7 +7,6 @@
 
 import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
-import { ElementType } from '../pages/profiles/modification/parameter-selection';
 
 const DIRECTORY_URL = `${getRestBase()}/directory/v1`;
 
@@ -31,7 +30,7 @@ export function fetchPath(elementUuid: UUID): Promise<ElementAttributes[]> {
 }
 
 export function fetchRootFolders(
-    types: ElementType[]
+    types: string[] // should be ElementType[]
 ): Promise<ElementAttributes[]> {
     console.info('Fetching Root Directories...');
     const urlSearchParams = new URLSearchParams(
@@ -53,7 +52,7 @@ export function fetchRootFolders(
 
 export function fetchDirectoryContent(
     directoryUuid: UUID,
-    types: ElementType[]
+    types: string[] // should be ElementType[]
 ): Promise<ElementAttributes[]> {
     console.info('Fetching Directory content...');
     const urlSearchParams = new URLSearchParams(

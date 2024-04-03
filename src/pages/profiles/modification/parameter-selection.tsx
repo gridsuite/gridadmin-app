@@ -10,7 +10,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { useIntl } from 'react-intl';
-import { DirectoryItemSelector } from '@gridsuite/commons-ui';
+import { DirectoryItemSelector, ElementType } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
 import {
     fetchDirectoryContent,
@@ -18,20 +18,6 @@ import {
     fetchRootFolders,
 } from 'services/directory';
 import { fetchElementsInfos } from 'services/explore';
-
-// TODO remove ElementType when available in commons-ui (available soon)
-export enum ElementType {
-    DIRECTORY = 'DIRECTORY',
-    STUDY = 'STUDY',
-    FILTER = 'FILTER',
-    CONTINGENCY_LIST = 'CONTINGENCY_LIST',
-    MODIFICATION = 'MODIFICATION',
-    CASE = 'CASE',
-    VOLTAGE_INIT_PARAMETERS = 'VOLTAGE_INIT_PARAMETERS',
-    SECURITY_ANALYSIS_PARAMETERS = 'SECURITY_ANALYSIS_PARAMETERS',
-    LOADFLOW_PARAMETERS = 'LOADFLOW_PARAMETERS',
-    SENSITIVITY_PARAMETERS = 'SENSITIVITY_PARAMETERS',
-}
 
 export interface ModifyElementSelectionProps {
     elementType: ElementType;

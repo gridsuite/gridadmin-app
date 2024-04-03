@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { TextInput } from '@gridsuite/commons-ui';
+import { ElementType, TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
-import ParameterSelection, { ElementType } from './parameter-selection';
+import ParameterSelection from './parameter-selection';
 import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
 

@@ -7,7 +7,6 @@
 
 import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
-import { ElementType } from '../pages/profiles/modification/parameter-selection';
 
 const EXPLORE_URL = `${getRestBase()}/explore/v1`;
 
@@ -19,7 +18,7 @@ export type ElementAttributes = {
 
 export function fetchElementsInfos(
     ids: UUID[],
-    elementTypes: ElementType[]
+    elementTypes: string[] // should be ElementType[]
 ): Promise<ElementAttributes[]> {
     console.info('Fetching elements metadata...');
     const tmp = ids?.filter((id) => id);
