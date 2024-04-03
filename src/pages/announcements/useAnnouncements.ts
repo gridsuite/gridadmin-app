@@ -10,22 +10,32 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import { Announcement, fromBackToFront } from './utils';
 import { UserAdminSrv } from '../../services';
 import { getUrlWithToken, getWsBase } from '../../utils/api-ws';
+import { useSnackMessage } from '@gridsuite/commons-ui';
 
 const PREFIX_CONFIG_NOTIFICATION_WS = `${getWsBase()}/config-notification`;
 const webSocketUrl = `${PREFIX_CONFIG_NOTIFICATION_WS}/global`;
 
 export function useAnnouncements() {
+    const { snackError } = useSnackMessage();
+
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
     useEffect(() => {
         function getAnnouncements() {
-            UserAdminSrv.getAnnouncements().then((announcements) =>
-                setAnnouncements(
-                    announcements.map((announcement) =>
-                        fromBackToFront(announcement)
+            UserAdminSrv.getAnnouncements()
+                .then((announcements) =>
+                    setAnnouncements(
+                        announcements.map((announcement) =>
+                            fromBackToFront(announcement)
+                        )
                     )
                 )
-            );
+                .catch((error) =>
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'announcements.error.get',
+                    })
+                );
         }
 
         const rws = new ReconnectingWebSocket(() =>
@@ -48,7 +58,7 @@ export function useAnnouncements() {
         });
 
         return () => rws.close();
-    }, []);
+    }, [snackError]);
 
     return announcements;
 }

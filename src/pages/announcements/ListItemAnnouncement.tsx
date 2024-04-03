@@ -24,17 +24,25 @@ import {
 } from './utils';
 import { Cancel, Message, ScheduleSend, Timelapse } from '@mui/icons-material';
 import { UserAdminSrv } from '../../services';
+import { useSnackMessage } from '@gridsuite/commons-ui';
 
 export const ListItemAnnouncement: FunctionComponent<Announcement> = (
     announcement
 ) => {
+    const { snackError } = useSnackMessage();
+
     return (
         <ListItem
-            key={announcement[ID]}
             secondaryAction={
                 <IconButton
                     onClick={() =>
-                        UserAdminSrv.deleteAnnouncement(announcement[ID])
+                        UserAdminSrv.deleteAnnouncement(announcement[ID]).catch(
+                            (error) =>
+                                snackError({
+                                    messageTxt: error.message,
+                                    headerId: 'announcements.error.delete',
+                                })
+                        )
                     }
                     edge="end"
                     aria-label="delete"

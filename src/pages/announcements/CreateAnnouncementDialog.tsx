@@ -17,7 +17,11 @@ import { FormattedMessage } from 'react-intl';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DurationInput } from './DurationInput';
-import { SubmitButton, TextInput } from '@gridsuite/commons-ui';
+import {
+    SubmitButton,
+    TextInput,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import {
     AnnouncementFormData,
     emptyFormData,
@@ -35,6 +39,8 @@ interface CreateAnnouncementDialogProps {
 export const CreateAnnouncementDialog: FunctionComponent<
     CreateAnnouncementDialogProps
 > = (props) => {
+    const { snackError } = useSnackMessage();
+
     const formMethods = useForm<AnnouncementFormData>({
         defaultValues: emptyFormData,
         //@ts-ignore because yup TS is broken
@@ -45,11 +51,17 @@ export const CreateAnnouncementDialog: FunctionComponent<
 
     const onSubmit = useCallback(
         (formData: AnnouncementFormData) => {
-            UserAdminSrv.createAnnouncement(fromFrontToBack(formData));
+            UserAdminSrv.createAnnouncement(fromFrontToBack(formData)).catch(
+                (error) =>
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'announcements.error.add',
+                    })
+            );
             reset();
             props.onClose();
         },
-        [props, reset]
+        [props, reset, snackError]
     );
 
     return (

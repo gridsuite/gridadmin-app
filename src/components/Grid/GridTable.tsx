@@ -19,14 +19,11 @@ import {
     useState,
 } from 'react';
 import {
-    AppBar,
-    Box,
     Button as MuiButton,
     ButtonProps,
     ButtonTypeMap,
     ExtendButtonBaseTypeMap,
     Grid,
-    Toolbar,
 } from '@mui/material';
 import {
     OverridableComponent,
@@ -38,6 +35,7 @@ import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
 import { useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomToolbar } from '../../pages/utils/CustomToolbar';
 
 type GridTableExposed = {
     refresh: () => Promise<void>;
@@ -115,25 +113,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
             alignItems="stretch"
         >
             <Grid item xs="auto">
-                <AppBar position="static" color="default">
-                    <Toolbar
-                        variant="dense"
-                        disableGutters
-                        sx={(theme) => ({
-                            marginLeft: 1,
-                            '& > *': {
-                                // mui's button set it own margin on itself...
-                                marginRight: `${theme.spacing(1)} !important`,
-                                '&:last-child': {
-                                    marginRight: '0 !important',
-                                },
-                            },
-                        })}
-                    >
-                        {toolbarContent}
-                        <Box sx={{ flexGrow: 1 }} />
-                    </Toolbar>
-                </AppBar>
+                <CustomToolbar>{toolbarContent}</CustomToolbar>
             </Grid>
             <Grid item xs>
                 <AgGrid<TData, TContext & GridTableExposed>

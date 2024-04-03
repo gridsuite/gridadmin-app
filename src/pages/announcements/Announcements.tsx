@@ -7,11 +7,13 @@
 
 import { FunctionComponent, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { AppBar, Button, Grid, List, Toolbar } from '@mui/material';
+import { Button, Grid, List } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog';
 import { useAnnouncements } from './useAnnouncements';
 import { ListItemAnnouncement } from './ListItemAnnouncement';
+import { CustomToolbar } from '../utils/CustomToolbar';
+import { ID } from './utils';
 
 const Announcements: FunctionComponent = () => {
     const intl = useIntl();
@@ -21,18 +23,16 @@ const Announcements: FunctionComponent = () => {
     return (
         <Grid item container spacing={2} direction="column">
             <Grid item>
-                <AppBar position="static" color="default">
-                    <Toolbar variant="dense">
-                        <Button
-                            onClick={() => setOpenDialog(true)}
-                            variant="outlined"
-                            startIcon={<AddCircleOutline />}
-                            size="small"
-                        >
-                            {intl.formatMessage({ id: 'announcements.add' })}
-                        </Button>
-                    </Toolbar>
-                </AppBar>
+                <CustomToolbar>
+                    <Button
+                        onClick={() => setOpenDialog(true)}
+                        variant="outlined"
+                        startIcon={<AddCircleOutline />}
+                        size="small"
+                    >
+                        {intl.formatMessage({ id: 'announcements.add' })}
+                    </Button>
+                </CustomToolbar>
             </Grid>
             <CreateAnnouncementDialog
                 open={openDialog}
@@ -41,7 +41,10 @@ const Announcements: FunctionComponent = () => {
             <Grid item>
                 <List sx={{ maxWidth: 1400 }}>
                     {announcements.map((announcement) => (
-                        <ListItemAnnouncement {...announcement} />
+                        <ListItemAnnouncement
+                            key={announcement[ID]}
+                            {...announcement}
+                        />
                     ))}
                 </List>
             </Grid>
