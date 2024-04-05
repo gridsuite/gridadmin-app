@@ -37,13 +37,14 @@ import {
 import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
-import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef, ICheckboxCellRendererParams } from 'ag-grid-community';
 import {
     CellEditingStoppedEvent,
+    ColDef,
+    GetRowIdParams,
+    ICheckboxCellRendererParams,
     SelectionChangedEvent,
-} from 'ag-grid-community/dist/lib/events';
+    TextFilterParams,
+} from 'ag-grid-community';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -168,7 +169,9 @@ const UsersPage: FunctionComponent = () => {
             UserAdminSrv.addUser(id)
                 .catch((error) =>
                     snackError({
-                        messageTxt: error.message,
+                        messageTxt: `Error while adding user "${id}"${
+                            error.message && ':\n' + error.message
+                        }`,
                         headerId: 'users.table.error.add',
                     })
                 )

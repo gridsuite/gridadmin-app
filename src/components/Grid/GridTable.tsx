@@ -61,6 +61,7 @@ export interface GridTableProps<TData>
  */
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
+
 interface GridTableWithRef
     extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
     <TData, TContext extends {}>(
