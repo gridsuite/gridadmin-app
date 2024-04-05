@@ -36,15 +36,15 @@ import {
 import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { GetRowIdParams } from 'ag-grid-community/dist/lib/interfaces/iCallbackParams';
-import { TextFilterParams } from 'ag-grid-community/dist/lib/filter/provided/text/textFilter';
-import { ColDef } from 'ag-grid-community';
-import tickInCircle from 'images/tick-in-circle.png';
-import crossInCircle from 'images/cross-in-circle.png';
 import {
+    ColDef,
+    GetRowIdParams,
     RowDoubleClickedEvent,
     SelectionChangedEvent,
-} from 'ag-grid-community/dist/lib/events';
+    TextFilterParams,
+} from 'ag-grid-community';
+import tickInCircle from 'images/tick-in-circle.png';
+import crossInCircle from 'images/cross-in-circle.png';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
 import { UUID } from 'crypto';
 
