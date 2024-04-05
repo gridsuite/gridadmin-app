@@ -26,7 +26,12 @@ import {
     PaperProps,
     TextField,
 } from '@mui/material';
-import { ManageAccounts } from '@mui/icons-material';
+import {
+    Cancel,
+    CheckCircle,
+    ManageAccounts,
+    IndeterminateCheckBoxOutlined,
+} from '@mui/icons-material';
 import {
     GridButton,
     GridButtonDelete,
@@ -43,8 +48,6 @@ import {
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
-import tickInCircle from 'images/tick-in-circle.png';
-import crossInCircle from 'images/cross-in-circle.png';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
 import { UUID } from 'crypto';
 
@@ -93,14 +96,17 @@ const ProfilesPage: FunctionComponent = () => {
             {
                 field: 'allParametersLinksValid',
                 cellDataType: 'boolean',
+                cellStyle: (params) => ({
+                    display: 'flex',
+                    alignItems: 'center',
+                }),
                 cellRenderer: (params: any) => {
                     return params.value == null ? (
-                        <span>-</span>
+                        <IndeterminateCheckBoxOutlined fontSize="small" />
+                    ) : params.value ? (
+                        <CheckCircle fontSize="small" color="success" />
                     ) : (
-                        <img
-                            alt={'validityImage'}
-                            src={params.value ? tickInCircle : crossInCircle}
-                        />
+                        <Cancel fontSize="small" color="error" />
                     );
                 },
                 flex: 1,
