@@ -31,7 +31,8 @@ const ParameterSelection: React.FunctionComponent<
     const intl = useIntl();
     const theme = useTheme();
 
-    const [open, setOpen] = useState<boolean>(false);
+    const [openDirectorySelector, setOpenDirectorySelector] =
+        useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
     const [parameterLinkValid, setParameterLinkValid] = useState<boolean>();
     const watchParamId = useWatch({
@@ -64,7 +65,7 @@ const ParameterSelection: React.FunctionComponent<
     }, [watchParamId]);
 
     const handleSelectFolder = () => {
-        setOpen(true);
+        setOpenDirectorySelector(true);
     };
 
     const handleResetParameter = () => {
@@ -75,7 +76,7 @@ const ParameterSelection: React.FunctionComponent<
         if (selection.length) {
             ctlParamId.field.onChange(selection[0]?.id);
         }
-        setOpen(false);
+        setOpenDirectorySelector(false);
     };
 
     return (
@@ -130,7 +131,7 @@ const ParameterSelection: React.FunctionComponent<
                               }))}
                 </Typography>
                 <DirectoryItemSelector
-                    open={open}
+                    open={openDirectorySelector}
                     onClose={handleClose}
                     types={[props.elementType]}
                     onlyLeaves={props.elementType !== ElementType.DIRECTORY}

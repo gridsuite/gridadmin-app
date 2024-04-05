@@ -52,7 +52,7 @@ const defaultColDef: ColDef<UserProfile> = {
     editable: false,
     resizable: true,
     minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer', //'agAnimateShowChangeCellRenderer'
+    cellRenderer: 'agAnimateSlideCellRenderer',
     showDisabledCheckboxes: true,
     rowDrag: false,
     sortable: true,
