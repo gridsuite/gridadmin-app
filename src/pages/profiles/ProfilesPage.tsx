@@ -62,7 +62,7 @@ const defaultColDef: ColDef<UserProfile> = {
 };
 
 function getRowId(params: GetRowIdParams<UserProfile>): string {
-    return params.data.id;
+    return params.data.id ? params.data.id : '';
 }
 
 const ProfilesPage: FunctionComponent = () => {
@@ -144,7 +144,13 @@ const ProfilesPage: FunctionComponent = () => {
 
     const addProfile = useCallback(
         (name: string) => {
-            UserAdminSrv.addProfile(name)
+            const profileData: UserProfile = {
+                id: undefined,
+                name: name,
+                loadFlowParameterId: undefined,
+                allParametersLinksValid: undefined,
+            };
+            UserAdminSrv.addProfile(profileData)
                 .catch((error) =>
                     snackError({
                         messageTxt: error.message,

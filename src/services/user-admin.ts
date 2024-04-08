@@ -112,10 +112,10 @@ export function addUser(sub: string): Promise<void> {
 }
 
 export type UserProfile = {
-    id: UUID;
+    id: UUID | undefined;
     name: string;
-    allParametersLinksValid: boolean;
-    loadFlowParameterId: UUID;
+    allParametersLinksValid: boolean | undefined;
+    loadFlowParameterId: UUID | undefined;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
@@ -144,27 +144,28 @@ export function getProfile(profileId: UUID): Promise<UserProfile> {
     }) as Promise<UserProfile>;
 }
 
-export function modifyProfile(profileId: UUID, name: string, lfParamId: UUID) {
+export function modifyProfile(profileData: UserProfile) {
     console.debug(`Updating a profile...`);
 
-    return backendFetch(`${USER_ADMIN_URL}/profiles/${profileId}`, {
+    return backendFetch(`${USER_ADMIN_URL}/profiles/${profileData.id}`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            id: profileId,
-            name: name,
-            loadFlowParameterId: lfParamId,
-        }),
+        body: JSON.stringify(profileData),
     });
 }
 
-export function addProfile(name: string): Promise<void> {
-    console.debug(`Creating user profile "${name}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/profiles/${name}`, {
+export function addProfile(profileData: UserProfile): Promise<void> {
+    console.debug(`Creating user profile "${profileData.name}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
         method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
     })
         .then((response: Response) => undefined)
         .catch((reason) => {

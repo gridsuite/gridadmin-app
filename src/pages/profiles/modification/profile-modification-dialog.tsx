@@ -14,7 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import { getProfile, modifyProfile } from 'services/user-admin';
+import { getProfile, modifyProfile, UserProfile } from 'services/user-admin';
 import CustomMuiDialog from '../../../components/custom-mui-dialog';
 import { UUID } from 'crypto';
 
@@ -55,11 +55,13 @@ const ProfileModificationDialog: FunctionComponent<
 
     const onSubmit = (profileFormData: any) => {
         if (profileId) {
-            modifyProfile(
-                profileId,
-                profileFormData[PROFILE_NAME],
-                profileFormData[LF_PARAM_ID]
-            )
+            const profileData: UserProfile = {
+                id: profileId,
+                name: profileFormData[PROFILE_NAME],
+                loadFlowParameterId: profileFormData[LF_PARAM_ID],
+                allParametersLinksValid: undefined,
+            };
+            modifyProfile(profileData)
                 .catch((error) => {
                     snackError({
                         messageTxt: error.message,
