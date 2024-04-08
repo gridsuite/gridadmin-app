@@ -75,16 +75,6 @@ export function udpateUser(userInfos: UserInfos) {
     });
 }
 
-export function deleteUser(sub: string): Promise<void> {
-    console.debug(`Deleting sub user "${sub}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })
-        .then((response: Response) => undefined)
-        .catch((reason) => {
-            console.error(`Error while deleting the servers data : ${reason}`);
-            throw reason;
-        });
-}
-
 export function deleteUsers(subs: string[]): Promise<void> {
     console.debug(`Deleting sub users "${JSON.stringify(subs)}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users`, {
@@ -94,7 +84,7 @@ export function deleteUsers(subs: string[]): Promise<void> {
         },
         body: JSON.stringify(subs),
     })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while deleting the servers data : ${reason}`);
             throw reason;
@@ -104,7 +94,7 @@ export function deleteUsers(subs: string[]): Promise<void> {
 export function addUser(sub: string): Promise<void> {
     console.debug(`Creating sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while pushing the data : ${reason}`);
             throw reason;

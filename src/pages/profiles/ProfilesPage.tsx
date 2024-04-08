@@ -96,7 +96,7 @@ const ProfilesPage: FunctionComponent = () => {
             {
                 field: 'allParametersLinksValid',
                 cellDataType: 'boolean',
-                cellStyle: (params) => ({
+                cellStyle: () => ({
                     display: 'flex',
                     alignItems: 'center',
                 }),
