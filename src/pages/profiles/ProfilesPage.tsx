@@ -30,7 +30,7 @@ import {
     Cancel,
     CheckCircle,
     ManageAccounts,
-    IndeterminateCheckBoxOutlined,
+    RadioButtonUnchecked,
 } from '@mui/icons-material';
 import {
     GridButton,
@@ -102,7 +102,7 @@ const ProfilesPage: FunctionComponent = () => {
                 }),
                 cellRenderer: (params: any) => {
                     return params.value == null ? (
-                        <IndeterminateCheckBoxOutlined fontSize="small" />
+                        <RadioButtonUnchecked fontSize="small" />
                     ) : params.value ? (
                         <CheckCircle fontSize="small" color="success" />
                     ) : (

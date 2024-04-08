@@ -167,7 +167,7 @@ export function addProfile(profileData: UserProfile): Promise<void> {
         },
         body: JSON.stringify(profileData),
     })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while pushing the data : ${reason}`);
             throw reason;
@@ -183,7 +183,7 @@ export function deleteProfiles(names: string[]): Promise<void> {
         },
         body: JSON.stringify(names),
     })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while deleting the servers data : ${reason}`);
             throw reason;
