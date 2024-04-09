@@ -13,7 +13,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { capitalize, Tab, TabProps, Tabs, useTheme } from '@mui/material';
+import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { PeopleAlt } from '@mui/icons-material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
@@ -32,28 +32,19 @@ import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { MainPaths } from '../../routes';
 
-const TabNavLink: FunctionComponent<TabProps & { href: string }> = (
-    props,
-    context
-) => (
-    <Tab
-        {...props}
-        iconPosition="start"
-        LinkComponent={forwardRef((props, ref) => (
-            <NavLink ref={ref} to={props.href} {...props} />
-        ))}
-    />
-);
-
 const tabs = new Map<MainPaths, ReactElement>([
     [
         MainPaths.users,
-        <TabNavLink
+        <Tab
             icon={<PeopleAlt />}
             label={<FormattedMessage id="appBar.tabs.users" />}
             href={`/${MainPaths.users}`}
             value={MainPaths.users}
             key={`tab-${MainPaths.users}`}
+            iconPosition="start"
+            LinkComponent={forwardRef((props, ref) => (
+                <NavLink ref={ref} to={props.href} {...props} />
+            ))}
         />,
     ],
 ]);
