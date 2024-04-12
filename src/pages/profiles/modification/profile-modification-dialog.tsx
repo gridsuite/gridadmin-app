@@ -59,7 +59,6 @@ const ProfileModificationDialog: FunctionComponent<
                 id: profileId,
                 name: profileFormData[PROFILE_NAME],
                 loadFlowParameterId: profileFormData[LF_PARAM_ID],
-                allParametersLinksValid: undefined,
             };
             modifyProfile(profileData)
                 .catch((error) => {

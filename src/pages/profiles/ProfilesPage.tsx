@@ -145,10 +145,7 @@ const ProfilesPage: FunctionComponent = () => {
     const addProfile = useCallback(
         (name: string) => {
             const profileData: UserProfile = {
-                id: undefined,
                 name: name,
-                loadFlowParameterId: undefined,
-                allParametersLinksValid: undefined,
             };
             UserAdminSrv.addProfile(profileData)
                 .catch((error) =>
@@ -166,9 +163,9 @@ const ProfilesPage: FunctionComponent = () => {
     }>({
         defaultValues: { name: '' }, //need default not undefined value for html input, else react error at runtime
     });
-    const [open, setOpen] = useState(false);
+    const [openAddProfileDialog, setOpenAddProfileDialog] = useState(false);
     const handleClose = () => {
-        setOpen(false);
+        setOpenAddProfileDialog(false);
         reset();
         clearErrors();
     };
@@ -228,7 +225,10 @@ const ProfilesPage: FunctionComponent = () => {
                         textId="profiles.table.toolbar.add"
                         startIcon={<ManageAccounts fontSize="small" />}
                         color="primary"
-                        onClick={useCallback(() => setOpen(true), [])}
+                        onClick={useCallback(
+                            () => setOpenAddProfileDialog(true),
+                            []
+                        )}
                     />
                     <GridButtonDelete
                         onClick={deleteProfiles}
@@ -236,7 +236,7 @@ const ProfilesPage: FunctionComponent = () => {
                     />
                 </GridTable>
                 <Dialog
-                    open={open}
+                    open={openAddProfileDialog}
                     onClose={handleClose}
                     PaperComponent={(props) => (
                         <PaperForm

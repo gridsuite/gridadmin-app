@@ -102,10 +102,10 @@ export function addUser(sub: string): Promise<void> {
 }
 
 export type UserProfile = {
-    id: UUID | undefined;
+    id?: UUID;
     name: string;
-    allParametersLinksValid: boolean | undefined;
-    loadFlowParameterId: UUID | undefined;
+    allParametersLinksValid?: boolean;
+    loadFlowParameterId?: UUID;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {

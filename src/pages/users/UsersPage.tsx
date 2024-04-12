@@ -72,11 +72,7 @@ const UsersPage: FunctionComponent = () => {
             let profiles: string[] = [
                 intl.formatMessage({ id: 'users.table.profile.none' }),
             ];
-            if (allProfiles?.length) {
-                profiles = profiles.concat(
-                    allProfiles.map((p: UserProfile) => p.name)
-                );
-            }
+            allProfiles?.forEach((p) => profiles.push(p.name));
             setprofileNameOptions(profiles);
         });
     }, [intl]);
