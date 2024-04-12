@@ -35,9 +35,6 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <ParameterSelection
                     elementType={ElementType.LOADFLOW_PARAMETERS}
                     parameterFormId={LF_PARAM_ID}
-                    parameterNameKey={
-                        'profiles.form.modification.loadflow.name'
-                    }
                 />
             </Grid>
         </Grid>
