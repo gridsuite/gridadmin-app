@@ -5,14 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    useCallback,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FunctionComponent, useCallback, useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import {
     Button,
     Dialog,
@@ -26,121 +20,23 @@ import {
     PaperProps,
     TextField,
 } from '@mui/material';
-import {
-    Cancel,
-    CheckCircle,
-    ManageAccounts,
-    RadioButtonUnchecked,
-} from '@mui/icons-material';
-import {
-    GridButton,
-    GridButtonDelete,
-    GridTable,
-    GridTableRef,
-} from '../../components/Grid';
+import { ManageAccounts } from '@mui/icons-material';
+import { GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import {
-    ColDef,
-    GetRowIdParams,
-    RowDoubleClickedEvent,
-    SelectionChangedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { RowDoubleClickedEvent } from 'ag-grid-community';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
 import { UUID } from 'crypto';
-
-const defaultColDef: ColDef<UserProfile> = {
-    editable: false,
-    resizable: true,
-    minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer',
-    showDisabledCheckboxes: true,
-    rowDrag: false,
-    sortable: true,
-};
-
-function getRowId(params: GetRowIdParams<UserProfile>): string {
-    return params.data.id ? params.data.id : '';
-}
+import ProfilesTable from './profiles-table';
 
 const ProfilesPage: FunctionComponent = () => {
-    const intl = useIntl();
     const { snackError } = useSnackMessage();
     const gridRef = useRef<GridTableRef<UserProfile>>(null);
     const gridContext = gridRef.current?.context;
     const [openProfileModificationDialog, setOpenProfileModificationDialog] =
         useState(false);
     const [editingProfileId, setEditingProfileId] = useState<UUID>();
-
-    const columns = useMemo(
-        (): ColDef<UserProfile>[] => [
-            {
-                field: 'name',
-                cellDataType: 'text',
-                flex: 3,
-                lockVisible: true,
-                filter: true,
-                headerName: intl.formatMessage({ id: 'profiles.table.id' }),
-                headerTooltip: intl.formatMessage({
-                    id: 'profiles.table.id.description',
-                }),
-                headerCheckboxSelection: true,
-                filterParams: {
-                    caseSensitive: false,
-                    trimInput: true,
-                } as TextFilterParams<UserProfile>,
-                editable: false,
-            },
-            {
-                field: 'allParametersLinksValid',
-                cellDataType: 'boolean',
-                cellStyle: () => ({
-                    display: 'flex',
-                    alignItems: 'center',
-                }),
-                cellRenderer: (params: any) => {
-                    return params.value == null ? (
-                        <RadioButtonUnchecked fontSize="small" />
-                    ) : params.value ? (
-                        <CheckCircle fontSize="small" color="success" />
-                    ) : (
-                        <Cancel fontSize="small" color="error" />
-                    );
-                },
-                flex: 1,
-                headerName: intl.formatMessage({
-                    id: 'profiles.table.validity',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'profiles.table.validity.description',
-                }),
-                sortable: true,
-                filter: true,
-                initialSortIndex: 1,
-                initialSort: 'asc',
-            },
-        ],
-        [intl]
-    );
-
-    const [rowsSelection, setRowsSelection] = useState<UserProfile[]>([]);
-    const deleteProfiles = useCallback((): Promise<void> | undefined => {
-        let profileNames = rowsSelection.map((userProfile) => userProfile.name);
-        return UserAdminSrv.deleteProfiles(profileNames)
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'profiles.table.error.delete',
-                })
-            )
-            .then(() => gridContext?.refresh?.());
-    }, [gridContext, rowsSelection, snackError]);
-    const deleteProfilesDisabled = useMemo(
-        () => rowsSelection.length <= 0,
-        [rowsSelection.length]
-    );
 
     const addProfile = useCallback(
         (name: string) => {
@@ -205,36 +101,11 @@ const ProfilesPage: FunctionComponent = () => {
                     onClose={handleCloseProfileModificationDialog}
                     onUpdate={handleUpdateProfileModificationDialog}
                 />
-                <GridTable<UserProfile, {}>
-                    ref={gridRef}
-                    dataLoader={UserAdminSrv.fetchProfiles}
-                    columnDefs={columns}
-                    defaultColDef={defaultColDef}
-                    gridId="table-profiles"
-                    getRowId={getRowId}
-                    rowSelection="multiple"
+                <ProfilesTable
+                    gridRef={gridRef}
                     onRowDoubleClicked={onRowDoubleClicked}
-                    onSelectionChanged={useCallback(
-                        (event: SelectionChangedEvent<UserProfile, {}>) =>
-                            setRowsSelection(event.api.getSelectedRows() ?? []),
-                        []
-                    )}
-                >
-                    <GridButton
-                        labelId="profiles.table.toolbar.add.label"
-                        textId="profiles.table.toolbar.add"
-                        startIcon={<ManageAccounts fontSize="small" />}
-                        color="primary"
-                        onClick={useCallback(
-                            () => setOpenAddProfileDialog(true),
-                            []
-                        )}
-                    />
-                    <GridButtonDelete
-                        onClick={deleteProfiles}
-                        disabled={deleteProfilesDisabled}
-                    />
-                </GridTable>
+                    setOpenAddProfileDialog={setOpenAddProfileDialog}
+                />
                 <Dialog
                     open={openAddProfileDialog}
                     onClose={handleClose}
