@@ -23,8 +23,6 @@ import {
     DialogTitle,
     Grid,
     InputAdornment,
-    Paper,
-    PaperProps,
     TextField,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
@@ -45,6 +43,7 @@ import {
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
+import PaperForm from '../common/paper-form';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -301,15 +300,3 @@ const UsersPage: FunctionComponent = () => {
     );
 };
 export default UsersPage;
-
-/*
- * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,
- *   so we must trick typescript check with a cast
- */
-const PaperForm: FunctionComponent<
-    PaperProps<'form'> & { untypedProps?: PaperProps }
-> = (props, context) => {
-    const { untypedProps, ...formProps } = props;
-    const othersProps = untypedProps as PaperProps<'form'>; //trust me ts
-    return <Paper component="form" {...formProps} {...(othersProps ?? {})} />;
-};

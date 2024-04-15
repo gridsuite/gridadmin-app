@@ -27,7 +27,6 @@ const ProfilesPage: FunctionComponent = () => {
     const handleCloseProfileModificationDialog = () => {
         setOpenProfileModificationDialog(false);
         setEditingProfileId(undefined);
-        // DBR reset();
     };
 
     const handleUpdateProfileModificationDialog = () => {

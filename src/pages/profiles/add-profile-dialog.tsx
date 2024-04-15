@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { FunctionComponent, RefObject, useCallback } from 'react';
+import React, { RefObject, useCallback } from 'react';
 import {
     Button,
     Dialog,
@@ -14,8 +14,6 @@ import {
     DialogContentText,
     DialogTitle,
     InputAdornment,
-    Paper,
-    PaperProps,
     TextField,
 } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
@@ -24,6 +22,7 @@ import { ManageAccounts } from '@mui/icons-material';
 import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
+import PaperForm from '../common/paper-form';
 
 export interface AddProfileDialogProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
@@ -128,15 +127,3 @@ const AddProfileDialog: React.FunctionComponent<AddProfileDialogProps> = (
     );
 };
 export default AddProfileDialog;
-
-/*
- * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,
- *   so we must trick typescript check with a cast
- */
-const PaperForm: FunctionComponent<
-    PaperProps<'form'> & { untypedProps?: PaperProps }
-> = (props, context) => {
-    const { untypedProps, ...formProps } = props;
-    const othersProps = untypedProps as PaperProps<'form'>; //trust me ts
-    return <Paper component="form" {...formProps} {...(othersProps ?? {})} />;
-};
