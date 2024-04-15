@@ -5,9 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import 'ag-grid-community/styles/ag-grid.min.css';
-import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
-import 'ag-grid-community/styles/agGridMaterialFont.min.css';
+// TODO FM use modules instead ?
+// https://github.com/ag-grid/ag-grid/issues/6124
+// https://www.ag-grid.com/javascript-data-grid/global-style-upgrading-to-v28-css/
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+// import 'ag-grid-community/styles/agGridMaterialFont.min.css';
 
 import {
     ForwardedRef,
@@ -117,7 +120,7 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
                 }
                 {...props} //destruct props to optimize react props change detection
                 debug={
-                    process.env.REACT_APP_DEBUG_AGGRID === 'true' || props.debug
+                    import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug
                 }
                 reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />

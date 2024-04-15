@@ -16,7 +16,7 @@ export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
     const reconnectingWebSocket = new ReconnectingWebSocket(
         () => getUrlWithToken(webSocketUrl),
         undefined,
-        { debug: process.env.REACT_APP_DEBUG_REQUESTS === 'true' }
+        { debug: import.meta.env.VITE_DEBUG_REQUESTS === 'true' }
     );
     reconnectingWebSocket.onopen = function (event: Event) {
         console.info(`Connected Websocket update config ui: ${webSocketUrl}`);

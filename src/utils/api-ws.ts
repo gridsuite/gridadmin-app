@@ -14,7 +14,7 @@ export function getWsBase(): string {
     return (
         document.baseURI
             .replace(/^http(s?):\/\//, 'ws$1://')
-            .replace(/\/+$/, '') + process.env.REACT_APP_WS_GATEWAY
+            .replace(/\/+$/, '') + import.meta.env.VITE_WS_GATEWAY
     );
 }
 
