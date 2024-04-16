@@ -67,14 +67,21 @@ const UsersPage: FunctionComponent = () => {
     const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
 
     useEffect(() => {
-        UserAdminSrv.fetchProfiles().then((allProfiles: UserProfile[]) => {
-            let profiles: string[] = [
-                intl.formatMessage({ id: 'users.table.profile.none' }),
-            ];
-            allProfiles?.forEach((p) => profiles.push(p.name));
-            setprofileNameOptions(profiles);
-        });
-    }, [intl]);
+        UserAdminSrv.fetchProfiles()
+            .then((allProfiles: UserProfile[]) => {
+                let profiles: string[] = [
+                    intl.formatMessage({ id: 'users.table.profile.none' }),
+                ];
+                allProfiles?.forEach((p) => profiles.push(p.name));
+                setprofileNameOptions(profiles);
+            })
+            .catch((error) =>
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'users.table.error.profiles',
+                })
+            );
+    }, [intl, snackError]);
 
     const columns = useMemo(
         (): ColDef<UserInfos>[] => [
