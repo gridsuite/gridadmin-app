@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { getProfile, modifyProfile, UserProfile } from 'services/user-admin';
-import CustomMuiDialog from '../../../components/custom-mui-dialog';
+import CustomMuiDialog from './custom-mui-dialog';
 import { UUID } from 'crypto';
 
 // TODO remove FetchStatus when available in commons-ui (available soon)
