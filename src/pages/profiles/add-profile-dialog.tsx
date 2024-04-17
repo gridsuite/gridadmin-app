@@ -58,16 +58,19 @@ const AddProfileDialog: React.FunctionComponent<AddProfileDialogProps> = (
         [props.gridRef, snackError]
     );
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         props.setOpen(false);
         reset();
         clearErrors();
-    };
+    }, [clearErrors, props, reset]);
 
-    const onSubmit: SubmitHandler<{ name: string }> = (data) => {
-        addProfile(data.name.trim());
-        handleClose();
-    };
+    const onSubmit: SubmitHandler<{ name: string }> = useCallback(
+        (data) => {
+            addProfile(data.name.trim());
+            handleClose();
+        },
+        [addProfile, handleClose]
+    );
 
     return (
         <Dialog
