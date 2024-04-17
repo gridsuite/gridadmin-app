@@ -12,7 +12,13 @@ import ProfileModificationForm, {
 import yup from 'utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { FunctionComponent, useEffect, useState } from 'react';
+import {
+    FunctionComponent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { getProfile, modifyProfile, UserProfile } from 'services/user-admin';
 import CustomMuiDialog from './custom-mui-dialog';
@@ -53,30 +59,33 @@ const ProfileModificationDialog: FunctionComponent<
 
     const { reset } = formMethods;
 
-    const onSubmit = (profileFormData: any) => {
-        if (profileId) {
-            const profileData: UserProfile = {
-                id: profileId,
-                name: profileFormData[PROFILE_NAME],
-                loadFlowParameterId: profileFormData[LF_PARAM_ID],
-            };
-            modifyProfile(profileData)
-                .catch((error) => {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'profiles.form.modification.updateError',
+    const onSubmit = useCallback(
+        (profileFormData: any) => {
+            if (profileId) {
+                const profileData: UserProfile = {
+                    id: profileId,
+                    name: profileFormData[PROFILE_NAME],
+                    loadFlowParameterId: profileFormData[LF_PARAM_ID],
+                };
+                modifyProfile(profileData)
+                    .catch((error) => {
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'profiles.form.modification.updateError',
+                        });
+                    })
+                    .then(() => {
+                        onUpdate();
                     });
-                })
-                .then(() => {
-                    onUpdate();
-                });
-        }
-    };
+            }
+        },
+        [profileId, snackError, onUpdate]
+    );
 
-    const onDialogClose = () => {
+    const onDialogClose = useCallback(() => {
         setDataFetchStatus(FetchStatus.IDLE);
         onClose();
-    };
+    }, [onClose]);
 
     useEffect(() => {
         if (profileId && open) {
@@ -101,7 +110,15 @@ const ProfileModificationDialog: FunctionComponent<
         }
     }, [profileId, open, reset, snackError]);
 
-    const isDataReady = dataFetchStatus === FetchStatus.FETCH_SUCCESS;
+    const isDataReady = useMemo(
+        () => dataFetchStatus === FetchStatus.FETCH_SUCCESS,
+        [dataFetchStatus]
+    );
+
+    const isDataFetching = useMemo(
+        () => dataFetchStatus === FetchStatus.FETCHING,
+        [dataFetchStatus]
+    );
 
     return (
         <CustomMuiDialog
@@ -112,7 +129,7 @@ const ProfileModificationDialog: FunctionComponent<
             formMethods={formMethods}
             titleId={'profiles.form.modification.title'}
             removeOptional={true}
-            isDataFetching={dataFetchStatus === FetchStatus.FETCHING}
+            isDataFetching={isDataFetching}
         >
             {isDataReady && <ProfileModificationForm />}
         </CustomMuiDialog>

@@ -72,7 +72,12 @@ export function udpateUser(userInfos: UserInfos) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(userInfos),
-    });
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while updating user : ${reason}`);
+            throw reason;
+        });
 }
 
 export function deleteUsers(subs: string[]): Promise<void> {
@@ -96,7 +101,7 @@ export function addUser(sub: string): Promise<void> {
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
         .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while pushing the data : ${reason}`);
+            console.error(`Error while adding user : ${reason}`);
             throw reason;
         });
 }
@@ -116,7 +121,7 @@ export function fetchProfiles(): Promise<UserProfile[]> {
         },
         cache: 'default',
     }).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
+        console.error(`Error while fetching list of profiles : ${reason}`);
         throw reason;
     }) as Promise<UserProfile[]>;
 }
@@ -132,7 +137,9 @@ export function fetchProfilesWithoutValidityCheck(): Promise<UserProfile[]> {
             cache: 'default',
         }
     ).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
+        console.error(
+            `Error while fetching list of profiles (without check) : ${reason}`
+        );
         throw reason;
     }) as Promise<UserProfile[]>;
 }
@@ -145,7 +152,7 @@ export function getProfile(profileId: UUID): Promise<UserProfile> {
         },
         cache: 'default',
     }).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
+        console.error(`Error while fetching profile : ${reason}`);
         throw reason;
     }) as Promise<UserProfile>;
 }
@@ -160,7 +167,12 @@ export function modifyProfile(profileData: UserProfile) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(profileData),
-    });
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while updating the data : ${reason}`);
+            throw reason;
+        });
 }
 
 export function addProfile(profileData: UserProfile): Promise<void> {
@@ -175,7 +187,7 @@ export function addProfile(profileData: UserProfile): Promise<void> {
     })
         .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while pushing the data : ${reason}`);
+            console.error(`Error while pushing adding profile : ${reason}`);
             throw reason;
         });
 }
@@ -191,7 +203,7 @@ export function deleteProfiles(names: string[]): Promise<void> {
     })
         .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while deleting the servers data : ${reason}`);
+            console.error(`Error while deleting profiles : ${reason}`);
             throw reason;
         });
 }

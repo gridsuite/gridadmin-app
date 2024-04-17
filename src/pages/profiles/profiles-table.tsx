@@ -66,7 +66,7 @@ const ProfilesTable: React.FunctionComponent<ProfilesTableProps> = (props) => {
         [props]
     );
 
-    const deleteProfiles = useCallback((): Promise<void> | undefined => {
+    const deleteProfiles = useCallback(() => {
         let profileNames = rowsSelection.map((userProfile) => userProfile.name);
         return UserAdminSrv.deleteProfiles(profileNames)
             .catch((error) => {

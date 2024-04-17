@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Grid, IconButton, Tooltip } from '@mui/material';
@@ -18,16 +18,20 @@ import {
     fetchRootFolders,
 } from 'services/directory';
 import { fetchElementsInfos } from 'services/explore';
-import ParameterDisplay from './parameter-display';
+import LinkedPathDisplay from './linked-path-display';
 
-export interface ModifyElementSelectionProps {
-    elementType: ElementType;
+export interface ParameterSelectionProps {
+    elementType:
+        | ElementType.LOADFLOW_PARAMETERS
+        | ElementType.SECURITY_ANALYSIS_PARAMETERS
+        | ElementType.SENSITIVITY_PARAMETERS
+        | ElementType.VOLTAGE_INIT_PARAMETERS;
     parameterFormId: string;
 }
 
-const ParameterSelection: React.FunctionComponent<
-    ModifyElementSelectionProps
-> = (props) => {
+const ParameterSelection: React.FunctionComponent<ParameterSelectionProps> = (
+    props
+) => {
     const intl = useIntl();
 
     const [openDirectorySelector, setOpenDirectorySelector] =
@@ -115,7 +119,7 @@ const ParameterSelection: React.FunctionComponent<
                 </IconButton>
             </Grid>
             <Grid item xs={22}>
-                <ParameterDisplay
+                <LinkedPathDisplay
                     nameKey={getParameterTranslationKey()}
                     value={selectedElementName}
                     linkValidity={parameterLinkValid}
@@ -125,7 +129,7 @@ const ParameterSelection: React.FunctionComponent<
                 open={openDirectorySelector}
                 onClose={handleClose}
                 types={[props.elementType]}
-                onlyLeaves={props.elementType !== ElementType.DIRECTORY}
+                onlyLeaves={true}
                 multiselect={false}
                 validationButtonText={intl.formatMessage({
                     id: 'validate',

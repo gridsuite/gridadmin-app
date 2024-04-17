@@ -24,15 +24,15 @@ const ProfilesPage: FunctionComponent = () => {
 
     const [openAddProfileDialog, setOpenAddProfileDialog] = useState(false);
 
-    const handleCloseProfileModificationDialog = () => {
+    const handleCloseProfileModificationDialog = useCallback(() => {
         setOpenProfileModificationDialog(false);
         setEditingProfileId(undefined);
-    };
+    }, []);
 
-    const handleUpdateProfileModificationDialog = () => {
+    const handleUpdateProfileModificationDialog = useCallback(() => {
         gridContext?.refresh?.();
         handleCloseProfileModificationDialog();
-    };
+    }, [gridContext, handleCloseProfileModificationDialog]);
 
     const onRowDoubleClicked = useCallback(
         (event: RowDoubleClickedEvent<UserProfile>) => {

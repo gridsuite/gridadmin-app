@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { RefObject, useCallback } from 'react';
+import { RefObject, useCallback } from 'react';
 import {
     Button,
     Dialog,
@@ -68,14 +68,16 @@ const AddProfileDialog: React.FunctionComponent<AddProfileDialogProps> = (
         addProfile(data.name.trim());
         handleClose();
     };
-    const onSubmitForm = handleSubmit(onSubmit);
 
     return (
         <Dialog
             open={props.open}
             onClose={handleClose}
             PaperComponent={(props) => (
-                <PaperForm untypedProps={props} onSubmit={onSubmitForm} />
+                <PaperForm
+                    untypedProps={props}
+                    onSubmit={handleSubmit(onSubmit)}
+                />
             )}
         >
             <DialogTitle>

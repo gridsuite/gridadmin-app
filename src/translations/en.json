@@ -58,13 +58,14 @@
 
     "profiles.form.modification.title": "Edit profile",
     "profiles.form.modification.defaultParameters": "Default parameters",
-    "profiles.form.modification.noSelectedParameter": "no parameters selected.",
-    "profiles.form.modification.invalidParameter": "invalid parameters link.",
     "profiles.form.modification.parameter.choose.tooltip": "Choose parameters",
     "profiles.form.modification.parameter.reset.tooltip": "Set undefined parameters",
     "profiles.form.modification.parameterSelection.dialog.title": "Choose parameters",
     "profiles.form.modification.parameterSelection.dialog.message": "Please choose parameters",
     "profiles.form.modification.loadflow.name": "Loadflow",
     "profiles.form.modification.readError": "Error while reading the profile",
-    "profiles.form.modification.updateError": "Error while updating the profile"
+    "profiles.form.modification.updateError": "Error while updating the profile",
+
+    "linked.path.display.noLink": "no parameters selected.",
+    "linked.path.display.invalidLink": "invalid parameters link."
 }

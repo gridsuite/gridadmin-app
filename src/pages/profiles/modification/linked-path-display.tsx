@@ -5,17 +5,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React from 'react';
 import { Typography, useTheme } from '@mui/material';
 import { useIntl } from 'react-intl';
 
-export interface ParameterDisplayProps {
+export interface LinkedPathDisplayProps {
     nameKey: string;
     value?: string;
     linkValidity?: boolean;
 }
 
-const ParameterDisplay: React.FunctionComponent<ParameterDisplayProps> = (
+const LinkedPathDisplay: React.FunctionComponent<LinkedPathDisplayProps> = (
     props
 ) => {
     const intl = useIntl();
@@ -40,11 +39,11 @@ const ParameterDisplay: React.FunctionComponent<ParameterDisplayProps> = (
                     : intl.formatMessage({
                           id:
                               props.linkValidity === false
-                                  ? 'profiles.form.modification.invalidParameter'
-                                  : 'profiles.form.modification.noSelectedParameter',
+                                  ? 'linked.path.display.invalidLink'
+                                  : 'linked.path.display.noLink',
                       }))}
         </Typography>
     );
 };
 
-export default ParameterDisplay;
+export default LinkedPathDisplay;

@@ -7,7 +7,7 @@
 
 // TODO: this file is going to be available soon in commons-ui
 
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { FieldErrors, FormProvider } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import {

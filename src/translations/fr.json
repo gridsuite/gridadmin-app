@@ -59,13 +59,14 @@
 
     "profiles.form.modification.title": "Modifier profil",
     "profiles.form.modification.defaultParameters": "Paramètres par défaut",
-    "profiles.form.modification.noSelectedParameter": "pas de paramètres selectionnés.",
-    "profiles.form.modification.invalidParameter": "lien vers paramètres invalide.",
     "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètres",
     "profiles.form.modification.parameter.reset.tooltip": "Ne pas définir de paramètres",
     "profiles.form.modification.parameterSelection.dialog.title": "Choisir des paramètres",
     "profiles.form.modification.parameterSelection.dialog.message": "Veuillez choisir des paramètres",
     "profiles.form.modification.loadflow.name": "Calcul de répartition",
     "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
-    "profiles.form.modification.updateError": "Erreur lors de la modification du profil"
+    "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
+
+    "linked.path.display.invalidLink": "lien vers paramètres invalide.",
+    "linked.path.display.noLink": "pas de paramètres selectionnés."
 }
