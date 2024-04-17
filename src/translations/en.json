@@ -54,6 +54,7 @@
     "profiles.table.validity.description": "Are all parameters links valid?",
     "profiles.table.error.add": "Error while adding profile",
     "profiles.table.error.delete": "Error while deleting profile",
+    "profiles.table.integrity.error.delete": "Error while deleting profile : a profile is still referenced by users",
 
     "profiles.form.modification.title": "Edit profile",
     "profiles.form.modification.defaultParameters": "Default parameters",

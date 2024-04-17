@@ -55,6 +55,7 @@
     "profiles.table.validity.description": "Tous les liens vers les paramètres sont-ils valides ?",
     "profiles.table.error.add": "Erreur pendant l'ajout du profil",
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
+    "profiles.table.integrity.error.delete": "Erreur pendant la suppression de profil: un profil est toujours référencé par des utilisateurs",
 
     "profiles.form.modification.title": "Modifier profil",
     "profiles.form.modification.defaultParameters": "Paramètres par défaut",

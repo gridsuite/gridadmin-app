@@ -69,12 +69,18 @@ const ProfilesTable: React.FunctionComponent<ProfilesTableProps> = (props) => {
     const deleteProfiles = useCallback((): Promise<void> | undefined => {
         let profileNames = rowsSelection.map((userProfile) => userProfile.name);
         return UserAdminSrv.deleteProfiles(profileNames)
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'profiles.table.error.delete',
-                })
-            )
+            .catch((error) => {
+                if (error.status === 422) {
+                    snackError({
+                        headerId: 'profiles.table.integrity.error.delete',
+                    });
+                } else {
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'profiles.table.error.delete',
+                    });
+                }
+            })
             .then(() => props.gridRef?.current?.context?.refresh?.());
     }, [props.gridRef, rowsSelection, snackError]);
 
