@@ -40,7 +40,6 @@
         "redux": "^5.0.1",
         "type-fest": "^4.14.0",
         "typeface-roboto": "^1.1.13",
-        "typescript": "5.1.6",
         "yup": "^1.4.0"
     },
     "scripts": {
@@ -58,7 +57,7 @@
         "@babel/preset-react": "^7.24.1",
         "@babel/preset-typescript": "^7.24.1",
         "@types/core-js": "^2.5.8",
-        "@types/eslint": "^7.29.0",
+        "@types/eslint": "^8.56.9",
         "@types/eslint-config-prettier": "^6.11.3",
         "@types/jest": "^27.5.2",
         "@types/node": "^18.19.31",
@@ -86,6 +85,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "jest-svg-transformer": "^1.0.0",
         "prettier": "^2.8.8",
+        "typescript": "5.1.6",
         "ts-node": "^10.9.2",
         "vite": "^5.2.7",
         "vite-plugin-eslint": "^1.8.1",
