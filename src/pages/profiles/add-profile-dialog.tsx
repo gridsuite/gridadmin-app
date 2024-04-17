@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { RefObject, useCallback } from 'react';
+import { FunctionComponent, RefObject, useCallback } from 'react';
 import {
     Button,
     Dialog,
@@ -17,7 +17,7 @@ import {
     TextField,
 } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { ManageAccounts } from '@mui/icons-material';
 import { UserAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
@@ -30,9 +30,7 @@ export interface AddProfileDialogProps {
     setOpen: (open: boolean) => void;
 }
 
-const AddProfileDialog: React.FunctionComponent<AddProfileDialogProps> = (
-    props
-) => {
+const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
     const { snackError } = useSnackMessage();
 
     const { handleSubmit, control, reset, clearErrors } = useForm<{
@@ -64,8 +62,8 @@ const AddProfileDialog: React.FunctionComponent<AddProfileDialogProps> = (
         clearErrors();
     }, [clearErrors, props, reset]);
 
-    const onSubmit: SubmitHandler<{ name: string }> = useCallback(
-        (data) => {
+    const onSubmit = useCallback(
+        (data: { name: string }) => {
             addProfile(data.name.trim());
             handleClose();
         },

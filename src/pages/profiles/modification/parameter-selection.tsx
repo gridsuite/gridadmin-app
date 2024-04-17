@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Grid, IconButton, Tooltip } from '@mui/material';
@@ -29,7 +29,7 @@ export interface ParameterSelectionProps {
     parameterFormId: string;
 }
 
-const ParameterSelection: React.FunctionComponent<ParameterSelectionProps> = (
+const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (
     props
 ) => {
     const intl = useIntl();

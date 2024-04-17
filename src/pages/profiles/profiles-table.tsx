@@ -5,7 +5,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import React, { RefObject, useCallback, useMemo, useState } from 'react';
+import {
+    FunctionComponent,
+    RefObject,
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import { useIntl } from 'react-intl';
 import {
     Cancel,
@@ -45,7 +51,7 @@ export interface ProfilesTableProps {
     setOpenAddProfileDialog: (open: boolean) => void;
 }
 
-const ProfilesTable: React.FunctionComponent<ProfilesTableProps> = (props) => {
+const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 

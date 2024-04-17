@@ -7,6 +7,7 @@
 
 import { Typography, useTheme } from '@mui/material';
 import { useIntl } from 'react-intl';
+import { FunctionComponent } from 'react';
 
 export interface LinkedPathDisplayProps {
     nameKey: string;
@@ -14,7 +15,7 @@ export interface LinkedPathDisplayProps {
     linkValidity?: boolean;
 }
 
-const LinkedPathDisplay: React.FunctionComponent<LinkedPathDisplayProps> = (
+const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (
     props
 ) => {
     const intl = useIntl();
