@@ -67,7 +67,7 @@ const UsersPage: FunctionComponent = () => {
     const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
 
     useEffect(() => {
-        UserAdminSrv.fetchProfiles()
+        UserAdminSrv.fetchProfilesWithoutValidityCheck()
             .then((allProfiles: UserProfile[]) => {
                 let profiles: string[] = [
                     intl.formatMessage({ id: 'users.table.profile.none' }),

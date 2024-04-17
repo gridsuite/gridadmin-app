@@ -121,6 +121,22 @@ export function fetchProfiles(): Promise<UserProfile[]> {
     }) as Promise<UserProfile[]>;
 }
 
+export function fetchProfilesWithoutValidityCheck(): Promise<UserProfile[]> {
+    console.debug(`Fetching list of profiles...`);
+    return backendFetchJson(
+        `${USER_ADMIN_URL}/profiles?checkLinksValidity=false`,
+        {
+            headers: {
+                Accept: 'application/json',
+            },
+            cache: 'default',
+        }
+    ).catch((reason) => {
+        console.error(`Error while fetching the servers data : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile[]>;
+}
+
 export function getProfile(profileId: UUID): Promise<UserProfile> {
     console.debug(`Fetching a profile...`);
     return backendFetchJson(`${USER_ADMIN_URL}/profiles/${profileId}`, {
