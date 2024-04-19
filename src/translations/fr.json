@@ -34,5 +34,9 @@
     "users.table.toolbar.add.label": "Ajouter un utilisateur",
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
-    "users.form.field.username.label": "ID utilisateur"
+    "users.form.field.username.label": "ID utilisateur",
+    "users.form.delete.title": "Supprimer utilisateur",
+    "users.form.delete.multipleItemsDialogMessage": "{itemsCount} utilisateurs vont être supprimés.",
+    "users.form.delete.itemDialogMessage": "{itemName} va être supprimé.",
+    "users.form.delete.multipleItemsDialogTitle": "Supprimer utilisateurs"
 }

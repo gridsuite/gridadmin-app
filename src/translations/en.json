@@ -34,5 +34,9 @@
     "users.table.toolbar.add.label": "Add a user",
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
-    "users.form.field.username.label": "User ID"
+    "users.form.field.username.label": "User ID",
+    "users.form.delete.title": "Delete a user",
+    "users.form.delete.multipleItemsDialogMessage": "{itemsCount} users will be deleted.",
+    "users.form.delete.itemDialogMessage": "{itemName} will be deleted.",
+    "users.form.delete.multipleItemsDialogTitle": "Delete {itemsCount} users"
 }
