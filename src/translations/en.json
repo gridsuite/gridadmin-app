@@ -67,7 +67,7 @@
     "profiles.form.modification.updateError": "Error while updating the profile",
 
     "linked.path.display.noLink": "no parameters selected.",
-    "linked.path.display.invalidLink": "invalid parameters link."
+    "linked.path.display.invalidLink": "invalid parameters link.",
 
     "users.form.delete.title": "Delete a user",
     "users.form.delete.multipleItemsDialogMessage": "{itemsCount} users will be deleted.",

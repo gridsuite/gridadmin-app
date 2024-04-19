@@ -68,7 +68,7 @@
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
 
     "linked.path.display.invalidLink": "lien vers paramètres invalide.",
-    "linked.path.display.noLink": "pas de paramètres selectionnés."
+    "linked.path.display.noLink": "pas de paramètres selectionnés.",
 
     "users.form.delete.title": "Supprimer utilisateur",
     "users.form.delete.multipleItemsDialogMessage": "{itemsCount} utilisateurs vont être supprimés.",
