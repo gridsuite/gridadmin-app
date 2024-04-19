@@ -8,6 +8,7 @@
 import {
     FunctionComponent,
     useCallback,
+    useEffect,
     useMemo,
     useRef,
     useState,
@@ -22,8 +23,6 @@ import {
     DialogTitle,
     Grid,
     InputAdornment,
-    Paper,
-    PaperProps,
     TextField,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
@@ -33,16 +32,18 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos } from '../../services';
+import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
+    CellEditingStoppedEvent,
     ColDef,
     GetRowIdParams,
     ICheckboxCellRendererParams,
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
+import PaperForm from '../common/paper-form';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -63,6 +64,24 @@ const UsersPage: FunctionComponent = () => {
     const { snackError } = useSnackMessage();
     const gridRef = useRef<GridTableRef<UserInfos>>(null);
     const gridContext = gridRef.current?.context;
+    const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
+
+    useEffect(() => {
+        UserAdminSrv.fetchProfilesWithoutValidityCheck()
+            .then((allProfiles: UserProfile[]) => {
+                let profiles: string[] = [
+                    intl.formatMessage({ id: 'users.table.profile.none' }),
+                ];
+                allProfiles?.forEach((p) => profiles.push(p.name));
+                setprofileNameOptions(profiles);
+            })
+            .catch((error) =>
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'users.table.error.profiles',
+                })
+            );
+    }, [intl, snackError]);
 
     const columns = useMemo(
         (): ColDef<UserInfos>[] => [
@@ -72,7 +91,7 @@ const UsersPage: FunctionComponent = () => {
                 flex: 3,
                 lockVisible: true,
                 filter: true,
-                headerName: intl.formatMessage({ id: 'table.id' }),
+                headerName: intl.formatMessage({ id: 'users.table.id' }),
                 headerTooltip: intl.formatMessage({
                     id: 'users.table.id.description',
                 }),
@@ -81,6 +100,31 @@ const UsersPage: FunctionComponent = () => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+            },
+            {
+                field: 'profileName',
+                cellDataType: 'text',
+                flex: 1,
+                filter: true,
+                headerName: intl.formatMessage({
+                    id: 'users.table.profileName',
+                }),
+                headerTooltip: intl.formatMessage({
+                    id: 'users.table.profileName.description',
+                }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<UserInfos>,
+                editable: true,
+                cellEditor: 'agSelectCellEditor',
+                cellEditorParams: () => {
+                    return {
+                        values: profileNameOptions,
+                        valueListMaxHeight: 400,
+                        valueListMaxWidth: 300,
+                    };
+                },
             },
             {
                 field: 'isAdmin',
@@ -102,7 +146,7 @@ const UsersPage: FunctionComponent = () => {
                 initialSort: 'asc',
             },
         ],
-        [intl]
+        [intl, profileNameOptions]
     );
 
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
@@ -111,9 +155,7 @@ const UsersPage: FunctionComponent = () => {
         return UserAdminSrv.deleteUsers(subs)
             .catch((error) =>
                 snackError({
-                    messageTxt: `Error while deleting user "${JSON.stringify(
-                        subs
-                    )}"${error.message && ':\n' + error.message}`,
+                    messageTxt: error.message,
                     headerId: 'users.table.error.delete',
                 })
             )
@@ -201,6 +243,24 @@ const UsersPage: FunctionComponent = () => {
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
+    const handleCellEditingStopped = useCallback(
+        (event: CellEditingStoppedEvent<UserInfos>) => {
+            if (event.valueChanged && event.data) {
+                UserAdminSrv.udpateUser(event.data)
+                    .catch((error) =>
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'users.table.error.update',
+                        })
+                    )
+                    .then(() => gridContext?.refresh?.());
+            } else {
+                gridContext?.refresh?.();
+            }
+        },
+        [gridContext, snackError]
+    );
+
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
@@ -209,6 +269,7 @@ const UsersPage: FunctionComponent = () => {
                     dataLoader={UserAdminSrv.fetchUsers}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
+                    onCellEditingStopped={handleCellEditingStopped}
                     gridId="table-users"
                     getRowId={getRowId}
                     rowSelection="multiple"
@@ -308,15 +369,3 @@ const UsersPage: FunctionComponent = () => {
     );
 };
 export default UsersPage;
-
-/*
- * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,
- *   so we must trick typescript check with a cast
- */
-const PaperForm: FunctionComponent<
-    PaperProps<'form'> & { untypedProps?: PaperProps }
-> = (props, context) => {
-    const { untypedProps, ...formProps } = props;
-    const othersProps = untypedProps as PaperProps<'form'>; //trust me ts
-    return <Paper component="form" {...formProps} {...(othersProps ?? {})} />;
-};
