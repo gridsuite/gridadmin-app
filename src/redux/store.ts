@@ -9,3 +9,9 @@ import { createStore, Store } from 'redux';
 import { Actions, AppState, reducer } from './reducer';
 
 export const store: Store<AppState, Actions> = createStore(reducer);
+
+// to avoid to reset the state with HMR
+// https://redux.js.org/usage/configuring-your-store#hot-reloading
+if (import.meta.env.DEV && import.meta.hot) {
+    import.meta.hot.accept('./reducer', () => store.replaceReducer(reducer));
+}
