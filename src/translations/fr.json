@@ -44,6 +44,11 @@
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
     "users.form.field.username.label": "ID utilisateur",
 
+    "users.form.delete.dialog.title": "Supprimer utilisateur",
+    "users.form.delete.dialog.message": "{itemName} va être supprimé.",
+    "users.form.delete.multiple.dialog.message": "{itemsCount} utilisateurs vont être supprimés.",
+    "users.form.delete.multiple.dialog.title": "Supprimer {itemsCount} utilisateurs",
+
     "profiles.table.toolbar.add": "Ajouter profil",
     "profiles.table.toolbar.add.label": "Ajouter un profil",
     "profiles.form.title": "Ajouter un profil",
@@ -68,10 +73,5 @@
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
 
     "linked.path.display.invalidLink": "lien vers paramètres invalide.",
-    "linked.path.display.noLink": "pas de paramètres selectionnés.",
-
-    "users.form.delete.title": "Supprimer utilisateur",
-    "users.form.delete.multipleItemsDialogMessage": "{itemsCount} utilisateurs vont être supprimés.",
-    "users.form.delete.itemDialogMessage": "{itemName} va être supprimé.",
-    "users.form.delete.multipleItemsDialogTitle": "Supprimer utilisateurs"
+    "linked.path.display.noLink": "pas de paramètres selectionnés."
 }

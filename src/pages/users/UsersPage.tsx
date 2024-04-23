@@ -44,6 +44,7 @@ import {
     TextFilterParams,
 } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
+import DeleteUserDialog from './delete-user-dialog';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -159,55 +160,11 @@ const UsersPage: FunctionComponent = () => {
                     headerId: 'users.table.error.delete',
                 })
             )
-            .then(() => {
-                // close the dialog
-                setShow(false);
-                gridContext?.refresh?.();
-            });
+            .then(() => gridContext?.refresh?.());
     }, [gridContext, rowsSelection, snackError]);
     const deleteUsersDisabled = useMemo(
         () => rowsSelection.length <= 0,
         [rowsSelection.length]
-    );
-
-    const handleDeletion = (value: boolean) => {
-        setShow(value);
-    };
-
-    const buildTitle = useCallback(
-        (users: UserInfos[]) => {
-            const hasMultipleItems = users.length > 1;
-            const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multipleItemsDialogTitle'
-                    : 'users.form.delete.title',
-            };
-            return intl.formatMessage(
-                descriptor,
-                hasMultipleItems ? { itemsCount: users.length } : undefined
-            );
-        },
-        [intl]
-    );
-
-    const buildContent = useCallback(
-        (users: UserInfos[]) => {
-            const hasMultipleItems = users.length > 1;
-            const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multipleItemsDialogMessage'
-                    : 'users.form.delete.itemDialogMessage',
-            };
-            if (hasMultipleItems) {
-                return intl.formatMessage(descriptor, {
-                    itemsCount: users.length,
-                });
-            }
-            return intl.formatMessage(descriptor, {
-                itemName: users.length === 1 && users[0].sub,
-            });
-        },
-        [intl]
     );
 
     const addUser = useCallback(
@@ -231,7 +188,7 @@ const UsersPage: FunctionComponent = () => {
         defaultValues: { user: '' }, //need default not undefined value for html input, else react error at runtime
     });
     const [open, setOpen] = useState(false);
-    const [show, setShow] = useState(false);
+    const [showDeletionDialog, setShowDeletionDialog] = useState(false);
     const handleClose = () => {
         setOpen(false);
         reset();
@@ -287,7 +244,7 @@ const UsersPage: FunctionComponent = () => {
                         onClick={useCallback(() => setOpen(true), [])}
                     />
                     <GridButtonDelete
-                        onClick={() => handleDeletion(true)}
+                        onClick={() => setShowDeletionDialog(true)}
                         disabled={deleteUsersDisabled}
                     />
                 </GridTable>
@@ -348,22 +305,12 @@ const UsersPage: FunctionComponent = () => {
                     </DialogActions>
                 </Dialog>
 
-                <Dialog open={show} onClose={() => handleDeletion(false)}>
-                    <DialogTitle>{buildTitle(rowsSelection)}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            {buildContent(rowsSelection)}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => handleDeletion(false)}>
-                            <FormattedMessage id="cancel" />
-                        </Button>
-                        <Button type="submit" onClick={deleteUsers}>
-                            <FormattedMessage id="ok" />
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                <DeleteUserDialog
+                    open={showDeletionDialog}
+                    setOpen={setShowDeletionDialog}
+                    usersInfos={rowsSelection}
+                    deleteUsers={deleteUsers}
+                />
             </Grid>
         </Grid>
     );
