@@ -44,6 +44,7 @@ import {
     TextFilterParams,
 } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
+import DeleteUserDialog from './delete-user-dialog';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -187,6 +188,7 @@ const UsersPage: FunctionComponent = () => {
         defaultValues: { user: '' }, //need default not undefined value for html input, else react error at runtime
     });
     const [open, setOpen] = useState(false);
+    const [showDeletionDialog, setShowDeletionDialog] = useState(false);
     const handleClose = () => {
         setOpen(false);
         reset();
@@ -242,7 +244,7 @@ const UsersPage: FunctionComponent = () => {
                         onClick={useCallback(() => setOpen(true), [])}
                     />
                     <GridButtonDelete
-                        onClick={deleteUsers}
+                        onClick={() => setShowDeletionDialog(true)}
                         disabled={deleteUsersDisabled}
                     />
                 </GridTable>
@@ -302,6 +304,13 @@ const UsersPage: FunctionComponent = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                <DeleteUserDialog
+                    open={showDeletionDialog}
+                    setOpen={setShowDeletionDialog}
+                    usersInfos={rowsSelection}
+                    deleteUsers={deleteUsers}
+                />
             </Grid>
         </Grid>
     );

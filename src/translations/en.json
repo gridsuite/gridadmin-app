@@ -43,6 +43,11 @@
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
 
+    "users.form.delete.dialog.title": "Delete a user",
+    "users.form.delete.multiple.dialog.message": "{itemsCount} users will be deleted.",
+    "users.form.delete.dialog.message": "{itemName} will be deleted.",
+    "users.form.delete.multiple.dialog.title": "Delete {itemsCount} users",
+
     "profiles.table.toolbar.add": "Add profile",
     "profiles.table.toolbar.add.label": "Add a profile",
     "profiles.form.title": "Add a profile",
