@@ -15,7 +15,13 @@ import {
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
-import { logout, TopBar } from '@gridsuite/commons-ui';
+import {
+    logout,
+    TopBar,
+    fetchVersion,
+    fetchAppsMetadata,
+    CommonMetadata,
+} from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import {
     APP_NAME,
@@ -25,7 +31,7 @@ import {
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { AppsMetadataSrv, MetadataJson, StudySrv } from '../../services';
+import { StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
 import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
@@ -86,11 +92,11 @@ const AppTopBar: FunctionComponent = () => {
     const [languageLocal, handleChangeLanguage] =
         useParameterState(PARAM_LANGUAGE);
 
-    const [appsAndUrls, setAppsAndUrls] = useState<MetadataJson[]>([]);
+    const [appsMetadata, setAppsMetadata] = useState<CommonMetadata[]>([]);
     useEffect(() => {
         if (user !== null) {
-            AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
-                setAppsAndUrls(res);
+            fetchAppsMetadata().then((res) => {
+                setAppsMetadata(res);
             });
         }
     }, [user]);
@@ -111,9 +117,9 @@ const AppTopBar: FunctionComponent = () => {
             onLogoutClick={() => logout(dispatch, userManagerInstance)}
             onLogoClick={() => navigate('/', { replace: true })}
             user={user}
-            appsAndUrls={appsAndUrls}
+            appsAndUrls={appsMetadata}
             globalVersionPromise={() =>
-                AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion)
+                fetchVersion().then((res) => res?.deployVersion)
             }
             additionalModulesPromise={StudySrv.getServersInfos}
             onThemeClick={handleChangeTheme}
