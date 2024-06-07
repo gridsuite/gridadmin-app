@@ -5,8 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetchJson, getRestBase, Token } from '../utils/api-rest';
-import { getErrorMessage } from '../utils/error';
+import {
+    backendFetchJson,
+    getErrorMessage,
+    getRestBase,
+    Token,
+} from '@gridsuite/commons-ui';
 import { APP_NAME } from '../utils/config-params';
 
 const STUDY_URL = `${getRestBase()}/study/v1`;

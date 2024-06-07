@@ -9,11 +9,6 @@ import { AppState } from '../redux/reducer';
 import { store } from '../redux/store';
 
 export type User = AppState['user'];
-export type Token = string;
-
-export function getToken(user?: User): Token | null {
-    return (user ?? getUser())?.id_token ?? null;
-}
 
 export function getUser(): User {
     const state: AppState = store.getState();
@@ -35,12 +30,4 @@ export function extractUserSub(user: User): Promise<unknown> {
             resolve(sub);
         }
     });
-}
-
-export function parseError(text: string) {
-    try {
-        return JSON.parse(text);
-    } catch (err) {
-        return null;
-    }
 }

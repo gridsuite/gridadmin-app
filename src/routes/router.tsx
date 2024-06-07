@@ -15,8 +15,10 @@ import {
 import { FormattedMessage } from 'react-intl';
 import {
     AuthenticationRouter,
+    fetchAuthorizationCodeFlowFeatureFlag,
     getPreLoginPath,
     initializeAuthenticationProd,
+    getErrorMessage,
 } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
@@ -31,13 +33,12 @@ import {
 import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
-import { AppsMetadataSrv, UserAdminSrv } from '../services';
+import { UserAdminSrv } from '../services';
 import { App } from '../components/App';
 import { Users, Profiles } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
-import { getErrorMessage } from '../utils/error';
 
 export enum MainPaths {
     users = 'users',
@@ -138,7 +139,7 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
     );
 
     useEffect(() => {
-        AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
+        fetchAuthorizationCodeFlowFeatureFlag()
             .then((authorizationCodeFlowEnabled) =>
                 initializeAuthenticationProd(
                     dispatch,

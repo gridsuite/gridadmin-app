@@ -7,7 +7,7 @@
 
 import ReconnectingWebSocket, { Event } from 'reconnecting-websocket';
 import { APP_NAME } from '../utils/config-params';
-import { getUrlWithToken, getWsBase } from '../utils/api-ws';
+import { getUrlWithToken, getWsBase } from '@gridsuite/commons-ui';
 
 const PREFIX_CONFIG_NOTIFICATION_WS = `${getWsBase()}/config-notification`;
 

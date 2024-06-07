@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { extractUserSub, getToken, getUser } from '../utils/api';
+import { backendFetch, backendFetchJson, getRestBase, getToken } from '@gridsuite/commons-ui';
+import { extractUserSub, getUser } from '../utils/api';
 import { User } from '../utils/auth';
 import { UUID } from 'crypto';
 
