@@ -18,6 +18,7 @@ import {
     fetchAuthorizationCodeFlowFeatureFlag,
     getPreLoginPath,
     initializeAuthenticationProd,
+    getErrorMessage,
 } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
@@ -38,7 +39,6 @@ import { Users, Profiles } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
-import { getErrorMessage } from '../utils/error';
 
 export enum MainPaths {
     users = 'users',

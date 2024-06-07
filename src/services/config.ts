@@ -11,7 +11,7 @@ import {
     PARAM_LANGUAGE,
     PARAM_THEME,
 } from '../utils/config-params';
-import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
+import { backendFetch, backendFetchJson, getRestBase } from '@gridsuite/commons-ui';
 import { LanguageParameters } from '../utils/language';
 
 const PREFIX_CONFIG_QUERIES = `${getRestBase()}/config`;
