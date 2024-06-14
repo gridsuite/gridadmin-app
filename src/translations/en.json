@@ -63,6 +63,8 @@
 
     "profiles.form.modification.title": "Edit profile",
     "profiles.form.modification.defaultParameters": "Default parameters",
+    "profiles.form.modification.userQuotas": "User quotas",
+    "profiles.form.modification.numberOfCasesOrStudies": "Number of cases or studies",
     "profiles.form.modification.parameter.choose.tooltip": "Choose parameters",
     "profiles.form.modification.parameter.reset.tooltip": "Set undefined parameters",
     "profiles.form.modification.parameterSelection.dialog.title": "Choose parameters",

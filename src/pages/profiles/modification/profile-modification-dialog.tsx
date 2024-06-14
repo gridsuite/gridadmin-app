@@ -8,6 +8,7 @@
 import ProfileModificationForm, {
     LF_PARAM_ID,
     PROFILE_NAME,
+    USER_QUOTAS,
 } from './profile-modification-form';
 import yup from 'utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -50,6 +51,7 @@ const ProfileModificationDialog: FunctionComponent<
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
             [LF_PARAM_ID]: yup.string().optional(),
+            [USER_QUOTAS]: yup.number().nullable(),
         })
         .required();
 
@@ -66,6 +68,7 @@ const ProfileModificationDialog: FunctionComponent<
                     id: profileId,
                     name: profileFormData[PROFILE_NAME],
                     loadFlowParameterId: profileFormData[LF_PARAM_ID],
+                    maxAllowedCases: profileFormData[USER_QUOTAS],
                 };
                 modifyProfile(profileData)
                     .catch((error) => {
@@ -98,6 +101,7 @@ const ProfileModificationDialog: FunctionComponent<
                         [LF_PARAM_ID]: response.loadFlowParameterId
                             ? response.loadFlowParameterId
                             : undefined,
+                        [USER_QUOTAS]: response.maxAllowedCases,
                     });
                 })
                 .catch((error) => {
