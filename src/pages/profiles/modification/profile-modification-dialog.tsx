@@ -51,7 +51,10 @@ const ProfileModificationDialog: FunctionComponent<
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
             [LF_PARAM_ID]: yup.string().optional(),
-            [USER_QUOTAS]: yup.number().nullable(),
+            [USER_QUOTAS]: yup
+                .number()
+                .positive('userQuotaPositive')
+                .nullable(),
         })
         .required();
 

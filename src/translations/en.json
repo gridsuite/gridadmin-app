@@ -10,6 +10,7 @@
     "nameEmpty": "The name is empty",
     "paramsChangingError": "An error occurred when changing the parameters",
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
+    "userQuotaPositive": "User quota must be positive",
 
     "appBar.tabs.users": "Users",
     "appBar.tabs.profiles": "Profiles",
