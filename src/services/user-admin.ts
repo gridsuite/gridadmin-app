@@ -111,6 +111,7 @@ export type UserProfile = {
     name: string;
     allParametersLinksValid?: boolean;
     loadFlowParameterId?: UUID;
+    maxAllowedCases?: number;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
