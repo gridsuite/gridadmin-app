@@ -8,6 +8,9 @@
 import { getErrorMessage } from '../utils/error';
 import { Url } from '../utils/api-rest';
 
+//import { IdpSettings } from '@gridsuite/commons-ui';
+export type IdpSettingsJson = typeof import('../../public/idpSettings.json');
+
 export type EnvJson = typeof import('../../public/env.json') & {
     // https://github.com/gridsuite/deployment/blob/main/docker-compose/env.json
     // https://github.com/gridsuite/deployment/blob/main/k8s/live/azure-dev/env.json
@@ -22,34 +25,8 @@ function fetchEnv(): Promise<EnvJson> {
     return fetch('env.json').then((res: Response) => res.json());
 }
 
-export function fetchAuthorizationCodeFlowFeatureFlag(): Promise<boolean> {
-    console.debug('Fetching authorization code flow feature flag...');
-    return fetchEnv()
-        .then((env: EnvJson) =>
-            fetch(`${env.appsMetadataServerUrl}/authentication.json`)
-        )
-        .then((res: Response) => res.json())
-        .then((res: { authorizationCodeFlowFeatureFlag: boolean }) => {
-            console.info(
-                `Authorization code flow is ${
-                    res.authorizationCodeFlowFeatureFlag
-                        ? 'enabled'
-                        : 'disabled'
-                }`
-            );
-            return res.authorizationCodeFlowFeatureFlag || false;
-        })
-        .catch((error) => {
-            console.error(
-                `Error while fetching the authentication code flow: ${getErrorMessage(
-                    error
-                )}`
-            );
-            console.warn(
-                'Something wrong happened when retrieving authentication.json: authorization code flow will be disabled'
-            );
-            return false;
-        });
+export function fetchIdpSettings(): Promise<IdpSettingsJson> {
+    return fetch('idpSettings.json').then((res) => res.json());
 }
 
 export type VersionJson = {
