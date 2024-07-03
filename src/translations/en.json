@@ -10,6 +10,7 @@
     "nameEmpty": "The name is empty",
     "paramsChangingError": "An error occurred when changing the parameters",
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
+    "userQuotaPositive": "User quota must be positive",
 
     "appBar.tabs.users": "Users",
     "appBar.tabs.profiles": "Profiles",
@@ -63,6 +64,8 @@
 
     "profiles.form.modification.title": "Edit profile",
     "profiles.form.modification.defaultParameters": "Default parameters",
+    "profiles.form.modification.userQuotas": "User quotas",
+    "profiles.form.modification.numberOfCasesOrStudies": "Number of cases or studies",
     "profiles.form.modification.parameter.choose.tooltip": "Choose parameters",
     "profiles.form.modification.parameter.reset.tooltip": "Set undefined parameters",
     "profiles.form.modification.parameterSelection.dialog.title": "Choose parameters",

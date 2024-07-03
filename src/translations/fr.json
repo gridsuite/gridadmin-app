@@ -10,6 +10,7 @@
     "nameEmpty": "Le nom est vide",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",
     "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres",
+    "userQuotaPositive": "Le quota utilisateur doit être positif",
 
     "appBar.tabs.users": "Utilisateurs",
     "appBar.tabs.profiles": "Profils",
@@ -64,6 +65,8 @@
 
     "profiles.form.modification.title": "Modifier profil",
     "profiles.form.modification.defaultParameters": "Paramètres par défaut",
+    "profiles.form.modification.userQuotas": "Quotas utilisateur",
+    "profiles.form.modification.numberOfCasesOrStudies": "Nombre de situations ou d'études",
     "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètres",
     "profiles.form.modification.parameter.reset.tooltip": "Ne pas définir de paramètres",
     "profiles.form.modification.parameterSelection.dialog.title": "Choisir des paramètres",
