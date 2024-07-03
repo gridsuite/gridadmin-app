@@ -5,27 +5,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { Env, IdpSettings } from '@gridsuite/commons-ui';
 import { getErrorMessage } from '../utils/error';
 import { Url } from '../utils/api-rest';
 
-//import { IdpSettings } from '@gridsuite/commons-ui';
-export type IdpSettingsJson = typeof import('../../public/idpSettings.json');
-
-export type EnvJson = typeof import('../../public/env.json') & {
-    // https://github.com/gridsuite/deployment/blob/main/docker-compose/env.json
-    // https://github.com/gridsuite/deployment/blob/main/k8s/live/azure-dev/env.json
-    // https://github.com/gridsuite/deployment/blob/main/k8s/live/azure-integ/env.json
-    // https://github.com/gridsuite/deployment/blob/main/k8s/live/local/env.json
-    appsMetadataServerUrl?: Url;
-    mapBoxToken?: string;
-    //[key: string]: string;
-};
+export type EnvJson = Env & typeof import('../../public/env.json');
 
 function fetchEnv(): Promise<EnvJson> {
     return fetch('env.json').then((res: Response) => res.json());
 }
 
-export function fetchIdpSettings(): Promise<IdpSettingsJson> {
+export function fetchIdpSettings(): Promise<IdpSettings> {
     return fetch('idpSettings.json').then((res) => res.json());
 }
 
