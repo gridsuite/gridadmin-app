@@ -5,35 +5,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetchJson, getRestBase, Token } from '../utils/api-rest';
+import { GridSuiteModule } from '@gridsuite/commons-ui';
+import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { getErrorMessage } from '../utils/error';
 import { APP_NAME } from '../utils/config-params';
 
 const STUDY_URL = `${getRestBase()}/study/v1`;
 
-//TODO delete when migrated into commons-ui
-export type ServerAbout = {
-    type?: 'app' | 'server' | 'other';
-    name?: string;
-    version?: string;
-    gitTag?: string;
-};
-
-export function getServersInfos(token: Token): Promise<ServerAbout[]> {
-    return backendFetchJson(
-        `${STUDY_URL}/servers/about?view=${APP_NAME}`,
-        {
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            cache: 'default',
+export function getServersInfos() {
+    return backendFetchJson(`${STUDY_URL}/servers/about?view=${APP_NAME}`, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
         },
-        token
-    ).catch((error) => {
+        cache: 'default',
+    }).catch((error) => {
         console.error(
             `Error while fetching the servers infos: ${getErrorMessage(error)}`
         );
         throw error;
-    }) as Promise<ServerAbout[]>;
+    }) as Promise<GridSuiteModule[]>;
 }

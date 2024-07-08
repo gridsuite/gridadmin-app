@@ -114,7 +114,9 @@ const AppTopBar: FunctionComponent = () => {
             user={user}
             appsAndUrls={appsAndUrls}
             globalVersionPromise={() =>
-                AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion)
+                AppsMetadataSrv.fetchVersion().then(
+                    (res) => res?.deployVersion ?? 'unknown'
+                )
             }
             additionalModulesPromise={StudySrv.getServersInfos}
             onThemeClick={handleChangeTheme}
