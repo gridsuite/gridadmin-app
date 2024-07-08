@@ -111,7 +111,7 @@ const AppTopBar: FunctionComponent = () => {
             appLicense={AppPackage.license}
             onLogoutClick={() => logout(dispatch, userManagerInstance)}
             onLogoClick={() => navigate('/', { replace: true })}
-            user={user}
+            user={user ?? undefined}
             appsAndUrls={appsAndUrls}
             globalVersionPromise={() =>
                 AppsMetadataSrv.fetchVersion().then(

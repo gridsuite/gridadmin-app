@@ -5,11 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { GsTheme } from '@gridsuite/commons-ui';
+import { GsTheme, UserManagerState } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE } from '../utils/config-params';
 import { Action } from 'redux';
 import { AppState } from './reducer';
-import { UserManagerState } from '../routes';
 
 export const UPDATE_USER_MANAGER_STATE = 'UPDATE_USER_MANAGER_STATE';
 export type UserManagerAction = Readonly<

@@ -15,12 +15,12 @@ export function getToken(user?: User): Token | null {
     return (user ?? getUser())?.id_token ?? null;
 }
 
-export function getUser(): User {
+export function getUser(): User | null {
     const state: AppState = store.getState();
     return state.user;
 }
 
-export function extractUserSub(user: User): Promise<unknown> {
+export function extractUserSub(user: User | null): Promise<unknown> {
     return new Promise((resolve, reject) => {
         const sub = user?.profile?.sub;
         if (!sub) {
