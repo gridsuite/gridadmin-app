@@ -29,6 +29,9 @@ import {
 
 import {
     CommonStoreState,
+    GsLang,
+    GsLangUser,
+    GsTheme,
     LOGOUT_ERROR,
     RESET_AUTHENTICATION_ROUTER_ERROR,
     SHOW_AUTH_INFO_LOGIN,
@@ -39,13 +42,12 @@ import {
 } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
-import { LanguageParameters, SupportedLanguages } from '../utils/language';
 import { UserManagerState } from '../routes';
 
 export type AppState = CommonStoreState & {
-    computedLanguage: SupportedLanguages;
-    [PARAM_THEME]: string;
-    [PARAM_LANGUAGE]: LanguageParameters;
+    computedLanguage: GsLangUser;
+    [PARAM_THEME]: GsTheme;
+    [PARAM_LANGUAGE]: GsLang;
 
     userManager: UserManagerState;
     signInCallbackError: unknown;

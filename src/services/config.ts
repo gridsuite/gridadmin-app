@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { GsLang, GsTheme } from '@gridsuite/commons-ui';
 import {
     APP_NAME,
     getAppName,
@@ -12,7 +13,6 @@ import {
     PARAM_THEME,
 } from '../utils/config-params';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { LanguageParameters } from '../utils/language';
 
 const PREFIX_CONFIG_QUERIES = `${getRestBase()}/config`;
 
@@ -20,13 +20,14 @@ const PREFIX_CONFIG_QUERIES = `${getRestBase()}/config`;
 export type ConfigParameter =
     | {
           readonly name: typeof PARAM_LANGUAGE;
-          value: LanguageParameters;
+          value: GsLang;
       }
     | {
           readonly name: typeof PARAM_THEME;
-          value: string;
+          value: GsTheme;
       };
 export type ConfigParameters = ConfigParameter[];
+
 export function fetchConfigParameters(
     appName: string = APP_NAME
 ): Promise<ConfigParameters> {

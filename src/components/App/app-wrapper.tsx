@@ -19,6 +19,8 @@ import {
     card_error_boundary_en,
     card_error_boundary_fr,
     CardErrorBoundary,
+    GsLangUser,
+    GsTheme,
     LANG_ENGLISH,
     LANG_FRENCH,
     LIGHT_THEME,
@@ -30,7 +32,6 @@ import {
 } from '@gridsuite/commons-ui';
 import { IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
-import { SupportedLanguages } from '../../utils/language';
 import messages_en from '../../translations/en.json';
 import messages_fr from '../../translations/fr.json';
 import { store } from '../../redux/store';
@@ -91,7 +92,7 @@ const darkTheme: ThemeOptions = {
     agGridTheme: 'ag-theme-alpine-dark',
 };
 
-const getMuiTheme = (theme: unknown, locale: SupportedLanguages): Theme => {
+const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {
     return responsiveFontSizes(
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
@@ -100,7 +101,7 @@ const getMuiTheme = (theme: unknown, locale: SupportedLanguages): Theme => {
     );
 };
 
-const messages: Record<SupportedLanguages, IntlConfig['messages']> = {
+const messages: Record<GsLangUser, IntlConfig['messages']> = {
     en: {
         ...messages_en,
         ...login_en,

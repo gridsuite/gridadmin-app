@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { GsTheme } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE } from '../utils/config-params';
 import { Action } from 'redux';
 import { AppState } from './reducer';
@@ -16,11 +17,13 @@ export type UserManagerAction = Readonly<
 > & {
     userManager: UserManagerState;
 };
+
 export function updateUserManager(
     userManager: UserManagerState
 ): UserManagerAction {
     return { type: UPDATE_USER_MANAGER_STATE, userManager };
 }
+
 export function updateUserManagerDestructured(
     instance: UserManagerState['instance'],
     error: UserManagerState['error']
@@ -32,6 +35,7 @@ export const UPDATE_USER_MANAGER_INSTANCE = 'UPDATE_USER_MANAGER_INSTANCE';
 export type UserManagerInstanceAction = Readonly<
     Action<typeof UPDATE_USER_MANAGER_INSTANCE>
 > & { instance: UserManagerState['instance'] };
+
 export function updateUserManagerInstance(
     instance: UserManagerState['instance']
 ): UserManagerInstanceAction {
@@ -42,6 +46,7 @@ export const UPDATE_USER_MANAGER_ERROR = 'UPDATE_USER_MANAGER_ERROR';
 export type UserManagerErrorAction = Readonly<
     Action<typeof UPDATE_USER_MANAGER_ERROR>
 > & { error: UserManagerState['error'] };
+
 export function updateUserManagerError(
     error: UserManagerState['error']
 ): UserManagerErrorAction {
@@ -50,9 +55,10 @@ export function updateUserManagerError(
 
 export const SELECT_THEME = 'SELECT_THEME';
 export type ThemeAction = Readonly<Action<typeof SELECT_THEME>> & {
-    theme: string;
+    theme: GsTheme;
 };
-export function selectTheme(theme: string): ThemeAction {
+
+export function selectTheme(theme: GsTheme): ThemeAction {
     return { type: SELECT_THEME, theme: theme };
 }
 
@@ -60,6 +66,7 @@ export const SELECT_LANGUAGE = 'SELECT_LANGUAGE';
 export type LanguageAction = Readonly<Action<typeof SELECT_LANGUAGE>> & {
     [PARAM_LANGUAGE]: AppState['language'];
 };
+
 export function selectLanguage(language: AppState['language']): LanguageAction {
     return { type: SELECT_LANGUAGE, [PARAM_LANGUAGE]: language };
 }
@@ -70,6 +77,7 @@ export type ComputedLanguageAction = Readonly<
 > & {
     computedLanguage: AppState['computedLanguage'];
 };
+
 export function selectComputedLanguage(
     computedLanguage: AppState['computedLanguage']
 ): ComputedLanguageAction {

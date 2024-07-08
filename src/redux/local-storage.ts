@@ -5,30 +5,39 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { DARK_THEME, LANG_SYSTEM } from '@gridsuite/commons-ui';
+import {
+    DARK_THEME,
+    GsLang,
+    GsTheme,
+    LANG_SYSTEM,
+} from '@gridsuite/commons-ui';
 import { getComputedLanguage } from '../utils/language';
 import { APP_NAME } from '../utils/config-params';
-import { AppState } from './reducer';
 
 const LOCAL_STORAGE_THEME_KEY = (APP_NAME + '_THEME').toUpperCase();
 const LOCAL_STORAGE_LANGUAGE_KEY = (APP_NAME + '_LANGUAGE').toUpperCase();
 
-export function getLocalStorageTheme(): string {
-    return localStorage.getItem(LOCAL_STORAGE_THEME_KEY) || DARK_THEME;
+export function getLocalStorageTheme() {
+    return (
+        (localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as GsTheme) || DARK_THEME
+    );
 }
 
-export function saveLocalStorageTheme(theme: string): void {
+export function saveLocalStorageTheme(theme: GsTheme): void {
     localStorage.setItem(LOCAL_STORAGE_THEME_KEY, theme);
 }
 
-export function getLocalStorageLanguage(): AppState['language'] {
-    return localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY) || LANG_SYSTEM;
+export function getLocalStorageLanguage() {
+    return (
+        (localStorage.getItem(LOCAL_STORAGE_LANGUAGE_KEY) as GsLang) ||
+        LANG_SYSTEM
+    );
 }
 
-export function saveLocalStorageLanguage(language: AppState['language']): void {
+export function saveLocalStorageLanguage(language: GsLang): void {
     localStorage.setItem(LOCAL_STORAGE_LANGUAGE_KEY, language);
 }
 
-export function getLocalStorageComputedLanguage(): AppState['computedLanguage'] {
+export function getLocalStorageComputedLanguage() {
     return getComputedLanguage(getLocalStorageLanguage());
 }
