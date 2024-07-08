@@ -5,10 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { User } from 'oidc-client';
 import { AppState } from '../redux/reducer';
 import { store } from '../redux/store';
 
-export type User = AppState['user'];
 export type Token = string;
 
 export function getToken(user?: User): Token | null {
