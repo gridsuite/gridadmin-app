@@ -6,7 +6,6 @@
  */
 
 import { AnyAction, createReducer, Draft } from '@reduxjs/toolkit';
-
 import {
     getLocalStorageComputedLanguage,
     getLocalStorageLanguage,
@@ -29,6 +28,7 @@ import {
 } from './actions';
 
 import {
+    CommonStoreState,
     LOGOUT_ERROR,
     RESET_AUTHENTICATION_ROUTER_ERROR,
     SHOW_AUTH_INFO_LOGIN,
@@ -40,16 +40,14 @@ import {
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
 import { LanguageParameters, SupportedLanguages } from '../utils/language';
-import { User } from '../utils/auth';
 import { UserManagerState } from '../routes';
 
-export type AppState = {
+export type AppState = CommonStoreState & {
     computedLanguage: SupportedLanguages;
     [PARAM_THEME]: string;
     [PARAM_LANGUAGE]: LanguageParameters;
 
     userManager: UserManagerState;
-    user: User | null; //TODO delete when migrated into commons-ui
     signInCallbackError: unknown;
     authenticationRouterError: unknown;
     showAuthenticationRouterLogin: boolean;
