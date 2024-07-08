@@ -38,6 +38,7 @@ import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
+import { AppDispatch } from '../redux/store';
 
 export enum MainPaths {
     users = 'users',
@@ -98,7 +99,7 @@ const AuthRouter: FunctionComponent<{
     const showAuthenticationRouterLogin = useSelector(
         (state: AppState) => state.showAuthenticationRouterLogin
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -123,7 +124,7 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
     PropsWithChildren<{ layout: App }>
 > = (props, context) => {
     const AppRouterLayout = props.layout;
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     // Can't use lazy initializer because useMatch is a hook
     const [initialMatchSilentRenewCallbackUrl] = useState(

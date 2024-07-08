@@ -31,11 +31,12 @@ import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { useDebugRender } from '../../utils/hooks';
+import { AppDispatch } from '../../redux/store';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);
 
     const updateParams = useCallback(
