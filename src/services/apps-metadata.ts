@@ -5,9 +5,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Env, IdpSettings } from '@gridsuite/commons-ui';
+import { Env } from '@gridsuite/commons-ui';
 import { getErrorMessage } from '../utils/error';
 import { Url } from '../utils/api-rest';
+
+// TODO remove when exported in commons-ui (src/utils/AuthService.ts)
+type IdpSettings = {
+    authority: string;
+    client_id: string;
+    redirect_uri: string;
+    post_logout_redirect_uri: string;
+    silent_redirect_uri: string;
+    scope: string;
+    maxExpiresIn?: number;
+};
 
 export type EnvJson = Env & typeof import('../../public/env.json');
 

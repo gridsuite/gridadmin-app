@@ -10,7 +10,7 @@ import ProfileModificationForm, {
     PROFILE_NAME,
     USER_QUOTAS,
 } from './profile-modification-form';
-import yup from 'utils/yup-config';
+import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import {
@@ -20,18 +20,17 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { useSnackMessage } from '@gridsuite/commons-ui';
-import { getProfile, modifyProfile, UserProfile } from 'services/user-admin';
-import CustomMuiDialog from './custom-mui-dialog';
+import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
+import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 
-// TODO remove FetchStatus when available in commons-ui (available soon)
-export const FetchStatus = {
-    IDLE: 'IDLE',
-    FETCHING: 'FETCHING',
-    FETCH_SUCCESS: 'FETCH_SUCCESS',
-    FETCH_ERROR: 'FETCH_ERROR',
-};
+// TODO remove FetchStatus when exported in commons-ui (available soon)
+export enum FetchStatus {
+    IDLE = 'IDLE',
+    FETCHING = 'FETCHING',
+    FETCH_SUCCESS = 'FETCH_SUCCESS',
+    FETCH_ERROR = 'FETCH_ERROR',
+}
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -44,7 +43,9 @@ const ProfileModificationDialog: FunctionComponent<
     ProfileModificationDialogProps
 > = ({ profileId, open, onClose, onUpdate }) => {
     const { snackError } = useSnackMessage();
-    const [dataFetchStatus, setDataFetchStatus] = useState(FetchStatus.IDLE);
+    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(
+        FetchStatus.IDLE
+    );
 
     const formSchema = yup
         .object()
@@ -57,6 +58,7 @@ const ProfileModificationDialog: FunctionComponent<
                 .nullable(),
         })
         .required();
+    console.log('formSchema =', formSchema);
 
     const formMethods = useForm({
         resolver: yupResolver(formSchema),
@@ -73,7 +75,8 @@ const ProfileModificationDialog: FunctionComponent<
                     loadFlowParameterId: profileFormData[LF_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTAS],
                 };
-                modifyProfile(profileData)
+                console.log('modify', profileData);
+                UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
                         snackError({
                             messageTxt: error.message,
@@ -96,9 +99,10 @@ const ProfileModificationDialog: FunctionComponent<
     useEffect(() => {
         if (profileId && open) {
             setDataFetchStatus(FetchStatus.FETCHING);
-            getProfile(profileId)
+            UserAdminSrv.getProfile(profileId)
                 .then((response) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
+                    console.log('reset', response);
                     reset({
                         [PROFILE_NAME]: response.name,
                         [LF_PARAM_ID]: response.loadFlowParameterId

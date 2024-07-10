@@ -30,13 +30,12 @@ import {
     top_bar_en,
     top_bar_fr,
 } from '@gridsuite/commons-ui';
-import { IntlProvider } from 'react-intl';
+import { IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
 import messages_en from '../../translations/en.json';
 import messages_fr from '../../translations/fr.json';
 import { store } from '../../redux/store';
 import { PARAM_THEME } from '../../utils/config-params';
-import { IntlConfig } from 'react-intl/src/types';
 import { AppState } from '../../redux/reducer';
 import { AppWithAuthRouter } from '../../routes';
 

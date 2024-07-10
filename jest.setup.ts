@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { TextEncoder, TextDecoder } from 'util';
+import { TextEncoder, TextDecoder } from 'node:util';
 
 // fix for ReferenceError: TextDecoder / TextEncoder is not defined
 Object.assign(global, { TextDecoder, TextEncoder });
