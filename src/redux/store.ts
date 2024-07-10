@@ -9,6 +9,7 @@ import { createStore, Store } from 'redux';
 import { Actions, AppState, reducer } from './reducer';
 
 export const store: Store<AppState, Actions> = createStore(reducer);
+export type AppDispatch = typeof store.dispatch;
 
 // to avoid to reset the state with HMR
 // https://redux.js.org/usage/configuring-your-store#hot-reloading

@@ -24,3 +24,9 @@ declare module '@mui/material/styles/createTheme' {
         extends MuiThemeOptions,
             Partial<ThemeExtension> {}
 }
+
+declare module '@mui/utils/capitalize' {
+    export default function capitalize<S extends string>(
+        string: S
+    ): Capitalize<S>;
+}

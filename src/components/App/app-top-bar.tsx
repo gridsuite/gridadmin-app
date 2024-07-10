@@ -31,6 +31,7 @@ import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { MainPaths } from '../../routes';
+import { AppDispatch } from '../../redux/store';
 
 const tabs = new Map<MainPaths, ReactElement>([
     [
@@ -65,7 +66,7 @@ const tabs = new Map<MainPaths, ReactElement>([
 
 const AppTopBar: FunctionComponent = () => {
     const theme = useTheme();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);
     const userManagerInstance = useSelector(
         (state: AppState) => state.userManager?.instance
@@ -110,10 +111,12 @@ const AppTopBar: FunctionComponent = () => {
             appLicense={AppPackage.license}
             onLogoutClick={() => logout(dispatch, userManagerInstance)}
             onLogoClick={() => navigate('/', { replace: true })}
-            user={user}
+            user={user ?? undefined}
             appsAndUrls={appsAndUrls}
             globalVersionPromise={() =>
-                AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion)
+                AppsMetadataSrv.fetchVersion().then(
+                    (res) => res?.deployVersion ?? 'unknown'
+                )
             }
             additionalModulesPromise={StudySrv.getServersInfos}
             onThemeClick={handleChangeTheme}
