@@ -27,9 +27,9 @@ import {
     UserManagerInstanceAction,
 } from './actions';
 import {
+    AuthenticationActions,
     AuthenticationRouterErrorAction,
     AuthenticationRouterErrorState,
-    CommonActions,
     CommonStoreState,
     GsLang,
     GsLangUser,
@@ -58,7 +58,7 @@ export type AppState = CommonStoreState & {
     [PARAM_LANGUAGE]: GsLang;
 
     userManager: UserManagerState;
-    signInCallbackError: string | null;
+    signInCallbackError: Error | null;
     authenticationRouterError: AuthenticationRouterErrorState | null;
     showAuthenticationRouterLogin: boolean;
 };
@@ -81,7 +81,7 @@ const initialState: AppState = {
 };
 
 export type Actions =
-    | CommonActions
+    | AuthenticationActions
     | UserManagerAction
     | UserManagerInstanceAction
     | UserManagerErrorAction
