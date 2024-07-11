@@ -58,7 +58,6 @@ const ProfileModificationDialog: FunctionComponent<
                 .nullable(),
         })
         .required();
-    console.log('formSchema =', formSchema);
 
     const formMethods = useForm({
         resolver: yupResolver(formSchema),
@@ -75,7 +74,6 @@ const ProfileModificationDialog: FunctionComponent<
                     loadFlowParameterId: profileFormData[LF_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTAS],
                 };
-                console.log('modify', profileData);
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
                         snackError({
@@ -102,7 +100,6 @@ const ProfileModificationDialog: FunctionComponent<
             UserAdminSrv.getProfile(profileId)
                 .then((response) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
-                    console.log('reset', response);
                     reset({
                         [PROFILE_NAME]: response.name,
                         [LF_PARAM_ID]: response.loadFlowParameterId
