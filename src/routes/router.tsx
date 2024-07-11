@@ -28,16 +28,16 @@ import {
     useMatch,
     useNavigate,
 } from 'react-router-dom';
-import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
-import { Users, Profiles } from '../pages';
+import { Profiles, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
+import { AppDispatch } from '../redux/store';
 
 export enum MainPaths {
     users = 'users',
@@ -98,7 +98,7 @@ const AuthRouter: FunctionComponent<{
     const showAuthenticationRouterLogin = useSelector(
         (state: AppState) => state.showAuthenticationRouterLogin
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -123,7 +123,7 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
     PropsWithChildren<{ layout: App }>
 > = (props, context) => {
     const AppRouterLayout = props.layout;
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     // Can't use lazy initializer because useMatch is a hook
     const [initialMatchSilentRenewCallbackUrl] = useState(
@@ -138,27 +138,27 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
     );
 
     useEffect(() => {
-        AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
-            .then((authorizationCodeFlowEnabled) =>
-                initializeAuthenticationProd(
-                    dispatch,
-                    initialMatchSilentRenewCallbackUrl != null,
-                    fetch('idpSettings.json'),
-                    UserAdminSrv.fetchValidateUser,
-                    authorizationCodeFlowEnabled,
-                    initialMatchSignInCallbackUrl != null
-                )
-            )
-            .then((userManager: UserManager | undefined) => {
+        // need subfunction when async as suggested by rule react-hooks/exhaustive-deps
+        (async function initializeAuthentication() {
+            try {
                 dispatch(
-                    updateUserManagerDestructured(userManager ?? null, null)
+                    updateUserManagerDestructured(
+                        (await initializeAuthenticationProd(
+                            dispatch,
+                            initialMatchSilentRenewCallbackUrl != null,
+                            AppsMetadataSrv.fetchIdpSettings,
+                            UserAdminSrv.fetchValidateUser,
+                            initialMatchSignInCallbackUrl != null
+                        )) ?? null,
+                        null
+                    )
                 );
-            })
-            .catch((error: any) => {
+            } catch (error: unknown) {
                 dispatch(
                     updateUserManagerDestructured(null, getErrorMessage(error))
                 );
-            });
+            }
+        })();
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
     }, [
         dispatch,
