@@ -67,6 +67,7 @@
     "profiles.form.modification.defaultParameters": "Paramètres par défaut",
     "profiles.form.modification.userQuotas": "Quotas utilisateur",
     "profiles.form.modification.numberOfCasesOrStudies": "Nombre de situations ou d'études",
+    "profiles.form.modification.numberOfNodeBuilds": "Nombre de noeuds réalisés",
     "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètres",
     "profiles.form.modification.parameter.reset.tooltip": "Ne pas définir de paramètres",
     "profiles.form.modification.parameterSelection.dialog.title": "Choisir des paramètres",
