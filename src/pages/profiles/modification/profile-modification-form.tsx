@@ -46,17 +46,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                     />
                 </h3>
             </Grid>
-            <Grid item xs={12}>
-                <Grid item xs={5}>
+            <Grid container spacing={2}>
+                <Grid item xs={4}>
                     <IntegerInput
                         name={USER_QUOTA_CASE_NB}
                         label="profiles.form.modification.numberOfCasesOrStudies"
                         clearable={true}
                     />
                 </Grid>
-            </Grid>
-            <Grid item xs={12}>
-                <Grid item xs={5}>
+                <Grid item xs={4}>
                     <IntegerInput
                         name={USER_QUOTA_BUILD_NB}
                         label="profiles.form.modification.numberOfNodeBuilds"
