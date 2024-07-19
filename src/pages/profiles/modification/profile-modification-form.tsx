@@ -13,7 +13,8 @@ import React, { FunctionComponent } from 'react';
 
 export const PROFILE_NAME = 'name';
 export const LF_PARAM_ID = 'lfParamId';
-export const USER_QUOTAS = 'userQuotas';
+export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
+export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
 
 const ProfileModificationForm: FunctionComponent = () => {
     return (
@@ -45,11 +46,18 @@ const ProfileModificationForm: FunctionComponent = () => {
                     />
                 </h3>
             </Grid>
-            <Grid item xs={12}>
-                <Grid item xs={5}>
+            <Grid container spacing={2}>
+                <Grid item xs={4}>
                     <IntegerInput
-                        name={USER_QUOTAS}
+                        name={USER_QUOTA_CASE_NB}
                         label="profiles.form.modification.numberOfCasesOrStudies"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_BUILD_NB}
+                        label="profiles.form.modification.numberOfNodeBuilds"
                         clearable={true}
                     />
                 </Grid>
