@@ -11,7 +11,6 @@ import ProfileModificationForm, {
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
 } from './profile-modification-form';
-import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import {
@@ -21,7 +20,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, useSnackMessage, yup } from '@gridsuite/commons-ui';
 import { userAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 
