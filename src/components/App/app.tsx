@@ -15,7 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
     CardErrorBoundary,
+    COMMON_APP_NAME,
     ConfigParameters,
+    getComputedLanguage,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
     useSnackMessage,
 } from '@gridsuite/commons-ui';
 import {
@@ -24,16 +28,9 @@ import {
     selectTheme,
 } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { configSrv, configNotificationSrv } from '../../services';
-import {
-    APP_NAME,
-    COMMON_APP_NAME,
-    PARAM_LANGUAGE,
-    PARAM_THEME,
-} from '../../utils/config-params';
-import { getComputedLanguage } from '../../utils/language';
+import { configNotificationSrv, configSrv } from '../../services';
+import { APP_NAME } from '../../utils/config-params';
 import AppTopBar from './app-top-bar';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
 
@@ -69,31 +66,28 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig =
-        useCallback((): ReconnectingWebSocket => {
-            const ws =
-                configNotificationSrv.connectNotificationsWsUpdateConfig(
-                    APP_NAME
-                );
-            ws.onmessage = function (event) {
-                let eventData = JSON.parse(event.data);
-                if (eventData?.headers?.parameterName) {
-                    configSrv
-                        .fetchConfigParameter(eventData.headers.parameterName)
-                        .then((param) => updateParams([param]))
-                        .catch((error) =>
-                            snackError({
-                                messageTxt: error.message,
-                                headerId: 'paramsRetrievingError',
-                            })
-                        );
-                }
-            };
-            ws.onerror = function (event) {
-                console.error('Unexpected Notification WebSocket error', event);
-            };
-            return ws;
-        }, [updateParams, snackError]);
+    const connectNotificationsUpdateConfig = useCallback(() => {
+        const ws =
+            configNotificationSrv.connectNotificationsWsUpdateConfig(APP_NAME);
+        ws.onmessage = function (event) {
+            let eventData = JSON.parse(event.data);
+            if (eventData?.headers?.parameterName) {
+                configSrv
+                    .fetchConfigParameter(eventData.headers.parameterName)
+                    .then((param) => updateParams([param]))
+                    .catch((error) =>
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'paramsRetrievingError',
+                        })
+                    );
+            }
+        };
+        ws.onerror = function (event) {
+            console.error('Unexpected Notification WebSocket error', event);
+        };
+        return ws;
+    }, [updateParams, snackError]);
 
     useEffect(() => {
         if (user !== null) {

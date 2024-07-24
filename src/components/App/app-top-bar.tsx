@@ -16,13 +16,15 @@ import {
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
-import { AppMetadataCommon, logout, TopBar } from '@gridsuite/commons-ui';
-import { useParameterState } from '../parameters';
 import {
-    APP_NAME,
+    AppMetadataCommon,
+    logout,
     PARAM_LANGUAGE,
     PARAM_THEME,
-} from '../../utils/config-params';
+    TopBar,
+} from '@gridsuite/commons-ui';
+import { useParameterState } from '../parameters';
+import { APP_NAME } from '../../utils/config-params';
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
