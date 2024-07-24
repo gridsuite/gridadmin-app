@@ -37,7 +37,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: AppState) => state.user);
+    const user = useSelector((state: AppState) => state.user ?? null);
 
     const updateParams = useCallback(
         (params: ConfigParameters) => {

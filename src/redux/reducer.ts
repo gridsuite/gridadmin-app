@@ -30,7 +30,6 @@ import {
     AuthenticationActions,
     AuthenticationRouterErrorAction,
     AuthenticationRouterErrorState,
-    CommonStoreState,
     GsLang,
     GsLangUser,
     GsTheme,
@@ -51,8 +50,10 @@ import {
 } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
+import { User } from 'oidc-client';
 
-export type AppState = CommonStoreState & {
+export type AppState = {
+    user?: User;
     computedLanguage: GsLangUser;
     [PARAM_THEME]: GsTheme;
     [PARAM_LANGUAGE]: GsLang;
@@ -69,7 +70,7 @@ const initialState: AppState = {
         instance: null,
         error: null,
     },
-    user: null,
+    user: undefined,
     signInCallbackError: null,
     authenticationRouterError: null,
     showAuthenticationRouterLogin: false,

@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Env } from '@gridsuite/commons-ui';
+import { AppMetadata, Env } from '@gridsuite/commons-ui';
 import { getErrorMessage } from '../utils/error';
 import { Url } from '../utils/api-rest';
 
@@ -84,7 +84,7 @@ export type MetadataStudy = MetadataCommon & {
 // https://github.com/gridsuite/deployment/blob/main/k8s/resources/common/config/apps-metadata.json
 export type MetadataJson = MetadataCommon | MetadataStudy;
 
-export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
+export function fetchAppsAndUrls(): Promise<AppMetadata[]> {
     console.debug('Fetching apps and urls...');
     return fetchEnv()
         .then((env: EnvJson) =>

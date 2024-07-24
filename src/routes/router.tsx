@@ -176,7 +176,7 @@ export const AppWithAuthRouter: FunctionComponent<{
     basename: string;
     layout: App;
 }> = (props, context) => {
-    const user = useSelector((state: AppState) => state.user);
+    const user = useSelector((state: AppState) => state.user ?? null);
     const router = useMemo(
         () =>
             createBrowserRouter(

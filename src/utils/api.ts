@@ -6,7 +6,6 @@
  */
 
 import { User } from 'oidc-client';
-import { AppState } from '../redux/reducer';
 import { store } from '../redux/store';
 
 export type Token = string;
@@ -16,8 +15,7 @@ export function getToken(user?: User): Token | null {
 }
 
 export function getUser(): User | null {
-    const state: AppState = store.getState();
-    return state.user;
+    return store.getState().user ?? null;
 }
 
 export function extractUserSub(user: User | null): Promise<unknown> {

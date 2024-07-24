@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
-import { logout, TopBar } from '@gridsuite/commons-ui';
+import { AppMetadataCommon, logout, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import {
     APP_NAME,
@@ -25,7 +25,7 @@ import {
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { AppsMetadataSrv, MetadataJson, StudySrv } from '../../services';
+import { AppsMetadataSrv, StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
 import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
@@ -67,7 +67,7 @@ const tabs = new Map<MainPaths, ReactElement>([
 const AppTopBar: FunctionComponent = () => {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: AppState) => state.user);
+    const user = useSelector((state: AppState) => state.user ?? null);
     const userManagerInstance = useSelector(
         (state: AppState) => state.userManager?.instance
     );
@@ -87,7 +87,7 @@ const AppTopBar: FunctionComponent = () => {
     const [languageLocal, handleChangeLanguage] =
         useParameterState(PARAM_LANGUAGE);
 
-    const [appsAndUrls, setAppsAndUrls] = useState<MetadataJson[]>([]);
+    const [appsAndUrls, setAppsAndUrls] = useState<AppMetadataCommon[]>([]);
     useEffect(() => {
         if (user !== null) {
             AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
