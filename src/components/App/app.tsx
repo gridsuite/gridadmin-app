@@ -13,14 +13,18 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
+import {
+    CardErrorBoundary,
+    ConfigParameters,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
 } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { ConfigNotif, ConfigParameters, ConfigSrv } from '../../services';
+import { configSrv, configNotificationSrv } from '../../services';
 import {
     APP_NAME,
     COMMON_APP_NAME,
@@ -67,13 +71,15 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
 
     const connectNotificationsUpdateConfig =
         useCallback((): ReconnectingWebSocket => {
-            const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
+            const ws =
+                configNotificationSrv.connectNotificationsWsUpdateConfig(
+                    APP_NAME
+                );
             ws.onmessage = function (event) {
                 let eventData = JSON.parse(event.data);
                 if (eventData?.headers?.parameterName) {
-                    ConfigSrv.fetchConfigParameter(
-                        eventData.headers.parameterName
-                    )
+                    configSrv
+                        .fetchConfigParameter(eventData.headers.parameterName)
                         .then((param) => updateParams([param]))
                         .catch((error) =>
                             snackError({
@@ -91,7 +97,8 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
 
     useEffect(() => {
         if (user !== null) {
-            ConfigSrv.fetchConfigParameters(COMMON_APP_NAME)
+            configSrv
+                .fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
@@ -100,7 +107,8 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME)
+            configSrv
+                .fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

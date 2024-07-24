@@ -30,7 +30,7 @@ import {
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
-import { AppsMetadataSrv, UserAdminSrv } from '../services';
+import { appLocalSrv, userAdminSrv } from '../services';
 import { App } from '../components/App';
 import { Profiles, Users } from '../pages';
 import ErrorPage from './ErrorPage';
@@ -146,8 +146,8 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                         (await initializeAuthenticationProd(
                             dispatch,
                             initialMatchSilentRenewCallbackUrl != null,
-                            AppsMetadataSrv.fetchIdpSettings,
-                            UserAdminSrv.fetchValidateUser,
+                            appLocalSrv.fetchIdpSettings,
+                            userAdminSrv.fetchValidateUser,
                             initialMatchSignInCallbackUrl != null
                         )) ?? null,
                         null

@@ -22,7 +22,7 @@ import {
     useState,
 } from 'react';
 import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
-import { UserAdminSrv, UserProfile } from '../../../services';
+import { userAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 
 // TODO remove FetchStatus when exported in commons-ui (available soon)
@@ -80,7 +80,8 @@ const ProfileModificationDialog: FunctionComponent<
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                 };
-                UserAdminSrv.modifyProfile(profileData)
+                userAdminSrv
+                    .modifyProfile(profileData)
                     .catch((error) => {
                         snackError({
                             messageTxt: error.message,
@@ -103,7 +104,8 @@ const ProfileModificationDialog: FunctionComponent<
     useEffect(() => {
         if (profileId && open) {
             setDataFetchStatus(FetchStatus.FETCHING);
-            UserAdminSrv.getProfile(profileId)
+            userAdminSrv
+                .getProfile(profileId)
                 .then((response) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({

@@ -19,7 +19,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import { ManageAccounts } from '@mui/icons-material';
-import { UserAdminSrv, UserProfile } from '../../services';
+import { userAdminSrv, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
@@ -44,7 +44,8 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
             const profileData: UserProfile = {
                 name: name,
             };
-            UserAdminSrv.addProfile(profileData)
+            userAdminSrv
+                .addProfile(profileData)
                 .catch((error) =>
                     snackError({
                         messageTxt: error.message,

@@ -25,7 +25,7 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserProfile } from '../../services';
+import { userAdminSrv, UserProfile } from '../../services';
 import {
     ColDef,
     GetRowIdParams,
@@ -74,7 +74,8 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
 
     const deleteProfiles = useCallback(() => {
         let profileNames = rowsSelection.map((userProfile) => userProfile.name);
-        return UserAdminSrv.deleteProfiles(profileNames)
+        return userAdminSrv
+            .deleteProfiles(profileNames)
             .catch((error) => {
                 if (error.status === 422) {
                     snackError({
@@ -149,7 +150,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     return (
         <GridTable<UserProfile, {}>
             ref={props.gridRef}
-            dataLoader={UserAdminSrv.fetchProfiles}
+            dataLoader={userAdminSrv.fetchProfiles}
             columnDefs={columns}
             defaultColDef={defaultColDef}
             gridId="table-profiles"

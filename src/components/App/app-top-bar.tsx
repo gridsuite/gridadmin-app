@@ -9,6 +9,7 @@ import {
     forwardRef,
     FunctionComponent,
     ReactElement,
+    useCallback,
     useEffect,
     useMemo,
     useState,
@@ -25,7 +26,7 @@ import {
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { AppsMetadataSrv, StudySrv } from '../../services';
+import { appsMetadataSrv, studySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
 import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
@@ -90,11 +91,15 @@ const AppTopBar: FunctionComponent = () => {
     const [appsAndUrls, setAppsAndUrls] = useState<AppMetadataCommon[]>([]);
     useEffect(() => {
         if (user !== null) {
-            AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
+            appsMetadataSrv.fetchAppsMetadata().then((res) => {
                 setAppsAndUrls(res);
             });
         }
     }, [user]);
+    const additionalModulesFetcher = useCallback(
+        () => studySrv.getServersInfos(APP_NAME),
+        []
+    );
 
     return (
         <TopBar
@@ -114,11 +119,11 @@ const AppTopBar: FunctionComponent = () => {
             user={user ?? undefined}
             appsAndUrls={appsAndUrls}
             globalVersionPromise={() =>
-                AppsMetadataSrv.fetchVersion().then(
-                    (res) => res?.deployVersion ?? 'unknown'
-                )
+                appsMetadataSrv
+                    .fetchVersion()
+                    .then((res) => res?.deployVersion ?? 'unknown')
             }
-            additionalModulesPromise={StudySrv.getServersInfos}
+            additionalModulesPromise={additionalModulesFetcher}
             onThemeClick={handleChangeTheme}
             theme={themeLocal}
             onLanguageClick={handleChangeLanguage}

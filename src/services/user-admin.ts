@@ -5,106 +5,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { User } from 'oidc-client';
-import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { extractUserSub, getToken, getUser } from '../utils/api';
 import { UUID } from 'crypto';
-
-const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
-
-export function getUserSub(): Promise<unknown> {
-    return extractUserSub(getUser());
-}
-
-/*
- * fetchValidateUser is call from commons-ui AuthServices to validate user infos before setting state.user!
- */
-export function fetchValidateUser(user: User): Promise<boolean> {
-    return extractUserSub(user)
-        .then((sub) => {
-            console.debug(`Fetching access for user "${sub}"...`);
-            return backendFetch(
-                `${USER_ADMIN_URL}/users/${sub}`,
-                { method: 'head' },
-                getToken(user) ?? undefined
-            );
-        })
-        .then((response: Response) => {
-            //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
-            return response.status === 200;
-        })
-        .catch((error) => {
-            if (error.status === 403) {
-                return false;
-            } else {
-                throw error;
-            }
-        });
-}
+import { UserAdminComSvc } from '@gridsuite/commons-ui';
+import { getUser } from '../redux/store';
 
 export type UserInfos = {
     sub: string;
     profileName: string;
     isAdmin: boolean;
 };
-
-export function fetchUsers(): Promise<UserInfos[]> {
-    console.debug(`Fetching list of users...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/users`, {
-        headers: {
-            Accept: 'application/json',
-            //'Content-Type': 'application/json; utf-8',
-        },
-        cache: 'default',
-    }).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
-        throw reason;
-    }) as Promise<UserInfos[]>;
-}
-
-export function udpateUser(userInfos: UserInfos) {
-    console.debug(`Updating a user...`);
-
-    return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userInfos),
-    })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while updating user : ${reason}`);
-            throw reason;
-        });
-}
-
-export function deleteUsers(subs: string[]): Promise<void> {
-    console.debug(`Deleting sub users "${JSON.stringify(subs)}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/users`, {
-        method: 'delete',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(subs),
-    })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while deleting the servers data : ${reason}`);
-            throw reason;
-        });
-}
-
-export function addUser(sub: string): Promise<void> {
-    console.debug(`Creating sub user "${sub}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while adding user : ${reason}`);
-            throw reason;
-        });
-}
 
 export type UserProfile = {
     id?: UUID;
@@ -115,97 +24,100 @@ export type UserProfile = {
     maxAllowedBuilds?: number;
 };
 
-export function fetchProfiles(): Promise<UserProfile[]> {
-    console.debug(`Fetching list of profiles...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/profiles`, {
-        headers: {
-            Accept: 'application/json',
-        },
-        cache: 'default',
-    }).catch((reason) => {
-        console.error(`Error while fetching list of profiles : ${reason}`);
-        throw reason;
-    }) as Promise<UserProfile[]>;
-}
+export default class UserAdminSvc extends UserAdminComSvc {
+    public constructor() {
+        super(getUser);
+    }
+    public async fetchUsers() {
+        console.debug('Fetching list of users...');
+        return this.backendFetchJson<UserInfos[]>(`${this.getPrefix(1)}/users`);
+    }
 
-export function fetchProfilesWithoutValidityCheck(): Promise<UserProfile[]> {
-    console.debug(`Fetching list of profiles...`);
-    return backendFetchJson(
-        `${USER_ADMIN_URL}/profiles?checkLinksValidity=false`,
-        {
+    public async updateUser(userInfos: UserInfos) {
+        console.debug('Updating a user...');
+        await this.backendFetch(`${this.getPrefix(1)}/users/${userInfos.sub}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userInfos),
+        });
+    }
+
+    public async deleteUsers(subs: string[]) {
+        const jsonSubs = JSON.stringify(subs);
+        console.debug(`Deleting sub users "${jsonSubs}"...`);
+        await this.backendFetch(`${this.getPrefix(1)}/users`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: jsonSubs,
+        });
+    }
+
+    public async addUser(sub: string) {
+        console.debug(`Creating sub user "${sub}"...`);
+        await this.backendFetch(`${this.getPrefix(1)}/users/${sub}`, {
+            method: 'POST',
+        });
+    }
+
+    public async fetchProfiles() {
+        console.debug('Fetching list of profiles...');
+        return this.backendFetchJson<UserProfile[]>(
+            `${this.getPrefix(1)}/profiles`
+        );
+    }
+
+    public async fetchProfilesWithoutValidityCheck() {
+        console.debug(`Fetching list of profiles...`);
+        return this.backendFetchJson<UserProfile[]>(
+            `${this.getPrefix(1)}/profiles?checkLinksValidity=false`
+        );
+    }
+
+    public async getProfile(profileId: UUID) {
+        console.debug(`Fetching a profile...`);
+        return this.backendFetchJson<UserProfile>(
+            `${this.getPrefix(1)}/profiles/${profileId}`
+        );
+    }
+
+    public async modifyProfile(profileData: UserProfile) {
+        console.debug(`Updating a profile...`);
+        await this.backendFetch(
+            `${this.getPrefix(1)}/profiles/${profileData.id}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(profileData),
+            }
+        );
+    }
+
+    public async addProfile(profileData: UserProfile) {
+        console.debug(`Creating user profile "${profileData.name}"...`);
+        await this.backendFetch(`${this.getPrefix(1)}/profiles`, {
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-            cache: 'default',
-        }
-    ).catch((reason) => {
-        console.error(
-            `Error while fetching list of profiles (without check) : ${reason}`
-        );
-        throw reason;
-    }) as Promise<UserProfile[]>;
-}
-
-export function getProfile(profileId: UUID): Promise<UserProfile> {
-    console.debug(`Fetching a profile...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/profiles/${profileId}`, {
-        headers: {
-            Accept: 'application/json',
-        },
-        cache: 'default',
-    }).catch((reason) => {
-        console.error(`Error while fetching profile : ${reason}`);
-        throw reason;
-    }) as Promise<UserProfile>;
-}
-
-export function modifyProfile(profileData: UserProfile) {
-    console.debug(`Updating a profile...`);
-
-    return backendFetch(`${USER_ADMIN_URL}/profiles/${profileData.id}`, {
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData),
-    })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while updating the data : ${reason}`);
-            throw reason;
+            body: JSON.stringify(profileData),
         });
-}
+    }
 
-export function addProfile(profileData: UserProfile): Promise<void> {
-    console.debug(`Creating user profile "${profileData.name}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
-        method: 'post',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(profileData),
-    })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while pushing adding profile : ${reason}`);
-            throw reason;
+    public async deleteProfiles(names: string[]) {
+        console.debug(`Deleting profiles "${JSON.stringify(names)}"...`);
+        await this.backendFetch(`${this.getPrefix(1)}/profiles`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(names),
         });
-}
-
-export function deleteProfiles(names: string[]): Promise<void> {
-    console.debug(`Deleting profiles "${JSON.stringify(names)}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
-        method: 'delete',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(names),
-    })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while deleting profiles : ${reason}`);
-            throw reason;
-        });
+    }
 }
