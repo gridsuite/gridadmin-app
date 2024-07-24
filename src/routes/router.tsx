@@ -15,6 +15,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import {
     AuthenticationRouter,
+    getErrorMessage,
     getPreLoginPath,
     initializeAuthenticationProd,
 } from '@gridsuite/commons-ui';
@@ -36,7 +37,6 @@ import { Profiles, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
-import { getErrorMessage } from '../utils/error';
 import { AppDispatch } from '../redux/store';
 
 export enum MainPaths {
