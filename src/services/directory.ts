@@ -5,21 +5,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
-import { ElementAttributes } from '@gridsuite/commons-ui';
+import { DirectoryComSvc, ElementAttributes } from '@gridsuite/commons-ui';
+import { getUser } from '../redux/store';
 
-const DIRECTORY_URL = `${getRestBase()}/directory/v1`;
+export default class DirectorySvc extends DirectoryComSvc {
+    public constructor() {
+        super(getUser);
+    }
 
-export function fetchPath(elementUuid: UUID): Promise<ElementAttributes[]> {
-    console.debug(`Fetching element and its parents info...`);
-    return backendFetchJson(`${DIRECTORY_URL}/elements/${elementUuid}/path`, {
-        headers: {
-            Accept: 'application/json',
-        },
-        cache: 'default',
-    }).catch((reason) => {
-        console.error(`Error while fetching the servers data : ${reason}`);
-        throw reason;
-    }) as Promise<ElementAttributes[]>;
+    public async fetchPath(elementUuid: UUID) {
+        console.debug('Fetching element and its parents info...');
+        return this.backendFetchJson<ElementAttributes[]>(
+            `${this.getPrefix(1)}/elements/${elementUuid}/path`
+        );
+    }
 }

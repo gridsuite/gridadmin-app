@@ -15,6 +15,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import {
     AuthenticationRouter,
+    getErrorMessage,
     getPreLoginPath,
     initializeAuthenticationProd,
 } from '@gridsuite/commons-ui';
@@ -30,13 +31,12 @@ import {
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
-import { AppsMetadataSrv, UserAdminSrv } from '../services';
+import { appLocalSrv, userAdminSrv } from '../services';
 import { App } from '../components/App';
 import { Profiles, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
-import { getErrorMessage } from '../utils/error';
 import { AppDispatch } from '../redux/store';
 
 export enum MainPaths {
@@ -146,8 +146,8 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                         (await initializeAuthenticationProd(
                             dispatch,
                             initialMatchSilentRenewCallbackUrl != null,
-                            AppsMetadataSrv.fetchIdpSettings,
-                            UserAdminSrv.fetchValidateUser,
+                            appLocalSrv.fetchIdpSettings,
+                            userAdminSrv.fetchValidateUser,
                             initialMatchSignInCallbackUrl != null
                         )) ?? null,
                         null
@@ -176,7 +176,7 @@ export const AppWithAuthRouter: FunctionComponent<{
     basename: string;
     layout: App;
 }> = (props, context) => {
-    const user = useSelector((state: AppState) => state.user);
+    const user = useSelector((state: AppState) => state.user ?? null);
     const router = useMemo(
         () =>
             createBrowserRouter(

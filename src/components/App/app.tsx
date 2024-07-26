@@ -13,23 +13,24 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
+import {
+    CardErrorBoundary,
+    COMMON_APP_NAME,
+    ConfigParameters,
+    getComputedLanguage,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import {
     selectComputedLanguage,
     selectLanguage,
     selectTheme,
 } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { ConfigNotif, ConfigParameters, ConfigSrv } from '../../services';
-import {
-    APP_NAME,
-    COMMON_APP_NAME,
-    PARAM_LANGUAGE,
-    PARAM_THEME,
-} from '../../utils/config-params';
-import { getComputedLanguage } from '../../utils/language';
+import { configNotificationSrv, configSrv } from '../../services';
+import { APP_NAME } from '../../utils/config-params';
 import AppTopBar from './app-top-bar';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
 
@@ -37,7 +38,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: AppState) => state.user);
+    const user = useSelector((state: AppState) => state.user ?? null);
 
     const updateParams = useCallback(
         (params: ConfigParameters) => {
@@ -65,33 +66,33 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig =
-        useCallback((): ReconnectingWebSocket => {
-            const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
-            ws.onmessage = function (event) {
-                let eventData = JSON.parse(event.data);
-                if (eventData?.headers?.parameterName) {
-                    ConfigSrv.fetchConfigParameter(
-                        eventData.headers.parameterName
-                    )
-                        .then((param) => updateParams([param]))
-                        .catch((error) =>
-                            snackError({
-                                messageTxt: error.message,
-                                headerId: 'paramsRetrievingError',
-                            })
-                        );
-                }
-            };
-            ws.onerror = function (event) {
-                console.error('Unexpected Notification WebSocket error', event);
-            };
-            return ws;
-        }, [updateParams, snackError]);
+    const connectNotificationsUpdateConfig = useCallback(() => {
+        const ws =
+            configNotificationSrv.connectNotificationsWsUpdateConfig(APP_NAME);
+        ws.onmessage = function (event) {
+            let eventData = JSON.parse(event.data);
+            if (eventData?.headers?.parameterName) {
+                configSrv
+                    .fetchConfigParameter(eventData.headers.parameterName)
+                    .then((param) => updateParams([param]))
+                    .catch((error) =>
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'paramsRetrievingError',
+                        })
+                    );
+            }
+        };
+        ws.onerror = function (event) {
+            console.error('Unexpected Notification WebSocket error', event);
+        };
+        return ws;
+    }, [updateParams, snackError]);
 
     useEffect(() => {
         if (user !== null) {
-            ConfigSrv.fetchConfigParameters(COMMON_APP_NAME)
+            configSrv
+                .fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
@@ -100,7 +101,8 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME)
+            configSrv
+                .fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({

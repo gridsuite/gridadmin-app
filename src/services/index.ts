@@ -1,17 +1,35 @@
-export * as ConfigSrv from './config';
-export type * from './config';
+import { getUser } from '../redux/store';
+import {
+    AppsMetadataComSvc,
+    ConfigNotificationComSvc,
+    ExploreComSvc,
+    setCommonServices,
+    StudyComSvc,
+} from '@gridsuite/commons-ui';
+import AppLocalSvc from './app-local';
+import ConfigSvc from './config';
+import DirectorySvc from './directory';
+import UserAdminSvc from './user-admin';
 
-export * as ConfigNotif from './config-notification';
-export type * from './config-notification';
+export type { EnvJson } from './app-local';
+export type { UserInfos, UserProfile } from './user-admin';
 
-export * as AppsMetadataSrv from './apps-metadata';
-export type * from './apps-metadata';
+export const appLocalSrv = new AppLocalSvc(),
+    appsMetadataSrv = new AppsMetadataComSvc(appLocalSrv),
+    configSrv = new ConfigSvc(),
+    configNotificationSrv = new ConfigNotificationComSvc(getUser),
+    directorySrv = new DirectorySvc(),
+    exploreSrv = new ExploreComSvc(getUser),
+    studySrv = new StudyComSvc(getUser),
+    userAdminSrv = new UserAdminSvc();
 
-export * as StudySrv from './study';
-export type * from './study';
-
-export * as UserAdminSrv from './user-admin';
-export type * from './user-admin';
-
-export * as DirectorySrv from './directory';
-export type * from './directory';
+setCommonServices(
+    appLocalSrv,
+    appsMetadataSrv,
+    configSrv,
+    configNotificationSrv,
+    directorySrv,
+    exploreSrv,
+    studySrv,
+    userAdminSrv
+);

@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ConfigSrv } from '../services';
+import { configSrv } from '../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AppState, AppStateKey } from '../redux/reducer';
 
@@ -25,7 +25,8 @@ export function useParameterState<K extends AppStateKey>(
     const handleChangeParamLocalState = useCallback(
         (value: AppState[K]) => {
             setParamLocalState(value);
-            ConfigSrv.updateConfigParameter(paramName, value as string) //TODO how to check/cast?
+            configSrv
+                .updateConfigParameter(paramName, value as string) //TODO how to check/cast?
                 .catch((error) => {
                     setParamLocalState(paramGlobalState);
                     snackError({

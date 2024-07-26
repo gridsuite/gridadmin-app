@@ -7,13 +7,6 @@
 
 import { createReducer, Draft } from '@reduxjs/toolkit';
 import {
-    getLocalStorageComputedLanguage,
-    getLocalStorageLanguage,
-    getLocalStorageTheme,
-    saveLocalStorageTheme,
-} from './local-storage';
-
-import {
     ComputedLanguageAction,
     LanguageAction,
     SELECT_COMPUTED_LANGUAGE,
@@ -30,13 +23,18 @@ import {
     AuthenticationActions,
     AuthenticationRouterErrorAction,
     AuthenticationRouterErrorState,
-    CommonStoreState,
+    getLocalStorageComputedLanguage,
+    getLocalStorageLanguage,
+    getLocalStorageTheme,
     GsLang,
     GsLangUser,
     GsTheme,
     LOGOUT_ERROR,
     LogoutErrorAction,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
     RESET_AUTHENTICATION_ROUTER_ERROR,
+    saveLocalStorageTheme,
     SHOW_AUTH_INFO_LOGIN,
     ShowAuthenticationRouterLoginAction,
     SIGNIN_CALLBACK_ERROR,
@@ -49,10 +47,12 @@ import {
     UserManagerState,
     UserValidationErrorAction,
 } from '@gridsuite/commons-ui';
-import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
+import { User } from 'oidc-client';
+import { APP_NAME } from '../utils/config-params';
 
-export type AppState = CommonStoreState & {
+export type AppState = {
+    user?: User;
     computedLanguage: GsLangUser;
     [PARAM_THEME]: GsTheme;
     [PARAM_LANGUAGE]: GsLang;
@@ -69,15 +69,15 @@ const initialState: AppState = {
         instance: null,
         error: null,
     },
-    user: null,
+    user: undefined,
     signInCallbackError: null,
     authenticationRouterError: null,
     showAuthenticationRouterLogin: false,
 
     // params
-    [PARAM_THEME]: getLocalStorageTheme(),
-    [PARAM_LANGUAGE]: getLocalStorageLanguage(),
-    computedLanguage: getLocalStorageComputedLanguage(),
+    [PARAM_THEME]: getLocalStorageTheme(APP_NAME),
+    [PARAM_LANGUAGE]: getLocalStorageLanguage(APP_NAME),
+    computedLanguage: getLocalStorageComputedLanguage(APP_NAME),
 };
 
 export type Actions =
@@ -98,7 +98,7 @@ export const reducer: ReducerWithInitialState<AppState> = createReducer(
             SELECT_THEME,
             (state: Draft<AppState>, action: ThemeAction) => {
                 state.theme = action.theme;
-                saveLocalStorageTheme(state.theme);
+                saveLocalStorageTheme(APP_NAME, state.theme);
             }
         );
 

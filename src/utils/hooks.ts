@@ -7,9 +7,9 @@
 
 export function useDebugRender(label: string) {
     // uncomment when you want the output in the console
-    /*if (import.meta.env.DEV) {
+    if (import.meta.env.VITE_DEBUG_HOOK_RENDER) {
         label = `${label} render`;
         console.count?.(label);
         console.timeStamp?.(label);
-    }*/
+    }
 }

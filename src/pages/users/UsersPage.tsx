@@ -32,7 +32,7 @@ import {
     GridTable,
     GridTableRef,
 } from '../../components/Grid';
-import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
+import { userAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
@@ -68,7 +68,8 @@ const UsersPage: FunctionComponent = () => {
     const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
 
     useEffect(() => {
-        UserAdminSrv.fetchProfilesWithoutValidityCheck()
+        userAdminSrv
+            .fetchProfilesWithoutValidityCheck()
             .then((allProfiles: UserProfile[]) => {
                 let profiles: string[] = [
                     intl.formatMessage({ id: 'users.table.profile.none' }),
@@ -153,7 +154,8 @@ const UsersPage: FunctionComponent = () => {
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
     const deleteUsers = useCallback((): Promise<void> | undefined => {
         let subs = rowsSelection.map((user) => user.sub);
-        return UserAdminSrv.deleteUsers(subs)
+        return userAdminSrv
+            .deleteUsers(subs)
             .catch((error) =>
                 snackError({
                     messageTxt: error.message,
@@ -169,7 +171,8 @@ const UsersPage: FunctionComponent = () => {
 
     const addUser = useCallback(
         (id: string) => {
-            UserAdminSrv.addUser(id)
+            userAdminSrv
+                .addUser(id)
                 .catch((error) =>
                     snackError({
                         messageTxt: `Error while adding user "${id}"${
@@ -203,7 +206,8 @@ const UsersPage: FunctionComponent = () => {
     const handleCellEditingStopped = useCallback(
         (event: CellEditingStoppedEvent<UserInfos>) => {
             if (event.valueChanged && event.data) {
-                UserAdminSrv.udpateUser(event.data)
+                userAdminSrv
+                    .updateUser(event.data)
                     .catch((error) =>
                         snackError({
                             messageTxt: error.message,
@@ -223,7 +227,7 @@ const UsersPage: FunctionComponent = () => {
             <Grid item container xs sx={{ width: 1 }}>
                 <GridTable<UserInfos, {}>
                     ref={gridRef}
-                    dataLoader={UserAdminSrv.fetchUsers}
+                    dataLoader={userAdminSrv.fetchUsers}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
                     onCellEditingStopped={handleCellEditingStopped}
