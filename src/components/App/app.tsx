@@ -5,28 +5,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    PropsWithChildren,
-    useCallback,
-    useEffect,
-} from 'react';
+import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
-import {
-    selectComputedLanguage,
-    selectLanguage,
-    selectTheme,
-} from '../../redux/actions';
+import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
 import { ConfigNotif, ConfigParameters, ConfigSrv } from '../../services';
-import {
-    APP_NAME,
-    COMMON_APP_NAME,
-    PARAM_LANGUAGE,
-    PARAM_THEME,
-} from '../../utils/config-params';
+import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import ReconnectingWebSocket from 'reconnecting-websocket';
@@ -51,11 +37,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                         break;
                     case PARAM_LANGUAGE:
                         dispatch(selectLanguage(param.value));
-                        dispatch(
-                            selectComputedLanguage(
-                                getComputedLanguage(param.value)
-                            )
-                        );
+                        dispatch(selectComputedLanguage(getComputedLanguage(param.value)));
                         break;
                     default:
                         break;
@@ -65,29 +47,26 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig =
-        useCallback((): ReconnectingWebSocket => {
-            const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
-            ws.onmessage = function (event) {
-                let eventData = JSON.parse(event.data);
-                if (eventData?.headers?.parameterName) {
-                    ConfigSrv.fetchConfigParameter(
-                        eventData.headers.parameterName
-                    )
-                        .then((param) => updateParams([param]))
-                        .catch((error) =>
-                            snackError({
-                                messageTxt: error.message,
-                                headerId: 'paramsRetrievingError',
-                            })
-                        );
-                }
-            };
-            ws.onerror = function (event) {
-                console.error('Unexpected Notification WebSocket error', event);
-            };
-            return ws;
-        }, [updateParams, snackError]);
+    const connectNotificationsUpdateConfig = useCallback((): ReconnectingWebSocket => {
+        const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
+        ws.onmessage = function (event) {
+            let eventData = JSON.parse(event.data);
+            if (eventData?.headers?.parameterName) {
+                ConfigSrv.fetchConfigParameter(eventData.headers.parameterName)
+                    .then((param) => updateParams([param]))
+                    .catch((error) =>
+                        snackError({
+                            messageTxt: error.message,
+                            headerId: 'paramsRetrievingError',
+                        })
+                    );
+            }
+        };
+        ws.onerror = function (event) {
+            console.error('Unexpected Notification WebSocket error', event);
+        };
+        return ws;
+    }, [updateParams, snackError]);
 
     useEffect(() => {
         if (user !== null) {
@@ -112,13 +91,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
             const ws = connectNotificationsUpdateConfig();
             return () => ws.close();
         }
-    }, [
-        user,
-        dispatch,
-        updateParams,
-        snackError,
-        connectNotificationsUpdateConfig,
-    ]);
+    }, [user, dispatch, updateParams, snackError, connectNotificationsUpdateConfig]);
 
     return (
         <Grid
@@ -131,9 +104,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         >
             <Grid item xs="auto" component={AppTopBar} />
             <Grid item container xs component="main">
-                <CardErrorBoundary>
-                    {/*Router outlet ->*/ props.children}
-                </CardErrorBoundary>
+                <CardErrorBoundary>{/*Router outlet ->*/ props.children}</CardErrorBoundary>
             </Grid>
         </Grid>
     );

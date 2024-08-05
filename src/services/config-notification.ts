@@ -13,11 +13,9 @@ const PREFIX_CONFIG_NOTIFICATION_WS = `${getWsBase()}/config-notification`;
 
 export function connectNotificationsWsUpdateConfig(): ReconnectingWebSocket {
     const webSocketUrl = `${PREFIX_CONFIG_NOTIFICATION_WS}/notify?appName=${APP_NAME}`;
-    const reconnectingWebSocket = new ReconnectingWebSocket(
-        () => getUrlWithToken(webSocketUrl),
-        undefined,
-        { debug: import.meta.env.VITE_DEBUG_REQUESTS === 'true' }
-    );
+    const reconnectingWebSocket = new ReconnectingWebSocket(() => getUrlWithToken(webSocketUrl), undefined, {
+        debug: import.meta.env.VITE_DEBUG_REQUESTS === 'true',
+    });
     reconnectingWebSocket.onopen = function (event: Event) {
         console.info(`Connected Websocket update config ui: ${webSocketUrl}`);
     };

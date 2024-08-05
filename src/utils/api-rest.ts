@@ -18,9 +18,7 @@ export type InitRequest = Partial<RequestInit>;
 
 export function getRestBase(): string {
     // We use the `baseURI` (from `<base/>` in index.html) to build the URL, which is corrected by httpd/nginx
-    return (
-        document.baseURI.replace(/\/+$/, '') + import.meta.env.VITE_API_GATEWAY
-    );
+    return document.baseURI.replace(/\/+$/, '') + import.meta.env.VITE_API_GATEWAY;
 }
 
 function handleError(response: Response): Promise<never> {
@@ -34,9 +32,7 @@ function handleError(response: Response): Promise<never> {
             ) as ErrorWithStatus;
             error.status = errorJson.status;
         } else {
-            error = new Error(
-                `${errorName}${response.status} ${response.statusText}`
-            ) as ErrorWithStatus;
+            error = new Error(`${errorName}${response.status} ${response.statusText}`) as ErrorWithStatus;
             error.status = response.status;
         }
         throw error;
@@ -45,9 +41,7 @@ function handleError(response: Response): Promise<never> {
 
 function prepareRequest(init?: InitRequest, token?: Token): RequestInit {
     if (!(typeof init === 'undefined' || typeof init === 'object')) {
-        throw new TypeError(
-            `Argument 2 of backendFetch is not an object ${typeof init}`
-        );
+        throw new TypeError(`Argument 2 of backendFetch is not an object ${typeof init}`);
     }
     const initCopy: RequestInit = { ...init };
     initCopy.headers = new Headers(initCopy.headers || {});
@@ -57,35 +51,17 @@ function prepareRequest(init?: InitRequest, token?: Token): RequestInit {
 }
 
 function safeFetch(url: Url, initCopy?: InitRequest) {
-    return fetch(url, initCopy).then((response: Response) =>
-        response.ok ? response : handleError(response)
-    );
+    return fetch(url, initCopy).then((response: Response) => (response.ok ? response : handleError(response)));
 }
 
-export function backendFetch(
-    url: Url,
-    init?: InitRequest,
-    token?: Token
-): Promise<Response> {
+export function backendFetch(url: Url, init?: InitRequest, token?: Token): Promise<Response> {
     return safeFetch(url, prepareRequest(init, token));
 }
 
-export function backendFetchText(
-    url: Url,
-    init?: InitRequest,
-    token?: Token
-): Promise<string> {
-    return backendFetch(url, init, token).then((safeResponse: Response) =>
-        safeResponse.text()
-    );
+export function backendFetchText(url: Url, init?: InitRequest, token?: Token): Promise<string> {
+    return backendFetch(url, init, token).then((safeResponse: Response) => safeResponse.text());
 }
 
-export function backendFetchJson(
-    url: Url,
-    init?: InitRequest,
-    token?: Token
-): Promise<unknown> {
-    return backendFetch(url, init, token).then((safeResponse: Response) =>
-        safeResponse.json()
-    );
+export function backendFetchJson(url: Url, init?: InitRequest, token?: Token): Promise<unknown> {
+    return backendFetch(url, init, token).then((safeResponse: Response) => safeResponse.json());
 }

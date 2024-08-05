@@ -37,14 +37,10 @@ export type VersionJson = {
 export function fetchVersion(): Promise<VersionJson> {
     console.debug(`Fetching global metadata...`);
     return fetchEnv()
-        .then((env: EnvJson) =>
-            fetch(`${env.appsMetadataServerUrl}/version.json`)
-        )
+        .then((env: EnvJson) => fetch(`${env.appsMetadataServerUrl}/version.json`))
         .then((response: Response) => response.json())
         .catch((error) => {
-            console.error(
-                `Error while fetching the version: ${getErrorMessage(error)}`
-            );
+            console.error(`Error while fetching the version: ${getErrorMessage(error)}`);
             throw error;
         });
 }
@@ -87,8 +83,6 @@ export type MetadataJson = MetadataCommon | MetadataStudy;
 export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
     console.debug('Fetching apps and urls...');
     return fetchEnv()
-        .then((env: EnvJson) =>
-            fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`)
-        )
+        .then((env: EnvJson) => fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`))
         .then((response: Response) => response.json());
 }

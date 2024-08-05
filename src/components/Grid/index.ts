@@ -9,8 +9,4 @@
 export type { AgGridRef } from './AgGrid';*/
 
 export { GridTable, GridButton, GridButtonDelete } from './GridTable';
-export type {
-    GridTableProps,
-    GridTableRef,
-    GridButtonProps,
-} from './GridTable';
+export type { GridTableProps, GridTableRef, GridButtonProps } from './GridTable';
