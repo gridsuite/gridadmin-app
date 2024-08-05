@@ -5,19 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    PropsWithChildren,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
-    AuthenticationRouter,
-    getPreLoginPath,
-    initializeAuthenticationProd,
-} from '@gridsuite/commons-ui';
+import { AuthenticationRouter, getPreLoginPath, initializeAuthenticationProd } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
     Navigate,
@@ -89,15 +79,9 @@ export function appRoutes(): RouteObject[] {
 const AuthRouter: FunctionComponent<{
     userManager: Parameters<typeof AuthenticationRouter>[0]['userManager'];
 }> = (props, context) => {
-    const signInCallbackError = useSelector(
-        (state: AppState) => state.signInCallbackError
-    );
-    const authenticationRouterError = useSelector(
-        (state: AppState) => state.authenticationRouterError
-    );
-    const showAuthenticationRouterLogin = useSelector(
-        (state: AppState) => state.showAuthenticationRouterLogin
-    );
+    const signInCallbackError = useSelector((state: AppState) => state.signInCallbackError);
+    const authenticationRouterError = useSelector((state: AppState) => state.authenticationRouterError);
+    const showAuthenticationRouterLogin = useSelector((state: AppState) => state.showAuthenticationRouterLogin);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -119,9 +103,7 @@ const AuthRouter: FunctionComponent<{
  * Manage authentication state.
  * <br/>Sub-component because `useMatch` must be under router context.
  */
-const AppAuthStateWithRouterLayer: FunctionComponent<
-    PropsWithChildren<{ layout: App }>
-> = (props, context) => {
+const AppAuthStateWithRouterLayer: FunctionComponent<PropsWithChildren<{ layout: App }>> = (props, context) => {
     const AppRouterLayout = props.layout;
     const dispatch = useDispatch<AppDispatch>();
 
@@ -154,17 +136,11 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
                     )
                 );
             } catch (error: unknown) {
-                dispatch(
-                    updateUserManagerDestructured(null, getErrorMessage(error))
-                );
+                dispatch(updateUserManagerDestructured(null, getErrorMessage(error)));
             }
         })();
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
-    }, [
-        dispatch,
-        initialMatchSilentRenewCallbackUrl,
-        initialMatchSignInCallbackUrl,
-    ]);
+    }, [dispatch, initialMatchSilentRenewCallbackUrl, initialMatchSignInCallbackUrl]);
 
     return <AppRouterLayout>{props.children}</AppRouterLayout>;
 };
@@ -185,9 +161,7 @@ export const AppWithAuthRouter: FunctionComponent<{
                           /*new react-router v6 api*/
                           {
                               element: (
-                                  <AppAuthStateWithRouterLayer
-                                      layout={props.layout}
-                                  >
+                                  <AppAuthStateWithRouterLayer layout={props.layout}>
                                       <Outlet />
                                   </AppAuthStateWithRouterLayer>
                               ),
@@ -198,9 +172,7 @@ export const AppWithAuthRouter: FunctionComponent<{
                           /*legacy component router*/
                           {
                               path: '*',
-                              Component: () => (
-                                  <LegacyAuthRouter layout={props.layout} />
-                              ),
+                              Component: () => <LegacyAuthRouter layout={props.layout} />,
                           },
                       ] as RouteObject[]),
                 { basename: props.basename }

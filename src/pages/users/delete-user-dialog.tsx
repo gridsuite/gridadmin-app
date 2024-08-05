@@ -6,14 +6,7 @@
  */
 
 import { FunctionComponent, useCallback } from 'react';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { UserInfos } from '../../services';
 
@@ -36,14 +29,9 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
         (users: UserInfos[]) => {
             const hasMultipleItems = users.length > 1;
             const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multiple.dialog.title'
-                    : 'users.form.delete.dialog.title',
+                id: hasMultipleItems ? 'users.form.delete.multiple.dialog.title' : 'users.form.delete.dialog.title',
             };
-            return intl.formatMessage(
-                descriptor,
-                hasMultipleItems ? { itemsCount: users.length } : undefined
-            );
+            return intl.formatMessage(descriptor, hasMultipleItems ? { itemsCount: users.length } : undefined);
         },
         [intl]
     );
@@ -56,9 +44,7 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
         (users: UserInfos[]) => {
             const hasMultipleItems = users.length > 1;
             const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multiple.dialog.message'
-                    : 'users.form.delete.dialog.message',
+                id: hasMultipleItems ? 'users.form.delete.multiple.dialog.message' : 'users.form.delete.dialog.message',
             };
             if (hasMultipleItems) {
                 return intl.formatMessage(descriptor, {
@@ -76,9 +62,7 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{buildTitle(usersInfos)}</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    {buildContent(usersInfos)}
-                </DialogContentText>
+                <DialogContentText>{buildContent(usersInfos)}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>

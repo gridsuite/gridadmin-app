@@ -49,11 +49,8 @@ type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
 
 interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
     <TData, TContext extends {}>(
-        props: PropsWithoutRef<GridOptions<TData>> &
-            RefAttributes<AgGridRef<TData, TContext>>
-    ): ReturnType<
-        ForwardRefComponent<GridOptions<TData>, AgGridRef<TData, TContext>>
-    >;
+        props: PropsWithoutRef<GridOptions<TData>> & RefAttributes<AgGridRef<TData, TContext>>
+    ): ReturnType<ForwardRefComponent<GridOptions<TData>, AgGridRef<TData, TContext>>>;
 }
 
 const style = {
@@ -65,10 +62,7 @@ const style = {
     },
 };
 
-export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
-    TData,
-    TContext extends {} = {}
->(
+export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext extends {} = {}>(
     props: GridOptions<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
@@ -94,15 +88,9 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<
         <Box component="div" className={theme.agGridTheme} sx={style}>
             <AgGridReact<TData>
                 ref={agGridRef}
-                localeText={
-                    messages[intl.locale] ??
-                    messages[intl.defaultLocale] ??
-                    undefined
-                }
+                localeText={messages[intl.locale] ?? messages[intl.defaultLocale] ?? undefined}
                 {...props} //destruct props to optimize react props change detection
-                debug={
-                    import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug
-                }
+                debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
                 reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />
         </Box>

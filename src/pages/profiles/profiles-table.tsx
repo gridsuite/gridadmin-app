@@ -5,26 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    RefObject,
-    useCallback,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import {
-    Cancel,
-    CheckCircle,
-    ManageAccounts,
-    RadioButtonUnchecked,
-} from '@mui/icons-material';
-import {
-    GridButton,
-    GridButtonDelete,
-    GridTable,
-    GridTableRef,
-} from '../../components/Grid';
+import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
+import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import {
     ColDef,
@@ -62,15 +46,11 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     }
 
     const onSelectionChanged = useCallback(
-        (event: SelectionChangedEvent<UserProfile, {}>) =>
-            setRowsSelection(event.api.getSelectedRows() ?? []),
+        (event: SelectionChangedEvent<UserProfile, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
         [setRowsSelection]
     );
 
-    const onAddButton = useCallback(
-        () => props.setOpenAddProfileDialog(true),
-        [props]
-    );
+    const onAddButton = useCallback(() => props.setOpenAddProfileDialog(true), [props]);
 
     const deleteProfiles = useCallback(() => {
         let profileNames = rowsSelection.map((userProfile) => userProfile.name);
@@ -90,10 +70,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
             .then(() => props.gridRef?.current?.context?.refresh?.());
     }, [props.gridRef, rowsSelection, snackError]);
 
-    const deleteProfilesDisabled = useMemo(
-        () => rowsSelection.length <= 0,
-        [rowsSelection.length]
-    );
+    const deleteProfilesDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
 
     const columns = useMemo(
         (): ColDef<UserProfile>[] => [
@@ -165,10 +142,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 color="primary"
                 onClick={onAddButton}
             />
-            <GridButtonDelete
-                onClick={deleteProfiles}
-                disabled={deleteProfilesDisabled}
-            />
+            <GridButtonDelete onClick={deleteProfiles} disabled={deleteProfilesDisabled} />
         </GridTable>
     );
 };

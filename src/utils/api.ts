@@ -24,13 +24,7 @@ export function extractUserSub(user: User | null): Promise<unknown> {
     return new Promise((resolve, reject) => {
         const sub = user?.profile?.sub;
         if (!sub) {
-            reject(
-                new Error(
-                    `Fetching access for missing user.profile.sub : ${JSON.stringify(
-                        user
-                    )}`
-                )
-            );
+            reject(new Error(`Fetching access for missing user.profile.sub : ${JSON.stringify(user)}`));
         } else {
             resolve(sub);
         }

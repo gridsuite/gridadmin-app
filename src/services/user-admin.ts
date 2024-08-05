@@ -23,11 +23,7 @@ export function fetchValidateUser(user: User): Promise<boolean> {
     return extractUserSub(user)
         .then((sub) => {
             console.debug(`Fetching access for user "${sub}"...`);
-            return backendFetch(
-                `${USER_ADMIN_URL}/users/${sub}`,
-                { method: 'head' },
-                getToken(user) ?? undefined
-            );
+            return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'head' }, getToken(user) ?? undefined);
         })
         .then((response: Response) => {
             //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
@@ -130,18 +126,13 @@ export function fetchProfiles(): Promise<UserProfile[]> {
 
 export function fetchProfilesWithoutValidityCheck(): Promise<UserProfile[]> {
     console.debug(`Fetching list of profiles...`);
-    return backendFetchJson(
-        `${USER_ADMIN_URL}/profiles?checkLinksValidity=false`,
-        {
-            headers: {
-                Accept: 'application/json',
-            },
-            cache: 'default',
-        }
-    ).catch((reason) => {
-        console.error(
-            `Error while fetching list of profiles (without check) : ${reason}`
-        );
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles?checkLinksValidity=false`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching list of profiles (without check) : ${reason}`);
         throw reason;
     }) as Promise<UserProfile[]>;
 }

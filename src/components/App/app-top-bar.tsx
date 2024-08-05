@@ -5,23 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    forwardRef,
-    FunctionComponent,
-    ReactElement,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { forwardRef, FunctionComponent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
-import {
-    APP_NAME,
-    PARAM_LANGUAGE,
-    PARAM_THEME,
-} from '../../utils/config-params';
+import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -68,9 +57,7 @@ const AppTopBar: FunctionComponent = () => {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);
-    const userManagerInstance = useSelector(
-        (state: AppState) => state.userManager?.instance
-    );
+    const userManagerInstance = useSelector((state: AppState) => state.userManager?.instance);
 
     const navigate = useNavigate();
     const matches = useMatches();
@@ -84,8 +71,7 @@ const AppTopBar: FunctionComponent = () => {
     }, [matches]);
 
     const [themeLocal, handleChangeTheme] = useParameterState(PARAM_THEME);
-    const [languageLocal, handleChangeLanguage] =
-        useParameterState(PARAM_LANGUAGE);
+    const [languageLocal, handleChangeLanguage] = useParameterState(PARAM_LANGUAGE);
 
     const [appsAndUrls, setAppsAndUrls] = useState<MetadataJson[]>([]);
     useEffect(() => {
@@ -100,24 +86,14 @@ const AppTopBar: FunctionComponent = () => {
         <TopBar
             appName={capitalize(APP_NAME)}
             appColor="#FD3745"
-            appLogo={
-                theme.palette.mode === 'light' ? (
-                    <GridAdminLogoLight />
-                ) : (
-                    <GridAdminLogoDark />
-                )
-            }
+            appLogo={theme.palette.mode === 'light' ? <GridAdminLogoLight /> : <GridAdminLogoDark />}
             appVersion={AppPackage.version}
             appLicense={AppPackage.license}
             onLogoutClick={() => logout(dispatch, userManagerInstance)}
             onLogoClick={() => navigate('/', { replace: true })}
             user={user ?? undefined}
             appsAndUrls={appsAndUrls}
-            globalVersionPromise={() =>
-                AppsMetadataSrv.fetchVersion().then(
-                    (res) => res?.deployVersion ?? 'unknown'
-                )
-            }
+            globalVersionPromise={() => AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion ?? 'unknown')}
             additionalModulesPromise={StudySrv.getServersInfos}
             onThemeClick={handleChangeTheme}
             theme={themeLocal}

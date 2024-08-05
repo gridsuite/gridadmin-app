@@ -15,10 +15,7 @@ export const PARAM_LANGUAGE = 'language';
 
 const COMMON_CONFIG_PARAMS_NAMES = new Set([PARAM_THEME, PARAM_LANGUAGE]);
 
-export type AppConfigParameter = LiteralUnion<
-    typeof PARAM_THEME | typeof PARAM_LANGUAGE,
-    string
->;
+export type AppConfigParameter = LiteralUnion<typeof PARAM_THEME | typeof PARAM_LANGUAGE, string>;
 
 export type AppConfigType = typeof COMMON_APP_NAME | typeof APP_NAME;
 
@@ -27,7 +24,5 @@ export type AppConfigType = typeof COMMON_APP_NAME | typeof APP_NAME;
  * @param paramName the parameter name/key
  */
 export function getAppName(paramName: AppConfigParameter): AppConfigType {
-    return COMMON_CONFIG_PARAMS_NAMES.has(paramName)
-        ? COMMON_APP_NAME
-        : APP_NAME;
+    return COMMON_CONFIG_PARAMS_NAMES.has(paramName) ? COMMON_APP_NAME : APP_NAME;
 }

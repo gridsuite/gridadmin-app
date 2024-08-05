@@ -20,30 +20,19 @@ const ProfileModificationForm: FunctionComponent = () => {
     return (
         <Grid container spacing={2} marginTop={'auto'}>
             <Grid item xs={12}>
-                <TextInput
-                    name={PROFILE_NAME}
-                    label={'profiles.table.id'}
-                    clearable={false}
-                />
+                <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={false} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
-                    <FormattedMessage
-                        id={'profiles.form.modification.defaultParameters'}
-                    />
+                    <FormattedMessage id={'profiles.form.modification.defaultParameters'} />
                 </h3>
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
-                    elementType={ElementType.LOADFLOW_PARAMETERS}
-                    parameterFormId={LF_PARAM_ID}
-                />
+                <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LF_PARAM_ID} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
-                    <FormattedMessage
-                        id={'profiles.form.modification.userQuotas'}
-                    />
+                    <FormattedMessage id={'profiles.form.modification.userQuotas'} />
                 </h3>
             </Grid>
             <Grid container spacing={2}>
