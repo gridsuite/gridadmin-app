@@ -65,37 +65,28 @@ export default class UserAdminSvc extends UserAdminComSvc {
 
     public async fetchProfiles() {
         console.debug('Fetching list of profiles...');
-        return this.backendFetchJson<UserProfile[]>(
-            `${this.getPrefix(1)}/profiles`
-        );
+        return this.backendFetchJson<UserProfile[]>(`${this.getPrefix(1)}/profiles`);
     }
 
     public async fetchProfilesWithoutValidityCheck() {
         console.debug(`Fetching list of profiles...`);
-        return this.backendFetchJson<UserProfile[]>(
-            `${this.getPrefix(1)}/profiles?checkLinksValidity=false`
-        );
+        return this.backendFetchJson<UserProfile[]>(`${this.getPrefix(1)}/profiles?checkLinksValidity=false`);
     }
 
     public async getProfile(profileId: UUID) {
         console.debug(`Fetching a profile...`);
-        return this.backendFetchJson<UserProfile>(
-            `${this.getPrefix(1)}/profiles/${profileId}`
-        );
+        return this.backendFetchJson<UserProfile>(`${this.getPrefix(1)}/profiles/${profileId}`);
     }
 
     public async modifyProfile(profileData: UserProfile) {
         console.debug(`Updating a profile...`);
-        await this.backendFetch(
-            `${this.getPrefix(1)}/profiles/${profileData.id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(profileData),
-            }
-        );
+        await this.backendFetch(`${this.getPrefix(1)}/profiles/${profileData.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(profileData),
+        });
     }
 
     public async addProfile(profileData: UserProfile) {

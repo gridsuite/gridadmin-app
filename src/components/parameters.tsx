@@ -11,9 +11,7 @@ import { configSrv } from '../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { AppState, AppStateKey } from '../redux/reducer';
 
-export function useParameterState<K extends AppStateKey>(
-    paramName: K
-): [AppState[K], (value: AppState[K]) => void] {
+export function useParameterState<K extends AppStateKey>(paramName: K): [AppState[K], (value: AppState[K]) => void] {
     const { snackError } = useSnackMessage();
     const paramGlobalState = useSelector((state: AppState) => state[paramName]);
     const [paramLocalState, setParamLocalState] = useState(paramGlobalState);

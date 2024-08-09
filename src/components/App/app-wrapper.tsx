@@ -8,12 +8,7 @@
 import App from './app';
 import { FunctionComponent, useMemo } from 'react';
 import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
-import {
-    createTheme,
-    StyledEngineProvider,
-    Theme,
-    ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
 import {
     card_error_boundary_en,
@@ -121,20 +116,11 @@ const basename = new URL(document.baseURI ?? '').pathname;
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
  */
 const AppWrapperRouterLayout: typeof App = (props, context) => {
-    const computedLanguage = useSelector(
-        (state: AppState) => state.computedLanguage
-    );
+    const computedLanguage = useSelector((state: AppState) => state.computedLanguage);
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
-    const themeCompiled = useMemo(
-        () => getMuiTheme(theme, computedLanguage),
-        [computedLanguage, theme]
-    );
+    const themeCompiled = useMemo(() => getMuiTheme(theme, computedLanguage), [computedLanguage, theme]);
     return (
-        <IntlProvider
-            locale={computedLanguage}
-            defaultLocale={LANG_ENGLISH}
-            messages={messages[computedLanguage]}
-        >
+        <IntlProvider locale={computedLanguage} defaultLocale={LANG_ENGLISH} messages={messages[computedLanguage]}>
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={themeCompiled}>
                     <SnackbarProvider hideIconVariant={false}>

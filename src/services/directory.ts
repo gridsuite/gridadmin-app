@@ -16,8 +16,6 @@ export default class DirectorySvc extends DirectoryComSvc {
 
     public async fetchPath(elementUuid: UUID) {
         console.debug('Fetching element and its parents info...');
-        return this.backendFetchJson<ElementAttributes[]>(
-            `${this.getPrefix(1)}/elements/${elementUuid}/path`
-        );
+        return this.backendFetchJson<ElementAttributes[]>(`${this.getPrefix(1)}/elements/${elementUuid}/path`);
     }
 }

@@ -5,12 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    PropsWithChildren,
-    useCallback,
-    useEffect,
-} from 'react';
+import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
@@ -22,11 +17,7 @@ import {
     PARAM_THEME,
     useSnackMessage,
 } from '@gridsuite/commons-ui';
-import {
-    selectComputedLanguage,
-    selectLanguage,
-    selectTheme,
-} from '../../redux/actions';
+import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
 import { configNotificationSrv, configSrv } from '../../services';
 import { APP_NAME } from '../../utils/config-params';
@@ -52,11 +43,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                         break;
                     case PARAM_LANGUAGE:
                         dispatch(selectLanguage(param.value));
-                        dispatch(
-                            selectComputedLanguage(
-                                getComputedLanguage(param.value)
-                            )
-                        );
+                        dispatch(selectComputedLanguage(getComputedLanguage(param.value)));
                         break;
                     default:
                         break;
@@ -67,8 +54,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     );
 
     const connectNotificationsUpdateConfig = useCallback(() => {
-        const ws =
-            configNotificationSrv.connectNotificationsWsUpdateConfig(APP_NAME);
+        const ws = configNotificationSrv.connectNotificationsWsUpdateConfig(APP_NAME);
         ws.onmessage = function (event) {
             let eventData = JSON.parse(event.data);
             if (eventData?.headers?.parameterName) {
@@ -114,13 +100,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
             const ws = connectNotificationsUpdateConfig();
             return () => ws.close();
         }
-    }, [
-        user,
-        dispatch,
-        updateParams,
-        snackError,
-        connectNotificationsUpdateConfig,
-    ]);
+    }, [user, dispatch, updateParams, snackError, connectNotificationsUpdateConfig]);
 
     return (
         <Grid
@@ -133,9 +113,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         >
             <Grid item xs="auto" component={AppTopBar} />
             <Grid item container xs component="main">
-                <CardErrorBoundary>
-                    {/*Router outlet ->*/ props.children}
-                </CardErrorBoundary>
+                <CardErrorBoundary>{/*Router outlet ->*/ props.children}</CardErrorBoundary>
             </Grid>
         </Grid>
     );

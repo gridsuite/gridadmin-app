@@ -5,14 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import {
     Button,
@@ -26,12 +19,7 @@ import {
     TextField,
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
-import {
-    GridButton,
-    GridButtonDelete,
-    GridTable,
-    GridTableRef,
-} from '../../components/Grid';
+import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { userAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -71,9 +59,7 @@ const UsersPage: FunctionComponent = () => {
         userAdminSrv
             .fetchProfilesWithoutValidityCheck()
             .then((allProfiles: UserProfile[]) => {
-                let profiles: string[] = [
-                    intl.formatMessage({ id: 'users.table.profile.none' }),
-                ];
+                let profiles: string[] = [intl.formatMessage({ id: 'users.table.profile.none' })];
                 allProfiles?.forEach((p) => profiles.push(p.name));
                 setprofileNameOptions(profiles);
             })
@@ -164,10 +150,7 @@ const UsersPage: FunctionComponent = () => {
             )
             .then(() => gridContext?.refresh?.());
     }, [gridContext, rowsSelection, snackError]);
-    const deleteUsersDisabled = useMemo(
-        () => rowsSelection.length <= 0,
-        [rowsSelection.length]
-    );
+    const deleteUsersDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
 
     const addUser = useCallback(
         (id: string) => {
@@ -175,9 +158,7 @@ const UsersPage: FunctionComponent = () => {
                 .addUser(id)
                 .catch((error) =>
                     snackError({
-                        messageTxt: `Error while adding user "${id}"${
-                            error.message && ':\n' + error.message
-                        }`,
+                        messageTxt: `Error while adding user "${id}"${error.message && ':\n' + error.message}`,
                         headerId: 'users.table.error.add',
                     })
                 )
@@ -247,20 +228,12 @@ const UsersPage: FunctionComponent = () => {
                         color="primary"
                         onClick={useCallback(() => setOpen(true), [])}
                     />
-                    <GridButtonDelete
-                        onClick={() => setShowDeletionDialog(true)}
-                        disabled={deleteUsersDisabled}
-                    />
+                    <GridButtonDelete onClick={() => setShowDeletionDialog(true)} disabled={deleteUsersDisabled} />
                 </GridTable>
                 <Dialog
                     open={open}
                     onClose={handleClose}
-                    PaperComponent={(props) => (
-                        <PaperForm
-                            untypedProps={props}
-                            onSubmit={onSubmitForm}
-                        />
-                    )}
+                    PaperComponent={(props) => <PaperForm untypedProps={props} onSubmit={onSubmitForm} />}
                 >
                     <DialogTitle>
                         <FormattedMessage id="users.form.title" />
@@ -279,9 +252,7 @@ const UsersPage: FunctionComponent = () => {
                                     autoFocus
                                     required
                                     margin="dense"
-                                    label={
-                                        <FormattedMessage id="users.form.field.username.label" />
-                                    }
+                                    label={<FormattedMessage id="users.form.field.username.label" />}
                                     type="text"
                                     fullWidth
                                     variant="standard"

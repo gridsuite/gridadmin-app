@@ -75,12 +75,7 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
         <Dialog
             open={props.open}
             onClose={handleClose}
-            PaperComponent={(props) => (
-                <PaperForm
-                    untypedProps={props}
-                    onSubmit={handleSubmit(onSubmit)}
-                />
-            )}
+            PaperComponent={(props) => <PaperForm untypedProps={props} onSubmit={handleSubmit(onSubmit)} />}
         >
             <DialogTitle>
                 <FormattedMessage id="profiles.form.title" />
@@ -99,9 +94,7 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                             autoFocus
                             required
                             margin="dense"
-                            label={
-                                <FormattedMessage id="profiles.form.field.profilename.label" />
-                            }
+                            label={<FormattedMessage id="profiles.form.field.profilename.label" />}
                             type="text"
                             fullWidth
                             variant="standard"
