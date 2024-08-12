@@ -12,7 +12,7 @@ import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useIntl } from 'react-intl';
 import { DirectoryItemSelector, ElementType } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
-import { DirectorySrv } from '../../../services';
+import { directorySrv } from '../../../services';
 import LinkedPathDisplay from './linked-path-display';
 
 export interface ParameterSelectionProps {
@@ -42,7 +42,8 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
             setSelectedElementName(undefined);
             setParameterLinkValid(undefined);
         } else {
-            DirectorySrv.fetchPath(watchParamId)
+            directorySrv
+                .fetchPath(watchParamId)
                 .then((res: any) => {
                     setParameterLinkValid(true);
                     setSelectedElementName(
