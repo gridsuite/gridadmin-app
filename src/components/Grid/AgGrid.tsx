@@ -22,10 +22,9 @@ import {
 import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { useIntl } from 'react-intl';
-import { LANG_FRENCH } from '@gridsuite/commons-ui';
+import { LANG_FRENCH, useDebugLog } from '@gridsuite/commons-ui';
 import { AG_GRID_LOCALE_FR } from '../../translations/ag-grid/locales';
 import { GridOptions } from 'ag-grid-community';
-import { useDebugRender } from '../../utils/hooks';
 
 const messages: Record<string, Record<string, string>> = {
     [LANG_FRENCH]: AG_GRID_LOCALE_FR,
@@ -70,7 +69,7 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext 
     const theme = useTheme();
 
     const id = useId();
-    useDebugRender(`ag-grid(${id}) ${props.gridId}`);
+    useDebugLog(`ag-grid(${id}) ${props.gridId}`);
 
     const agGridRef = useRef<AgGridReact<TData>>(null);
     const agGridRefContent = agGridRef.current;

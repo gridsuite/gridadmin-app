@@ -35,32 +35,18 @@ export default class UserAdminSvc extends UserAdminComSvc {
 
     public async updateUser(userInfos: UserInfos) {
         console.debug('Updating a user...');
-        await this.backendFetch(`${this.getPrefix(1)}/users/${userInfos.sub}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userInfos),
-        });
+        await this.backendSend(`${this.getPrefix(1)}/users/${userInfos.sub}`, 'PUT', JSON.stringify(userInfos));
     }
 
     public async deleteUsers(subs: string[]) {
         const jsonSubs = JSON.stringify(subs);
         console.debug(`Deleting sub users "${jsonSubs}"...`);
-        await this.backendFetch(`${this.getPrefix(1)}/users`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: jsonSubs,
-        });
+        await this.backendSend(`${this.getPrefix(1)}/users`, 'DELETE', jsonSubs);
     }
 
     public async addUser(sub: string) {
         console.debug(`Creating sub user "${sub}"...`);
-        await this.backendFetch(`${this.getPrefix(1)}/users/${sub}`, {
-            method: 'POST',
-        });
+        await this.backendFetch(`${this.getPrefix(1)}/users/${sub}`, 'POST');
     }
 
     public async fetchProfiles() {
@@ -80,35 +66,16 @@ export default class UserAdminSvc extends UserAdminComSvc {
 
     public async modifyProfile(profileData: UserProfile) {
         console.debug(`Updating a profile...`);
-        await this.backendFetch(`${this.getPrefix(1)}/profiles/${profileData.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(profileData),
-        });
+        await this.backendSend(`${this.getPrefix(1)}/profiles/${profileData.id}`, 'PUT', JSON.stringify(profileData));
     }
 
     public async addProfile(profileData: UserProfile) {
         console.debug(`Creating user profile "${profileData.name}"...`);
-        await this.backendFetch(`${this.getPrefix(1)}/profiles`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(profileData),
-        });
+        await this.backendSend(`${this.getPrefix(1)}/profiles`, 'POST', JSON.stringify(profileData));
     }
 
     public async deleteProfiles(names: string[]) {
         console.debug(`Deleting profiles "${JSON.stringify(names)}"...`);
-        await this.backendFetch(`${this.getPrefix(1)}/profiles`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(names),
-        });
+        await this.backendSend(`${this.getPrefix(1)}/profiles`, 'DELETE', JSON.stringify(names));
     }
 }

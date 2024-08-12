@@ -15,6 +15,7 @@ import {
     getComputedLanguage,
     PARAM_LANGUAGE,
     PARAM_THEME,
+    useDebugLog,
     useSnackMessage,
 } from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
@@ -22,11 +23,10 @@ import { AppState } from '../../redux/reducer';
 import { configNotificationSrv, configSrv } from '../../services';
 import { APP_NAME } from '../../utils/config-params';
 import AppTopBar from './app-top-bar';
-import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
-    useDebugRender('app');
+    useDebugLog('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user ?? null);
