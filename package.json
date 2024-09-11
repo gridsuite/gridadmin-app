@@ -23,7 +23,7 @@
         "@mui/material": "^5.15.14",
         "@mui/x-tree-view": "^6.17.0",
         "@reduxjs/toolkit": "^2.2.3",
-        "ag-grid-community": "^31.1.1",
+        "ag-grid-community": "^32.0.1",
         "ag-grid-react": "^31.2.0",
         "core-js": "^3.36.1",
         "notistack": "^3.0.1",
