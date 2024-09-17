@@ -13,6 +13,7 @@
     "userQuotaPositive": "Le quota utilisateur doit être positif",
 
     "appBar.tabs.users": "Utilisateurs",
+    "appBar.tabs.announcement": "Annonces",
     "appBar.tabs.profiles": "Profils",
     "appBar.tabs.connections": "Connexions",
 
@@ -44,6 +45,19 @@
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
     "users.form.field.username.label": "ID utilisateur",
+
+    "announcements.add": "Nouveau",
+    "announcements.dialog.title": "Annonce",
+    "announcements.dialog.input": "Message à envoyer",
+    "announcements.dialog.duration": "Durée : ",
+    "announcements.error.get": "Erreur lors de la récupération de la liste des annonces",
+    "announcements.error.add": "Erreur lors de la création d'une annonce",
+    "announcements.error.delete": "Erreur lors de la suppression d'une annonce",
+    "duration.days": "Jours",
+    "duration.hours": "Heures",
+    "duration.minutes": "Minutes",
+
+    "YupRequired": "Requis",
 
     "users.form.delete.dialog.title": "Supprimer utilisateur",
     "users.form.delete.dialog.message": "{itemName} va être supprimé.",

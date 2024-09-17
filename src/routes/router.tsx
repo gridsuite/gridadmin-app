@@ -28,10 +28,12 @@ import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
 import { AppDispatch } from '../redux/store';
+import { Announcements } from '../pages/announcements';
 
 export enum MainPaths {
     users = 'users',
     profiles = 'profiles',
+    announcements = 'announcements',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -49,6 +51,13 @@ export function appRoutes(): RouteObject[] {
                     element: <Users />,
                     handle: {
                         appBar_tab: MainPaths.users,
+                    },
+                },
+                {
+                    path: `/${MainPaths.announcements}`,
+                    element: <Announcements />,
+                    handle: {
+                        appBar_tab: MainPaths.announcements,
                     },
                 },
                 {

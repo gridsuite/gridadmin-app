@@ -8,6 +8,7 @@
 import { forwardRef, FunctionComponent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
+import { Announcement } from '@mui/icons-material';
 import { logout, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
@@ -45,6 +46,20 @@ const tabs = new Map<MainPaths, ReactElement>([
             href={`/${MainPaths.profiles}`}
             value={MainPaths.profiles}
             key={`tab-${MainPaths.profiles}`}
+            iconPosition="start"
+            LinkComponent={forwardRef((props, ref) => (
+                <NavLink ref={ref} to={props.href} {...props} />
+            ))}
+        />,
+    ],
+    [
+        MainPaths.announcements,
+        <Tab
+            icon={<Announcement />}
+            label={<FormattedMessage id="appBar.tabs.announcement" />}
+            href={`/${MainPaths.announcements}`}
+            value={MainPaths.announcements}
+            key={`tab-${MainPaths.announcements}`}
             iconPosition="start"
             LinkComponent={forwardRef((props, ref) => (
                 <NavLink ref={ref} to={props.href} {...props} />

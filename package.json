@@ -38,6 +38,7 @@
         "react-window": "^1.8.10",
         "reconnecting-websocket": "^4.4.0",
         "redux": "^5.0.1",
+        "tinyduration": "^3.3.0",
         "type-fest": "^4.14.0",
         "typeface-roboto": "^1.1.13",
         "yup": "^1.4.0"

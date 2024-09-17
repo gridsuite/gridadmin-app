@@ -8,6 +8,7 @@
 import { User } from 'oidc-client';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
+import { AnnouncementServerData, DURATION, MESSAGE } from '../pages/announcements/utils';
 import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
@@ -199,4 +200,40 @@ export function deleteProfiles(names: string[]): Promise<void> {
             console.error(`Error while deleting profiles : ${reason}`);
             throw reason;
         });
+}
+
+export function getAnnouncements(): Promise<AnnouncementServerData[]> {
+    console.debug('Getting list of announcements...');
+    return backendFetchJson(`${USER_ADMIN_URL}/announcements`, {
+        method: 'get',
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while getting the list of announcements : ${reason}`);
+        throw reason;
+    }) as Promise<AnnouncementServerData[]>;
+}
+
+export function createAnnouncement(announcement: { [MESSAGE]: string; [DURATION]: string }) {
+    const body = JSON.stringify(announcement);
+    console.debug('Creating announcement...' + body);
+    return backendFetch(`${USER_ADMIN_URL}/announcements`, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body,
+    }).catch((reason) => {
+        console.error(`Error while creating announcement : ${reason}`);
+        throw reason;
+    });
+}
+
+export function deleteAnnouncement(id: string) {
+    console.debug('Deleting announcement with ID ' + id);
+    return backendFetch(`${USER_ADMIN_URL}/announcements/${id}`, {
+        method: 'delete',
+    }).catch((reason) => {
+        console.error(`Error while deleting announcement : ${reason}`);
+        throw reason;
+    });
 }

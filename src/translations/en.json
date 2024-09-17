@@ -13,6 +13,7 @@
     "userQuotaPositive": "User quota must be positive",
 
     "appBar.tabs.users": "Users",
+    "appBar.tabs.announcement": "Announcements",
     "appBar.tabs.profiles": "Profiles",
     "appBar.tabs.connections": "Connections",
 
@@ -43,6 +44,19 @@
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
+
+    "announcements.add": "New",
+    "announcements.dialog.title": "Announcement",
+    "announcements.dialog.input": "Message to send",
+    "announcements.dialog.duration": "Duration : ",
+    "announcements.error.get": "Error while getting the list of announcements",
+    "announcements.error.add": "Error while creating announcement",
+    "announcements.error.delete": "Error while deleting announcement",
+    "duration.days": "Days",
+    "duration.hours": "Hours",
+    "duration.minutes": "Minutes",
+
+    "YupRequired": "Required",
 
     "users.form.delete.dialog.title": "Delete a user",
     "users.form.delete.multiple.dialog.message": "{itemsCount} users will be deleted.",
