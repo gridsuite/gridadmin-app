@@ -8,12 +8,7 @@
 import { User } from 'oidc-client';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
-import { User } from '../utils/auth';
-import {
-    AnnouncementServerData,
-    DURATION,
-    MESSAGE,
-} from '../pages/announcements/utils';
+import { AnnouncementServerData, DURATION, MESSAGE } from '../pages/announcements/utils';
 import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
@@ -213,17 +208,12 @@ export function getAnnouncements(): Promise<AnnouncementServerData[]> {
         method: 'get',
         cache: 'default',
     }).catch((reason) => {
-        console.error(
-            `Error while getting the list of announcements : ${reason}`
-        );
+        console.error(`Error while getting the list of announcements : ${reason}`);
         throw reason;
     }) as Promise<AnnouncementServerData[]>;
 }
 
-export function createAnnouncement(announcement: {
-    [MESSAGE]: string;
-    [DURATION]: string;
-}) {
+export function createAnnouncement(announcement: { [MESSAGE]: string; [DURATION]: string }) {
     const body = JSON.stringify(announcement);
     console.debug('Creating announcement...' + body);
     return backendFetch(`${USER_ADMIN_URL}/announcements`, {

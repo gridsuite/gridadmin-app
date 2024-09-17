@@ -34,17 +34,11 @@ const Announcements: FunctionComponent = () => {
                     </Button>
                 </CustomToolbar>
             </Grid>
-            <CreateAnnouncementDialog
-                open={openDialog}
-                onClose={() => setOpenDialog(false)}
-            />
+            <CreateAnnouncementDialog open={openDialog} onClose={() => setOpenDialog(false)} />
             <Grid item>
                 <List sx={{ maxWidth: 1400 }}>
                     {announcements.map((announcement) => (
-                        <ListItemAnnouncement
-                            key={announcement[ID]}
-                            {...announcement}
-                        />
+                        <ListItemAnnouncement key={announcement[ID]} {...announcement} />
                     ))}
                 </List>
             </Grid>

@@ -24,11 +24,7 @@ export function useAnnouncements() {
         function getAnnouncements() {
             UserAdminSrv.getAnnouncements()
                 .then((announcements) =>
-                    setAnnouncements(
-                        announcements.map((announcement) =>
-                            fromBackToFront(announcement)
-                        )
-                    )
+                    setAnnouncements(announcements.map((announcement) => fromBackToFront(announcement)))
                 )
                 .catch((error) =>
                     snackError({
@@ -38,9 +34,7 @@ export function useAnnouncements() {
                 );
         }
 
-        const rws = new ReconnectingWebSocket(() =>
-            getUrlWithToken(webSocketUrl)
-        );
+        const rws = new ReconnectingWebSocket(() => getUrlWithToken(webSocketUrl));
 
         rws.addEventListener('open', () => {
             console.info('WebSocket for announcements is connected');

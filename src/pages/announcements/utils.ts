@@ -62,8 +62,7 @@ export const formSchema = yup
 
 function getDurationUnitSchema(otherUnitName1: string, otherUnitName2: string) {
     return yup.number().when([otherUnitName1, otherUnitName2], {
-        is: (v1: number | null, v2: number | null) =>
-            v1 === null && v2 === null,
+        is: (v1: number | null, v2: number | null) => v1 === null && v2 === null,
         then: (schema) => schema.required(),
         otherwise: (schema) => schema.nullable(),
     });
@@ -88,9 +87,7 @@ export interface Announcement extends AnnouncementFormData {
     [DATE]: string;
 }
 
-export function fromBackToFront(
-    serverData: AnnouncementServerData
-): Announcement {
+export function fromBackToFront(serverData: AnnouncementServerData): Announcement {
     // In server side, duration is stored in hours only, so we need to compute the days
     const duration = parse(serverData[DURATION]);
     if (duration[HOURS] && duration[HOURS] >= 24) {

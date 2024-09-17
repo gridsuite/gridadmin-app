@@ -6,29 +6,13 @@
  */
 
 import { FunctionComponent, useCallback } from 'react';
-import {
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Grid,
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DurationInput } from './DurationInput';
-import {
-    SubmitButton,
-    TextInput,
-    useSnackMessage,
-} from '@gridsuite/commons-ui';
-import {
-    AnnouncementFormData,
-    emptyFormData,
-    formSchema,
-    fromFrontToBack,
-    MESSAGE,
-} from './utils';
+import { SubmitButton, TextInput, useSnackMessage, CustomFormProvider } from '@gridsuite/commons-ui';
+import { AnnouncementFormData, emptyFormData, formSchema, fromFrontToBack, MESSAGE } from './utils';
 import { UserAdminSrv } from '../../services';
 
 interface CreateAnnouncementDialogProps {
@@ -36,9 +20,7 @@ interface CreateAnnouncementDialogProps {
     onClose: () => void;
 }
 
-export const CreateAnnouncementDialog: FunctionComponent<
-    CreateAnnouncementDialogProps
-> = (props) => {
+export const CreateAnnouncementDialog: FunctionComponent<CreateAnnouncementDialogProps> = (props) => {
     const { snackError } = useSnackMessage();
 
     const formMethods = useForm<AnnouncementFormData>({
@@ -51,12 +33,11 @@ export const CreateAnnouncementDialog: FunctionComponent<
 
     const onSubmit = useCallback(
         (formData: AnnouncementFormData) => {
-            UserAdminSrv.createAnnouncement(fromFrontToBack(formData)).catch(
-                (error) =>
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'announcements.error.add',
-                    })
+            UserAdminSrv.createAnnouncement(fromFrontToBack(formData)).catch((error) =>
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'announcements.error.add',
+                })
             );
             reset();
             props.onClose();
@@ -66,7 +47,7 @@ export const CreateAnnouncementDialog: FunctionComponent<
 
     return (
         //@ts-ignore because RHF TS is broken
-        <FormProvider validationSchema={formSchema} {...formMethods}>
+        <CustomFormProvider validationSchema={formSchema} {...formMethods}>
             <Dialog open={props.open} onClose={props.onClose}>
                 <DialogTitle>
                     <FormattedMessage id="announcements.dialog.title" />
@@ -88,12 +69,9 @@ export const CreateAnnouncementDialog: FunctionComponent<
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <SubmitButton
-                        onClick={handleSubmit(onSubmit)}
-                        variant="outlined"
-                    />
+                    <SubmitButton onClick={handleSubmit(onSubmit)} variant="outlined" />
                 </DialogActions>
             </Dialog>
-        </FormProvider>
+        </CustomFormProvider>
     );
 };

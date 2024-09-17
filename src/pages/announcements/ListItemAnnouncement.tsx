@@ -5,30 +5,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    IconButton,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-} from '@mui/material';
+import { IconButton, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { FunctionComponent } from 'react';
-import {
-    Announcement,
-    DATE,
-    DAYS,
-    DURATION,
-    HOURS,
-    ID,
-    MESSAGE,
-    MINUTES,
-} from './utils';
+import { Announcement, DATE, DAYS, DURATION, HOURS, ID, MESSAGE, MINUTES } from './utils';
 import { Cancel, Message, ScheduleSend, Timelapse } from '@mui/icons-material';
 import { UserAdminSrv } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 
-export const ListItemAnnouncement: FunctionComponent<Announcement> = (
-    announcement
-) => {
+export const ListItemAnnouncement: FunctionComponent<Announcement> = (announcement) => {
     const { snackError } = useSnackMessage();
 
     return (
@@ -36,12 +20,11 @@ export const ListItemAnnouncement: FunctionComponent<Announcement> = (
             secondaryAction={
                 <IconButton
                     onClick={() =>
-                        UserAdminSrv.deleteAnnouncement(announcement[ID]).catch(
-                            (error) =>
-                                snackError({
-                                    messageTxt: error.message,
-                                    headerId: 'announcements.error.delete',
-                                })
+                        UserAdminSrv.deleteAnnouncement(announcement[ID]).catch((error) =>
+                            snackError({
+                                messageTxt: error.message,
+                                headerId: 'announcements.error.delete',
+                            })
                         )
                     }
                     edge="end"
@@ -55,10 +38,7 @@ export const ListItemAnnouncement: FunctionComponent<Announcement> = (
             <ListItemIcon>
                 <Message />
             </ListItemIcon>
-            <ListItemText
-                sx={{ width: 550, marginRight: 10 }}
-                primary={announcement[MESSAGE]}
-            />
+            <ListItemText sx={{ width: 550, marginRight: 10 }} primary={announcement[MESSAGE]} />
             <ListItemIcon>
                 <ScheduleSend />
             </ListItemIcon>
@@ -69,15 +49,9 @@ export const ListItemAnnouncement: FunctionComponent<Announcement> = (
             <ListItemText
                 sx={{ width: 10 }}
                 primary={
-                    (announcement[DURATION][DAYS]
-                        ? announcement[DURATION][DAYS] + ' d '
-                        : '') +
-                    (announcement[DURATION][HOURS]
-                        ? announcement[DURATION][HOURS] + ' h '
-                        : '') +
-                    (announcement[DURATION][MINUTES]
-                        ? announcement[DURATION][MINUTES] + ' m '
-                        : '')
+                    (announcement[DURATION][DAYS] ? announcement[DURATION][DAYS] + ' d ' : '') +
+                    (announcement[DURATION][HOURS] ? announcement[DURATION][HOURS] + ' h ' : '') +
+                    (announcement[DURATION][MINUTES] ? announcement[DURATION][MINUTES] + ' m ' : '')
                 }
             />
         </ListItem>

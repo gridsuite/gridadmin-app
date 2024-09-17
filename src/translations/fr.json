@@ -57,7 +57,7 @@
     "duration.hours": "Heures",
     "duration.minutes": "Minutes",
 
-    "YupRequired": "Requis"
+    "YupRequired": "Requis",
 
     "users.form.delete.dialog.title": "Supprimer utilisateur",
     "users.form.delete.dialog.message": "{itemName} va être supprimé.",

@@ -45,7 +45,6 @@
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
 
-
     "announcements.add": "New",
     "announcements.dialog.title": "Announcement",
     "announcements.dialog.input": "Message to send",
@@ -57,7 +56,7 @@
     "duration.hours": "Hours",
     "duration.minutes": "Minutes",
 
-    "YupRequired": "Required"
+    "YupRequired": "Required",
 
     "users.form.delete.dialog.title": "Delete a user",
     "users.form.delete.multiple.dialog.message": "{itemsCount} users will be deleted.",

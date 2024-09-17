@@ -42,31 +42,19 @@ export const DurationInput = () => {
                 </Typography>
             </Grid>
             <Grid item xs={4}>
-                <IntegerInput
-                    name={`${DURATION}.${DAYS}`}
-                    label={'duration.days'}
-                    adornment={DaysAdornment}
-                />
+                <IntegerInput name={`${DURATION}.${DAYS}`} label={'duration.days'} adornment={DaysAdornment} />
             </Grid>
             <Grid item xs={1} sx={centerStyle}>
                 <Typography variant="h6">:</Typography>
             </Grid>
             <Grid item xs={4}>
-                <IntegerInput
-                    name={`${DURATION}.${HOURS}`}
-                    label={'duration.hours'}
-                    adornment={HoursAdornment}
-                />
+                <IntegerInput name={`${DURATION}.${HOURS}`} label={'duration.hours'} adornment={HoursAdornment} />
             </Grid>
             <Grid item xs={1} sx={centerStyle}>
                 <Typography variant="h6">:</Typography>
             </Grid>
             <Grid item xs={4}>
-                <IntegerInput
-                    name={`${DURATION}.${MINUTES}`}
-                    label={'duration.minutes'}
-                    adornment={MinutesAdornment}
-                />
+                <IntegerInput name={`${DURATION}.${MINUTES}`} label={'duration.minutes'} adornment={MinutesAdornment} />
             </Grid>
         </Grid>
     );

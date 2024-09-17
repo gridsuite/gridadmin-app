@@ -33,7 +33,7 @@ import { Announcements } from '../pages/announcements';
 export enum MainPaths {
     users = 'users',
     profiles = 'profiles',
-    annoncements = 'annoucements',
+    announcements = 'announcements',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -59,8 +59,8 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.announcements,
                     },
-                 },
-                 {
+                },
+                {
                     path: `/${MainPaths.profiles}`,
                     element: <Profiles />,
                     handle: {
