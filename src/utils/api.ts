@@ -5,32 +5,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { User } from 'oidc-client';
 import { AppState } from '../redux/reducer';
 import { store } from '../redux/store';
 
-export type User = AppState['user'];
 export type Token = string;
 
 export function getToken(user?: User): Token | null {
     return (user ?? getUser())?.id_token ?? null;
 }
 
-export function getUser(): User {
+export function getUser(): User | null {
     const state: AppState = store.getState();
     return state.user;
 }
 
-export function extractUserSub(user: User): Promise<unknown> {
+export function extractUserSub(user: User | null): Promise<unknown> {
     return new Promise((resolve, reject) => {
         const sub = user?.profile?.sub;
         if (!sub) {
-            reject(
-                new Error(
-                    `Fetching access for missing user.profile.sub : ${JSON.stringify(
-                        user
-                    )}`
-                )
-            );
+            reject(new Error(`Fetching access for missing user.profile.sub : ${JSON.stringify(user)}`));
         } else {
             resolve(sub);
         }

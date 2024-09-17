@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import { User } from 'oidc-client';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { User } from '../utils/auth';
@@ -13,6 +14,7 @@ import {
     DURATION,
     MESSAGE,
 } from '../pages/announcements/utils';
+import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 
@@ -27,11 +29,7 @@ export function fetchValidateUser(user: User): Promise<boolean> {
     return extractUserSub(user)
         .then((sub) => {
             console.debug(`Fetching access for user "${sub}"...`);
-            return backendFetch(
-                `${USER_ADMIN_URL}/users/${sub}`,
-                { method: 'head' },
-                getToken(user) ?? undefined
-            );
+            return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'head' }, getToken(user) ?? undefined);
         })
         .then((response: Response) => {
             //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
@@ -48,6 +46,7 @@ export function fetchValidateUser(user: User): Promise<boolean> {
 
 export type UserInfos = {
     sub: string;
+    profileName: string;
     isAdmin: boolean;
 };
 
@@ -65,12 +64,20 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }) as Promise<UserInfos[]>;
 }
 
-export function deleteUser(sub: string): Promise<void> {
-    console.debug(`Deleting sub user "${sub}"...`);
-    return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'delete' })
-        .then((response: Response) => undefined)
+export function udpateUser(userInfos: UserInfos) {
+    console.debug(`Updating a user...`);
+
+    return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userInfos),
+    })
+        .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while deleting the servers data : ${reason}`);
+            console.error(`Error while updating user : ${reason}`);
             throw reason;
         });
 }
@@ -84,7 +91,7 @@ export function deleteUsers(subs: string[]): Promise<void> {
         },
         body: JSON.stringify(subs),
     })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while deleting the servers data : ${reason}`);
             throw reason;
@@ -94,9 +101,108 @@ export function deleteUsers(subs: string[]): Promise<void> {
 export function addUser(sub: string): Promise<void> {
     console.debug(`Creating sub user "${sub}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'post' })
-        .then((response: Response) => undefined)
+        .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while pushing the data : ${reason}`);
+            console.error(`Error while adding user : ${reason}`);
+            throw reason;
+        });
+}
+
+export type UserProfile = {
+    id?: UUID;
+    name: string;
+    allParametersLinksValid?: boolean;
+    loadFlowParameterId?: UUID;
+    maxAllowedCases?: number;
+    maxAllowedBuilds?: number;
+};
+
+export function fetchProfiles(): Promise<UserProfile[]> {
+    console.debug(`Fetching list of profiles...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching list of profiles : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile[]>;
+}
+
+export function fetchProfilesWithoutValidityCheck(): Promise<UserProfile[]> {
+    console.debug(`Fetching list of profiles...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles?checkLinksValidity=false`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching list of profiles (without check) : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile[]>;
+}
+
+export function getProfile(profileId: UUID): Promise<UserProfile> {
+    console.debug(`Fetching a profile...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/profiles/${profileId}`, {
+        headers: {
+            Accept: 'application/json',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching profile : ${reason}`);
+        throw reason;
+    }) as Promise<UserProfile>;
+}
+
+export function modifyProfile(profileData: UserProfile) {
+    console.debug(`Updating a profile...`);
+
+    return backendFetch(`${USER_ADMIN_URL}/profiles/${profileData.id}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while updating the data : ${reason}`);
+            throw reason;
+        });
+}
+
+export function addProfile(profileData: UserProfile): Promise<void> {
+    console.debug(`Creating user profile "${profileData.name}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while pushing adding profile : ${reason}`);
+            throw reason;
+        });
+}
+
+export function deleteProfiles(names: string[]): Promise<void> {
+    console.debug(`Deleting profiles "${JSON.stringify(names)}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/profiles`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(names),
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while deleting profiles : ${reason}`);
             throw reason;
         });
 }

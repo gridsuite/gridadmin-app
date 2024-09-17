@@ -11,11 +11,7 @@ export type * from './api';
 
 export function getWsBase(): string {
     // We use the `baseURI` (from `<base/>` in index.html) to build the URL, which is corrected by httpd/nginx
-    return (
-        document.baseURI
-            .replace(/^http(s?):\/\//, 'ws$1://')
-            .replace(/\/+$/, '') + process.env.REACT_APP_WS_GATEWAY
-    );
+    return document.baseURI.replace(/^http(s?):\/\//, 'ws$1://').replace(/\/+$/, '') + import.meta.env.VITE_WS_GATEWAY;
 }
 
 export function getUrlWithToken(baseUrl: string): string {

@@ -5,11 +5,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-export function useDebugRender(label: string) {
-    // uncomment when you want the output in the console
-    /*if (import.meta.env.DEV) {
-        label = `${label} render`;
-        console.count?.(label);
-        console.timeStamp?.(label);
-    }*/
-}
+export { default as Profiles } from './profiles-page';

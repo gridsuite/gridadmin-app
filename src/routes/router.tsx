@@ -5,19 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    PropsWithChildren,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import {
-    AuthenticationRouter,
-    getPreLoginPath,
-    initializeAuthenticationProd,
-} from '@gridsuite/commons-ui';
+import { AuthenticationRouter, getPreLoginPath, initializeAuthenticationProd } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
     Navigate,
@@ -28,21 +18,22 @@ import {
     useMatch,
     useNavigate,
 } from 'react-router-dom';
-import { UserManager } from 'oidc-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
-import { Users } from '../pages';
+import { Profiles, Users } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
+import { AppDispatch } from '../redux/store';
 import { Announcements } from '../pages/announcements';
 
 export enum MainPaths {
     users = 'users',
-    announcements = 'announcements',
+    profiles = 'profiles',
+    annoncements = 'annoucements',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -68,6 +59,13 @@ export function appRoutes(): RouteObject[] {
                     handle: {
                         appBar_tab: MainPaths.announcements,
                     },
+                 },
+                 {
+                    path: `/${MainPaths.profiles}`,
+                    element: <Profiles />,
+                    handle: {
+                        appBar_tab: MainPaths.profiles,
+                    },
                 },
             ],
         },
@@ -90,16 +88,10 @@ export function appRoutes(): RouteObject[] {
 const AuthRouter: FunctionComponent<{
     userManager: Parameters<typeof AuthenticationRouter>[0]['userManager'];
 }> = (props, context) => {
-    const signInCallbackError = useSelector(
-        (state: AppState) => state.signInCallbackError
-    );
-    const authenticationRouterError = useSelector(
-        (state: AppState) => state.authenticationRouterError
-    );
-    const showAuthenticationRouterLogin = useSelector(
-        (state: AppState) => state.showAuthenticationRouterLogin
-    );
-    const dispatch = useDispatch();
+    const signInCallbackError = useSelector((state: AppState) => state.signInCallbackError);
+    const authenticationRouterError = useSelector((state: AppState) => state.authenticationRouterError);
+    const showAuthenticationRouterLogin = useSelector((state: AppState) => state.showAuthenticationRouterLogin);
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -120,11 +112,9 @@ const AuthRouter: FunctionComponent<{
  * Manage authentication state.
  * <br/>Sub-component because `useMatch` must be under router context.
  */
-const AppAuthStateWithRouterLayer: FunctionComponent<
-    PropsWithChildren<{ layout: App }>
-> = (props, context) => {
+const AppAuthStateWithRouterLayer: FunctionComponent<PropsWithChildren<{ layout: App }>> = (props, context) => {
     const AppRouterLayout = props.layout;
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     // Can't use lazy initializer because useMatch is a hook
     const [initialMatchSilentRenewCallbackUrl] = useState(
@@ -139,33 +129,27 @@ const AppAuthStateWithRouterLayer: FunctionComponent<
     );
 
     useEffect(() => {
-        AppsMetadataSrv.fetchAuthorizationCodeFlowFeatureFlag()
-            .then((authorizationCodeFlowEnabled) =>
-                initializeAuthenticationProd(
-                    dispatch,
-                    initialMatchSilentRenewCallbackUrl != null,
-                    fetch('idpSettings.json'),
-                    UserAdminSrv.fetchValidateUser,
-                    authorizationCodeFlowEnabled,
-                    initialMatchSignInCallbackUrl != null
-                )
-            )
-            .then((userManager: UserManager | undefined) => {
+        // need subfunction when async as suggested by rule react-hooks/exhaustive-deps
+        (async function initializeAuthentication() {
+            try {
                 dispatch(
-                    updateUserManagerDestructured(userManager ?? null, null)
+                    updateUserManagerDestructured(
+                        (await initializeAuthenticationProd(
+                            dispatch,
+                            initialMatchSilentRenewCallbackUrl != null,
+                            AppsMetadataSrv.fetchIdpSettings,
+                            UserAdminSrv.fetchValidateUser,
+                            initialMatchSignInCallbackUrl != null
+                        )) ?? null,
+                        null
+                    )
                 );
-            })
-            .catch((error: any) => {
-                dispatch(
-                    updateUserManagerDestructured(null, getErrorMessage(error))
-                );
-            });
+            } catch (error: unknown) {
+                dispatch(updateUserManagerDestructured(null, getErrorMessage(error)));
+            }
+        })();
         // Note: initialize and initialMatchSilentRenewCallbackUrl & initialMatchSignInCallbackUrl won't change
-    }, [
-        dispatch,
-        initialMatchSilentRenewCallbackUrl,
-        initialMatchSignInCallbackUrl,
-    ]);
+    }, [dispatch, initialMatchSilentRenewCallbackUrl, initialMatchSignInCallbackUrl]);
 
     return <AppRouterLayout>{props.children}</AppRouterLayout>;
 };
@@ -186,9 +170,7 @@ export const AppWithAuthRouter: FunctionComponent<{
                           /*new react-router v6 api*/
                           {
                               element: (
-                                  <AppAuthStateWithRouterLayer
-                                      layout={props.layout}
-                                  >
+                                  <AppAuthStateWithRouterLayer layout={props.layout}>
                                       <Outlet />
                                   </AppAuthStateWithRouterLayer>
                               ),
@@ -199,9 +181,7 @@ export const AppWithAuthRouter: FunctionComponent<{
                           /*legacy component router*/
                           {
                               path: '*',
-                              Component: () => (
-                                  <LegacyAuthRouter layout={props.layout} />
-                              ),
+                              Component: () => <LegacyAuthRouter layout={props.layout} />,
                           },
                       ] as RouteObject[]),
                 { basename: props.basename }

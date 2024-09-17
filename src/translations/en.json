@@ -5,16 +5,19 @@
     "close": "Close",
     "ok": "OK",
     "cancel": "Cancel",
+    "validate": "Validate",
     "parameters": "Parameters",
+    "nameEmpty": "The name is empty",
     "paramsChangingError": "An error occurred when changing the parameters",
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
+    "userQuotaPositive": "User quota must be positive",
 
     "appBar.tabs.users": "Users",
     "appBar.tabs.announcement": "Announcements",
+    "appBar.tabs.profiles": "Profiles",
     "appBar.tabs.connections": "Connections",
 
     "table.noRows": "No data",
-    "table.id": "ID",
     "table.error.retrieve": "Error while retrieving data",
     "table.toolbar.reset": "Reset",
     "table.toolbar.reset.label": "Reset table columns & filters",
@@ -26,16 +29,22 @@
     "table.bool.no": "No",
     "table.bool.unknown": "Unknown",
 
-    "users.table.id.description": "Identifiant de l'utilisateur",
+    "users.table.id": "ID",
+    "users.table.id.description": "User identifier",
     "users.table.isAdmin": "Admin",
     "users.table.isAdmin.description": "The users is an administrator of GridSuite",
+    "users.table.profileName": "Profile",
+    "users.table.profileName.description": "The user's profile",
     "users.table.error.delete": "Error while deleting user",
     "users.table.error.add": "Error while adding user",
     "users.table.toolbar.add": "Add user",
+    "users.table.profile.none": "<None>",
+    "users.table.error.profiles": "Error while fetching profiles",
     "users.table.toolbar.add.label": "Add a user",
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
+
 
     "announcements.add": "New",
     "announcements.dialog.title": "Announcement",
@@ -49,4 +58,38 @@
     "duration.minutes": "Minutes",
 
     "YupRequired": "Required"
+
+    "users.form.delete.dialog.title": "Delete a user",
+    "users.form.delete.multiple.dialog.message": "{itemsCount} users will be deleted.",
+    "users.form.delete.dialog.message": "{itemName} will be deleted.",
+    "users.form.delete.multiple.dialog.title": "Delete {itemsCount} users",
+
+    "profiles.table.toolbar.add": "Add profile",
+    "profiles.table.toolbar.add.label": "Add a profile",
+    "profiles.form.title": "Add a profile",
+    "profiles.form.content": "Please fill in new profile data.",
+    "profiles.form.field.profilename.label": "Profile name",
+    "profiles.table.id": "Name",
+    "profiles.table.id.description": "Profile name",
+    "profiles.table.validity": "Parameters links validity",
+    "profiles.table.validity.description": "Are all parameters links valid?",
+    "profiles.table.error.add": "Error while adding profile",
+    "profiles.table.error.delete": "Error while deleting profile",
+    "profiles.table.integrity.error.delete": "Error while deleting profile : a profile is still referenced by users",
+
+    "profiles.form.modification.title": "Edit profile",
+    "profiles.form.modification.defaultParameters": "Default parameters",
+    "profiles.form.modification.userQuotas": "User quotas",
+    "profiles.form.modification.numberOfCasesOrStudies": "Number of cases or studies",
+    "profiles.form.modification.numberOfNodeBuilds": "Number of builds per study",
+    "profiles.form.modification.parameter.choose.tooltip": "Choose parameters",
+    "profiles.form.modification.parameter.reset.tooltip": "Set undefined parameters",
+    "profiles.form.modification.parameterSelection.dialog.title": "Choose parameters",
+    "profiles.form.modification.parameterSelection.dialog.message": "Please choose parameters",
+    "profiles.form.modification.loadflow.name": "Loadflow",
+    "profiles.form.modification.readError": "Error while reading the profile",
+    "profiles.form.modification.updateError": "Error while updating the profile",
+
+    "linked.path.display.noLink": "no parameters selected.",
+    "linked.path.display.invalidLink": "invalid parameters link."
 }
