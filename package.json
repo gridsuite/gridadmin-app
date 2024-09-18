@@ -48,6 +48,7 @@
         "build": "tsc && vite build",
         "serve": "vite preview",
         "test": "jest",
+        "test:coverage": "jest --coverage",
         "lint": "eslint . --ext js,mjs,jsx,ts,mts,tsx --max-warnings 0"
     },
     "devDependencies": {
