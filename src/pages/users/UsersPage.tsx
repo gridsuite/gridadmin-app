@@ -32,7 +32,7 @@ import {
     TextFilterParams,
 } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
-import DeleteUserDialog from './delete-user-dialog';
+import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -276,11 +276,12 @@ const UsersPage: FunctionComponent = () => {
                     </DialogActions>
                 </Dialog>
 
-                <DeleteUserDialog
+                <DeleteConfirmationDialog
                     open={showDeletionDialog}
                     setOpen={setShowDeletionDialog}
-                    usersInfos={rowsSelection}
-                    deleteUsers={deleteUsers}
+                    itemType={intl.formatMessage({ id: 'form.delete.dialog.user' })}
+                    itemNames={rowsSelection.map((user) => user.sub)}
+                    deleteFunc={deleteUsers}
                 />
             </Grid>
         </Grid>
