@@ -8,11 +8,7 @@ import { Provider } from 'react-redux';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
 import App from './app';
 import { store } from '../../redux/store';
-import {
-    createTheme,
-    StyledEngineProvider,
-    ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
 import { CssBaseline } from '@mui/material';
 import { appRoutes } from '../../routes';
@@ -37,9 +33,7 @@ it.skip('renders', async () => {
         throw new Error('No container was defined');
     }
     const root = createRoot(container);
-    const AppWrapperRouterLayout: FunctionComponent<
-        PropsWithChildren<{}>
-    > = () => (
+    const AppWrapperRouterLayout: FunctionComponent<PropsWithChildren<{}>> = () => (
         <IntlProvider locale="en">
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={createTheme({})}>

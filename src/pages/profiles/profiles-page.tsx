@@ -18,8 +18,7 @@ import AddProfileDialog from './add-profile-dialog';
 const ProfilesPage: FunctionComponent = () => {
     const gridRef = useRef<GridTableRef<UserProfile>>(null);
     const gridContext = gridRef.current?.context;
-    const [openProfileModificationDialog, setOpenProfileModificationDialog] =
-        useState(false);
+    const [openProfileModificationDialog, setOpenProfileModificationDialog] = useState(false);
     const [editingProfileId, setEditingProfileId] = useState<UUID>();
 
     const [openAddProfileDialog, setOpenAddProfileDialog] = useState(false);
@@ -34,15 +33,12 @@ const ProfilesPage: FunctionComponent = () => {
         handleCloseProfileModificationDialog();
     }, [gridContext, handleCloseProfileModificationDialog]);
 
-    const onRowDoubleClicked = useCallback(
-        (event: RowDoubleClickedEvent<UserProfile>) => {
-            if (event.data) {
-                setEditingProfileId(event.data.id);
-                setOpenProfileModificationDialog(true);
-            }
-        },
-        []
-    );
+    const onRowDoubleClicked = useCallback((event: RowDoubleClickedEvent<UserProfile>) => {
+        if (event.data) {
+            setEditingProfileId(event.data.id);
+            setOpenProfileModificationDialog(true);
+        }
+    }, []);
 
     return (
         <Grid item container direction="column" spacing={2} component="section">
@@ -58,11 +54,7 @@ const ProfilesPage: FunctionComponent = () => {
                     onRowDoubleClicked={onRowDoubleClicked}
                     setOpenAddProfileDialog={setOpenAddProfileDialog}
                 />
-                <AddProfileDialog
-                    gridRef={gridRef}
-                    open={openAddProfileDialog}
-                    setOpen={setOpenAddProfileDialog}
-                />
+                <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />
             </Grid>
         </Grid>
     );

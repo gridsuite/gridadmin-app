@@ -1,48 +1,61 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v[0-9]*'
+  pull_request:
 
 jobs:
-    build-and-deploy:
-        runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-              with:
-                  persist-credentials: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
-            - name: Parse tag
-              id: vars
-              run: echo ::set-output name=tag::${GITHUB_REF_NAME#v}
+      - name: Parse tag
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF_NAME#v}
 
-            - name: Install and Build
-              run: |
-                  npm install
-                  npm run lint
-                  npm run test
-                  npm run build
+      - name: Install and Build
+        run: |
+          npm install
+          npm run lint
+          npm run test:coverage
+          npm run build
 
-            - name: Build and publish Docker image - Main
-              if: github.ref == 'refs/heads/main'
-              uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
-              with:
-                  name: gridsuite/gridadmin-app
-                  username: gridsuiteci
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-            - name: Build and publish Docker image - Tag
-              if: startsWith(github.ref, 'refs/tags/')
-              uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
-              with:
-                  name: gridsuite/gridadmin-app
-                  username: gridsuiteci
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
-                  tags: ${{ steps.vars.outputs.tag }}
+      - name: Build and publish Docker image - Main
+        if: github.ref == 'refs/heads/main'
+        uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
+        with:
+          name: gridsuite/gridadmin-app
+          username: gridsuiteci
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Broadcast update event
-              if: github.ref == 'refs/heads/main'
-              uses: gridsuite/broadcast-event@main
-              with:
-                  token: ${{ secrets.REPO_ACCESS_TOKEN }}
-                  event-type: gridadmin_app_updated
+      - name: Build and publish Docker image - Tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
+        with:
+          name: gridsuite/gridadmin-app
+          username: gridsuiteci
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          tags: ${{ steps.vars.outputs.tag }}
+
+      - name: Broadcast update event
+        if: github.ref == 'refs/heads/main'
+        uses: gridsuite/broadcast-event@main
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          event-type: gridadmin_app_updated

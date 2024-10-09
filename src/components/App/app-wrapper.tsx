@@ -8,27 +8,22 @@
 import App from './app';
 import { FunctionComponent, useMemo } from 'react';
 import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
-import {
-    createTheme,
-    StyledEngineProvider,
-    Theme,
-    ThemeProvider,
-} from '@mui/material/styles';
+import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
 import {
-    card_error_boundary_en,
-    card_error_boundary_fr,
+    cardErrorBoundaryEn,
+    cardErrorBoundaryFr,
     CardErrorBoundary,
     GsLangUser,
     GsTheme,
     LANG_ENGLISH,
     LANG_FRENCH,
     LIGHT_THEME,
-    login_en,
-    login_fr,
+    loginEn,
+    loginFr,
     SnackbarProvider,
-    top_bar_en,
-    top_bar_fr,
+    topBarEn,
+    topBarFr,
 } from '@gridsuite/commons-ui';
 import { IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
@@ -103,15 +98,15 @@ const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {
 const messages: Record<GsLangUser, IntlConfig['messages']> = {
     en: {
         ...messages_en,
-        ...login_en,
-        ...top_bar_en,
-        ...card_error_boundary_en,
+        ...loginEn,
+        ...topBarEn,
+        ...cardErrorBoundaryEn,
     },
     fr: {
         ...messages_fr,
-        ...login_fr,
-        ...top_bar_fr,
-        ...card_error_boundary_fr,
+        ...loginFr,
+        ...topBarFr,
+        ...cardErrorBoundaryFr,
     },
 };
 
@@ -121,20 +116,11 @@ const basename = new URL(document.baseURI ?? '').pathname;
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
  */
 const AppWrapperRouterLayout: typeof App = (props, context) => {
-    const computedLanguage = useSelector(
-        (state: AppState) => state.computedLanguage
-    );
+    const computedLanguage = useSelector((state: AppState) => state.computedLanguage);
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
-    const themeCompiled = useMemo(
-        () => getMuiTheme(theme, computedLanguage),
-        [computedLanguage, theme]
-    );
+    const themeCompiled = useMemo(() => getMuiTheme(theme, computedLanguage), [computedLanguage, theme]);
     return (
-        <IntlProvider
-            locale={computedLanguage}
-            defaultLocale={LANG_ENGLISH}
-            messages={messages[computedLanguage]}
-        >
+        <IntlProvider locale={computedLanguage} defaultLocale={LANG_ENGLISH} messages={messages[computedLanguage]}>
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={themeCompiled}>
                     <SnackbarProvider hideIconVariant={false}>

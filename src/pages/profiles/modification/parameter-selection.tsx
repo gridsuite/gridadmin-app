@@ -24,13 +24,10 @@ export interface ParameterSelectionProps {
     parameterFormId: string;
 }
 
-const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (
-    props
-) => {
+const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) => {
     const intl = useIntl();
 
-    const [openDirectorySelector, setOpenDirectorySelector] =
-        useState<boolean>(false);
+    const [openDirectorySelector, setOpenDirectorySelector] = useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
     const [parameterLinkValid, setParameterLinkValid] = useState<boolean>();
     const watchParamId = useWatch({
@@ -88,11 +85,7 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (
     return (
         <Grid container columns={24} alignItems={'center'}>
             <Grid item xs={1}>
-                <IconButton
-                    edge="start"
-                    onClick={handleResetParameter}
-                    disableRipple={watchParamId === undefined}
-                >
+                <IconButton edge="start" onClick={handleResetParameter} disableRipple={watchParamId === undefined}>
                     <Tooltip
                         title={intl.formatMessage({
                             id: 'profiles.form.modification.parameter.reset.tooltip',

@@ -18,21 +18,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import {
-    AppBar,
-    Box,
-    Button as MuiButton,
-    ButtonProps,
-    ButtonTypeMap,
-    ExtendButtonBaseTypeMap,
-    Grid,
-    Toolbar,
-} from '@mui/material';
-import {
-    OverridableComponent,
-    OverridableTypeMap,
-    OverrideProps,
-} from '@mui/material/OverridableComponent';
+import { AppBar, Box, Button, ButtonProps, Grid, Toolbar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
@@ -43,14 +29,9 @@ type GridTableExposed = {
     refresh: () => Promise<void>;
 };
 
-export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<
-    TData,
-    TContext & GridTableExposed
->;
+export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<TData, TContext & GridTableExposed>;
 
-export interface GridTableProps<TData>
-    extends Omit<GridOptions<TData>, 'rowData'>,
-        PropsWithChildren<{}> {
+export interface GridTableProps<TData> extends Omit<GridOptions<TData>, 'rowData'>, PropsWithChildren<{}> {
     //accessRef: RefObject<GridTableRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
 }
@@ -62,36 +43,21 @@ export interface GridTableProps<TData>
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
 
-interface GridTableWithRef
-    extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
+interface GridTableWithRef extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
     <TData, TContext extends {}>(
-        props: PropsWithoutRef<PropsWithChildren<GridTableProps<TData>>> &
-            RefAttributes<GridTableRef<TData, TContext>>
-    ): ReturnType<
-        ForwardRefComponent<
-            GridTableProps<TData>,
-            GridTableRef<TData, TContext>
-        >
-    >;
+        props: PropsWithoutRef<PropsWithChildren<GridTableProps<TData>>> & RefAttributes<GridTableRef<TData, TContext>>
+    ): ReturnType<ForwardRefComponent<GridTableProps<TData>, GridTableRef<TData, TContext>>>;
 }
 
 /**
  * Common part for a Grid with toolbar
  * @param props
  */
-export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
-    TData,
-    TContext extends {} = {}
->(
+export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TData, TContext extends {} = {}>(
     props: PropsWithChildren<GridTableProps<TData>>,
     gridRef: ForwardedRef<GridTableRef<TData, TContext>>
 ): ReactNode {
-    const {
-        children: toolbarContent,
-        context,
-        dataLoader,
-        ...agGridProps
-    } = props;
+    const { children: toolbarContent, context, dataLoader, ...agGridProps } = props;
     const { snackError } = useSnackMessage();
 
     const [data, setData] = useState<TData[] | null>(null);
@@ -109,12 +75,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<
     );
 
     return (
-        <Grid
-            container
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="stretch"
-        >
+        <Grid container direction="column" justifyContent="flex-start" alignItems="stretch">
             <Grid item xs="auto">
                 <AppBar position="static" color="default">
                     <Toolbar
@@ -166,54 +127,41 @@ export type GridButtonProps = Omit<
     labelId: string;
 };
 
-/* Taken from MUI/materials-ui codebase
- * Mui expose button's defaultComponent as "button" and button component as "a"... but generate in reality a <button/>
- * Redefine type to cast it.
- */
-type ExtendButtonBaseOverride<M extends OverridableTypeMap> = ((
-    props: OverrideProps<ExtendButtonBaseTypeMap<M>, 'button'>
-) => JSX.Element) &
-    OverridableComponent<ExtendButtonBaseTypeMap<M>>;
-const Button = MuiButton as ExtendButtonBaseOverride<ButtonTypeMap>;
-
-export const GridButton = forwardRef<HTMLButtonElement, GridButtonProps>(
-    function GridButton(props, ref) {
-        const intl = useIntl();
-        const buttonId = useId();
-        const { textId, labelId, ...buttonProps } = props;
-        return (
-            <Button
-                variant="outlined"
-                {...(buttonProps ?? {})}
-                aria-label={intl.formatMessage({ id: props.labelId })}
-                aria-disabled={props.disabled}
-                id={buttonId}
-                ref={ref}
-                size="small"
-            >
-                {intl.formatMessage({ id: props.textId })}
-            </Button>
-        );
-    }
-);
+export const GridButton = forwardRef<HTMLButtonElement, GridButtonProps>(function GridButton(props, ref) {
+    const intl = useIntl();
+    const buttonId = useId();
+    const { textId, labelId, ...buttonProps } = props;
+    return (
+        <Button
+            variant="outlined"
+            {...(buttonProps ?? {})}
+            aria-label={intl.formatMessage({ id: props.labelId })}
+            aria-disabled={props.disabled}
+            id={buttonId}
+            ref={ref}
+            size="small"
+        >
+            {intl.formatMessage({ id: props.textId })}
+        </Button>
+    );
+});
 
 function noClickProps() {
     console.error('GridButtonDelete.onClick not defined');
 }
 
-export const GridButtonDelete = forwardRef<
-    HTMLButtonElement,
-    Partial<Omit<GridButtonProps, 'color'>>
->(function GridButtonDelete(props, ref) {
-    return (
-        <GridButton
-            textId="table.toolbar.delete"
-            labelId="table.toolbar.delete.label"
-            onClick={noClickProps}
-            startIcon={<Delete fontSize="small" />}
-            {...props}
-            ref={ref}
-            color="error"
-        />
-    );
-});
+export const GridButtonDelete = forwardRef<HTMLButtonElement, Partial<Omit<GridButtonProps, 'color'>>>(
+    function GridButtonDelete(props, ref) {
+        return (
+            <GridButton
+                textId="table.toolbar.delete"
+                labelId="table.toolbar.delete.label"
+                onClick={noClickProps}
+                startIcon={<Delete fontSize="small" />}
+                {...props}
+                ref={ref}
+                color="error"
+            />
+        );
+    }
+);

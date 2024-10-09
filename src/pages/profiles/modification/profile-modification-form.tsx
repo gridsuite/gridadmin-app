@@ -13,43 +13,40 @@ import React, { FunctionComponent } from 'react';
 
 export const PROFILE_NAME = 'name';
 export const LF_PARAM_ID = 'lfParamId';
-export const USER_QUOTAS = 'userQuotas';
+export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
+export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
 
 const ProfileModificationForm: FunctionComponent = () => {
     return (
         <Grid container spacing={2} marginTop={'auto'}>
             <Grid item xs={12}>
-                <TextInput
-                    name={PROFILE_NAME}
-                    label={'profiles.table.id'}
-                    clearable={false}
-                />
+                <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={false} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
-                    <FormattedMessage
-                        id={'profiles.form.modification.defaultParameters'}
-                    />
+                    <FormattedMessage id={'profiles.form.modification.defaultParameters'} />
                 </h3>
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
-                    elementType={ElementType.LOADFLOW_PARAMETERS}
-                    parameterFormId={LF_PARAM_ID}
-                />
+                <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LF_PARAM_ID} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
-                    <FormattedMessage
-                        id={'profiles.form.modification.userQuotas'}
-                    />
+                    <FormattedMessage id={'profiles.form.modification.userQuotas'} />
                 </h3>
             </Grid>
-            <Grid item xs={12}>
-                <Grid item xs={5}>
+            <Grid container spacing={2}>
+                <Grid item xs={4}>
                     <IntegerInput
-                        name={USER_QUOTAS}
+                        name={USER_QUOTA_CASE_NB}
                         label="profiles.form.modification.numberOfCasesOrStudies"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_BUILD_NB}
+                        label="profiles.form.modification.numberOfNodeBuilds"
                         clearable={true}
                     />
                 </Grid>

@@ -15,9 +15,7 @@ export interface LinkedPathDisplayProps {
     linkValidity?: boolean;
 }
 
-const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (
-    props
-) => {
+const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (props) => {
     const intl = useIntl();
     const theme = useTheme();
 
@@ -25,10 +23,7 @@ const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (
         <Typography
             sx={{
                 fontWeight: 'bold',
-                color:
-                    props.linkValidity === false
-                        ? theme.palette.error.main
-                        : undefined,
+                color: props.linkValidity === false ? theme.palette.error.main : undefined,
             }}
         >
             {intl.formatMessage({

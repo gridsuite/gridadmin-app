@@ -11,15 +11,11 @@ import { Action } from 'redux';
 import { AppState } from './reducer';
 
 export const UPDATE_USER_MANAGER_STATE = 'UPDATE_USER_MANAGER_STATE';
-export type UserManagerAction = Readonly<
-    Action<typeof UPDATE_USER_MANAGER_STATE>
-> & {
+export type UserManagerAction = Readonly<Action<typeof UPDATE_USER_MANAGER_STATE>> & {
     userManager: UserManagerState;
 };
 
-export function updateUserManager(
-    userManager: UserManagerState
-): UserManagerAction {
+export function updateUserManager(userManager: UserManagerState): UserManagerAction {
     return { type: UPDATE_USER_MANAGER_STATE, userManager };
 }
 
@@ -31,24 +27,20 @@ export function updateUserManagerDestructured(
 }
 
 export const UPDATE_USER_MANAGER_INSTANCE = 'UPDATE_USER_MANAGER_INSTANCE';
-export type UserManagerInstanceAction = Readonly<
-    Action<typeof UPDATE_USER_MANAGER_INSTANCE>
-> & { instance: UserManagerState['instance'] };
+export type UserManagerInstanceAction = Readonly<Action<typeof UPDATE_USER_MANAGER_INSTANCE>> & {
+    instance: UserManagerState['instance'];
+};
 
-export function updateUserManagerInstance(
-    instance: UserManagerState['instance']
-): UserManagerInstanceAction {
+export function updateUserManagerInstance(instance: UserManagerState['instance']): UserManagerInstanceAction {
     return { type: UPDATE_USER_MANAGER_INSTANCE, instance };
 }
 
 export const UPDATE_USER_MANAGER_ERROR = 'UPDATE_USER_MANAGER_ERROR';
-export type UserManagerErrorAction = Readonly<
-    Action<typeof UPDATE_USER_MANAGER_ERROR>
-> & { error: UserManagerState['error'] };
+export type UserManagerErrorAction = Readonly<Action<typeof UPDATE_USER_MANAGER_ERROR>> & {
+    error: UserManagerState['error'];
+};
 
-export function updateUserManagerError(
-    error: UserManagerState['error']
-): UserManagerErrorAction {
+export function updateUserManagerError(error: UserManagerState['error']): UserManagerErrorAction {
     return { type: UPDATE_USER_MANAGER_ERROR, error };
 }
 
@@ -71,15 +63,11 @@ export function selectLanguage(language: AppState['language']): LanguageAction {
 }
 
 export const SELECT_COMPUTED_LANGUAGE = 'SELECT_COMPUTED_LANGUAGE';
-export type ComputedLanguageAction = Readonly<
-    Action<typeof SELECT_COMPUTED_LANGUAGE>
-> & {
+export type ComputedLanguageAction = Readonly<Action<typeof SELECT_COMPUTED_LANGUAGE>> & {
     computedLanguage: AppState['computedLanguage'];
 };
 
-export function selectComputedLanguage(
-    computedLanguage: AppState['computedLanguage']
-): ComputedLanguageAction {
+export function selectComputedLanguage(computedLanguage: AppState['computedLanguage']): ComputedLanguageAction {
     return {
         type: SELECT_COMPUTED_LANGUAGE,
         computedLanguage: computedLanguage,

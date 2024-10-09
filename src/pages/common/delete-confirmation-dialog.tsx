@@ -6,26 +6,19 @@
  */
 
 import { FunctionComponent, useCallback } from 'react';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { UserInfos } from '../../services';
 
-export interface DeleteUserDialogProps {
+export interface DeleteConfirmationDialogProps {
     open: boolean;
     setOpen: (open: boolean) => void;
-    usersInfos: UserInfos[];
-    deleteUsers: () => void;
+    itemType: string;
+    itemNames: string[];
+    deleteFunc: () => void;
 }
 
-const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
-    const { open, setOpen, deleteUsers, usersInfos } = props;
+const DeleteConfirmationDialog: FunctionComponent<DeleteConfirmationDialogProps> = (props) => {
+    const { open, setOpen, itemType, itemNames, deleteFunc } = props;
     const intl = useIntl();
 
     const handleClose = useCallback(() => {
@@ -33,40 +26,37 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
     }, [setOpen]);
 
     const buildTitle = useCallback(
-        (users: UserInfos[]) => {
-            const hasMultipleItems = users.length > 1;
+        (itemType: string, itemNames: string[]) => {
+            const hasMultipleItems = itemNames.length > 1;
             const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multiple.dialog.title'
-                    : 'users.form.delete.dialog.title',
+                id: hasMultipleItems ? 'form.delete.multiple.dialog.title' : 'form.delete.dialog.title',
             };
             return intl.formatMessage(
                 descriptor,
-                hasMultipleItems ? { itemsCount: users.length } : undefined
+                hasMultipleItems ? { itemType: itemType, itemsCount: itemNames.length } : { itemType: itemType }
             );
         },
         [intl]
     );
     const onSubmit = useCallback(() => {
-        deleteUsers();
+        deleteFunc();
         setOpen(false);
-    }, [deleteUsers, setOpen]);
+    }, [deleteFunc, setOpen]);
 
     const buildContent = useCallback(
-        (users: UserInfos[]) => {
-            const hasMultipleItems = users.length > 1;
+        (itemType: string, itemNames: string[]) => {
+            const hasMultipleItems = itemNames.length > 1;
             const descriptor = {
-                id: hasMultipleItems
-                    ? 'users.form.delete.multiple.dialog.message'
-                    : 'users.form.delete.dialog.message',
+                id: hasMultipleItems ? 'form.delete.multiple.dialog.message' : 'form.delete.dialog.message',
             };
             if (hasMultipleItems) {
                 return intl.formatMessage(descriptor, {
-                    itemsCount: users.length,
+                    itemType: itemType,
+                    itemsCount: itemNames.length,
                 });
             }
             return intl.formatMessage(descriptor, {
-                itemName: users.length === 1 && users[0].sub,
+                itemName: itemNames.length === 1 && itemNames[0],
             });
         },
         [intl]
@@ -74,11 +64,9 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
 
     return (
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>{buildTitle(usersInfos)}</DialogTitle>
+            <DialogTitle>{buildTitle(itemType, itemNames)}</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    {buildContent(usersInfos)}
-                </DialogContentText>
+                <DialogContentText>{buildContent(itemType, itemNames)}</DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>
@@ -92,4 +80,4 @@ const DeleteUserDialog: FunctionComponent<DeleteUserDialogProps> = (props) => {
     );
 };
 
-export default DeleteUserDialog;
+export default DeleteConfirmationDialog;

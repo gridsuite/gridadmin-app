@@ -20,9 +20,7 @@ export function getServersInfos() {
         },
         cache: 'default',
     }).catch((error) => {
-        console.error(
-            `Error while fetching the servers infos: ${getErrorMessage(error)}`
-        );
+        console.error(`Error while fetching the servers infos: ${getErrorMessage(error)}`);
         throw error;
     }) as Promise<GridSuiteModule[]>;
 }

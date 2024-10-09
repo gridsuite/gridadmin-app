@@ -8,18 +8,13 @@
 import ProfileModificationForm, {
     LF_PARAM_ID,
     PROFILE_NAME,
-    USER_QUOTAS,
+    USER_QUOTA_BUILD_NB,
+    USER_QUOTA_CASE_NB,
 } from './profile-modification-form';
 import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import {
-    FunctionComponent,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
@@ -39,23 +34,22 @@ export interface ProfileModificationDialogProps {
     onUpdate: () => void;
 }
 
-const ProfileModificationDialog: FunctionComponent<
-    ProfileModificationDialogProps
-> = ({ profileId, open, onClose, onUpdate }) => {
+const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProps> = ({
+    profileId,
+    open,
+    onClose,
+    onUpdate,
+}) => {
     const { snackError } = useSnackMessage();
-    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(
-        FetchStatus.IDLE
-    );
+    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(FetchStatus.IDLE);
 
     const formSchema = yup
         .object()
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
             [LF_PARAM_ID]: yup.string().optional(),
-            [USER_QUOTAS]: yup
-                .number()
-                .positive('userQuotaPositive')
-                .nullable(),
+            [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
+            [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
         })
         .required();
 
@@ -72,7 +66,8 @@ const ProfileModificationDialog: FunctionComponent<
                     id: profileId,
                     name: profileFormData[PROFILE_NAME],
                     loadFlowParameterId: profileFormData[LF_PARAM_ID],
-                    maxAllowedCases: profileFormData[USER_QUOTAS],
+                    maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
+                    maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
@@ -102,10 +97,9 @@ const ProfileModificationDialog: FunctionComponent<
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({
                         [PROFILE_NAME]: response.name,
-                        [LF_PARAM_ID]: response.loadFlowParameterId
-                            ? response.loadFlowParameterId
-                            : undefined,
-                        [USER_QUOTAS]: response.maxAllowedCases,
+                        [LF_PARAM_ID]: response.loadFlowParameterId ? response.loadFlowParameterId : undefined,
+                        [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
+                        [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                     });
                 })
                 .catch((error) => {
@@ -118,15 +112,9 @@ const ProfileModificationDialog: FunctionComponent<
         }
     }, [profileId, open, reset, snackError]);
 
-    const isDataReady = useMemo(
-        () => dataFetchStatus === FetchStatus.FETCH_SUCCESS,
-        [dataFetchStatus]
-    );
+    const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.FETCH_SUCCESS, [dataFetchStatus]);
 
-    const isDataFetching = useMemo(
-        () => dataFetchStatus === FetchStatus.FETCHING,
-        [dataFetchStatus]
-    );
+    const isDataFetching = useMemo(() => dataFetchStatus === FetchStatus.FETCHING, [dataFetchStatus]);
 
     return (
         <CustomMuiDialog

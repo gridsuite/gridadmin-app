@@ -5,26 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    FunctionComponent,
-    RefObject,
-    useCallback,
-    useMemo,
-    useState,
-} from 'react';
+import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import {
-    Cancel,
-    CheckCircle,
-    ManageAccounts,
-    RadioButtonUnchecked,
-} from '@mui/icons-material';
-import {
-    GridButton,
-    GridButtonDelete,
-    GridTable,
-    GridTableRef,
-} from '../../components/Grid';
+import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
+import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import {
     ColDef,
@@ -34,6 +18,7 @@ import {
     TextFilterParams,
 } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
+import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 
 const defaultColDef: ColDef<UserProfile> = {
     editable: false,
@@ -56,21 +41,18 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const { snackError } = useSnackMessage();
 
     const [rowsSelection, setRowsSelection] = useState<UserProfile[]>([]);
+    const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserProfile>): string {
         return params.data.id ? params.data.id : '';
     }
 
     const onSelectionChanged = useCallback(
-        (event: SelectionChangedEvent<UserProfile, {}>) =>
-            setRowsSelection(event.api.getSelectedRows() ?? []),
+        (event: SelectionChangedEvent<UserProfile, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
         [setRowsSelection]
     );
 
-    const onAddButton = useCallback(
-        () => props.setOpenAddProfileDialog(true),
-        [props]
-    );
+    const onAddButton = useCallback(() => props.setOpenAddProfileDialog(true), [props]);
 
     const deleteProfiles = useCallback(() => {
         let profileNames = rowsSelection.map((userProfile) => userProfile.name);
@@ -90,10 +72,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
             .then(() => props.gridRef?.current?.context?.refresh?.());
     }, [props.gridRef, rowsSelection, snackError]);
 
-    const deleteProfilesDisabled = useMemo(
-        () => rowsSelection.length <= 0,
-        [rowsSelection.length]
-    );
+    const deleteProfilesDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
 
     const columns = useMemo(
         (): ColDef<UserProfile>[] => [
@@ -147,29 +126,36 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     );
 
     return (
-        <GridTable<UserProfile, {}>
-            ref={props.gridRef}
-            dataLoader={UserAdminSrv.fetchProfiles}
-            columnDefs={columns}
-            defaultColDef={defaultColDef}
-            gridId="table-profiles"
-            getRowId={getRowId}
-            rowSelection="multiple"
-            onRowDoubleClicked={props.onRowDoubleClicked}
-            onSelectionChanged={onSelectionChanged}
-        >
-            <GridButton
-                labelId="profiles.table.toolbar.add.label"
-                textId="profiles.table.toolbar.add"
-                startIcon={<ManageAccounts fontSize="small" />}
-                color="primary"
-                onClick={onAddButton}
+        <>
+            <GridTable<UserProfile, {}>
+                ref={props.gridRef}
+                dataLoader={UserAdminSrv.fetchProfiles}
+                columnDefs={columns}
+                defaultColDef={defaultColDef}
+                gridId="table-profiles"
+                getRowId={getRowId}
+                rowSelection="multiple"
+                onRowDoubleClicked={props.onRowDoubleClicked}
+                onSelectionChanged={onSelectionChanged}
+            >
+                <GridButton
+                    labelId="profiles.table.toolbar.add.label"
+                    textId="profiles.table.toolbar.add"
+                    startIcon={<ManageAccounts fontSize="small" />}
+                    color="primary"
+                    onClick={onAddButton}
+                />
+                <GridButtonDelete onClick={() => setShowDeletionDialog(true)} disabled={deleteProfilesDisabled} />
+            </GridTable>
+
+            <DeleteConfirmationDialog
+                open={showDeletionDialog}
+                setOpen={setShowDeletionDialog}
+                itemType={intl.formatMessage({ id: 'form.delete.dialog.profile' })}
+                itemNames={rowsSelection.map((userProfile) => userProfile.name)}
+                deleteFunc={deleteProfiles}
             />
-            <GridButtonDelete
-                onClick={deleteProfiles}
-                disabled={deleteProfilesDisabled}
-            />
-        </GridTable>
+        </>
     );
 };
 export default ProfilesTable;

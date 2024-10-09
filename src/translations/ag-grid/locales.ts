@@ -86,8 +86,7 @@ export const AG_GRID_LOCALE_FR: Record<string, string> = {
     ariaFilterColumn: 'Appuyer sur CTRL+ENTRER pour ouvrir les filtres',
     ariaRowDeselect: 'Appuyer sur ESPACE pour désélectionner cette ligne',
     ariaRowSelectAll: 'Appuyer sur ESPACE pour sélectionner toutes les lignes',
-    ariaRowToggleSelection:
-        'Appuyer sur Espace pour inverser les lignes sélectionnés',
+    ariaRowToggleSelection: 'Appuyer sur Espace pour inverser les lignes sélectionnés',
     ariaRowSelect: 'Appuyer sur ESPACE pour sélectionner cette ligne',
     ariaSearch: 'Rechercher',
     ariaSortableColumn: 'Appuyer sur ENTRER pour trier',
