@@ -18,17 +18,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import {
-    AppBar,
-    Box,
-    Button as MuiButton,
-    ButtonProps,
-    ButtonTypeMap,
-    ExtendButtonBaseTypeMap,
-    Grid,
-    Toolbar,
-} from '@mui/material';
-import { OverridableComponent, OverridableTypeMap, OverrideProps } from '@mui/material/OverridableComponent';
+import { AppBar, Box, Button, ButtonProps, Grid, Toolbar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
@@ -136,16 +126,6 @@ export type GridButtonProps = Omit<
     textId: string;
     labelId: string;
 };
-
-/* Taken from MUI/materials-ui codebase
- * Mui expose button's defaultComponent as "button" and button component as "a"... but generate in reality a <button/>
- * Redefine type to cast it.
- */
-type ExtendButtonBaseOverride<M extends OverridableTypeMap> = ((
-    props: OverrideProps<ExtendButtonBaseTypeMap<M>, 'button'>
-) => JSX.Element) &
-    OverridableComponent<ExtendButtonBaseTypeMap<M>>;
-const Button = MuiButton as ExtendButtonBaseOverride<ButtonTypeMap>;
 
 export const GridButton = forwardRef<HTMLButtonElement, GridButtonProps>(function GridButton(props, ref) {
     const intl = useIntl();
