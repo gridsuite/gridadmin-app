@@ -1,0 +1,22 @@
+name: Patch
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: Release version (vX.X)
+        required: true
+        type: string
+
+jobs:
+  run-patch:
+    uses: powsybl/github-ci/.github/workflows/patch-frontend-app-generic.yml@29746dc4775fab66ef9e0481b57f3c0615b36ee4
+    with:
+      releaseVersion: ${{ github.event.inputs.releaseVersion }}
+      dockerImage: docker.io/gridsuite/gridadmin-app
+      dockerUsername: gridsuiteci
+      githubappId: ${{ vars.GRIDSUITE_ACTIONS_APPID }}
+    secrets:
+      githubappPrivateKey: ${{ secrets.GRIDSUITE_ACTIONS_SECRET }}
+      docker-token: ${{ secrets.DOCKERHUB_TOKEN }}
+      sonar-token: ${{ secrets.SONAR_TOKEN }}

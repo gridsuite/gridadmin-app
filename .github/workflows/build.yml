@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - 'main'
-    tags:
-      - 'v[0-9]*'
   pull_request:
 
 jobs:
@@ -43,15 +41,6 @@ jobs:
           name: gridsuite/gridadmin-app
           username: gridsuiteci
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and publish Docker image - Tag
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: elgohr/Publish-Docker-Github-Action@33a481be3e179353cb7793a92b57cf9a6c985860 # v4
-        with:
-          name: gridsuite/gridadmin-app
-          username: gridsuiteci
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          tags: ${{ steps.vars.outputs.tag }}
 
       - name: Broadcast update event
         if: github.ref == 'refs/heads/main'
