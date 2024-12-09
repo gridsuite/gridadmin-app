@@ -107,6 +107,10 @@ export type UserProfile = {
     name: string;
     allParametersLinksValid?: boolean;
     loadFlowParameterId?: UUID;
+    securityAnalysisParameterId?: UUID;
+    sensitivityAnalysisParameterId?: UUID;
+    shortcircuitParameterId?: UUID;
+    voltageInitParameterId?: UUID;
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
 };

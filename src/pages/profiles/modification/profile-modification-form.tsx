@@ -12,7 +12,12 @@ import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
 
 export const PROFILE_NAME = 'name';
-export const LF_PARAM_ID = 'lfParamId';
+export const LOADFLOW_PARAM_ID = 'loadFlowParamId';
+export const SECURITY_ANALYSIS_PARAM_ID = 'securityAnalysisParamId';
+export const SENSITIVITY_ANALYSIS_PARAM_ID = 'sensitivityAnalysisParamId';
+export const SHORTCIRCUIT_PARAM_ID = 'shortcircuitParamId';
+export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
+
 export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
 export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
 
@@ -28,7 +33,19 @@ const ProfileModificationForm: FunctionComponent = () => {
                 </h3>
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LF_PARAM_ID} />
+                <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LOADFLOW_PARAM_ID} />
+            </Grid>
+            <Grid item xs={12}>
+                <ParameterSelection elementType={ElementType.SECURITY_ANALYSIS_PARAMETERS} parameterFormId={SECURITY_ANALYSIS_PARAM_ID} />
+            </Grid>
+            <Grid item xs={12}>
+                <ParameterSelection elementType={ElementType.SENSITIVITY_PARAMETERS} parameterFormId={SENSITIVITY_ANALYSIS_PARAM_ID} />
+            </Grid>
+            <Grid item xs={12}>
+                <ParameterSelection elementType={ElementType.SHORT_CIRCUIT_PARAMETERS} parameterFormId={SHORTCIRCUIT_PARAM_ID} />
+            </Grid>
+            <Grid item xs={12}>
+                <ParameterSelection elementType={ElementType.VOLTAGE_INIT_PARAMETERS} parameterFormId={VOLTAGE_INIT_PARAM_ID} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
