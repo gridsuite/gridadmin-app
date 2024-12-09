@@ -36,16 +36,28 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LOADFLOW_PARAM_ID} />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.SECURITY_ANALYSIS_PARAMETERS} parameterFormId={SECURITY_ANALYSIS_PARAM_ID} />
+                <ParameterSelection
+                    elementType={ElementType.SECURITY_ANALYSIS_PARAMETERS}
+                    parameterFormId={SECURITY_ANALYSIS_PARAM_ID}
+                />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.SENSITIVITY_PARAMETERS} parameterFormId={SENSITIVITY_ANALYSIS_PARAM_ID} />
+                <ParameterSelection
+                    elementType={ElementType.SENSITIVITY_PARAMETERS}
+                    parameterFormId={SENSITIVITY_ANALYSIS_PARAM_ID}
+                />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.SHORT_CIRCUIT_PARAMETERS} parameterFormId={SHORTCIRCUIT_PARAM_ID} />
+                <ParameterSelection
+                    elementType={ElementType.SHORT_CIRCUIT_PARAMETERS}
+                    parameterFormId={SHORTCIRCUIT_PARAM_ID}
+                />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.VOLTAGE_INIT_PARAMETERS} parameterFormId={VOLTAGE_INIT_PARAM_ID} />
+                <ParameterSelection
+                    elementType={ElementType.VOLTAGE_INIT_PARAMETERS}
+                    parameterFormId={VOLTAGE_INIT_PARAM_ID}
+                />
             </Grid>
             <Grid item xs={12}>
                 <h3>

@@ -110,10 +110,18 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     reset({
                         [PROFILE_NAME]: response.name,
                         [LOADFLOW_PARAM_ID]: response.loadFlowParameterId ? response.loadFlowParameterId : undefined,
-                        [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId ? response.securityAnalysisParameterId : undefined,
-                        [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId ? response.sensitivityAnalysisParameterId : undefined,
-                        [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ? response.shortcircuitParameterId : undefined,
-                        [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ? response.voltageInitParameterId : undefined,
+                        [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId
+                            ? response.securityAnalysisParameterId
+                            : undefined,
+                        [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId
+                            ? response.sensitivityAnalysisParameterId
+                            : undefined,
+                        [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId
+                            ? response.shortcircuitParameterId
+                            : undefined,
+                        [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId
+                            ? response.voltageInitParameterId
+                            : undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                     });
