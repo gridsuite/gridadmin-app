@@ -74,6 +74,10 @@
     "profiles.form.modification.parameterSelection.dialog.title": "Choose parameters",
     "profiles.form.modification.parameterSelection.dialog.message": "Please choose parameters",
     "profiles.form.modification.loadflow.name": "Loadflow",
+    "profiles.form.modification.securityAnalysis.name": "Security analysis",
+    "profiles.form.modification.sensitivityAnalysis.name": "Sensitivity analysis",
+    "profiles.form.modification.shortcircuit.name": "Short-circuit",
+    "profiles.form.modification.voltageInit.name": "Voltage init",
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile",
 

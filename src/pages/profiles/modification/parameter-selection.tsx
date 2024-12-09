@@ -20,6 +20,7 @@ export interface ParameterSelectionProps {
         | ElementType.LOADFLOW_PARAMETERS
         | ElementType.SECURITY_ANALYSIS_PARAMETERS
         | ElementType.SENSITIVITY_PARAMETERS
+        | ElementType.SHORT_CIRCUIT_PARAMETERS
         | ElementType.VOLTAGE_INIT_PARAMETERS;
     parameterFormId: string;
 }
@@ -78,6 +79,14 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
         switch (props.elementType) {
             case ElementType.LOADFLOW_PARAMETERS:
                 return 'profiles.form.modification.loadflow.name';
+            case ElementType.SECURITY_ANALYSIS_PARAMETERS:
+                return 'profiles.form.modification.securityAnalysis.name';
+            case ElementType.SENSITIVITY_PARAMETERS:
+                return 'profiles.form.modification.sensitivityAnalysis.name';
+            case ElementType.SHORT_CIRCUIT_PARAMETERS:
+                return 'profiles.form.modification.shortcircuit.name';
+            case ElementType.VOLTAGE_INIT_PARAMETERS:
+                return 'profiles.form.modification.voltageInit.name';
         }
         return 'cannot happen';
     };
