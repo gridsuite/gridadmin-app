@@ -49,7 +49,8 @@
         "serve": "vite preview",
         "test": "jest",
         "test:coverage": "jest --coverage",
-        "lint": "eslint . --ext js,mjs,jsx,ts,mts,tsx --max-warnings 0"
+        "lint": "eslint . --ext js,mjs,jsx,ts,mts,tsx --max-warnings 0",
+        "licenses-check": "license-checker --summary --excludePrivatePackages --production --onlyAllow \"$( jq -r .onlyAllow[] license-checker-config.json | tr '\n' ';')\""
     },
     "devDependencies": {
         "@babel/helper-builder-react-jsx": "7.22.10",
@@ -61,6 +62,7 @@
         "@types/eslint": "^8.56.9",
         "@types/eslint-config-prettier": "^6.11.3",
         "@types/jest": "^27.5.2",
+        "@types/license-checker": "^25.0.6",
         "@types/node": "^18.19.31",
         "@types/prop-types": "^15.7.12",
         "@types/react": "^18.2.75",
@@ -85,6 +87,7 @@
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "jest-svg-transformer": "^1.0.0",
+        "license-checker": "^25.0.1",
         "prettier": "^2.8.8",
         "ts-node": "^10.9.2",
         "typescript": "5.1.6",
