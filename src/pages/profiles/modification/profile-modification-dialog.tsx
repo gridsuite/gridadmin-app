@@ -6,7 +6,11 @@
  */
 
 import ProfileModificationForm, {
-    LF_PARAM_ID,
+    LOADFLOW_PARAM_ID,
+    SECURITY_ANALYSIS_PARAM_ID,
+    SENSITIVITY_ANALYSIS_PARAM_ID,
+    SHORTCIRCUIT_PARAM_ID,
+    VOLTAGE_INIT_PARAM_ID,
     PROFILE_NAME,
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
@@ -47,7 +51,11 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
         .object()
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
-            [LF_PARAM_ID]: yup.string().optional(),
+            [LOADFLOW_PARAM_ID]: yup.string().optional(),
+            [SECURITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
+            [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
+            [SHORTCIRCUIT_PARAM_ID]: yup.string().optional(),
+            [VOLTAGE_INIT_PARAM_ID]: yup.string().optional(),
             [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
             [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
         })
@@ -65,7 +73,11 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                 const profileData: UserProfile = {
                     id: profileId,
                     name: profileFormData[PROFILE_NAME],
-                    loadFlowParameterId: profileFormData[LF_PARAM_ID],
+                    loadFlowParameterId: profileFormData[LOADFLOW_PARAM_ID],
+                    securityAnalysisParameterId: profileFormData[SECURITY_ANALYSIS_PARAM_ID],
+                    sensitivityAnalysisParameterId: profileFormData[SENSITIVITY_ANALYSIS_PARAM_ID],
+                    shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
+                    voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                 };
@@ -97,7 +109,19 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({
                         [PROFILE_NAME]: response.name,
-                        [LF_PARAM_ID]: response.loadFlowParameterId ? response.loadFlowParameterId : undefined,
+                        [LOADFLOW_PARAM_ID]: response.loadFlowParameterId ? response.loadFlowParameterId : undefined,
+                        [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId
+                            ? response.securityAnalysisParameterId
+                            : undefined,
+                        [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId
+                            ? response.sensitivityAnalysisParameterId
+                            : undefined,
+                        [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId
+                            ? response.shortcircuitParameterId
+                            : undefined,
+                        [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId
+                            ? response.voltageInitParameterId
+                            : undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                     });

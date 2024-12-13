@@ -75,6 +75,10 @@
     "profiles.form.modification.parameterSelection.dialog.title": "Choisir des paramètres",
     "profiles.form.modification.parameterSelection.dialog.message": "Veuillez choisir des paramètres",
     "profiles.form.modification.loadflow.name": "Calcul de répartition",
+    "profiles.form.modification.securityAnalysis.name": "Analyse de sécurité",
+    "profiles.form.modification.sensitivityAnalysis.name": "Analyse de sensibilités",
+    "profiles.form.modification.shortcircuit.name": "Calcul de court-circuit",
+    "profiles.form.modification.voltageInit.name": "Initialisation du plan de tension",
     "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
 
