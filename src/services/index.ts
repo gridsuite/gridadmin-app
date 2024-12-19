@@ -8,9 +8,6 @@
 export * as ConfigSrv from './config';
 export type * from './config';
 
-export * as ConfigNotif from './config-notification';
-export type * from './config-notification';
-
 export * as AppsMetadataSrv from './apps-metadata';
 export type * from './apps-metadata';
 
