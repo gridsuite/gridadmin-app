@@ -8,16 +8,16 @@
 import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { CardErrorBoundary, useSnackMessage } from '@gridsuite/commons-ui';
+import { CardErrorBoundary, useNotificationsListener, useSnackMessage } from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { ConfigNotif, ConfigParameters, ConfigSrv } from '../../services';
+import { ConfigParameters, ConfigSrv } from '../../services';
 import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
+import { NOTIFICATIONS_URL_KEYS } from '../../utils/notifications-provider';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
@@ -47,26 +47,19 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [dispatch]
     );
 
-    const connectNotificationsUpdateConfig = useCallback((): ReconnectingWebSocket => {
-        const ws = ConfigNotif.connectNotificationsWsUpdateConfig();
-        ws.onmessage = function (event) {
-            let eventData = JSON.parse(event.data);
+    const updateConfig = useCallback(
+        (event: MessageEvent) => {
+            const eventData = JSON.parse(event.data);
             if (eventData?.headers?.parameterName) {
                 ConfigSrv.fetchConfigParameter(eventData.headers.parameterName)
                     .then((param) => updateParams([param]))
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'paramsRetrievingError',
-                        })
-                    );
+                    .catch((error) => snackError({ messageTxt: error.message, headerId: 'paramsRetrievingError' }));
             }
-        };
-        ws.onerror = function (event) {
-            console.error('Unexpected Notification WebSocket error', event);
-        };
-        return ws;
-    }, [updateParams, snackError]);
+        },
+        [updateParams, snackError]
+    );
+
+    useNotificationsListener(NOTIFICATIONS_URL_KEYS.CONFIG, { listenerCallbackMessage: updateConfig });
 
     useEffect(() => {
         if (user !== null) {
@@ -87,11 +80,8 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                         headerId: 'paramsRetrievingError',
                     })
                 );
-
-            const ws = connectNotificationsUpdateConfig();
-            return () => ws.close();
         }
-    }, [user, dispatch, updateParams, snackError, connectNotificationsUpdateConfig]);
+    }, [user, dispatch, updateParams, snackError]);
 
     return (
         <Grid

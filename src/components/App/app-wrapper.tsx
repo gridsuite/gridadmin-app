@@ -24,6 +24,7 @@ import {
     SnackbarProvider,
     topBarEn,
     topBarFr,
+    NotificationsProvider,
 } from '@gridsuite/commons-ui';
 import { IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
@@ -33,6 +34,7 @@ import { store } from '../../redux/store';
 import { PARAM_THEME } from '../../utils/config-params';
 import { AppState } from '../../redux/reducer';
 import { AppWithAuthRouter } from '../../routes';
+import { useNotificationsUrlGenerator } from '../../utils/notifications-provider';
 
 const lightTheme: ThemeOptions = {
     palette: {
@@ -119,6 +121,7 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
     const computedLanguage = useSelector((state: AppState) => state.computedLanguage);
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
     const themeCompiled = useMemo(() => getMuiTheme(theme, computedLanguage), [computedLanguage, theme]);
+    const urlMapper = useNotificationsUrlGenerator();
     return (
         <IntlProvider locale={computedLanguage} defaultLocale={LANG_ENGLISH} messages={messages[computedLanguage]}>
             <StyledEngineProvider injectFirst>
@@ -126,7 +129,9 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
                     <SnackbarProvider hideIconVariant={false}>
                         <CssBaseline />
                         <CardErrorBoundary>
-                            <App {...props}>{props.children}</App>
+                            <NotificationsProvider urls={urlMapper}>
+                                <App {...props}>{props.children}</App>
+                            </NotificationsProvider>
                         </CardErrorBoundary>
                     </SnackbarProvider>
                 </ThemeProvider>
