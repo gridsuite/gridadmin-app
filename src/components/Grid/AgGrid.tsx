@@ -5,9 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-
 import {
     ForwardedRef,
     forwardRef,
@@ -19,10 +16,9 @@ import {
     useImperativeHandle,
     useRef,
 } from 'react';
-import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { useIntl } from 'react-intl';
-import { LANG_FRENCH } from '@gridsuite/commons-ui';
+import { LANG_FRENCH, ThemedAgGrid } from '@gridsuite/commons-ui';
 import { AG_GRID_LOCALE_FR } from '../../translations/ag-grid/locales';
 import { GridOptions } from 'ag-grid-community';
 import { useDebugRender } from '../../utils/hooks';
@@ -62,12 +58,11 @@ const style = {
     },
 };
 
-export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext extends {} = {}>(
+const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext extends {} = {}>(
     props: GridOptions<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
     const intl = useIntl();
-    const theme = useTheme();
 
     const id = useId();
     useDebugRender(`ag-grid(${id}) ${props.gridId}`);
@@ -85,15 +80,15 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext 
 
     return (
         // wrapping container with theme & size
-        <Box component="div" className={theme.agGridTheme} sx={style}>
-            <AgGridReact<TData>
-                ref={agGridRef}
-                localeText={messages[intl.locale] ?? messages[intl.defaultLocale] ?? undefined}
-                {...props} //destruct props to optimize react props change detection
-                debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
-                reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
-            />
-        </Box>
+        <ThemedAgGrid<TData>
+            //component="div"
+            sx={style}
+            ref={agGridRef}
+            localeText={messages[intl.locale] ?? messages[intl.defaultLocale] ?? undefined}
+            {...props} //destruct props to optimize react props change detection
+            debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
+            reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
+        />
     );
 });
 export default AgGrid;

@@ -20,7 +20,7 @@ import {
 } from 'react';
 import { AppBar, Box, Button, ButtonProps, Grid, Toolbar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
-import { AgGrid, AgGridRef } from './AgGrid';
+import AgGrid, { type AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
 import { useSnackMessage } from '@gridsuite/commons-ui';
