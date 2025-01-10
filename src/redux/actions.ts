@@ -54,11 +54,11 @@ export function selectTheme(theme: GsTheme): ThemeAction {
 }
 
 export const SELECT_LANGUAGE = 'SELECT_LANGUAGE';
-export type LanguageAction = Readonly<Action<typeof SELECT_LANGUAGE>> & {
+export type SelectLanguageAction = Readonly<Action<typeof SELECT_LANGUAGE>> & {
     [PARAM_LANGUAGE]: AppState['language'];
 };
 
-export function selectLanguage(language: AppState['language']): LanguageAction {
+export function selectLanguage(language: AppState['language']): SelectLanguageAction {
     return { type: SELECT_LANGUAGE, [PARAM_LANGUAGE]: language };
 }
 
