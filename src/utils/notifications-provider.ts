@@ -15,7 +15,7 @@ export enum NOTIFICATIONS_URL_KEYS {
     CONFIG = 'CONFIG',
 }
 
-export const PREFIX_CONFIG_NOTIFICATION_WS = import.meta.env.VITE_WS_GATEWAY + '/config-notification';
+export const PREFIX_CONFIG_NOTIFICATION_WS = '/config-notification';
 
 export function useNotificationsUrlGenerator() {
     // The websocket API doesn't allow relative urls
