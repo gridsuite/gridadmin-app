@@ -5,9 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Env } from '@gridsuite/commons-ui';
+import { type Env, type Metadata } from '@gridsuite/commons-ui';
 import { getErrorMessage } from '../utils/error';
-import { Url } from '../utils/api-rest';
 
 // TODO remove when exported in commons-ui (src/utils/AuthService.ts)
 type IdpSettings = {
@@ -45,19 +44,9 @@ export function fetchVersion(): Promise<VersionJson> {
         });
 }
 
-export type MetadataCommon = {
-    name: string;
-    url: Url;
-    appColor: string;
-    hiddenInAppsMenu: boolean;
-};
-
-export type MetadataStudy = MetadataCommon & {
+// TODO move & merge into commons-ui's MetadataStudy
+export type MetadataStudy = Metadata & {
     readonly name: 'Study';
-    resources?: {
-        types: string[];
-        path: string;
-    }[];
     predefinedEquipmentProperties?: {
         substation?: {
             region?: string[];
@@ -78,7 +67,7 @@ export type MetadataStudy = MetadataCommon & {
 
 // https://github.com/gridsuite/deployment/blob/main/docker-compose/docker-compose.base.yml
 // https://github.com/gridsuite/deployment/blob/main/k8s/resources/common/config/apps-metadata.json
-export type MetadataJson = MetadataCommon | MetadataStudy;
+export type MetadataJson = Metadata | MetadataStudy;
 
 export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
     console.debug('Fetching apps and urls...');
