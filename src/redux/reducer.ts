@@ -10,14 +10,16 @@ import {
     getLocalStorageComputedLanguage,
     getLocalStorageLanguage,
     getLocalStorageTheme,
+    saveLocalStorageLanguage,
     saveLocalStorageTheme,
 } from './local-storage';
 
 import {
     ComputedLanguageAction,
-    LanguageAction,
     SELECT_COMPUTED_LANGUAGE,
+    SELECT_LANGUAGE,
     SELECT_THEME,
+    SelectLanguageAction,
     ThemeAction,
     UPDATE_USER_MANAGER_ERROR,
     UPDATE_USER_MANAGER_INSTANCE,
@@ -86,7 +88,7 @@ export type Actions =
     | UserManagerInstanceAction
     | UserManagerErrorAction
     | ThemeAction
-    | LanguageAction
+    | SelectLanguageAction
     | ComputedLanguageAction;
 
 export type AppStateKey = keyof AppState;
@@ -95,6 +97,11 @@ export const reducer: ReducerWithInitialState<AppState> = createReducer(initialS
     builder.addCase(SELECT_THEME, (state: Draft<AppState>, action: ThemeAction) => {
         state.theme = action.theme;
         saveLocalStorageTheme(state.theme);
+    });
+
+    builder.addCase(SELECT_LANGUAGE, (state, action: SelectLanguageAction) => {
+        state[PARAM_LANGUAGE] = action[PARAM_LANGUAGE];
+        saveLocalStorageLanguage(state[PARAM_LANGUAGE]);
     });
 
     builder.addCase(UPDATE_USER_MANAGER_STATE, (state: Draft<AppState>, action: UserManagerAction) => {
