@@ -25,7 +25,6 @@ const defaultColDef: ColDef<UserProfile> = {
     resizable: true,
     minWidth: 50,
     cellRenderer: 'agAnimateSlideCellRenderer',
-    showDisabledCheckboxes: true,
     rowDrag: false,
     sortable: true,
 };
@@ -86,7 +85,6 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 headerTooltip: intl.formatMessage({
                     id: 'profiles.table.id.description',
                 }),
-                headerCheckboxSelection: true,
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -134,7 +132,13 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 defaultColDef={defaultColDef}
                 gridId="table-profiles"
                 getRowId={getRowId}
-                rowSelection="multiple"
+                rowSelection={{
+                    mode: 'multiRow',
+                    enableClickSelection: false,
+                    checkboxes: true,
+                    headerCheckbox: true,
+                    hideDisabledCheckboxes: false,
+                }}
                 onRowDoubleClicked={props.onRowDoubleClicked}
                 onSelectionChanged={onSelectionChanged}
             >

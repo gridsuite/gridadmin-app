@@ -35,6 +35,13 @@ import { PARAM_THEME } from '../../utils/config-params';
 import { AppState } from '../../redux/reducer';
 import { AppWithAuthRouter } from '../../routes';
 import { useNotificationsUrlGenerator } from '../../utils/notifications-provider';
+import { AllCommunityModule, ModuleRegistry, provideGlobalGridOptions } from 'ag-grid-community';
+
+// Register all community features (migration to V33)
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+// Mark all grids as using legacy themes (migration to V33)
+provideGlobalGridOptions({ theme: 'legacy' });
 
 const lightTheme: ThemeOptions = {
     palette: {

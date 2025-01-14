@@ -39,7 +39,6 @@ const defaultColDef: ColDef<UserInfos> = {
     resizable: true,
     minWidth: 50,
     cellRenderer: 'agAnimateSlideCellRenderer', //'agAnimateShowChangeCellRenderer'
-    showDisabledCheckboxes: true,
     rowDrag: false,
     sortable: true,
 };
@@ -82,7 +81,6 @@ const UsersPage: FunctionComponent = () => {
                 headerTooltip: intl.formatMessage({
                     id: 'users.table.id.description',
                 }),
-                headerCheckboxSelection: true,
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -210,7 +208,13 @@ const UsersPage: FunctionComponent = () => {
                     onCellEditingStopped={handleCellEditingStopped}
                     gridId="table-users"
                     getRowId={getRowId}
-                    rowSelection="multiple"
+                    rowSelection={{
+                        mode: 'multiRow',
+                        enableClickSelection: false,
+                        checkboxes: true,
+                        headerCheckbox: true,
+                        hideDisabledCheckboxes: false,
+                    }}
                     onSelectionChanged={useCallback(
                         (event: SelectionChangedEvent<UserInfos, {}>) =>
                             setRowsSelection(event.api.getSelectedRows() ?? []),
