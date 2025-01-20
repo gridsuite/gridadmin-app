@@ -46,12 +46,7 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
             DirectorySrv.fetchPath(watchParamId)
                 .then((res: any) => {
                     setParameterLinkValid(true);
-                    setSelectedElementName(
-                        res
-                            .map((element: any) => element.elementName.trim())
-                            .reverse()
-                            .join('/')
-                    );
+                    setSelectedElementName(res.map((element: any) => element.elementName.trim()).join('/'));
                 })
                 .catch(() => {
                     setSelectedElementName(undefined);
@@ -88,7 +83,6 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
             case ElementType.VOLTAGE_INIT_PARAMETERS:
                 return 'profiles.form.modification.voltageInit.name';
         }
-        return 'cannot happen';
     };
 
     return (
