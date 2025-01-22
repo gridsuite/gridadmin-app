@@ -34,7 +34,6 @@ export default defineConfig((config) => ({
             lintOnStart: true,
         }),
         svgr(), // works on every import with the pattern "**/*.svg?react"
-        reactVirtualized(),
         tsconfigPaths(), // to resolve absolute path via tsconfig cf https://stackoverflow.com/a/68250175/5092999
     ],
     base: './',
