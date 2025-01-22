@@ -91,7 +91,6 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext 
                 localeText={messages[intl.locale] ?? messages[intl.defaultLocale] ?? undefined}
                 {...props} //destruct props to optimize react props change detection
                 debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
-                reactiveCustomComponents //AG Grid: Using custom components without `reactiveCustomComponents = true` is deprecated.
             />
         </Box>
     );
