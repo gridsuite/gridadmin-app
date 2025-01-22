@@ -44,4 +44,3 @@ export default defineConfig((config) => ({
         outDir: 'build',
     },
 }));
-
