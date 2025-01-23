@@ -121,7 +121,7 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
                 onClose={handleClose}
                 types={[props.elementType]}
                 onlyLeaves={true}
-                multiselect={false}
+                multiSelect={false}
                 validationButtonText={intl.formatMessage({
                     id: 'validate',
                 })}
