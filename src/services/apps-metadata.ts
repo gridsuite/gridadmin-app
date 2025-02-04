@@ -59,9 +59,7 @@ export type MetadataStudy = Metadata & {
         };
     };
     defaultParametersValues?: {
-        fluxConvention?: string;
         enableDeveloperMode?: string; //maybe 'true'|'false' type?
-        mapManualRefresh?: string; //maybe 'true'|'false' type?
     };
 };
 
