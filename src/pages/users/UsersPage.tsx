@@ -85,6 +85,7 @@ const UsersPage: FunctionComponent = () => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+                initialSort: 'asc',
             },
             {
                 field: 'profileName',
@@ -125,10 +126,7 @@ const UsersPage: FunctionComponent = () => {
                 headerTooltip: intl.formatMessage({
                     id: 'users.table.isAdmin.description',
                 }),
-                sortable: false,
                 filter: true,
-                initialSortIndex: 1,
-                initialSort: 'asc',
             },
         ],
         [intl, profileNameOptions]
@@ -246,7 +244,7 @@ const UsersPage: FunctionComponent = () => {
                             name="user"
                             control={control}
                             rules={{ required: true, minLength: 1 }}
-                            render={({ field, fieldState, formState }) => (
+                            render={({ field, fieldState }) => (
                                 <TextField
                                     {...field}
                                     autoFocus
