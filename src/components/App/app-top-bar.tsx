@@ -8,13 +8,13 @@
 import { forwardRef, FunctionComponent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
-import { logout, TopBar } from '@gridsuite/commons-ui';
+import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { NavLink, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { AppsMetadataSrv, MetadataJson, StudySrv } from '../../services';
+import { AppsMetadataSrv, StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
 import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
@@ -73,10 +73,10 @@ const AppTopBar: FunctionComponent = () => {
     const [themeLocal, handleChangeTheme] = useParameterState(PARAM_THEME);
     const [languageLocal, handleChangeLanguage] = useParameterState(PARAM_LANGUAGE);
 
-    const [appsAndUrls, setAppsAndUrls] = useState<MetadataJson[]>([]);
+    const [appsAndUrls, setAppsAndUrls] = useState<Metadata[]>([]);
     useEffect(() => {
         if (user !== null) {
-            AppsMetadataSrv.fetchAppsAndUrls().then((res) => {
+            fetchAppsMetadata().then((res) => {
                 setAppsAndUrls(res);
             });
         }
