@@ -99,6 +99,7 @@ const AppTopBar: FunctionComponent = () => {
             theme={themeLocal}
             onLanguageClick={handleChangeLanguage}
             language={languageLocal}
+            developerMode={false}
         >
             <Tabs
                 component="nav"
