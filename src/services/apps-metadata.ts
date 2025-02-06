@@ -5,19 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { type Env, type Metadata } from '@gridsuite/commons-ui';
+import { type Env, IdpSettings } from '@gridsuite/commons-ui';
 import { getErrorMessage } from '../utils/error';
-
-// TODO remove when exported in commons-ui (src/utils/AuthService.ts)
-type IdpSettings = {
-    authority: string;
-    client_id: string;
-    redirect_uri: string;
-    post_logout_redirect_uri: string;
-    silent_redirect_uri: string;
-    scope: string;
-    maxExpiresIn?: number;
-};
 
 export type EnvJson = Env & typeof import('../../public/env.json');
 
@@ -42,34 +31,4 @@ export function fetchVersion(): Promise<VersionJson> {
             console.error(`Error while fetching the version: ${getErrorMessage(error)}`);
             throw error;
         });
-}
-
-// TODO move & merge into commons-ui's MetadataStudy
-export type MetadataStudy = Metadata & {
-    readonly name: 'Study';
-    predefinedEquipmentProperties?: {
-        substation?: {
-            region?: string[];
-            tso?: string[];
-            totallyFree?: unknown[];
-            Demo?: string[];
-        };
-        load?: {
-            codeOI?: string[];
-        };
-    };
-    defaultParametersValues?: {
-        enableDeveloperMode?: string; //maybe 'true'|'false' type?
-    };
-};
-
-// https://github.com/gridsuite/deployment/blob/main/docker-compose/docker-compose.base.yml
-// https://github.com/gridsuite/deployment/blob/main/k8s/resources/common/config/apps-metadata.json
-export type MetadataJson = Metadata | MetadataStudy;
-
-export function fetchAppsAndUrls(): Promise<MetadataJson[]> {
-    console.debug('Fetching apps and urls...');
-    return fetchEnv()
-        .then((env: EnvJson) => fetch(`${env.appsMetadataServerUrl}/apps-metadata.json`))
-        .then((response: Response) => response.json());
 }
