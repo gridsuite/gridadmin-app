@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { createReducer, Draft } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import {
     getLocalStorageComputedLanguage,
     getLocalStorageLanguage,
@@ -52,7 +52,6 @@ import {
     UserValidationErrorAction,
 } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
-import { ReducerWithInitialState } from '@reduxjs/toolkit/dist/createReducer';
 
 export type AppState = CommonStoreState & {
     computedLanguage: GsLangUser;
@@ -93,8 +92,8 @@ export type Actions =
 
 export type AppStateKey = keyof AppState;
 
-export const reducer: ReducerWithInitialState<AppState> = createReducer(initialState, (builder) => {
-    builder.addCase(SELECT_THEME, (state: Draft<AppState>, action: ThemeAction) => {
+export const reducer = createReducer<AppState>(initialState, (builder) => {
+    builder.addCase(SELECT_THEME, (state, action: ThemeAction) => {
         state.theme = action.theme;
         saveLocalStorageTheme(state.theme);
     });
@@ -104,50 +103,47 @@ export const reducer: ReducerWithInitialState<AppState> = createReducer(initialS
         saveLocalStorageLanguage(state[PARAM_LANGUAGE]);
     });
 
-    builder.addCase(UPDATE_USER_MANAGER_STATE, (state: Draft<AppState>, action: UserManagerAction) => {
+    builder.addCase(UPDATE_USER_MANAGER_STATE, (state, action: UserManagerAction) => {
         state.userManager = action.userManager;
     });
 
-    builder.addCase(UPDATE_USER_MANAGER_INSTANCE, (state: Draft<AppState>, action: UserManagerInstanceAction) => {
+    builder.addCase(UPDATE_USER_MANAGER_INSTANCE, (state, action: UserManagerInstanceAction) => {
         state.userManager.instance = action.instance;
     });
 
-    builder.addCase(UPDATE_USER_MANAGER_ERROR, (state: Draft<AppState>, action: UserManagerErrorAction) => {
+    builder.addCase(UPDATE_USER_MANAGER_ERROR, (state, action: UserManagerErrorAction) => {
         state.userManager.error = action.error;
     });
 
-    builder.addCase(USER, (state: Draft<AppState>, action: UserAction) => {
+    builder.addCase(USER, (state, action: UserAction) => {
         state.user = action.user;
     });
 
-    builder.addCase(SIGNIN_CALLBACK_ERROR, (state: Draft<AppState>, action: SignInCallbackErrorAction) => {
+    builder.addCase(SIGNIN_CALLBACK_ERROR, (state, action: SignInCallbackErrorAction) => {
         state.signInCallbackError = action.signInCallbackError;
     });
 
-    builder.addCase(UNAUTHORIZED_USER_INFO, (state: Draft<AppState>, action: UnauthorizedUserAction) => {
+    builder.addCase(UNAUTHORIZED_USER_INFO, (state, action: UnauthorizedUserAction) => {
         state.authenticationRouterError = action.authenticationRouterError;
     });
 
-    builder.addCase(LOGOUT_ERROR, (state: Draft<AppState>, action: LogoutErrorAction) => {
+    builder.addCase(LOGOUT_ERROR, (state, action: LogoutErrorAction) => {
         state.authenticationRouterError = action.authenticationRouterError;
     });
 
-    builder.addCase(USER_VALIDATION_ERROR, (state: Draft<AppState>, action: UserValidationErrorAction) => {
+    builder.addCase(USER_VALIDATION_ERROR, (state, action: UserValidationErrorAction) => {
         state.authenticationRouterError = action.authenticationRouterError;
     });
 
-    builder.addCase(
-        RESET_AUTHENTICATION_ROUTER_ERROR,
-        (state: Draft<AppState>, action: AuthenticationRouterErrorAction) => {
-            state.authenticationRouterError = null;
-        }
-    );
+    builder.addCase(RESET_AUTHENTICATION_ROUTER_ERROR, (state, action: AuthenticationRouterErrorAction) => {
+        state.authenticationRouterError = null;
+    });
 
-    builder.addCase(SHOW_AUTH_INFO_LOGIN, (state: Draft<AppState>, action: ShowAuthenticationRouterLoginAction) => {
+    builder.addCase(SHOW_AUTH_INFO_LOGIN, (state, action: ShowAuthenticationRouterLoginAction) => {
         state.showAuthenticationRouterLogin = action.showAuthenticationRouterLogin;
     });
 
-    builder.addCase(SELECT_COMPUTED_LANGUAGE, (state: Draft<AppState>, action: ComputedLanguageAction) => {
+    builder.addCase(SELECT_COMPUTED_LANGUAGE, (state, action: ComputedLanguageAction) => {
         state.computedLanguage = action.computedLanguage;
     });
 });
