@@ -42,6 +42,7 @@ export type UserInfos = {
     sub: string;
     profileName: string;
     isAdmin: boolean;
+    groups: GroupInfos[];
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
@@ -58,7 +59,14 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }) as Promise<UserInfos[]>;
 }
 
-export function udpateUser(userInfos: UserInfos) {
+export type UpdateUserInfos = {
+    sub: string;
+    profileName?: string;
+    isAdmin?: boolean;
+    groups: string[];
+};
+
+export function udpateUser(userInfos: UpdateUserInfos) {
     console.debug(`Updating a user...`);
 
     return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
@@ -201,6 +209,76 @@ export function deleteProfiles(names: string[]): Promise<void> {
         .then(() => undefined)
         .catch((reason) => {
             console.error(`Error while deleting profiles : ${reason}`);
+            throw reason;
+        });
+}
+
+export type GroupInfos = {
+    id?: UUID;
+    name: string;
+    users: UserInfos[];
+};
+
+export function fetchGroups(): Promise<GroupInfos[]> {
+    console.debug(`Fetching list of groups...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/groups`, {
+        headers: {
+            Accept: 'application/json',
+            //'Content-Type': 'application/json; utf-8',
+        },
+        cache: 'default',
+    }).catch((reason) => {
+        console.error(`Error while fetching the servers data : ${reason}`);
+        throw reason;
+    }) as Promise<GroupInfos[]>;
+}
+
+export type UpdateGroupInfos = {
+    id: UUID;
+    name: string;
+    users: string[];
+};
+
+export function udpateGroup(groupInfos: UpdateGroupInfos) {
+    console.debug(`Updating a group...`);
+
+    return backendFetch(`${USER_ADMIN_URL}/groups/${groupInfos.id}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(groupInfos),
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while updating group : ${reason}`);
+            throw reason;
+        });
+}
+
+export function deleteGroups(groups: string[]): Promise<void> {
+    console.debug(`Deleting groups "${JSON.stringify(groups)}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/groups`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(groups),
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while deleting the servers data : ${reason}`);
+            throw reason;
+        });
+}
+
+export function addGroup(group: string): Promise<void> {
+    console.debug(`Creating group "${group}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/groups/${group}`, { method: 'post' })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while adding group : ${reason}`);
             throw reason;
         });
 }
