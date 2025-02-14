@@ -5,6 +5,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-export * from './users';
-export * from './profiles';
-export * from './groups';
+export { default as Groups } from './GroupsPage';
