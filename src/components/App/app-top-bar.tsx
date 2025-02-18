@@ -68,8 +68,8 @@ const tabs = new Map<MainPaths, ReactElement>([
             value={MainPaths.groups}
             key={`tab-${MainPaths.groups}`}
             iconPosition="start"
-            LinkComponent={forwardRef((props, ref) => (
-                <NavLink ref={ref} to={props.href} {...props} />
+            LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
+                <NavLink ref={ref} to={props.href as To} {...props} />
             ))}
         />,
     ],
