@@ -5,13 +5,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { forwardRef, FunctionComponent, ReactElement, useEffect, useMemo, useState } from 'react';
+import {
+    type AnchorHTMLAttributes,
+    forwardRef,
+    type FunctionComponent,
+    type ReactElement,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { Groups, ManageAccounts, PeopleAlt } from '@mui/icons-material';
 import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
-import { NavLink, useMatches, useNavigate } from 'react-router-dom';
+import { NavLink, type To, useMatches, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';
@@ -32,8 +40,8 @@ const tabs = new Map<MainPaths, ReactElement>([
             value={MainPaths.users}
             key={`tab-${MainPaths.users}`}
             iconPosition="start"
-            LinkComponent={forwardRef((props, ref) => (
-                <NavLink ref={ref} to={props.href} {...props} />
+            LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
+                <NavLink ref={ref} to={props.href as To} {...props} />
             ))}
         />,
     ],
@@ -46,8 +54,8 @@ const tabs = new Map<MainPaths, ReactElement>([
             value={MainPaths.profiles}
             key={`tab-${MainPaths.profiles}`}
             iconPosition="start"
-            LinkComponent={forwardRef((props, ref) => (
-                <NavLink ref={ref} to={props.href} {...props} />
+            LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
+                <NavLink ref={ref} to={props.href as To} {...props} />
             ))}
         />,
     ],
@@ -60,8 +68,8 @@ const tabs = new Map<MainPaths, ReactElement>([
             value={MainPaths.groups}
             key={`tab-${MainPaths.groups}`}
             iconPosition="start"
-            LinkComponent={forwardRef((props, ref) => (
-                <NavLink ref={ref} to={props.href} {...props} />
+            LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
+                <NavLink ref={ref} to={props.href as To} {...props} />
             ))}
         />,
     ],
@@ -113,6 +121,7 @@ const AppTopBar: FunctionComponent = () => {
             theme={themeLocal}
             onLanguageClick={handleChangeLanguage}
             language={languageLocal}
+            developerMode={false} // TODO: set as optional in commons-ui
         >
             <Tabs
                 component="nav"
