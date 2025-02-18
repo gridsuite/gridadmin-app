@@ -267,6 +267,7 @@ const UsersPage: FunctionComponent = () => {
                     dataLoader={UserAdminSrv.fetchUsers}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
+                    stopEditingWhenCellsLoseFocus={true}
                     onCellEditingStopped={handleCellEditingStopped}
                     gridId="table-users"
                     getRowId={getRowId}
