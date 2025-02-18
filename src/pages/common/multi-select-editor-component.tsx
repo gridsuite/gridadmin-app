@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Autocomplete } from '@mui/lab';
 import { Chip, TextField } from '@mui/material';
 
@@ -15,20 +15,13 @@ export interface MultiSelectCellEditorProps {
     setValue: (value: string[]) => void;
 }
 
-const MutiSelectEditorComponent = (props: MultiSelectCellEditorProps) => {
+const MultiSelectEditorComponent = (props: MultiSelectCellEditorProps) => {
     const [selectedValues, setSelectedValues] = useState<string[]>(props.value || []);
 
-    useEffect(() => {
-        props.setValue(selectedValues);
-    }, [props, selectedValues]);
-
     const handleDelete = (label: string) => {
-        let newValues = [...selectedValues];
-        const idx = newValues.indexOf(label);
-        if (idx !== -1) {
-            newValues.splice(idx, 1);
-            setSelectedValues(newValues);
-        }
+        let newValues = selectedValues.filter((val) => val !== label);
+        setSelectedValues(newValues);
+        props.setValue(newValues);
     };
 
     return (
@@ -38,6 +31,7 @@ const MutiSelectEditorComponent = (props: MultiSelectCellEditorProps) => {
             value={selectedValues}
             onChange={(_, newValue) => {
                 setSelectedValues(newValue);
+                props.setValue(newValue);
             }}
             renderInput={(params) => <TextField {...params} variant="outlined" size="small" />}
             renderTags={(val: string[]) =>
@@ -55,4 +49,4 @@ const MutiSelectEditorComponent = (props: MultiSelectCellEditorProps) => {
     );
 };
 
-export default MutiSelectEditorComponent;
+export default MultiSelectEditorComponent;

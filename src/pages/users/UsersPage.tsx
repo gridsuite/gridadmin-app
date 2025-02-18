@@ -27,14 +27,14 @@ import {
     CellEditingStoppedEvent,
     ColDef,
     GetRowIdParams,
+    ICellEditorParams,
     ICheckboxCellRendererParams,
-    RowClickedEvent,
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
-import MutiSelectEditorComponent from '../common/multi-select-editor-component';
+import MultiSelectEditorComponent from '../common/multi-select-editor-component';
 import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
 
 const defaultColDef: ColDef<UserInfos> = {
@@ -44,13 +44,6 @@ const defaultColDef: ColDef<UserInfos> = {
     cellRenderer: 'agAnimateSlideCellRenderer', //'agAnimateShowChangeCellRenderer'
     rowDrag: false,
     sortable: true,
-};
-
-type CurrentRowType = {
-    sub?: string;
-    profileName?: string;
-    isAdmin?: boolean;
-    groups?: GroupInfos[];
 };
 
 function getRowId(params: GetRowIdParams<UserInfos>): string {
@@ -64,7 +57,6 @@ const UsersPage: FunctionComponent = () => {
     const gridContext = gridRef.current?.context;
     const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
     const [groupsOptions, setGroupsOptions] = useState<string[]>([]);
-    const currentRowData = useRef<CurrentRowType>({});
 
     useEffect(() => {
         // fetch available profiles
@@ -192,22 +184,15 @@ const UsersPage: FunctionComponent = () => {
                 } as TextFilterParams<GroupInfos>,
                 editable: true,
                 cellRenderer: MultiChipsRendererComponent,
-                cellEditor: MutiSelectEditorComponent,
-                cellEditorParams: () => {
-                    return {
-                        options: groupsOptions,
-                        setValue: (values: string[]) => {
-                            if (currentRowData.current.sub !== undefined) {
-                                updateUserCallback(
-                                    currentRowData.current.sub,
-                                    currentRowData.current.profileName,
-                                    currentRowData.current.isAdmin,
-                                    values
-                                );
-                            }
-                        },
-                    };
-                },
+                cellEditor: MultiSelectEditorComponent,
+                cellEditorParams: (params: ICellEditorParams<UserInfos>) => ({
+                    options: groupsOptions,
+                    setValue: (values: string[]) => {
+                        if (params.data?.sub) {
+                            updateUserCallback(params.data.sub, params.data.profileName, params.data.isAdmin, values);
+                        }
+                    },
+                }),
             },
         ],
         [intl, profileNameOptions, groupsOptions, updateUserCallback]
@@ -274,17 +259,6 @@ const UsersPage: FunctionComponent = () => {
         [gridContext, updateUserCallback]
     );
 
-    const handleRowClicked = useCallback((event: RowClickedEvent<UserInfos>) => {
-        if (event.data?.sub !== undefined) {
-            currentRowData.current = {
-                sub: event.data?.sub,
-                profileName: event.data?.profileName,
-                isAdmin: event.data?.isAdmin,
-                groups: event.data?.groups,
-            };
-        }
-    }, []);
-
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
@@ -294,7 +268,6 @@ const UsersPage: FunctionComponent = () => {
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
                     onCellEditingStopped={handleCellEditingStopped}
-                    onRowClicked={handleRowClicked}
                     gridId="table-users"
                     getRowId={getRowId}
                     rowSelection={{

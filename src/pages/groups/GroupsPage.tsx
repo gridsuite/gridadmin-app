@@ -23,10 +23,10 @@ import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../com
 import { UserAdminSrv, GroupInfos, UserInfos, UpdateGroupInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ColDef, GetRowIdParams, SelectionChangedEvent, TextFilterParams, RowClickedEvent } from 'ag-grid-community';
+import { ColDef, GetRowIdParams, SelectionChangedEvent, TextFilterParams, ICellEditorParams } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
-import MutiSelectEditorComponent from '../common/multi-select-editor-component';
+import MultiSelectEditorComponent from '../common/multi-select-editor-component';
 import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
 import { UUID } from 'crypto';
 
@@ -34,15 +34,9 @@ const defaultColDef: ColDef<GroupInfos> = {
     editable: false,
     resizable: true,
     minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer', //'agAnimateShowChangeCellRenderer'
+    cellRenderer: 'agAnimateSlideCellRenderer',
     rowDrag: false,
     sortable: true,
-};
-
-type CurrentRowType = {
-    id?: UUID;
-    name?: string;
-    users?: UserInfos[];
 };
 
 function getRowId(params: GetRowIdParams<GroupInfos>): string {
@@ -55,13 +49,11 @@ const GroupsPage: FunctionComponent = () => {
     const gridRef = useRef<GridTableRef<GroupInfos>>(null);
     const gridContext = gridRef.current?.context;
     const [usersOptions, setUsersOptions] = useState<string[]>([]);
-    const currentRowData = useRef<CurrentRowType>({});
 
     useEffect(() => {
         UserAdminSrv.fetchUsers()
             .then((allUsers: UserInfos[]) => {
-                let users: string[] = [];
-                allUsers?.forEach((u) => users.push(u.sub));
+                const users = allUsers?.map((u) => u.sub) || [];
                 setUsersOptions(users);
             })
             .catch((error) =>
@@ -70,7 +62,7 @@ const GroupsPage: FunctionComponent = () => {
                     headerId: 'groups.table.error.users',
                 })
             );
-    }, [intl, snackError]);
+    }, [snackError]);
 
     const updateGroupCallback = useCallback(
         (id: UUID, name: string, users: string[]) => {
@@ -126,17 +118,15 @@ const GroupsPage: FunctionComponent = () => {
                 } as TextFilterParams<UserInfos>,
                 editable: true,
                 cellRenderer: MultiChipsRendererComponent,
-                cellEditor: MutiSelectEditorComponent,
-                cellEditorParams: () => {
-                    return {
-                        options: usersOptions,
-                        setValue: (values: string[]) => {
-                            if (currentRowData.current.id !== undefined && currentRowData.current.name !== undefined) {
-                                updateGroupCallback(currentRowData.current.id, currentRowData.current.name, values);
-                            }
-                        },
-                    };
-                },
+                cellEditor: MultiSelectEditorComponent,
+                cellEditorParams: (params: ICellEditorParams<GroupInfos>) => ({
+                    options: usersOptions,
+                    setValue: (values: string[]) => {
+                        if (params.data?.id) {
+                            updateGroupCallback(params.data.id, params.data.name, values);
+                        }
+                    },
+                }),
             },
         ],
         [intl, usersOptions, updateGroupCallback]
@@ -187,16 +177,6 @@ const GroupsPage: FunctionComponent = () => {
     };
     const onSubmitForm = handleSubmit(onSubmit);
 
-    const handleRowClicked = useCallback((event: RowClickedEvent<GroupInfos>) => {
-        if (event.data?.name !== undefined) {
-            currentRowData.current = {
-                id: event.data?.id,
-                name: event.data?.name,
-                users: event.data?.users,
-            };
-        }
-    }, []);
-
     return (
         <Grid item container direction="column" spacing={2} component="section">
             <Grid item container xs sx={{ width: 1 }}>
@@ -205,8 +185,7 @@ const GroupsPage: FunctionComponent = () => {
                     dataLoader={UserAdminSrv.fetchGroups}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
-                    //onCellEditingStopped={handleCellEditingStopped}
-                    onRowClicked={handleRowClicked}
+                    stopEditingWhenCellsLoseFocus={true}
                     gridId="table-groups"
                     getRowId={getRowId}
                     rowSelection={{
