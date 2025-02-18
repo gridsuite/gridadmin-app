@@ -14,6 +14,7 @@
 
     "appBar.tabs.users": "Users",
     "appBar.tabs.profiles": "Profiles",
+    "appBar.tabs.groups": "Groups",
     "appBar.tabs.connections": "Connections",
 
     "table.noRows": "No data",
@@ -37,8 +38,12 @@
     "users.table.error.delete": "Error while deleting user",
     "users.table.error.add": "Error while adding user",
     "users.table.toolbar.add": "Add user",
+    "users.table.error.update": "Error while modifying user",
     "users.table.profile.none": "<None>",
     "users.table.error.profiles": "Error while fetching profiles",
+    "users.table.error.groups": "Error while fetching groups",
+    "users.table.groups": "Groups",
+    "users.table.groups.description": "The user's groups",
     "users.table.toolbar.add.label": "Add a user",
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
@@ -46,6 +51,7 @@
 
     "form.delete.dialog.user": "user",
     "form.delete.dialog.profile": "profile",
+    "form.delete.dialog.group": "group",
     "form.delete.dialog.title": "Delete a {itemType}",
     "form.delete.multiple.dialog.message": "{itemsCount} {itemType}s will be deleted.",
     "form.delete.dialog.message": "{itemName} will be deleted.",
@@ -80,6 +86,20 @@
     "profiles.form.modification.voltageInit.name": "Voltage init",
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile",
+
+    "groups.table.id": "ID",
+    "groups.table.id.description": "Group identifier",
+    "groups.table.users": "Users",
+    "groups.table.users.description": "The group's users",
+    "groups.table.error.delete": "Error while deleting group",
+    "groups.table.error.add": "Error while adding group",
+    "groups.table.toolbar.add.label": "Add a group",
+    "groups.table.toolbar.add": "Add group",
+    "groups.table.error.update": "Error while modifying group",
+    "groups.table.error.users": "Error while fetching users",
+    "groups.form.title": "Add a group",
+    "groups.form.content": "Please fill in new group data.",
+    "groups.form.field.group.label": "Group ID",
 
     "linked.path.display.noLink": "no parameters selected.",
     "linked.path.display.invalidLink": "invalid parameters link."

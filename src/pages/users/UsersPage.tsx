@@ -20,19 +20,22 @@ import {
 } from '@mui/material';
 import { AccountCircle, PersonAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
-import { UserAdminSrv, UserInfos, UserProfile } from '../../services';
+import { GroupInfos, UpdateUserInfos, UserAdminSrv, UserInfos, UserProfile } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
     CellEditingStoppedEvent,
     ColDef,
     GetRowIdParams,
+    ICellEditorParams,
     ICheckboxCellRendererParams,
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
 import PaperForm from '../common/paper-form';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
+import MultiSelectEditorComponent from '../common/multi-select-editor-component';
+import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
 
 const defaultColDef: ColDef<UserInfos> = {
     editable: false,
@@ -53,8 +56,10 @@ const UsersPage: FunctionComponent = () => {
     const gridRef = useRef<GridTableRef<UserInfos>>(null);
     const gridContext = gridRef.current?.context;
     const [profileNameOptions, setprofileNameOptions] = useState<string[]>([]);
+    const [groupsOptions, setGroupsOptions] = useState<string[]>([]);
 
     useEffect(() => {
+        // fetch available profiles
         UserAdminSrv.fetchProfilesWithoutValidityCheck()
             .then((allProfiles: UserProfile[]) => {
                 let profiles: string[] = [intl.formatMessage({ id: 'users.table.profile.none' })];
@@ -67,7 +72,41 @@ const UsersPage: FunctionComponent = () => {
                     headerId: 'users.table.error.profiles',
                 })
             );
+
+        // fetch available groups
+        UserAdminSrv.fetchGroups()
+            .then((allGroups: GroupInfos[]) => {
+                let groups: string[] = [];
+                allGroups?.forEach((g) => groups.push(g.name));
+                setGroupsOptions(groups);
+            })
+            .catch((error) =>
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'users.table.error.groups',
+                })
+            );
     }, [intl, snackError]);
+
+    const updateUserCallback = useCallback(
+        (sub: string, profileName: string | undefined, isAdmin: boolean | undefined, groups: string[]) => {
+            const newData: UpdateUserInfos = {
+                sub: sub,
+                profileName: profileName,
+                isAdmin: isAdmin,
+                groups: groups,
+            };
+            UserAdminSrv.udpateUser(newData)
+                .catch((error) =>
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'users.table.error.update',
+                    })
+                )
+                .then(() => gridContext?.refresh?.());
+        },
+        [gridContext, snackError]
+    );
 
     const columns = useMemo(
         (): ColDef<UserInfos>[] => [
@@ -128,8 +167,35 @@ const UsersPage: FunctionComponent = () => {
                 }),
                 filter: true,
             },
+            {
+                field: 'groups',
+                cellDataType: 'text',
+                flex: 1,
+                filter: true,
+                headerName: intl.formatMessage({
+                    id: 'users.table.groups',
+                }),
+                headerTooltip: intl.formatMessage({
+                    id: 'users.table.groups.description',
+                }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<GroupInfos>,
+                editable: true,
+                cellRenderer: MultiChipsRendererComponent,
+                cellEditor: MultiSelectEditorComponent,
+                cellEditorParams: (params: ICellEditorParams<UserInfos>) => ({
+                    options: groupsOptions,
+                    setValue: (values: string[]) => {
+                        if (params.data?.sub) {
+                            updateUserCallback(params.data.sub, params.data.profileName, params.data.isAdmin, values);
+                        }
+                    },
+                }),
+            },
         ],
-        [intl, profileNameOptions]
+        [intl, profileNameOptions, groupsOptions, updateUserCallback]
     );
 
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
@@ -180,19 +246,17 @@ const UsersPage: FunctionComponent = () => {
     const handleCellEditingStopped = useCallback(
         (event: CellEditingStoppedEvent<UserInfos>) => {
             if (event.valueChanged && event.data) {
-                UserAdminSrv.udpateUser(event.data)
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'users.table.error.update',
-                        })
-                    )
-                    .then(() => gridContext?.refresh?.());
+                updateUserCallback(
+                    event.data.sub,
+                    event.data.profileName,
+                    event.data.isAdmin,
+                    event.data.groups.map((g) => g.name)
+                );
             } else {
                 gridContext?.refresh?.();
             }
         },
-        [gridContext, snackError]
+        [gridContext, updateUserCallback]
     );
 
     return (
@@ -203,6 +267,7 @@ const UsersPage: FunctionComponent = () => {
                     dataLoader={UserAdminSrv.fetchUsers}
                     columnDefs={columns}
                     defaultColDef={defaultColDef}
+                    stopEditingWhenCellsLoseFocus={true}
                     onCellEditingStopped={handleCellEditingStopped}
                     gridId="table-users"
                     getRowId={getRowId}

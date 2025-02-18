@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
-import { Profiles, Users } from '../pages';
+import { Profiles, Users, Groups } from '../pages';
 import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
 import HomePage from './HomePage';
@@ -32,6 +32,7 @@ import { AppDispatch } from '../redux/store';
 export enum MainPaths {
     users = 'users',
     profiles = 'profiles',
+    groups = 'groups',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -56,6 +57,13 @@ export function appRoutes(): RouteObject[] {
                     element: <Profiles />,
                     handle: {
                         appBar_tab: MainPaths.profiles,
+                    },
+                },
+                {
+                    path: `/${MainPaths.groups}`,
+                    element: <Groups />,
+                    handle: {
+                        appBar_tab: MainPaths.groups,
                     },
                 },
             ],
