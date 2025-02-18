@@ -7,7 +7,7 @@
 
 import { forwardRef, FunctionComponent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
-import { ManageAccounts, PeopleAlt } from '@mui/icons-material';
+import { Groups, ManageAccounts, PeopleAlt } from '@mui/icons-material';
 import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
@@ -45,6 +45,20 @@ const tabs = new Map<MainPaths, ReactElement>([
             href={`/${MainPaths.profiles}`}
             value={MainPaths.profiles}
             key={`tab-${MainPaths.profiles}`}
+            iconPosition="start"
+            LinkComponent={forwardRef((props, ref) => (
+                <NavLink ref={ref} to={props.href} {...props} />
+            ))}
+        />,
+    ],
+    [
+        MainPaths.groups,
+        <Tab
+            icon={<Groups />}
+            label={<FormattedMessage id="appBar.tabs.groups" />}
+            href={`/${MainPaths.groups}`}
+            value={MainPaths.groups}
+            key={`tab-${MainPaths.groups}`}
             iconPosition="start"
             LinkComponent={forwardRef((props, ref) => (
                 <NavLink ref={ref} to={props.href} {...props} />
