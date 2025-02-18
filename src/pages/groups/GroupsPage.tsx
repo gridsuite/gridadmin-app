@@ -6,29 +6,18 @@
  */
 
 import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
-    InputAdornment,
-    TextField,
-} from '@mui/material';
-import { AccountCircle, GroupAdd } from '@mui/icons-material';
+import { useIntl } from 'react-intl';
+import { Grid } from '@mui/material';
+import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, GroupInfos, UserInfos, UpdateGroupInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ColDef, GetRowIdParams, SelectionChangedEvent, TextFilterParams, ICellEditorParams } from 'ag-grid-community';
-import PaperForm from '../common/paper-form';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import MultiSelectEditorComponent from '../common/multi-select-editor-component';
 import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
 import { UUID } from 'crypto';
+import AddGroupDialog from './add-group-dialog';
 
 const defaultColDef: ColDef<GroupInfos> = {
     editable: false,
@@ -49,6 +38,7 @@ const GroupsPage: FunctionComponent = () => {
     const gridRef = useRef<GridTableRef<GroupInfos>>(null);
     const gridContext = gridRef.current?.context;
     const [usersOptions, setUsersOptions] = useState<string[]>([]);
+    const [openAddGroupDialog, setOpenAddGroupDialog] = useState(false);
 
     useEffect(() => {
         UserAdminSrv.fetchUsers()
@@ -145,37 +135,7 @@ const GroupsPage: FunctionComponent = () => {
             .then(() => gridContext?.refresh?.());
     }, [gridContext, rowsSelection, snackError]);
     const deleteGroupsDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
-
-    const addGroup = useCallback(
-        (group: string) => {
-            UserAdminSrv.addGroup(group)
-                .catch((error) =>
-                    snackError({
-                        messageTxt: `Error while adding group "${group}"${error.message && ':\n' + error.message}`,
-                        headerId: 'groups.table.error.add',
-                    })
-                )
-                .then(() => gridContext?.refresh?.());
-        },
-        [gridContext, snackError]
-    );
-    const { handleSubmit, control, reset, clearErrors } = useForm<{
-        group: string;
-    }>({
-        defaultValues: { group: '' }, //need default not undefined value for html input, else react error at runtime
-    });
-    const [open, setOpen] = useState(false);
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
-    const handleClose = () => {
-        setOpen(false);
-        reset();
-        clearErrors();
-    };
-    const onSubmit: SubmitHandler<{ group: string }> = (data) => {
-        addGroup(data.group.trim());
-        handleClose();
-    };
-    const onSubmitForm = handleSubmit(onSubmit);
 
     return (
         <Grid item container direction="column" spacing={2} component="section">
@@ -206,60 +166,11 @@ const GroupsPage: FunctionComponent = () => {
                         textId="groups.table.toolbar.add"
                         startIcon={<GroupAdd fontSize="small" />}
                         color="primary"
-                        onClick={useCallback(() => setOpen(true), [])}
+                        onClick={useCallback(() => setOpenAddGroupDialog(true), [])}
                     />
                     <GridButtonDelete onClick={() => setShowDeletionDialog(true)} disabled={deleteGroupsDisabled} />
                 </GridTable>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    PaperComponent={(props) => <PaperForm untypedProps={props} onSubmit={onSubmitForm} />}
-                >
-                    <DialogTitle>
-                        <FormattedMessage id="groups.form.title" />
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            <FormattedMessage id="groups.form.content" />
-                        </DialogContentText>
-                        <Controller
-                            name="group"
-                            control={control}
-                            rules={{ required: true, minLength: 1 }}
-                            render={({ field, fieldState }) => (
-                                <TextField
-                                    {...field}
-                                    autoFocus
-                                    required
-                                    margin="dense"
-                                    label={<FormattedMessage id="groups.form.field.group.label" />}
-                                    type="text"
-                                    fullWidth
-                                    variant="standard"
-                                    inputMode="text"
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <AccountCircle />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    error={fieldState?.invalid}
-                                    helperText={fieldState?.error?.message}
-                                />
-                            )}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>
-                            <FormattedMessage id="cancel" />
-                        </Button>
-                        <Button type="submit">
-                            <FormattedMessage id="ok" />
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
+                <AddGroupDialog gridRef={gridRef} open={openAddGroupDialog} setOpen={setOpenAddGroupDialog} />
                 <DeleteConfirmationDialog
                     open={showDeletionDialog}
                     setOpen={setShowDeletionDialog}
