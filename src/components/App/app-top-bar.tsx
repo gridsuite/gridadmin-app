@@ -28,7 +28,7 @@ import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { AppDispatch } from '../../redux/store';
-import { MainPaths } from 'routes/utils';
+import { MainPaths } from '../../routes/utils';
 
 const tabs = new Map<MainPaths, ReactElement>([
     [
