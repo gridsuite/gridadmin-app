@@ -6,11 +6,9 @@
  */
 
 import { FunctionComponent, PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { AuthenticationRouter, getPreLoginPath, initializeAuthenticationProd } from '@gridsuite/commons-ui';
+import { AuthenticationRouter, initializeAuthenticationProd } from '@gridsuite/commons-ui';
 import {
     createBrowserRouter,
-    Navigate,
     Outlet,
     RouteObject,
     RouterProvider,
@@ -22,67 +20,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
 import { App } from '../components/App';
-import { Profiles, Users, Groups } from '../pages';
-import ErrorPage from './ErrorPage';
 import { updateUserManagerDestructured } from '../redux/actions';
-import HomePage from './HomePage';
 import { getErrorMessage } from '../utils/error';
 import { AppDispatch } from '../redux/store';
-
-export enum MainPaths {
-    users = 'users',
-    profiles = 'profiles',
-    groups = 'groups',
-}
-
-export function appRoutes(): RouteObject[] {
-    return [
-        {
-            path: '/',
-            errorElement: <ErrorPage />,
-            children: [
-                {
-                    index: true,
-                    element: <HomePage />,
-                },
-                {
-                    path: `/${MainPaths.users}`,
-                    element: <Users />,
-                    handle: {
-                        appBar_tab: MainPaths.users,
-                    },
-                },
-                {
-                    path: `/${MainPaths.profiles}`,
-                    element: <Profiles />,
-                    handle: {
-                        appBar_tab: MainPaths.profiles,
-                    },
-                },
-                {
-                    path: `/${MainPaths.groups}`,
-                    element: <Groups />,
-                    handle: {
-                        appBar_tab: MainPaths.groups,
-                    },
-                },
-            ],
-        },
-        {
-            path: '/sign-in-callback',
-            element: <Navigate replace to={getPreLoginPath() || '/'} />,
-        },
-        {
-            path: '/logout-callback',
-            element: <FormattedMessage tagName="h1" id="logoutFailed" />,
-        },
-        {
-            path: '*',
-            element: <FormattedMessage tagName="h1" id="pageNotFound" />,
-            errorElement: <ErrorPage />,
-        },
-    ];
-}
+import { appRoutes } from './utils';
 
 const AuthRouter: FunctionComponent<{
     userManager: Parameters<typeof AuthenticationRouter>[0]['userManager'];

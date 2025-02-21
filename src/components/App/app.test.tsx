@@ -17,7 +17,7 @@ import { store } from '../../redux/store';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
 import { CssBaseline } from '@mui/material';
-import { appRoutes } from '../../routes';
+import { appRoutes } from 'routes/utils';
 
 let container: HTMLElement | null = null;
 

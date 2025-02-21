@@ -19,17 +19,11 @@ import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 
-// TODO remove FetchStatus when exported in commons-ui (available soon)
-export enum FetchStatus {
-    IDLE = 'IDLE',
-    FETCHING = 'FETCHING',
-    FETCH_SUCCESS = 'FETCH_SUCCESS',
-    FETCH_ERROR = 'FETCH_ERROR',
-}
+type FetchStatusType = (typeof FetchStatus)[keyof typeof FetchStatus];
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -45,7 +39,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
-    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(FetchStatus.IDLE);
+    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatusType>(FetchStatus.IDLE);
 
     const formSchema = yup
         .object()
