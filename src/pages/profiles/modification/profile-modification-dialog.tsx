@@ -11,6 +11,7 @@ import ProfileModificationForm, {
     SENSITIVITY_ANALYSIS_PARAM_ID,
     SHORTCIRCUIT_PARAM_ID,
     VOLTAGE_INIT_PARAM_ID,
+    SPREADSHEET_CONFIG_COLLECTION_ID,
     PROFILE_NAME,
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
@@ -58,6 +59,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [VOLTAGE_INIT_PARAM_ID]: yup.string().optional(),
             [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
             [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
+            [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
         })
         .required();
 
@@ -80,6 +82,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
+                    spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
@@ -124,6 +127,9 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                             : undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
+                        [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId
+                            ? response.spreadsheetConfigCollectionId
+                            : undefined,
                     });
                 })
                 .catch((error) => {

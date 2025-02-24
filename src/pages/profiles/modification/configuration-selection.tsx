@@ -15,62 +15,63 @@ import { useController, useWatch } from 'react-hook-form';
 import { DirectorySrv } from '../../../services';
 import LinkedPathDisplay from './linked-path-display';
 
-export interface ParameterSelectionProps {
+export interface ConfigSelectionProps {
     elementType:
         | ElementType.LOADFLOW_PARAMETERS
         | ElementType.SECURITY_ANALYSIS_PARAMETERS
         | ElementType.SENSITIVITY_PARAMETERS
         | ElementType.SHORT_CIRCUIT_PARAMETERS
-        | ElementType.VOLTAGE_INIT_PARAMETERS;
-    parameterFormId: string;
+        | ElementType.VOLTAGE_INIT_PARAMETERS
+        | ElementType.SPREADSHEET_CONFIG_COLLECTION;
+    selectionFormId: string;
 }
 
-const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) => {
+const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) => {
     const intl = useIntl();
 
     const [openDirectorySelector, setOpenDirectorySelector] = useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
-    const [parameterLinkValid, setParameterLinkValid] = useState<boolean>();
-    const watchParamId = useWatch({
-        name: props.parameterFormId,
+    const [configLinkValid, setConfigLinkValid] = useState<boolean>();
+    const watchConfigId = useWatch({
+        name: props.selectionFormId,
     });
-    const ctlParamId = useController({
-        name: props.parameterFormId,
+    const ctlConfigId = useController({
+        name: props.selectionFormId,
     });
 
     useEffect(() => {
-        if (!watchParamId) {
+        if (!watchConfigId) {
             setSelectedElementName(undefined);
-            setParameterLinkValid(undefined);
+            setConfigLinkValid(undefined);
         } else {
-            DirectorySrv.fetchPath(watchParamId)
+            DirectorySrv.fetchPath(watchConfigId)
                 .then((res: any) => {
-                    setParameterLinkValid(true);
+                    setConfigLinkValid(true);
                     setSelectedElementName(res.map((element: any) => element.elementName.trim()).join('/'));
                 })
                 .catch(() => {
                     setSelectedElementName(undefined);
-                    setParameterLinkValid(false);
+                    setConfigLinkValid(false);
                 });
         }
-    }, [watchParamId]);
+    }, [watchConfigId]);
 
     const handleSelectFolder = () => {
         setOpenDirectorySelector(true);
     };
 
-    const handleResetParameter = () => {
-        ctlParamId.field.onChange(undefined);
+    const handleResetConfig = () => {
+        ctlConfigId.field.onChange(undefined);
     };
 
     const handleClose = (selection: any) => {
         if (selection.length) {
-            ctlParamId.field.onChange(selection[0]?.id);
+            ctlConfigId.field.onChange(selection[0]?.id);
         }
         setOpenDirectorySelector(false);
     };
 
-    const getParameterTranslationKey = () => {
+    const getConfigTranslationKey = () => {
         switch (props.elementType) {
             case ElementType.LOADFLOW_PARAMETERS:
                 return 'profiles.form.modification.loadflow.name';
@@ -82,16 +83,18 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
                 return 'profiles.form.modification.shortcircuit.name';
             case ElementType.VOLTAGE_INIT_PARAMETERS:
                 return 'profiles.form.modification.voltageInit.name';
+            case ElementType.SPREADSHEET_CONFIG_COLLECTION:
+                return 'profiles.form.modification.spreadsheetConfigCollection.name';
         }
     };
 
     return (
         <Grid container columns={24} alignItems={'center'}>
             <Grid item xs={1}>
-                <IconButton edge="start" onClick={handleResetParameter} disableRipple={watchParamId === undefined}>
+                <IconButton edge="start" onClick={handleResetConfig} disableRipple={watchConfigId === undefined}>
                     <Tooltip
                         title={intl.formatMessage({
-                            id: 'profiles.form.modification.parameter.reset.tooltip',
+                            id: 'profiles.form.modification.configuration.reset.tooltip',
                         })}
                     >
                         <HighlightOffIcon color="action" />
@@ -102,7 +105,7 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
                 <IconButton edge="start" onClick={handleSelectFolder}>
                     <Tooltip
                         title={intl.formatMessage({
-                            id: 'profiles.form.modification.parameter.choose.tooltip',
+                            id: 'profiles.form.modification.configuration.choose.tooltip',
                         })}
                     >
                         <FolderIcon color="action" />
@@ -111,9 +114,9 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
             </Grid>
             <Grid item xs={22}>
                 <LinkedPathDisplay
-                    nameKey={getParameterTranslationKey()}
+                    nameKey={getConfigTranslationKey()}
                     value={selectedElementName}
-                    linkValidity={parameterLinkValid}
+                    linkValidity={configLinkValid}
                 />
             </Grid>
             <DirectoryItemSelector
@@ -126,14 +129,14 @@ const ParameterSelection: FunctionComponent<ParameterSelectionProps> = (props) =
                     id: 'validate',
                 })}
                 title={intl.formatMessage({
-                    id: 'profiles.form.modification.parameterSelection.dialog.title',
+                    id: 'profiles.form.modification.configSelection.dialog.title',
                 })}
                 contentText={intl.formatMessage({
-                    id: 'profiles.form.modification.parameterSelection.dialog.message',
+                    id: 'profiles.form.modification.configSelection.dialog.message',
                 })}
             />
         </Grid>
     );
 };
 
-export default ParameterSelection;
+export default ConfigurationSelection;

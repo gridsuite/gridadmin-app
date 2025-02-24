@@ -65,26 +65,27 @@
     "profiles.form.field.profilename.label": "Nom du profil",
     "profiles.table.id": "Nom",
     "profiles.table.id.description": "Nom du profil",
-    "profiles.table.validity": "Validité des liens vers les paramètres",
-    "profiles.table.validity.description": "Tous les liens vers les paramètres sont-ils valides ?",
+    "profiles.table.validity": "Validité des liens vers les configurations",
+    "profiles.table.validity.description": "Tous les liens vers les configurations sont-ils valides ?",
     "profiles.table.error.add": "Erreur pendant l'ajout du profil",
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
     "profiles.table.integrity.error.delete": "Erreur pendant la suppression de profil: un profil est toujours référencé par des utilisateurs",
 
     "profiles.form.modification.title": "Modifier profil",
-    "profiles.form.modification.defaultParameters": "Paramètres par défaut",
+    "profiles.form.modification.defaultConfigurations": "Configurations par défaut",
     "profiles.form.modification.userQuotas": "Quotas utilisateur",
     "profiles.form.modification.numberOfCasesOrStudies": "Nombre de situations ou d'études",
     "profiles.form.modification.numberOfNodeBuilds": "Nombre de réalisations par étude",
-    "profiles.form.modification.parameter.choose.tooltip": "Choisir paramètres",
-    "profiles.form.modification.parameter.reset.tooltip": "Ne pas définir de paramètres",
-    "profiles.form.modification.parameterSelection.dialog.title": "Choisir des paramètres",
-    "profiles.form.modification.parameterSelection.dialog.message": "Veuillez choisir des paramètres",
+    "profiles.form.modification.configuration.choose.tooltip": "Choisir configuration",
+    "profiles.form.modification.configuration.reset.tooltip": "Ne pas définir de configuration",
+    "profiles.form.modification.configSelection.dialog.title": "Choisir une configuration",
+    "profiles.form.modification.configSelection.dialog.message": "Veuillez choisir une configuration",
     "profiles.form.modification.loadflow.name": "Calcul de répartition",
     "profiles.form.modification.securityAnalysis.name": "Analyse de sécurité",
     "profiles.form.modification.sensitivityAnalysis.name": "Analyse de sensibilités",
     "profiles.form.modification.shortcircuit.name": "Calcul de court-circuit",
     "profiles.form.modification.voltageInit.name": "Initialisation du plan de tension",
+    "profiles.form.modification.spreadsheetConfigCollection.name": "Modèles de tableur",
     "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
 
@@ -102,6 +103,6 @@
     "groups.form.content": "Veuillez renseigner les informations du groupe.",
     "groups.form.field.group.label": "ID groupe",
 
-    "linked.path.display.invalidLink": "lien vers paramètres invalide.",
-    "linked.path.display.noLink": "pas de paramètres selectionnés."
+    "linked.path.display.noLink": "pas de configuration selectionnée.",
+    "linked.path.display.invalidLink": "lien vers configurations invalide."
 }
