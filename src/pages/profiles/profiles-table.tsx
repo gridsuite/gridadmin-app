@@ -92,7 +92,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 editable: false,
             },
             {
-                field: 'allParametersLinksValid',
+                field: 'allLinksValid',
                 cellDataType: 'boolean',
                 cellStyle: () => ({
                     display: 'flex',
