@@ -9,11 +9,11 @@ import { backendFetchJson, getRestBase } from '../utils/api-rest';
 import { UUID } from 'crypto';
 import { ElementAttributes } from '@gridsuite/commons-ui';
 
-const DIRECTORY_URL = `${getRestBase()}/directory/v1`;
+const EXPLORE_URL = `${getRestBase()}/explore/v1`;
 
 export function fetchPath(elementUuid: UUID): Promise<ElementAttributes[]> {
     console.debug(`Fetching element and its parents info...`);
-    return backendFetchJson(`${DIRECTORY_URL}/elements/${elementUuid}/path`, {
+    return backendFetchJson(`${EXPLORE_URL}/explore/directories/elements/${elementUuid}/path`, {
         headers: {
             Accept: 'application/json',
         },
