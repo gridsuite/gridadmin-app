@@ -24,7 +24,7 @@ import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 
 // TODO remove FetchStatus when exported in commons-ui (available soon)
-export enum FetchStatus {
+enum FetchStatus {
     IDLE = 'IDLE',
     FETCHING = 'FETCHING',
     FETCH_SUCCESS = 'FETCH_SUCCESS',
