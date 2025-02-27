@@ -7,7 +7,7 @@
 
 import { ElementType, IntegerInput, TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
-import ParameterSelection from './parameter-selection';
+import ConfigurationSelection from './configuration-selection';
 import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
 
@@ -17,6 +17,7 @@ export const SECURITY_ANALYSIS_PARAM_ID = 'securityAnalysisParamId';
 export const SENSITIVITY_ANALYSIS_PARAM_ID = 'sensitivityAnalysisParamId';
 export const SHORTCIRCUIT_PARAM_ID = 'shortcircuitParamId';
 export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
+export const SPREADSHEET_CONFIG_COLLECTION_ID = 'spreadsheetConfigCollectionId';
 
 export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
 export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
@@ -29,34 +30,43 @@ const ProfileModificationForm: FunctionComponent = () => {
             </Grid>
             <Grid item xs={12}>
                 <h3>
-                    <FormattedMessage id={'profiles.form.modification.defaultParameters'} />
+                    <FormattedMessage id={'profiles.form.modification.defaultConfigurations'} />
                 </h3>
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection elementType={ElementType.LOADFLOW_PARAMETERS} parameterFormId={LOADFLOW_PARAM_ID} />
+                <ConfigurationSelection
+                    elementType={ElementType.LOADFLOW_PARAMETERS}
+                    selectionFormId={LOADFLOW_PARAM_ID}
+                />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
+                <ConfigurationSelection
                     elementType={ElementType.SECURITY_ANALYSIS_PARAMETERS}
-                    parameterFormId={SECURITY_ANALYSIS_PARAM_ID}
+                    selectionFormId={SECURITY_ANALYSIS_PARAM_ID}
                 />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
+                <ConfigurationSelection
                     elementType={ElementType.SENSITIVITY_PARAMETERS}
-                    parameterFormId={SENSITIVITY_ANALYSIS_PARAM_ID}
+                    selectionFormId={SENSITIVITY_ANALYSIS_PARAM_ID}
                 />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
+                <ConfigurationSelection
                     elementType={ElementType.SHORT_CIRCUIT_PARAMETERS}
-                    parameterFormId={SHORTCIRCUIT_PARAM_ID}
+                    selectionFormId={SHORTCIRCUIT_PARAM_ID}
                 />
             </Grid>
             <Grid item xs={12}>
-                <ParameterSelection
+                <ConfigurationSelection
                     elementType={ElementType.VOLTAGE_INIT_PARAMETERS}
-                    parameterFormId={VOLTAGE_INIT_PARAM_ID}
+                    selectionFormId={VOLTAGE_INIT_PARAM_ID}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <ConfigurationSelection
+                    elementType={ElementType.SPREADSHEET_CONFIG_COLLECTION}
+                    selectionFormId={SPREADSHEET_CONFIG_COLLECTION_ID}
                 />
             </Grid>
             <Grid item xs={12}>

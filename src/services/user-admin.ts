@@ -113,7 +113,7 @@ export function addUser(sub: string): Promise<void> {
 export type UserProfile = {
     id?: UUID;
     name: string;
-    allParametersLinksValid?: boolean;
+    allLinksValid?: boolean;
     loadFlowParameterId?: UUID;
     securityAnalysisParameterId?: UUID;
     sensitivityAnalysisParameterId?: UUID;
@@ -121,6 +121,7 @@ export type UserProfile = {
     voltageInitParameterId?: UUID;
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
+    spreadsheetConfigCollectionId?: UUID;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
