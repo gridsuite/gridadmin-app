@@ -19,7 +19,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
-import { App } from '../components/App';
+import type { App } from '../components/App';
 import { updateUserManagerDestructured } from '../redux/actions';
 import { getErrorMessage } from '../utils/error';
 import { AppDispatch } from '../redux/store';

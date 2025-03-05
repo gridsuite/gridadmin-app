@@ -8,7 +8,7 @@
 import { GsTheme, UserManagerState } from '@gridsuite/commons-ui';
 import { PARAM_LANGUAGE } from '../utils/config-params';
 import { Action } from 'redux';
-import { AppState } from './reducer';
+import type { AppState } from './reducer';
 
 export const UPDATE_USER_MANAGER_STATE = 'UPDATE_USER_MANAGER_STATE';
 export type UserManagerAction = Readonly<Action<typeof UPDATE_USER_MANAGER_STATE>> & {
