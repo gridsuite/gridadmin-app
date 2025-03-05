@@ -15,6 +15,7 @@ import ProfileModificationForm, {
     PROFILE_NAME,
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
+    NETWORK_VISUALIZATION_PARAMETERS_ID,
 } from './profile-modification-form';
 import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -60,6 +61,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
             [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
             [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
+            [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string().optional(),
         })
         .required();
 
@@ -83,6 +85,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                     spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
+                    networkVisualizationParameterId: profileFormData[NETWORK_VISUALIZATION_PARAMETERS_ID],
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
@@ -129,6 +132,9 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                         [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId
                             ? response.spreadsheetConfigCollectionId
+                            : undefined,
+                        [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId
+                            ? response.networkVisualizationParameterId
                             : undefined,
                     });
                 })

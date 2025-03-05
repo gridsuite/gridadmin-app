@@ -122,6 +122,7 @@ export type UserProfile = {
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
     spreadsheetConfigCollectionId?: UUID;
+    networkVisualizationParameterId?: UUID;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {

@@ -22,7 +22,8 @@ export interface ConfigSelectionProps {
         | ElementType.SENSITIVITY_PARAMETERS
         | ElementType.SHORT_CIRCUIT_PARAMETERS
         | ElementType.VOLTAGE_INIT_PARAMETERS
-        | ElementType.SPREADSHEET_CONFIG_COLLECTION;
+        | ElementType.SPREADSHEET_CONFIG_COLLECTION
+        | ElementType.NETWORK_VISUALIZATIONS_PARAMETERS;
     selectionFormId: string;
 }
 
@@ -85,6 +86,8 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                 return 'profiles.form.modification.voltageInit.name';
             case ElementType.SPREADSHEET_CONFIG_COLLECTION:
                 return 'profiles.form.modification.spreadsheetConfigCollection.name';
+            case ElementType.NETWORK_VISUALIZATIONS_PARAMETERS:
+                return 'profiles.form.modification.networkVisualizations.name';
         }
     };
 
