@@ -49,6 +49,9 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                     snackError({
                         messageTxt: error.message,
                         headerId: 'profiles.table.error.add',
+                        headerValues: {
+                            profile: profileData.name,
+                        },
                     })
                 )
                 .then(() => props.gridRef?.current?.context?.refresh?.());

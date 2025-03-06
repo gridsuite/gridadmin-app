@@ -32,7 +32,9 @@ function handleError(response: Response): Promise<never> {
             ) as ErrorWithStatus;
             error.status = errorJson.status;
         } else {
-            error = new Error(`${errorName}${response.status} ${response.statusText}`) as ErrorWithStatus;
+            error = new Error(
+                `${errorName}${response.status} ${response.statusText}, message : ${text}`
+            ) as ErrorWithStatus;
             error.status = response.status;
         }
         throw error;

@@ -217,8 +217,11 @@ const UsersPage: FunctionComponent = () => {
             UserAdminSrv.addUser(id)
                 .catch((error) =>
                     snackError({
-                        messageTxt: `Error while adding user "${id}"${error.message && ':\n' + error.message}`,
+                        messageTxt: error.message,
                         headerId: 'users.table.error.add',
+                        headerValues: {
+                            user: id,
+                        },
                     })
                 )
                 .then(() => gridContext?.refresh?.());
