@@ -40,6 +40,9 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                     snackError({
                         messageTxt: error.message,
                         headerId: 'groups.table.error.add',
+                        headerValues: {
+                            group: group,
+                        },
                     })
                 )
                 .then(() => props.gridRef?.current?.context?.refresh?.());
