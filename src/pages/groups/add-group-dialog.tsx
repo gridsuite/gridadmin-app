@@ -38,7 +38,6 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
             UserAdminSrv.addGroup(group)
                 .catch((error) =>
                     snackError({
-                        messageTxt: error.message,
                         headerId: 'groups.table.error.add',
                         headerValues: {
                             group: group,

@@ -217,7 +217,6 @@ const UsersPage: FunctionComponent = () => {
             UserAdminSrv.addUser(id)
                 .catch((error) =>
                     snackError({
-                        messageTxt: error.message,
                         headerId: 'users.table.error.add',
                         headerValues: {
                             user: id,

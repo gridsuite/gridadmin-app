@@ -47,7 +47,6 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
             UserAdminSrv.addProfile(profileData)
                 .catch((error) =>
                     snackError({
-                        messageTxt: error.message,
                         headerId: 'profiles.table.error.add',
                         headerValues: {
                             profile: profileData.name,
