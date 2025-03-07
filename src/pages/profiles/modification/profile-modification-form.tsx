@@ -18,6 +18,7 @@ export const SENSITIVITY_ANALYSIS_PARAM_ID = 'sensitivityAnalysisParamId';
 export const SHORTCIRCUIT_PARAM_ID = 'shortcircuitParamId';
 export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
 export const SPREADSHEET_CONFIG_COLLECTION_ID = 'spreadsheetConfigCollectionId';
+export const NETWORK_VISUALIZATION_PARAMETERS_ID = 'networkVisualizationParametersId';
 
 export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
 export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
@@ -67,6 +68,12 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <ConfigurationSelection
                     elementType={ElementType.SPREADSHEET_CONFIG_COLLECTION}
                     selectionFormId={SPREADSHEET_CONFIG_COLLECTION_ID}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <ConfigurationSelection
+                    elementType={ElementType.NETWORK_VISUALIZATIONS_PARAMETERS}
+                    selectionFormId={NETWORK_VISUALIZATION_PARAMETERS_ID}
                 />
             </Grid>
             <Grid item xs={12}>
