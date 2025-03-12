@@ -9,13 +9,16 @@ import 'core-js/es/array/flat-map';
 import 'typeface-roboto';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { polyfillIntl } from '@gridsuite/commons-ui';
 import './index.css';
 import { AppWrapper } from './components/App';
 
 const container = document.getElementById('root');
 if (container) {
-    const root = createRoot(container);
-    root.render(<AppWrapper />);
+    polyfillIntl(['en', 'en-GB', 'fr'], import.meta.env.VITE_DEFAULT_TIMEZONE).finally(() => {
+        const root = createRoot(container);
+        root.render(<AppWrapper />);
+    });
 } else {
     document.write("<b>Can't start the application...</b>");
     throw new Error('No root container found');
