@@ -21,12 +21,8 @@ import {
     SELECT_THEME,
     SelectLanguageAction,
     ThemeAction,
-    UPDATE_USER_MANAGER_ERROR,
-    UPDATE_USER_MANAGER_INSTANCE,
     UPDATE_USER_MANAGER_STATE,
     UserManagerAction,
-    UserManagerErrorAction,
-    UserManagerInstanceAction,
 } from './actions';
 import {
     AuthenticationActions,
@@ -84,8 +80,6 @@ const initialState: AppState = {
 export type Actions =
     | AuthenticationActions
     | UserManagerAction
-    | UserManagerInstanceAction
-    | UserManagerErrorAction
     | ThemeAction
     | SelectLanguageAction
     | ComputedLanguageAction;
@@ -105,14 +99,6 @@ export const reducer = createReducer<AppState>(initialState, (builder) => {
 
     builder.addCase(UPDATE_USER_MANAGER_STATE, (state, action: UserManagerAction) => {
         state.userManager = action.userManager;
-    });
-
-    builder.addCase(UPDATE_USER_MANAGER_INSTANCE, (state, action: UserManagerInstanceAction) => {
-        state.userManager.instance = action.instance;
-    });
-
-    builder.addCase(UPDATE_USER_MANAGER_ERROR, (state, action: UserManagerErrorAction) => {
-        state.userManager.error = action.error;
     });
 
     builder.addCase(USER, (state, action: UserAction) => {

@@ -246,14 +246,9 @@ const UsersPage: FunctionComponent = () => {
     const onSubmitForm = handleSubmit(onSubmit);
 
     const handleCellEditingStopped = useCallback(
-        (event: CellEditingStoppedEvent<UserInfos>) => {
+        (event: CellEditingStoppedEvent) => {
             if (event.valueChanged && event.data) {
-                updateUserCallback(
-                    event.data.sub,
-                    event.data.profileName,
-                    event.data.isAdmin,
-                    event.data.groups.map((g) => g.name)
-                );
+                updateUserCallback(event.data.sub, event.data.profileName, event.data.isAdmin, event.data.groups);
             } else {
                 gridContext?.refresh?.();
             }
