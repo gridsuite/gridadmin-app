@@ -11,7 +11,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, Outlet, RouterProvider } from 'react-router';
 import App from './app';
 import { store } from '../../redux/store';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
