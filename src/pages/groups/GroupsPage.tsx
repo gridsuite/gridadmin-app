@@ -126,12 +126,18 @@ const GroupsPage: FunctionComponent = () => {
     const deleteGroups = useCallback((): Promise<void> | undefined => {
         let groupNames = rowsSelection.map((group) => group.name);
         return UserAdminSrv.deleteGroups(groupNames)
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'groups.table.error.delete',
-                })
-            )
+            .catch((error) => {
+                if (error.status === 422) {
+                    snackError({
+                        headerId: 'groups.table.integrity.error.delete',
+                    });
+                } else {
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'groups.table.error.delete',
+                    });
+                }
+            })
             .then(() => gridContext?.refresh?.());
     }, [gridContext, rowsSelection, snackError]);
     const deleteGroupsDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
