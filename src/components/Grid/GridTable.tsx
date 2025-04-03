@@ -109,7 +109,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                             ({
                                 ...((context ?? {}) as TContext),
                                 refresh: loadDataAndSave,
-                            } as TContext & GridTableExposed),
+                            }) as TContext & GridTableExposed,
                         [context, loadDataAndSave]
                     )}
                 />
