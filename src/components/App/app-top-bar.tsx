@@ -19,7 +19,7 @@ import { Groups, ManageAccounts, PeopleAlt } from '@mui/icons-material';
 import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
-import { NavLink, type To, useMatches, useNavigate } from 'react-router-dom';
+import { NavLink, type To, useMatches, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';

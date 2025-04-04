@@ -16,7 +16,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
-        "@gridsuite/commons-ui": "0.89.2",
+        "@gridsuite/commons-ui": "0.92.1",
         "@hookform/resolvers": "^4.0.0",
         "@mui/icons-material": "^5.16.14",
         "@mui/lab": "5.0.0-alpha.175",
@@ -33,7 +33,7 @@
         "react-hook-form": "^7.54.2",
         "react-intl": "^7.1.6",
         "react-redux": "^9.2.0",
-        "react-router-dom": "^6.29.0",
+        "react-router": "^7.4.1",
         "redux": "^5.0.1",
         "typeface-roboto": "^1.1.13",
         "yup": "^1.6.1"

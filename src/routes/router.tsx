@@ -15,7 +15,7 @@ import {
     useLocation,
     useMatch,
     useNavigate,
-} from 'react-router-dom';
+} from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
 import { AppsMetadataSrv, UserAdminSrv } from '../services';
