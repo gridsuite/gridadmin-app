@@ -72,7 +72,7 @@ const AnnouncementsPage: FunctionComponent = () => {
     );
 
     const refreshGrid = useCallback(() => {
-        gridRef.current.context?.refresh();
+        gridRef.current?.context?.refresh();
     }, []);
 
     const handleDeleteAnnouncement = useCallback(

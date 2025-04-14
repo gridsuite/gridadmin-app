@@ -328,7 +328,7 @@ export function fetchAnnouncementList(): Promise<Announcement[]> {
     return backendFetchJson(`${USER_ADMIN_URL}/announcements`, { method: 'get' }).catch((reason) => {
         console.error(`Error while fetching announcement : ${reason}`);
         throw reason;
-    });
+    }) as Promise<Announcement[]>;
 }
 
 export function deleteAnnouncement(announcementId: UUID): Promise<void> {
@@ -336,5 +336,10 @@ export function deleteAnnouncement(announcementId: UUID): Promise<void> {
     return backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
         console.error(`Error while deleting announcement : ${reason}`);
         throw reason;
-    });
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while creating announcement : ${reason}`);
+            throw reason;
+        });
 }
