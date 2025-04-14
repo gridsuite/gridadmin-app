@@ -6,7 +6,7 @@
  */
 
 import { Grid, Typography } from '@mui/material';
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { ReactElement, useEffect } from 'react';
 
 export default function ErrorPage(): ReactElement {

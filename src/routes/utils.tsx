@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Navigate, RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router';
 import { Profiles, Users, Groups } from '../pages';
 import ErrorPage from './ErrorPage';
 import HomePage from './HomePage';

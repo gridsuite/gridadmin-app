@@ -34,7 +34,7 @@ export function useNotificationsUrlGenerator() {
                           })}`
                       )
                     : undefined,
-            } satisfies Record<NOTIFICATIONS_URL_KEYS, string | undefined>),
+            }) satisfies Record<NOTIFICATIONS_URL_KEYS, string | undefined>,
         [wsBase, tokenId]
     );
 }

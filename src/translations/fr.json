@@ -96,6 +96,7 @@
     "groups.table.users": "Utilisateurs",
     "groups.table.users.description": "Nom des utilisateurs associés au groupe",
     "groups.table.error.delete": "Erreur pendant la suppression du groupe",
+    "groups.table.integrity.error.delete": "Erreur pendant la suppression du groupe : un groupe est toujours référencé par des utilisateurs",
     "groups.table.error.add": "Erreur pendant l'ajout du groupe {group} : Un groupe du même nom existe déjà.",
     "groups.table.error.update": "Erreur pendant la modification du groupe",
     "groups.table.toolbar.add.label": "Ajouter un groupe",

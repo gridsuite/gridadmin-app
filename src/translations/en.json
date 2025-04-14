@@ -95,6 +95,7 @@
     "groups.table.users": "Users",
     "groups.table.users.description": "The group's users",
     "groups.table.error.delete": "Error while deleting group",
+    "groups.table.integrity.error.delete": "Error while deleting group : a group is still referenced by users",
     "groups.table.error.add": "Error while adding group {group} : A group with the same name already exists.",
     "groups.table.toolbar.add.label": "Add a group",
     "groups.table.toolbar.add": "Add group",
