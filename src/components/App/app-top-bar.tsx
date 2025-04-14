@@ -15,7 +15,7 @@ import {
     useState,
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
-import { Groups, ManageAccounts, PeopleAlt } from '@mui/icons-material';
+import { Groups, ManageAccounts, PeopleAlt, NotificationImportant } from '@mui/icons-material';
 import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
@@ -67,6 +67,20 @@ const tabs = new Map<MainPaths, ReactElement>([
             href={`/${MainPaths.groups}`}
             value={MainPaths.groups}
             key={`tab-${MainPaths.groups}`}
+            iconPosition="start"
+            LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
+                <NavLink ref={ref} to={props.href as To} {...props} />
+            ))}
+        />,
+    ],
+    [
+        MainPaths.banners,
+        <Tab
+            icon={<NotificationImportant />}
+            label={<FormattedMessage id="appBar.tabs.warningBanner" />}
+            href={`/${MainPaths.banners}`}
+            value={MainPaths.banners}
+            key={`tab-${MainPaths.banners}`}
             iconPosition="start"
             LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
                 <NavLink ref={ref} to={props.href as To} {...props} />

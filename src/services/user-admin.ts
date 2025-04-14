@@ -284,3 +284,57 @@ export function addGroup(group: string): Promise<void> {
             throw reason;
         });
 }
+
+export enum AnnouncementSeverity {
+    INFO = 'INFO',
+    WARN = 'WARN',
+}
+
+export function sanitizeString(val: string | null | undefined) {
+    const trimedValue = val?.trim();
+    return trimedValue === '' ? null : trimedValue;
+}
+
+export type Announcement = {
+    id: UUID;
+    startDate: string;
+    endDate: string;
+    message: string;
+    severity: string;
+};
+
+export function addAnnouncement(announcement: Announcement): Promise<void> {
+    console.debug(`Creating announcement ...`);
+    return backendFetch(
+        `${USER_ADMIN_URL}/announcements/${announcement.id}?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
+        {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: sanitizeString(announcement.message),
+        }
+    )
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while creating announcement : ${reason}`);
+            throw reason;
+        });
+}
+
+export function fetchAnnouncementList(): Promise<Announcement[]> {
+    console.debug(`Fetching announcement ...`);
+    return backendFetchJson(`${USER_ADMIN_URL}/announcements`, { method: 'get' }).catch((reason) => {
+        console.error(`Error while fetching announcement : ${reason}`);
+        throw reason;
+    });
+}
+
+export function deleteAnnouncement(announcementId: UUID): Promise<void> {
+    console.debug(`Deleting announcement ...`);
+    return backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
+        console.error(`Error while deleting announcement : ${reason}`);
+        throw reason;
+    });
+}

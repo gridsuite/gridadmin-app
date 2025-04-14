@@ -24,3 +24,30 @@ export function getErrorMessage(error: unknown): string | null {
         return JSON.stringify(error ?? undefined) ?? null;
     }
 }
+
+const OVERLAPPING_ANNOUNCEMENTS = 'OVERLAPPING_ANNOUNCEMENTS';
+const SAME_START_END_DATE = 'SAME_START_END_DATE';
+const START_DATE_AFTER_END_DATE = 'START_DATE_AFTER_END_DATE';
+
+export function handleAnnouncementCreationErrors(error: string, snackError: Function): boolean {
+    if (error.includes(OVERLAPPING_ANNOUNCEMENTS)) {
+        snackError({
+            headerId: 'errCreateAnnouncement',
+            messageId: 'noOverlapAllowedErr',
+        });
+        return true;
+    } else if (error.includes(SAME_START_END_DATE)) {
+        snackError({
+            headerId: 'errCreateAnnouncement',
+            messageId: 'noSameDateErr',
+        });
+        return true;
+    } else if (error.includes(START_DATE_AFTER_END_DATE)) {
+        snackError({
+            headerId: 'errCreateAnnouncement',
+            messageId: 'startDateAfterEndDateErr',
+        });
+        return true;
+    }
+    return false;
+}

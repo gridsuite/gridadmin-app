@@ -16,6 +16,7 @@
     "appBar.tabs.profiles": "Profils",
     "appBar.tabs.groups": "Groupes",
     "appBar.tabs.connections": "Connexions",
+    "appBar.tabs.warningBanner": "Bandeau d'avertissement",
 
     "table.noRows": "No data",
     "table.id": "ID",
@@ -105,5 +106,19 @@
     "groups.form.field.group.label": "ID groupe",
 
     "linked.path.display.noLink": "pas de configuration selectionnée.",
-    "linked.path.display.invalidLink": "lien vers configurations invalide."
+    "linked.path.display.invalidLink": "lien vers configurations invalide.",
+
+    "banners.programNewMessage": "Programmer un nouveau message",
+    "banners.programmedMessage": "Messages programmés",
+    "banners.table.message": "Message",
+    "banners.table.startDate": "Date de début",
+    "banners.table.endDate": "Date de fin",
+    "banners.table.severity": "Sévérité",
+    "banners.table.cancel": "Annulation",
+    "banners.table.info": "Info",
+    "banners.table.warn": "Attention",
+    "errCreateAnnouncement": "Erreur lors de la création de l'annonce : ",
+    "noOverlapAllowedErr": "La date d'annonce chevauche une autre date d'annonce",
+    "noSameDateErr": "La date de début et de fin d'annonce doivent être différentes",
+    "startDateAfterEndDateErr": "La date de début d'annonce ne peut pas être après la date de fin"
 }
