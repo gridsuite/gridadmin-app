@@ -13,6 +13,7 @@ import { APP_NAME } from './config-params';
 
 export enum NOTIFICATIONS_URL_KEYS {
     CONFIG = 'CONFIG',
+    GLOBAL_CONFIG = 'GLOBAL_CONFIG',
 }
 
 export const PREFIX_CONFIG_NOTIFICATION_WS = '/config-notification';
@@ -33,6 +34,9 @@ export function useNotificationsUrlGenerator() {
                               appName: APP_NAME,
                           })}`
                       )
+                    : undefined,
+                [NOTIFICATIONS_URL_KEYS.GLOBAL_CONFIG]: tokenId
+                    ? getUrlWithToken(`${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/global`)
                     : undefined,
             }) satisfies Record<NOTIFICATIONS_URL_KEYS, string | undefined>,
         [wsBase, tokenId]
