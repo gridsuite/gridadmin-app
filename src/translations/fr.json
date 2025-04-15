@@ -118,6 +118,7 @@
     "banners.table.cancel": "Annulation",
     "banners.table.info": "Info",
     "banners.table.warn": "Attention",
+    "banners.form.message": "Message d'avertissement",
     "errCreateAnnouncement": "Erreur lors de la création de l'annonce : ",
     "noOverlapAllowedErr": "La date d'annonce chevauche une autre date d'annonce",
     "noSameDateErr": "La date de début et de fin d'annonce doivent être différentes",

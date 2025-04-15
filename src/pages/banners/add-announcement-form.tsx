@@ -85,7 +85,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                     <TextField
                         {...register('message')}
                         id="message-input"
-                        label={intl.formatMessage({ id: 'banners.table.message' })}
+                        label={intl.formatMessage({ id: 'banners.form.message' })}
                         multiline
                         rows={4}
                         fullWidth
