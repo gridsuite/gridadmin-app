@@ -333,13 +333,10 @@ export function fetchAnnouncementList(): Promise<Announcement[]> {
 
 export function deleteAnnouncement(announcementId: UUID): Promise<void> {
     console.debug(`Deleting announcement ...`);
-    return backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
-        console.error(`Error while deleting announcement : ${reason}`);
-        throw reason;
-    })
+    return backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' })
         .then(() => undefined)
         .catch((reason) => {
-            console.error(`Error while creating announcement : ${reason}`);
+            console.error(`Error while deleting announcement : ${reason}`);
             throw reason;
         });
 }

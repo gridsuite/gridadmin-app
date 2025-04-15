@@ -98,7 +98,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                             {...register('startDate')}
                             name={START_DATE}
                             label={intl.formatMessage({ id: 'banners.table.startDate' })}
-                            onChange={(newValue) => setValue('startDate', newValue?.toString ?? '')}
+                            onChange={(newValue) => setValue('startDate', newValue)}
                         />
                     </LocalizationProvider>
                 </Grid>
@@ -108,7 +108,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                             {...register('endDate')}
                             name={END_DATE}
                             label={intl.formatMessage({ id: 'banners.table.endDate' })}
-                            onChange={(newValue) => setValue('endDate', newValue?.toString ?? '')}
+                            onChange={(newValue) => setValue('endDate', newValue)}
                         />
                     </LocalizationProvider>
                 </Grid>
