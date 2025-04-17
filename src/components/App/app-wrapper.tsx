@@ -66,7 +66,9 @@ const lightTheme: ThemeOptions = {
     link: {
         color: 'blue',
     },
-    agGridTheme: 'ag-theme-alpine',
+    aggrid: {
+        theme: 'ag-theme-alpine',
+    },
 };
 
 const darkTheme: ThemeOptions = {
@@ -92,7 +94,9 @@ const darkTheme: ThemeOptions = {
     link: {
         color: 'green',
     },
-    agGridTheme: 'ag-theme-alpine-dark',
+    aggrid: {
+        theme: 'ag-theme-alpine-dark',
+    },
 };
 
 const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {

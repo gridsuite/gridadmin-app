@@ -18,7 +18,9 @@ declare module '@mui/material/styles/createTheme' {
         circle_hover: CSSObject;
         link: CSSObject;
         mapboxStyle: string;
-        agGridTheme: 'ag-theme-alpine' | 'ag-theme-alpine-dark';
+        aggrid: {
+            theme: 'ag-theme-alpine' | 'ag-theme-alpine-dark';
+        };
         agGridThemeOverride?: CSSObject;
     };
 
