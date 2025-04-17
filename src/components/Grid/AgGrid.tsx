@@ -5,9 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-
 import {
     ForwardedRef,
     forwardRef,
@@ -19,17 +16,9 @@ import {
     useImperativeHandle,
     useRef,
 } from 'react';
-import { Box, useTheme } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
-import { useIntl } from 'react-intl';
-import { LANG_FRENCH } from '@gridsuite/commons-ui';
-import { AG_GRID_LOCALE_FR } from '../../translations/ag-grid/locales';
-import { GridOptions } from 'ag-grid-community';
+import { CustomAGGrid, type CustomAGGridProps } from '@gridsuite/commons-ui';
 import { useDebugRender } from '../../utils/hooks';
-
-const messages: Record<string, Record<string, string>> = {
-    [LANG_FRENCH]: AG_GRID_LOCALE_FR,
-};
 
 type AccessibleAgGridReact<TData> = Omit<
     AgGridReact<TData>,
@@ -47,28 +36,18 @@ export type AgGridRef<TData, TContext extends {}> = {
 type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
 
-interface AgGridWithRef extends FunctionComponent<GridOptions<unknown>> {
+interface AgGridWithRef extends FunctionComponent<CustomAGGridProps<unknown>> {
     <TData, TContext extends {}>(
-        props: PropsWithoutRef<GridOptions<TData>> & RefAttributes<AgGridRef<TData, TContext>>
-    ): ReturnType<ForwardRefComponent<GridOptions<TData>, AgGridRef<TData, TContext>>>;
+        props: PropsWithoutRef<CustomAGGridProps<TData>> & RefAttributes<AgGridRef<TData, TContext>>
+    ): ReturnType<ForwardRefComponent<CustomAGGridProps<TData>, AgGridRef<TData, TContext>>>;
 }
 
-const style = {
-    // default overridable style
-    width: '100%',
-    height: '100%',
-    '@media print': {
-        pageBreakInside: 'avoid',
-    },
-};
-
+// TODO move type generic restoration to commons-ui
+// TODO move useDebug feature from env to commons-ui
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext extends {} = {}>(
-    props: GridOptions<TData>,
+    props: CustomAGGridProps<TData>,
     gridRef?: ForwardedRef<AgGridRef<TData, TContext>>
 ): ReactNode {
-    const intl = useIntl();
-    const theme = useTheme();
-
     const id = useId();
     useDebugRender(`ag-grid(${id}) ${props.gridId}`);
 
@@ -84,15 +63,11 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext 
     );
 
     return (
-        // wrapping container with theme & size
-        <Box component="div" className={theme.agGridTheme} sx={style}>
-            <AgGridReact<TData>
-                ref={agGridRef}
-                localeText={messages[intl.locale] ?? messages[intl.defaultLocale] ?? undefined}
-                {...props} //destruct props to optimize react props change detection
-                debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
-            />
-        </Box>
+        <CustomAGGrid //TODO <TData>
+            ref={agGridRef}
+            {...props} //destruct props to optimize react props change detection
+            debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
+        />
     );
 });
 export default AgGrid;

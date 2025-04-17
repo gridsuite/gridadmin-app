@@ -31,7 +31,9 @@ type GridTableExposed = {
 
 export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<TData, TContext & GridTableExposed>;
 
-export interface GridTableProps<TData> extends Omit<GridOptions<TData>, 'rowData'>, PropsWithChildren<{}> {
+export interface GridTableProps<TData>
+    extends Omit<GridOptions<TData>, 'rowData' | 'alwaysShowVerticalScroll' | 'onGridReady'>,
+        PropsWithChildren<{}> {
     //accessRef: RefObject<GridTableRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
 }
@@ -40,8 +42,7 @@ export interface GridTableProps<TData> extends Omit<GridOptions<TData>, 'rowData
  * Restore lost generics from `forwardRef()`<br/>
  * https://stackoverflow.com/questions/58469229/react-with-typescript-generics-while-using-react-forwardref
  */
-type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
-type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
+type ForwardRefComponent<Props, Ref> = ReturnType<typeof forwardRef<Props, Ref>>;
 
 interface GridTableWithRef extends FunctionComponent<PropsWithChildren<GridTableProps<unknown>>> {
     <TData, TContext extends {}>(
