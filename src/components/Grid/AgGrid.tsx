@@ -42,6 +42,16 @@ interface AgGridWithRef extends FunctionComponent<CustomAGGridProps<unknown>> {
     ): ReturnType<ForwardRefComponent<CustomAGGridProps<TData>, AgGridRef<TData, TContext>>>;
 }
 
+// TODO move&merge to commons-ui
+const style = {
+    // default overridable style
+    width: '100%',
+    height: '100%',
+    '@media print': {
+        pageBreakInside: 'avoid',
+    },
+};
+
 // TODO move type generic restoration to commons-ui
 // TODO move useDebug feature from env to commons-ui
 export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext extends {} = {}>(
@@ -67,6 +77,7 @@ export const AgGrid: AgGridWithRef = forwardRef(function AgGrid<TData, TContext 
             ref={agGridRef}
             {...props} //destruct props to optimize react props change detection
             debug={import.meta.env.VITE_DEBUG_AGGRID === 'true' || props.debug}
+            sx={style}
         />
     );
 });
