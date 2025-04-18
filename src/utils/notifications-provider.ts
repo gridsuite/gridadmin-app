@@ -32,7 +32,7 @@ export function useNotificationsUrlGenerator() {
                 [NotificationsUrlKeys.GLOBAL_CONFIG]: tokenId
                     ? getUrlWithToken(`${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/global`)
                     : undefined,
-            }) satisfies { [Key in NotificationsUrlKeys]?: string | undefined },
+            }) satisfies Partial<Record<NotificationsUrlKeys, string | undefined>>,
         [wsBase, tokenId]
     );
 }
