@@ -306,7 +306,7 @@ export type Announcement = {
 export function addAnnouncement(announcement: Announcement): Promise<void> {
     console.debug(`Creating announcement ...`);
     return backendFetch(
-        `${USER_ADMIN_URL}/announcements/${announcement.id}?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
+        `${USER_ADMIN_URL}/announcements?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
         {
             method: 'post',
             headers: {

@@ -15,8 +15,8 @@ import {
     useState,
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
-import { Groups, ManageAccounts, PeopleAlt, NotificationImportant } from '@mui/icons-material';
-import { fetchAppsMetadata, logout, Metadata, TopBar, useNotificationsListener } from '@gridsuite/commons-ui';
+import { Groups, ManageAccounts, NotificationImportant, PeopleAlt } from '@mui/icons-material';
+import { fetchAppsMetadata, logout, Metadata, TopBar, useGlobalAnnouncement } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { NavLink, type To, useMatches, useNavigate } from 'react-router';
@@ -29,7 +29,6 @@ import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { AppDispatch } from '../../redux/store';
 import { MainPaths } from '../../routes/utils';
-import { NOTIFICATIONS_URL_KEYS } from '../../utils/notifications-provider';
 
 const tabs = new Map<MainPaths, ReactElement>([
     [
@@ -112,31 +111,7 @@ const AppTopBar: FunctionComponent = () => {
 
     const [appsAndUrls, setAppsAndUrls] = useState<Metadata[]>([]);
 
-    const [announcementInfos, setAnnouncementInfos] = useState<AnnouncementProps | null>(null);
-
-    useNotificationsListener(NOTIFICATIONS_URL_KEYS.GLOBAL_CONFIG, {
-        listenerCallbackMessage: (event) => {
-            const eventData = JSON.parse(event.data);
-            if (eventData.headers.messageType === 'announcement') {
-                if (
-                    announcementInfos != null &&
-                    announcementInfos.announcementId === eventData.headers.announcementId
-                ) {
-                    // If we receive a notification for an announcement that we already received we ignore it
-                    return;
-                }
-                const announcement = {
-                    announcementId: eventData.headers.announcementId,
-                    message: eventData.payload,
-                    severity: eventData.headers.severity,
-                    duration: eventData.headers.duration,
-                } as AnnouncementProps;
-                setAnnouncementInfos(announcement);
-            } else if (eventData.headers.messageType === 'cancelAnnouncement') {
-                setAnnouncementInfos(null);
-            }
-        },
-    });
+    const announcementInfos = useGlobalAnnouncement(user);
 
     useEffect(() => {
         if (user !== null) {
