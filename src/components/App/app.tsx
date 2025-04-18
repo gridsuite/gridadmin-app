@@ -8,7 +8,12 @@
 import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { CardErrorBoundary, useNotificationsListener, useSnackMessage } from '@gridsuite/commons-ui';
+import {
+    CardErrorBoundary,
+    NotificationsUrlKeys,
+    useNotificationsListener,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
 import { ConfigParameters, ConfigSrv } from '../../services';
@@ -17,7 +22,6 @@ import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
-import { NOTIFICATIONS_URL_KEYS } from '../../utils/notifications-provider';
 
 const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
     useDebugRender('app');
@@ -59,7 +63,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [updateParams, snackError]
     );
 
-    useNotificationsListener(NOTIFICATIONS_URL_KEYS.CONFIG, { listenerCallbackMessage: updateConfig });
+    useNotificationsListener(NotificationsUrlKeys.CONFIG, { listenerCallbackMessage: updateConfig });
 
     useEffect(() => {
         if (user !== null) {
