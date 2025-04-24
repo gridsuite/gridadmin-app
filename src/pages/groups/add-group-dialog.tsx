@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
-import { ManageAccounts } from '@mui/icons-material';
+import { Groups } from '@mui/icons-material';
 import { GroupInfos, UserAdminSrv } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
@@ -99,7 +99,7 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <ManageAccounts />
+                                        <Groups />
                                     </InputAdornment>
                                 ),
                             }}
