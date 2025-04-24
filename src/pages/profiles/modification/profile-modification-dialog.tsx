@@ -21,17 +21,9 @@ import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
-
-// TODO remove FetchStatus when exported in commons-ui (available soon)
-enum FetchStatus {
-    IDLE = 'IDLE',
-    FETCHING = 'FETCHING',
-    FETCH_SUCCESS = 'FETCH_SUCCESS',
-    FETCH_ERROR = 'FETCH_ERROR',
-}
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -47,7 +39,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
-    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(FetchStatus.IDLE);
+    const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
     const formSchema = yup
         .object()
@@ -115,27 +107,15 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     reset({
                         [PROFILE_NAME]: response.name,
-                        [LOADFLOW_PARAM_ID]: response.loadFlowParameterId ? response.loadFlowParameterId : undefined,
-                        [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId
-                            ? response.securityAnalysisParameterId
-                            : undefined,
-                        [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId
-                            ? response.sensitivityAnalysisParameterId
-                            : undefined,
-                        [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId
-                            ? response.shortcircuitParameterId
-                            : undefined,
-                        [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId
-                            ? response.voltageInitParameterId
-                            : undefined,
+                        [LOADFLOW_PARAM_ID]: response.loadFlowParameterId ?? undefined,
+                        [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId ?? undefined,
+                        [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId ?? undefined,
+                        [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ?? undefined,
+                        [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ?? undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
-                        [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId
-                            ? response.spreadsheetConfigCollectionId
-                            : undefined,
-                        [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId
-                            ? response.networkVisualizationParameterId
-                            : undefined,
+                        [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId ?? undefined,
+                        [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId ?? undefined,
                     });
                 })
                 .catch((error) => {

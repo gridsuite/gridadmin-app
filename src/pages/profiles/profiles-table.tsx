@@ -10,13 +10,7 @@ import { useIntl } from 'react-intl';
 import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    RowDoubleClickedEvent,
-    SelectionChangedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 
@@ -31,7 +25,7 @@ const defaultColDef: ColDef<UserProfile> = {
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
-    onRowDoubleClicked: (event: RowDoubleClickedEvent<UserProfile>) => void;
+    onRowClicked: (event: RowClickedEvent<UserProfile>) => void;
     setOpenAddProfileDialog: (open: boolean) => void;
 }
 
@@ -43,7 +37,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserProfile>): string {
-        return params.data.id ? params.data.id : '';
+        return params.data.id ?? '';
     }
 
     const onSelectionChanged = useCallback(
@@ -139,7 +133,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     headerCheckbox: true,
                     hideDisabledCheckboxes: false,
                 }}
-                onRowDoubleClicked={props.onRowDoubleClicked}
+                onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
             >
                 <GridButton

@@ -9,7 +9,7 @@ import { FunctionComponent, useCallback, useRef, useState } from 'react';
 import { Grid } from '@mui/material';
 import { GridTableRef } from '../../components/Grid';
 import { UserProfile } from '../../services';
-import { RowDoubleClickedEvent } from 'ag-grid-community';
+import { RowClickedEvent } from 'ag-grid-community';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
 import { UUID } from 'crypto';
 import ProfilesTable from './profiles-table';
@@ -33,7 +33,7 @@ const ProfilesPage: FunctionComponent = () => {
         handleCloseProfileModificationDialog();
     }, [gridContext, handleCloseProfileModificationDialog]);
 
-    const onRowDoubleClicked = useCallback((event: RowDoubleClickedEvent<UserProfile>) => {
+    const onRowClicked = useCallback((event: RowClickedEvent<UserProfile>) => {
         if (event.data) {
             setEditingProfileId(event.data.id);
             setOpenProfileModificationDialog(true);
@@ -51,7 +51,7 @@ const ProfilesPage: FunctionComponent = () => {
                 />
                 <ProfilesTable
                     gridRef={gridRef}
-                    onRowDoubleClicked={onRowDoubleClicked}
+                    onRowClicked={onRowClicked}
                     setOpenAddProfileDialog={setOpenAddProfileDialog}
                 />
                 <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />

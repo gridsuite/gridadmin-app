@@ -30,14 +30,13 @@ const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (props) => 
                 id: props.nameKey,
             }) +
                 ' : ' +
-                (props.value
-                    ? props.value
-                    : intl.formatMessage({
-                          id:
-                              props.linkValidity === false
-                                  ? 'linked.path.display.invalidLink'
-                                  : 'linked.path.display.noLink',
-                      }))}
+                (props.value ??
+                    intl.formatMessage({
+                        id:
+                            props.linkValidity === false
+                                ? 'linked.path.display.invalidLink'
+                                : 'linked.path.display.noLink',
+                    }))}
         </Typography>
     );
 };
