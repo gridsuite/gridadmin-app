@@ -5,7 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // from https://github.com/ag-grid/ag-grid/blob/latest/documentation/ag-grid-docs/src/content/docs/localisation/_examples/localisation/locale.en.js
-/* eslint-disable no-template-curly-in-string */
 
 export const AG_GRID_LOCALE_FR: Record<string, string> = {
     // Set Filter

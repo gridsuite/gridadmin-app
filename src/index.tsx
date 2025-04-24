@@ -7,7 +7,6 @@
 
 import 'core-js/es/array/flat-map';
 import 'typeface-roboto';
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { AppWrapper } from './components/App';
