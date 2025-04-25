@@ -74,13 +74,13 @@ const tabs = new Map<MainPaths, ReactElement>([
         />,
     ],
     [
-        MainPaths.banners,
+        MainPaths.announcements,
         <Tab
             icon={<NotificationImportant />}
             label={<FormattedMessage id="appBar.tabs.warningBanner" />}
-            href={`/${MainPaths.banners}`}
-            value={MainPaths.banners}
-            key={`tab-${MainPaths.banners}`}
+            href={`/${MainPaths.announcements}`}
+            value={MainPaths.announcements}
+            key={`tab-${MainPaths.announcements}`}
             iconPosition="start"
             LinkComponent={forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>((props, ref) => (
                 <NavLink ref={ref} to={props.href as To} {...props} />

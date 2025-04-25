@@ -5,25 +5,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, useCallback, useMemo, useRef, useState } from 'react';
+import type { UUID } from 'crypto';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Grid } from '@mui/material';
-import { GridTableRef } from '../../components/Grid';
+import { Grid, type SxProps, type Theme } from '@mui/material';
+import { useSnackMessage } from '@gridsuite/commons-ui';
+import type { ColDef, GetRowIdParams, ValueGetterParams } from 'ag-grid-community';
+import { type GridTableRef } from '../../components/Grid';
 import { Announcement, UserAdminSrv } from '../../services';
-import { ColDef, GetRowIdParams, ValueGetterParams } from 'ag-grid-community';
 import AddAnnouncementForm from './add-announcement-form';
 import { DateCellRenderer } from './date-cell-renderer';
 import AgGrid from '../../components/Grid/AgGrid';
-import { useSnackMessage } from '@gridsuite/commons-ui';
 import { CancelButtonCellRenderer } from './cancel-button-cell-renderer';
-import { UUID } from 'crypto';
 
 const stylesLayout = {
+    root: { display: 'flex' },
     columnContainer: {
         maxHeight: '60px',
         paddingLeft: '15px',
     },
-};
+} as const satisfies Record<string, SxProps<Theme>>;
 
 const defaultColDef: ColDef<Announcement> = {
     editable: false,
@@ -34,11 +35,11 @@ const defaultColDef: ColDef<Announcement> = {
     sortable: true,
 };
 
-function getRowId(params: GetRowIdParams<Announcement>): string {
+function getRowId(params: GetRowIdParams<Announcement>) {
     return params.data.id;
 }
 
-const AnnouncementsPage: FunctionComponent = () => {
+export default function AnnouncementsPage() {
     const intl = useIntl();
     const gridRef = useRef<GridTableRef<Announcement>>(null);
 
@@ -61,9 +62,9 @@ const AnnouncementsPage: FunctionComponent = () => {
     const convertSeverity = useCallback(
         (severity: string) => {
             if (severity === UserAdminSrv.AnnouncementSeverity.INFO) {
-                return intl.formatMessage({ id: 'banners.table.info' });
+                return intl.formatMessage({ id: 'announcements.severity.INFO' });
             } else if (severity === UserAdminSrv.AnnouncementSeverity.WARN) {
-                return intl.formatMessage({ id: 'banners.table.warn' });
+                return intl.formatMessage({ id: 'announcements.severity.WARN' });
             } else {
                 return '';
             }
@@ -72,14 +73,12 @@ const AnnouncementsPage: FunctionComponent = () => {
     );
 
     const refreshGrid = useCallback(() => {
-        gridRef.current?.context?.refresh();
+        gridRef.current?.context?.refresh?.();
     }, []);
 
     const handleDeleteAnnouncement = useCallback(
         (announcementId: UUID) => {
-            UserAdminSrv.deleteAnnouncement(announcementId).then(() => {
-                refreshGrid();
-            });
+            UserAdminSrv.deleteAnnouncement(announcementId).then(refreshGrid);
         },
         [refreshGrid]
     );
@@ -91,28 +90,28 @@ const AnnouncementsPage: FunctionComponent = () => {
                 cellDataType: 'text',
                 flex: 3,
                 lockVisible: true,
-                headerName: intl.formatMessage({ id: 'banners.table.message' }),
+                headerName: intl.formatMessage({ id: 'announcements.table.message' }),
             },
             {
                 field: 'startDate',
                 cellRenderer: DateCellRenderer,
                 flex: 3,
                 lockVisible: true,
-                headerName: intl.formatMessage({ id: 'banners.table.startDate' }),
+                headerName: intl.formatMessage({ id: 'announcements.table.startDate' }),
             },
             {
                 field: 'endDate',
                 cellRenderer: DateCellRenderer,
                 flex: 3,
                 lockVisible: true,
-                headerName: intl.formatMessage({ id: 'banners.table.endDate' }),
+                headerName: intl.formatMessage({ id: 'announcements.table.endDate' }),
             },
             {
                 field: 'severity',
                 cellDataType: 'text',
                 flex: 2,
                 lockVisible: true,
-                headerName: intl.formatMessage({ id: 'banners.table.severity' }),
+                headerName: intl.formatMessage({ id: 'announcements.severity' }),
                 valueGetter: (value: ValueGetterParams) => convertSeverity(value.data.severity),
             },
             {
@@ -123,55 +122,47 @@ const AnnouncementsPage: FunctionComponent = () => {
                 },
                 flex: 2,
                 lockVisible: true,
-                headerName: intl.formatMessage({ id: 'banners.table.cancel' }),
+                headerName: intl.formatMessage({ id: 'announcements.table.cancel' }),
             },
         ],
         [intl, convertSeverity, handleDeleteAnnouncement]
     );
 
     return (
-        <>
-            <Grid container direction="column" sx={{ display: 'flex' }}>
-                <Grid container item xs={3} direction="column">
-                    <Grid item xs sx={stylesLayout.columnContainer}>
-                        <h3>
-                            <FormattedMessage id="banners.programNewMessage"></FormattedMessage>
-                        </h3>
-                    </Grid>
-                    <Grid item xs paddingX={'15px'}>
-                        <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
-                    </Grid>
+        <Grid container direction="column" sx={stylesLayout.root}>
+            <Grid container item xs={3} direction="column">
+                <Grid item xs sx={stylesLayout.columnContainer}>
+                    <h3>
+                        <FormattedMessage id="announcements.programNewMessage"></FormattedMessage>
+                    </h3>
                 </Grid>
+                <Grid item xs paddingX="15px">
+                    <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
+                </Grid>
+            </Grid>
 
-                <Grid container item xs direction="column" marginBottom={'15px'}>
-                    <Grid item sx={stylesLayout.columnContainer}>
-                        <h3>
-                            <FormattedMessage id="banners.programmedMessage"></FormattedMessage>
-                        </h3>
-                    </Grid>
-                    <Grid container item xs paddingX={'15px'}>
-                        <Grid item xs>
-                            <AgGrid<Announcement, {}>
-                                ref={gridRef}
-                                rowData={data}
-                                alwaysShowVerticalScroll={true}
-                                onGridReady={loadDataAndSave}
-                                columnDefs={columns}
-                                defaultColDef={defaultColDef}
-                                gridId="table-banners"
-                                getRowId={getRowId}
-                                context={useMemo(
-                                    () => ({
-                                        refresh: loadDataAndSave,
-                                    }),
-                                    [loadDataAndSave]
-                                )}
-                            />
-                        </Grid>
+            <Grid container item xs direction="column" marginBottom="15px">
+                <Grid item sx={stylesLayout.columnContainer}>
+                    <h3>
+                        <FormattedMessage id="announcements.programmedMessage" />
+                    </h3>
+                </Grid>
+                <Grid container item xs paddingX="15px">
+                    <Grid item xs>
+                        <AgGrid<Announcement>
+                            ref={gridRef}
+                            rowData={data}
+                            alwaysShowVerticalScroll
+                            onGridReady={loadDataAndSave}
+                            columnDefs={columns}
+                            defaultColDef={defaultColDef}
+                            gridId="table-banners"
+                            getRowId={getRowId}
+                            context={useMemo(() => ({ refresh: loadDataAndSave }), [loadDataAndSave])}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
-};
-export default AnnouncementsPage;
+}

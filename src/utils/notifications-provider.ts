@@ -24,9 +24,7 @@ export function useNotificationsUrlGenerator() {
             ({
                 [NotificationsUrlKeys.CONFIG]: tokenId
                     ? getUrlWithToken(
-                          `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({
-                              appName: APP_NAME,
-                          })}`
+                          `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({ appName: APP_NAME })}`
                       )
                     : undefined,
                 [NotificationsUrlKeys.GLOBAL_CONFIG]: tokenId

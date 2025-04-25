@@ -31,7 +31,7 @@ interface AddAnnouncementProps {
     onAnnouncementCreated: () => void;
 }
 
-const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnouncementCreated }) => {
+export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<AddAnnouncementProps>) {
     const intl = useIntl();
     const [languageLocal] = useParameterState(PARAM_LANGUAGE);
     const { snackError } = useSnackMessage();
@@ -39,17 +39,15 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
     const formSchema = yup
         .object()
         .shape({
-            [MESSAGE]: yup.string().trim().required(),
-            [START_DATE]: yup.string().required(),
-            [END_DATE]: yup.string().required(),
-            [SEVERITY]: yup.string().required(),
+            [MESSAGE]: yup.string().trim().required(), // TODO not empty
+            [START_DATE]: yup.string().required(), //TODO date
+            [END_DATE]: yup.string().required(), // TODO date
+            [SEVERITY]: yup.string().required(), // TODO enum
         })
         .required();
-
     const formMethods = useForm({
         resolver: yupResolver(formSchema),
     });
-
     const { register, setValue, handleSubmit, formState } = formMethods;
 
     const onSubmit = useCallback(
@@ -69,7 +67,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                     let errorMessage = getErrorMessage(error) ?? '';
                     if (!handleAnnouncementCreationErrors(errorMessage, snackError)) {
                         snackError({
-                            headerId: 'errCreateAnnouncement',
+                            headerId: 'announcements.form.errCreateAnnouncement',
                             messageTxt: errorMessage,
                         });
                     }
@@ -85,7 +83,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                     <TextField
                         {...register('message')}
                         id="message-input"
-                        label={intl.formatMessage({ id: 'banners.form.message' })}
+                        label={intl.formatMessage({ id: 'announcements.form.message' })}
                         multiline
                         rows={4}
                         fullWidth
@@ -97,7 +95,7 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                         <DateTimePicker
                             {...register('startDate')}
                             name={START_DATE}
-                            label={intl.formatMessage({ id: 'banners.table.startDate' })}
+                            label={intl.formatMessage({ id: 'announcements.table.startDate' })}
                             onChange={(newValue) => setValue('startDate', newValue?.toISOString() ?? '')}
                         />
                     </LocalizationProvider>
@@ -107,34 +105,32 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
                         <DateTimePicker
                             {...register('endDate')}
                             name={END_DATE}
-                            label={intl.formatMessage({ id: 'banners.table.endDate' })}
+                            label={intl.formatMessage({ id: 'announcements.table.endDate' })}
                             onChange={(newValue) => setValue('endDate', newValue?.toISOString() ?? '')}
                         />
                     </LocalizationProvider>
                 </Grid>
-
                 <Grid item xs={2}>
                     <FormControl fullWidth>
                         <InputLabel id="severity-input-label">
-                            <FormattedMessage id="banners.table.severity" />
+                            <FormattedMessage id="announcements.severity" />
                         </InputLabel>
                         <Select
                             {...register('severity')}
                             name={SEVERITY}
-                            label={intl.formatMessage({ id: 'banners.table.severity' })}
+                            label={intl.formatMessage({ id: 'announcements.severity' })}
                             fullWidth={true}
-                            defaultValue={''}
+                            defaultValue={''} // TODO default info
                         >
                             <MenuItem value={UserAdminSrv.AnnouncementSeverity.INFO}>
-                                {intl.formatMessage({ id: 'banners.table.info' })}
+                                {intl.formatMessage({ id: 'announcements.severity.INFO' })}
                             </MenuItem>
                             <MenuItem value={UserAdminSrv.AnnouncementSeverity.WARN}>
-                                {intl.formatMessage({ id: 'banners.table.warn' })}
+                                {intl.formatMessage({ id: 'announcements.severity.WARN' })}
                             </MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
-
                 <Grid item xs={2}>
                     <SubmitButton
                         variant="outlined"
@@ -146,6 +142,4 @@ const AddAnnouncementForm: FunctionComponent<AddAnnouncementProps> = ({ onAnnoun
             </Grid>
         </CustomFormProvider>
     );
-};
-
-export default AddAnnouncementForm;
+}

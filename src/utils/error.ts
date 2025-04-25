@@ -32,20 +32,20 @@ const START_DATE_AFTER_END_DATE = 'START_DATE_AFTER_END_DATE';
 export function handleAnnouncementCreationErrors(error: string, snackError: Function): boolean {
     if (error.includes(OVERLAPPING_ANNOUNCEMENTS)) {
         snackError({
-            headerId: 'errCreateAnnouncement',
-            messageId: 'noOverlapAllowedErr',
+            headerId: 'announcements.form.errCreateAnnouncement',
+            messageId: 'announcements.form.errCreateAnnouncement.noOverlapAllowedErr',
         });
         return true;
     } else if (error.includes(SAME_START_END_DATE)) {
         snackError({
-            headerId: 'errCreateAnnouncement',
-            messageId: 'noSameDateErr',
+            headerId: 'announcements.form.errCreateAnnouncement',
+            messageId: 'announcements.form.errCreateAnnouncement.noSameDateErr',
         });
         return true;
     } else if (error.includes(START_DATE_AFTER_END_DATE)) {
         snackError({
-            headerId: 'errCreateAnnouncement',
-            messageId: 'startDateAfterEndDateErr',
+            headerId: 'announcements.form.errCreateAnnouncement',
+            messageId: 'announcements.form.errCreateAnnouncement.startDateAfterEndDateErr',
         });
         return true;
     }

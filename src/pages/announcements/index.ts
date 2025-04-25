@@ -5,4 +5,4 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-export { default as Banners } from './announcements-page';
+export { default as Announcements } from './announcements-page';

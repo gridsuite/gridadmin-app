@@ -37,7 +37,7 @@ type ForwardRef<Props, Ref> = typeof forwardRef<Props, Ref>;
 type ForwardRefComponent<Props, Ref> = ReturnType<ForwardRef<Props, Ref>>;
 
 interface AgGridWithRef extends FunctionComponent<CustomAGGridProps<unknown>> {
-    <TData, TContext extends {}>(
+    <TData, TContext extends {} = {}>(
         props: PropsWithoutRef<CustomAGGridProps<TData>> & RefAttributes<AgGridRef<TData, TContext>>
     ): ReturnType<ForwardRefComponent<CustomAGGridProps<TData>, AgGridRef<TData, TContext>>>;
 }

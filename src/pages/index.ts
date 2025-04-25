@@ -8,4 +8,4 @@
 export * from './users';
 export * from './profiles';
 export * from './groups';
-export * from './banners';
+export * from './announcements';
