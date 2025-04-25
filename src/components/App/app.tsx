@@ -9,6 +9,7 @@ import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
+    AnnouncementNotification,
     CardErrorBoundary,
     NotificationsUrlKeys,
     useNotificationsListener,
@@ -97,6 +98,9 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
             sx={{ height: '100vh', width: '100vw' }}
         >
             <Grid item xs="auto" component={AppTopBar} />
+            <Grid item xs="auto">
+                <AnnouncementNotification user={user} />
+            </Grid>
             <Grid item container xs component="main">
                 <CardErrorBoundary>{/*Router outlet ->*/ props.children}</CardErrorBoundary>
             </Grid>

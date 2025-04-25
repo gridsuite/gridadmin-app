@@ -16,7 +16,7 @@ import {
 } from 'react';
 import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
 import { Groups, ManageAccounts, NotificationImportant, PeopleAlt } from '@mui/icons-material';
-import { fetchAppsMetadata, logout, Metadata, TopBar, useGlobalAnnouncement } from '@gridsuite/commons-ui';
+import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { NavLink, type To, useMatches, useNavigate } from 'react-router';
@@ -111,8 +111,6 @@ const AppTopBar: FunctionComponent = () => {
 
     const [appsAndUrls, setAppsAndUrls] = useState<Metadata[]>([]);
 
-    const announcementInfos = useGlobalAnnouncement(user);
-
     useEffect(() => {
         if (user !== null) {
             fetchAppsMetadata().then((res) => {
@@ -139,7 +137,6 @@ const AppTopBar: FunctionComponent = () => {
             onLanguageClick={handleChangeLanguage}
             language={languageLocal}
             developerMode={false} // TODO: set as optional in commons-ui
-            announcementInfos={announcementInfos}
         >
             <Tabs
                 component="nav"
