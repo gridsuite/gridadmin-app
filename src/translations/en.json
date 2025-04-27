@@ -39,7 +39,6 @@
     "users.table.error.add": "Error while adding user {user} : A user with the same name already exists.",
     "users.table.toolbar.add": "Add user",
     "users.table.error.update": "Error while modifying user",
-    "users.table.profile.none": "<None>",
     "users.table.error.profiles": "Error while fetching profiles",
     "users.table.error.groups": "Error while fetching groups",
     "users.table.groups": "Groups",

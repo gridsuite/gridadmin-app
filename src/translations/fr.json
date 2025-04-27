@@ -41,7 +41,6 @@
     "users.table.error.update": "Erreur pendant la modification de l'utilisateur",
     "users.table.toolbar.add.label": "Ajouter un utilisateur",
     "users.table.toolbar.add": "Ajouter utilisateur",
-    "users.table.profile.none": "<Aucun>",
     "users.table.error.profiles": "Erreur pendant la récupération des profils",
     "users.table.error.groups": "Erreur pendant la récupération des groupes",
     "users.table.groups": "Groupes",

@@ -17,16 +17,8 @@ import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import MultiSelectEditorComponent from '../common/multi-select-editor-component';
 import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
 import { UUID } from 'crypto';
+import { defaultColDef } from '../common/table-config';
 import AddGroupDialog from './add-group-dialog';
-
-const defaultColDef: ColDef<GroupInfos> = {
-    editable: false,
-    resizable: true,
-    minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer',
-    rowDrag: false,
-    sortable: true,
-};
 
 function getRowId(params: GetRowIdParams<GroupInfos>): string {
     return params.data.name;
