@@ -13,15 +13,7 @@ import { UserAdminSrv, UserProfile } from '../../services';
 import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
-
-const defaultColDef: ColDef<UserProfile> = {
-    editable: false,
-    resizable: true,
-    minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer',
-    rowDrag: false,
-    sortable: true,
-};
+import { defaultColDef, defaultRowSelection } from '../common/table-config';
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
@@ -126,13 +118,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 defaultColDef={defaultColDef}
                 gridId="table-profiles"
                 getRowId={getRowId}
-                rowSelection={{
-                    mode: 'multiRow',
-                    enableClickSelection: false,
-                    checkboxes: true,
-                    headerCheckbox: true,
-                    hideDisabledCheckboxes: false,
-                }}
+                rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
             >

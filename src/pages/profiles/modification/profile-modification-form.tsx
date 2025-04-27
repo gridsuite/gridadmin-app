@@ -27,7 +27,7 @@ const ProfileModificationForm: FunctionComponent = () => {
     return (
         <Grid container spacing={2} marginTop={'auto'}>
             <Grid item xs={12}>
-                <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={false} />
+                <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={true} />
             </Grid>
             <Grid item xs={12}>
                 <h3>
