@@ -8,16 +8,13 @@
 import { CustomFormProvider, SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
 import { FormattedMessage, useIntl } from 'react-intl';
-import React, { FunctionComponent, useCallback } from 'react';
+import { useCallback } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { UserAdminSrv, Announcement } from '../../services';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { Announcement, UserAdminSrv } from '../../services';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import yup from '../../utils/yup-config';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/en';
 import { useParameterState } from '../../components/parameters';
 import { PARAM_LANGUAGE } from '../../utils/config-params';
 import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
@@ -91,24 +88,22 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                     />
                 </Grid>
                 <Grid item xs={2}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={languageLocal}>
-                        <DateTimePicker
-                            {...register('startDate')}
-                            name={START_DATE}
-                            label={intl.formatMessage({ id: 'announcements.table.startDate' })}
-                            onChange={(newValue) => setValue('startDate', newValue?.toISOString() ?? '')}
-                        />
-                    </LocalizationProvider>
+                    <DateTimePicker
+                        {...register('startDate')}
+                        name={START_DATE}
+                        label={intl.formatMessage({ id: 'announcements.table.startDate' })}
+                        onChange={(newValue) => setValue('startDate', newValue?.toISOString() ?? '')} //TODO startOf(min)
+                        timezone="system"
+                    />
                 </Grid>
                 <Grid item xs={2}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={languageLocal}>
-                        <DateTimePicker
-                            {...register('endDate')}
-                            name={END_DATE}
-                            label={intl.formatMessage({ id: 'announcements.table.endDate' })}
-                            onChange={(newValue) => setValue('endDate', newValue?.toISOString() ?? '')}
-                        />
-                    </LocalizationProvider>
+                    <DateTimePicker
+                        {...register('endDate')}
+                        name={END_DATE}
+                        label={intl.formatMessage({ id: 'announcements.table.endDate' })}
+                        onChange={(newValue) => setValue('endDate', newValue?.toISOString() ?? '')} //TODO endOf(min)
+                        timezone="system"
+                    />
                 </Grid>
                 <Grid item xs={2}>
                     <FormControl fullWidth>

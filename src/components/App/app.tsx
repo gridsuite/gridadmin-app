@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
+import { type PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
@@ -24,7 +24,7 @@ import AppTopBar from './app-top-bar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
 
-const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
+export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
@@ -102,9 +102,8 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
                 <AnnouncementNotification user={user} />
             </Grid>
             <Grid item container xs component="main">
-                <CardErrorBoundary>{/*Router outlet ->*/ props.children}</CardErrorBoundary>
+                <CardErrorBoundary>{/*Router outlet ->*/ children}</CardErrorBoundary>
             </Grid>
         </Grid>
     );
-};
-export default App;
+}
