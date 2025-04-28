@@ -38,7 +38,6 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
     useEffect(() => {
-        // fetch available profiles
         if (groupInfos && open) {
             setDataFetchStatus(FetchStatus.FETCHING);
             UserAdminSrv.fetchUsers()

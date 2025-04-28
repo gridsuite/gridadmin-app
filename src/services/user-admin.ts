@@ -42,7 +42,7 @@ export type UserInfos = {
     sub: string;
     profileName: string;
     isAdmin: boolean;
-    groups: GroupInfos[];
+    groups: string[];
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
