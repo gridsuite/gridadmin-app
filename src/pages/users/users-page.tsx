@@ -40,18 +40,24 @@ const UsersPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid item container direction="column" spacing={2} component="section">
-            <Grid item container xs sx={{ width: 1 }}>
-                <UserModificationDialog
-                    userInfos={editingUser}
-                    open={openUserModificationDialog}
-                    onClose={handleCloseUserModificationDialog}
-                    onUpdate={handleUpdateUserModificationDialog}
-                />
-                <UsersTable gridRef={gridRef} onRowClicked={onRowClicked} setOpenAddUserDialog={setOpenAddUserDialog} />
-                <AddUserDialog gridRef={gridRef} open={openAddUserDialog} setOpen={setOpenAddUserDialog} />
+        <>
+            <Grid item container direction="column" spacing={2} component="section">
+                <Grid item container xs sx={{ width: 1 }}>
+                    <UsersTable
+                        gridRef={gridRef}
+                        onRowClicked={onRowClicked}
+                        setOpenAddUserDialog={setOpenAddUserDialog}
+                    />
+                </Grid>
             </Grid>
-        </Grid>
+            <AddUserDialog gridRef={gridRef} open={openAddUserDialog} setOpen={setOpenAddUserDialog} />
+            <UserModificationDialog
+                userInfos={editingUser}
+                open={openUserModificationDialog}
+                onClose={handleCloseUserModificationDialog}
+                onUpdate={handleUpdateUserModificationDialog}
+            />
+        </>
     );
 };
 export default UsersPage;
