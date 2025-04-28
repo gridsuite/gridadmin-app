@@ -1,0 +1,188 @@
+/**
+ * Copyright (c) 2024, RTE (http://www.rte-france.com)
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+import { FunctionComponent, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { GroupAdd } from '@mui/icons-material';
+import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
+import { GroupInfos, UpdateGroupInfos, UserAdminSrv, UserInfos } from '../../services';
+import {
+    ColDef,
+    GetRowIdParams,
+    ICellEditorParams,
+    RowClickedEvent,
+    SelectionChangedEvent,
+    TextFilterParams,
+} from 'ag-grid-community';
+import { useSnackMessage } from '@gridsuite/commons-ui';
+import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
+import { defaultColDef, defaultRowSelection } from '../common/table-config';
+import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
+import MultiSelectEditorComponent from '../common/multi-select-editor-component';
+import { UUID } from 'crypto';
+
+export interface GroupsTableProps {
+    gridRef: RefObject<GridTableRef<GroupInfos>>;
+    onRowClicked: (event: RowClickedEvent<GroupInfos>) => void;
+    setOpenAddGroupDialog: (open: boolean) => void;
+}
+
+const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
+    const intl = useIntl();
+    const { snackError } = useSnackMessage();
+
+    const [rowsSelection, setRowsSelection] = useState<GroupInfos[]>([]);
+    const [showDeletionDialog, setShowDeletionDialog] = useState(false);
+    const [usersOptions, setUsersOptions] = useState<string[]>([]);
+
+    useEffect(() => {
+        UserAdminSrv.fetchUsers()
+            .then((allUsers: UserInfos[]) => {
+                const users = allUsers?.map((u) => u.sub) || [];
+                setUsersOptions(users);
+            })
+            .catch((error) =>
+                snackError({
+                    messageTxt: error.message,
+                    headerId: 'groups.table.error.users',
+                })
+            );
+    }, [snackError]);
+
+    function getRowId(params: GetRowIdParams<GroupInfos>): string {
+        return params.data.name;
+    }
+
+    const onSelectionChanged = useCallback(
+        (event: SelectionChangedEvent<GroupInfos, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
+        [setRowsSelection]
+    );
+
+    const onAddButton = useCallback(() => props.setOpenAddGroupDialog(true), [props]);
+
+    const deleteGroups = useCallback((): Promise<void> | undefined => {
+        let groupNames = rowsSelection.map((group) => group.name);
+        return UserAdminSrv.deleteGroups(groupNames)
+            .catch((error) => {
+                if (error.status === 422) {
+                    snackError({
+                        headerId: 'groups.table.integrity.error.delete',
+                    });
+                } else {
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'groups.table.error.delete',
+                    });
+                }
+            })
+            .then(() => props.gridRef?.current?.context?.refresh?.());
+    }, [props.gridRef, rowsSelection, snackError]);
+
+    const deleteGroupsDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
+
+    const updateGroupCallback = useCallback(
+        (id: UUID, name: string, users: string[]) => {
+            const newData: UpdateGroupInfos = {
+                id: id,
+                name: name,
+                users: [],
+            };
+            UserAdminSrv.udpateGroup(newData)
+                .catch((error) =>
+                    snackError({
+                        messageTxt: error.message,
+                        headerId: 'groups.table.error.update',
+                    })
+                )
+                .then(() => props.gridRef?.current?.context?.refresh?.());
+        },
+        [props.gridRef, snackError]
+    );
+
+    const columns = useMemo(
+        (): ColDef<GroupInfos>[] => [
+            {
+                field: 'name',
+                cellDataType: 'text',
+                flex: 3,
+                lockVisible: true,
+                filter: true,
+                headerName: intl.formatMessage({ id: 'groups.table.id' }),
+                headerTooltip: intl.formatMessage({
+                    id: 'groups.table.id.description',
+                }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<GroupInfos>,
+                initialSort: 'asc',
+            },
+            {
+                field: 'users',
+                cellDataType: 'text',
+                flex: 1,
+                filter: true,
+                headerName: intl.formatMessage({
+                    id: 'groups.table.users',
+                }),
+                headerTooltip: intl.formatMessage({
+                    id: 'groups.table.users.description',
+                }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<UserInfos>,
+                editable: true,
+                cellRenderer: MultiChipsRendererComponent,
+                cellEditor: MultiSelectEditorComponent,
+                cellEditorParams: (params: ICellEditorParams<GroupInfos>) => ({
+                    options: usersOptions,
+                    setValue: (values: string[]) => {
+                        if (params.data?.id) {
+                            updateGroupCallback(params.data.id, params.data.name, values);
+                        }
+                    },
+                }),
+            },
+        ],
+        [intl, usersOptions, updateGroupCallback]
+    );
+
+    return (
+        <>
+            <GridTable<GroupInfos, {}>
+                ref={props.gridRef}
+                dataLoader={UserAdminSrv.fetchGroups}
+                columnDefs={columns}
+                defaultColDef={defaultColDef}
+                gridId="table-groups"
+                getRowId={getRowId}
+                rowSelection={defaultRowSelection}
+                onRowClicked={props.onRowClicked}
+                onSelectionChanged={onSelectionChanged}
+            >
+                <GridButton
+                    labelId="groups.table.toolbar.add.label"
+                    textId="groups.table.toolbar.add"
+                    startIcon={<GroupAdd fontSize="small" />}
+                    color="primary"
+                    onClick={onAddButton}
+                />
+                <GridButtonDelete onClick={() => setShowDeletionDialog(true)} disabled={deleteGroupsDisabled} />
+            </GridTable>
+
+            <DeleteConfirmationDialog
+                open={showDeletionDialog}
+                setOpen={setShowDeletionDialog}
+                itemType={intl.formatMessage({ id: 'form.delete.dialog.group' })}
+                itemNames={rowsSelection.map((user) => user.name)}
+                deleteFunc={deleteGroups}
+            />
+        </>
+    );
+};
+export default GroupsTable;
