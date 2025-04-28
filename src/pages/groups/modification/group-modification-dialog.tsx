@@ -6,67 +6,65 @@
  */
 
 import ProfileModificationForm, {
-    USER_NAME,
-    USER_PROFILE_NAME,
-    UserModificationFormType,
-    UserModificationSchema,
-} from './user-modification-form';
+    GROUP_NAME,
+    GroupModificationFormType,
+    GroupModificationSchema,
+} from './group-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { UpdateUserInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
+import { GroupInfos, UpdateGroupInfos, UserAdminSrv, UserInfos } from '../../../services';
 
-interface UserModificationDialogProps {
-    userInfos: UserInfos | undefined;
+interface GroupModificationDialogProps {
+    groupInfos: GroupInfos | undefined;
     open: boolean;
     onClose: () => void;
     onUpdate: () => void;
 }
 
-const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = ({
-    userInfos,
+const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> = ({
+    groupInfos,
     open,
     onClose,
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
     const formMethods = useForm({
-        resolver: yupResolver(UserModificationSchema),
+        resolver: yupResolver(GroupModificationSchema),
     });
     const { reset } = formMethods;
-    const [profileOptions, setProfileOptions] = useState<string[]>([]);
+    const [userOptions, setUserOptions] = useState<string[]>([]);
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
     useEffect(() => {
         // fetch available profiles
-        if (userInfos && open) {
+        if (groupInfos && open) {
             setDataFetchStatus(FetchStatus.FETCHING);
-            UserAdminSrv.fetchProfilesWithoutValidityCheck()
-                .then((allProfiles: UserProfile[]) => {
+            UserAdminSrv.fetchUsers()
+                .then((allUsers: UserInfos[]) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
-                    setProfileOptions(
-                        allProfiles.map((p) => p.name).sort((a: string, b: string) => a.localeCompare(b))
+                    setUserOptions(
+                        allUsers?.map((p) => p.sub).sort((a: string, b: string) => a.localeCompare(b)) || []
                     );
                 })
                 .catch((error) => {
                     setDataFetchStatus(FetchStatus.FETCH_ERROR);
                     snackError({
                         messageTxt: error.message,
-                        headerId: 'users.table.error.profiles',
+                        headerId: 'groups.table.error.users',
                     });
                 });
         }
-    }, [open, snackError, userInfos]);
+    }, [open, snackError, groupInfos]);
 
     useEffect(() => {
-        if (userInfos && open) {
+        if (groupInfos && open) {
             reset({
-                [USER_NAME]: userInfos.sub,
-                [USER_PROFILE_NAME]: userInfos.profileName,
+                [GROUP_NAME]: groupInfos.name,
             });
         }
-    }, [userInfos, open, reset]);
+    }, [groupInfos, open, reset]);
 
     const onDialogClose = useCallback(() => {
         setDataFetchStatus(FetchStatus.IDLE);
@@ -74,19 +72,18 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
     }, [onClose]);
 
     const onSubmit = useCallback(
-        (userFormData: UserModificationFormType) => {
-            if (userInfos) {
-                const newData: UpdateUserInfos = {
-                    sub: userInfos.sub, // sub cannot be changed, it is a PK in database
-                    isAdmin: userInfos.isAdmin, // cannot be changed for now
-                    profileName: userFormData.profileName ?? undefined,
-                    groups: [],
+        (groupFormData: GroupModificationFormType) => {
+            if (groupInfos?.id) {
+                const newData: UpdateGroupInfos = {
+                    id: groupInfos.id,
+                    name: groupFormData.name,
+                    users: [],
                 };
-                UserAdminSrv.udpateUser(newData)
+                UserAdminSrv.udpateGroup(newData)
                     .catch((error) =>
                         snackError({
                             messageTxt: error.message,
-                            headerId: 'users.table.error.update',
+                            headerId: 'groups.table.error.update',
                         })
                     )
                     .then(() => {
@@ -94,7 +91,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     });
             }
         },
-        [onUpdate, snackError, userInfos]
+        [onUpdate, snackError, groupInfos]
     );
 
     const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.FETCH_SUCCESS, [dataFetchStatus]);
@@ -105,15 +102,15 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
             open={open}
             onClose={onDialogClose}
             onSave={onSubmit}
-            formSchema={UserModificationSchema}
+            formSchema={GroupModificationSchema}
             formMethods={formMethods}
-            titleId={'users.form.modification.title'}
+            titleId={'groups.form.modification.title'}
             removeOptional={true}
             isDataFetching={isDataFetching}
         >
-            {isDataReady && <ProfileModificationForm profileOptions={profileOptions} />}
+            {isDataReady && <ProfileModificationForm usersOptions={userOptions} />}
         </CustomMuiDialog>
     );
 };
 
-export default UserModificationDialog;
+export default GroupModificationDialog;

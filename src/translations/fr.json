@@ -48,6 +48,7 @@
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
     "users.form.field.username.label": "ID utilisateur",
+    "users.form.modification.title": "Modifier utilisateur",
 
     "form.delete.dialog.user": "utilisateur",
     "form.delete.dialog.profile": "profil",
@@ -103,6 +104,7 @@
     "groups.form.title": "Ajouter un groupe",
     "groups.form.content": "Veuillez renseigner les informations du groupe.",
     "groups.form.field.group.label": "ID groupe",
+    "groups.form.modification.title": "Modifier groupe",
 
     "linked.path.display.noLink": "pas de configuration selectionnée.",
     "linked.path.display.invalidLink": "lien vers configurations invalide."

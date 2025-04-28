@@ -47,6 +47,7 @@
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
+    "users.form.modification.title": "Edit user",
 
     "form.delete.dialog.user": "user",
     "form.delete.dialog.profile": "profile",
@@ -102,6 +103,7 @@
     "groups.form.title": "Add a group",
     "groups.form.content": "Please fill in new group data.",
     "groups.form.field.group.label": "Group ID",
+    "groups.form.modification.title": "Edit group",
 
     "linked.path.display.noLink": "no configuration selected.",
     "linked.path.display.invalidLink": "invalid configurations link."
