@@ -5,10 +5,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import ProfileModificationForm, {
+import GroupModificationForm, {
     GROUP_NAME,
     GroupModificationFormType,
     GroupModificationSchema,
+    SELECTED_USERS,
 } from './group-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -33,12 +34,15 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
     const formMethods = useForm({
         resolver: yupResolver(GroupModificationSchema),
     });
-    const { reset } = formMethods;
+    const { reset, setValue } = formMethods;
     const [userOptions, setUserOptions] = useState<string[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
     useEffect(() => {
         if (groupInfos && open) {
+            setSelectedUsers(groupInfos.users);
+            // fetch all users
             setDataFetchStatus(FetchStatus.FETCHING);
             UserAdminSrv.fetchUsers()
                 .then((allUsers: UserInfos[]) => {
@@ -59,11 +63,26 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
 
     useEffect(() => {
         if (groupInfos && open) {
+            const sortedUsers = Array.from(groupInfos.users).sort((a, b) => a.localeCompare(b));
             reset({
                 [GROUP_NAME]: groupInfos.name,
+                [SELECTED_USERS]: JSON.stringify(sortedUsers), // only used to dirty the form
             });
         }
     }, [groupInfos, open, reset]);
+
+    const onSelectionChanged = useCallback(
+        (selectedItems: string[]) => {
+            if (groupInfos) {
+                setSelectedUsers(selectedItems);
+                selectedItems.sort((a, b) => a.localeCompare(b));
+                setValue(SELECTED_USERS, JSON.stringify(selectedItems), {
+                    shouldDirty: true,
+                });
+            }
+        },
+        [groupInfos, setValue]
+    );
 
     const onDialogClose = useCallback(() => {
         setDataFetchStatus(FetchStatus.IDLE);
@@ -76,7 +95,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                 const newData: UpdateGroupInfos = {
                     id: groupInfos.id,
                     name: groupFormData.name,
-                    users: [],
+                    users: selectedUsers,
                 };
                 UserAdminSrv.udpateGroup(newData)
                     .catch((error) =>
@@ -90,7 +109,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                     });
             }
         },
-        [onUpdate, snackError, groupInfos]
+        [groupInfos?.id, selectedUsers, snackError, onUpdate]
     );
 
     const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.FETCH_SUCCESS, [dataFetchStatus]);
@@ -106,8 +125,15 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
             titleId={'groups.form.modification.title'}
             removeOptional={true}
             isDataFetching={isDataFetching}
+            unscrollableFullHeight
         >
-            {isDataReady && <ProfileModificationForm usersOptions={userOptions} />}
+            {isDataReady && (
+                <GroupModificationForm
+                    usersOptions={userOptions}
+                    selectedUsers={selectedUsers}
+                    onSelectionChanged={onSelectionChanged}
+                />
+            )}
         </CustomMuiDialog>
     );
 };

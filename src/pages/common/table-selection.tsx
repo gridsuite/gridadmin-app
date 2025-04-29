@@ -6,7 +6,7 @@
  */
 
 import { FunctionComponent, useCallback, useMemo, useRef, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { CustomAGGrid } from '@gridsuite/commons-ui';
 import { Grid, Typography } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
@@ -21,7 +21,6 @@ export interface TableSelectionProps {
 }
 
 const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
-    const intl = useIntl();
     const [selectedRowsLength, setSelectedRowsLength] = useState(0);
     const gridRef = useRef<AgGridReact>(null);
 
@@ -55,12 +54,9 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                 filter: true,
                 sortable: true,
                 minWidth: 80,
-                headerName: intl.formatMessage({
-                    id: props.itemNameTranslationKey,
-                }),
             },
         ],
-        [intl, props.itemNameTranslationKey]
+        []
     );
 
     function getRowId(params: GetRowIdParams): string {
