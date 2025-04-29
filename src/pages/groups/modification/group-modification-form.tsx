@@ -9,13 +9,16 @@ import { TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
 import React, { FunctionComponent } from 'react';
 import yup from '../../../utils/yup-config';
+import TableSelection from 'pages/common/table-selection';
 
 export const GROUP_NAME = 'name';
+export const SELECTED_USERS = 'users';
 
 export const GroupModificationSchema = yup
     .object()
     .shape({
         [GROUP_NAME]: yup.string().trim().required('nameEmpty'),
+        [SELECTED_USERS]: yup.string().nullable(),
     })
     .required();
 
@@ -23,13 +26,27 @@ export type GroupModificationFormType = yup.InferType<typeof GroupModificationSc
 
 interface GroupModificationFormProps {
     usersOptions: string[];
+    selectedUsers?: string[];
+    onSelectionChanged: (selectedItems: string[]) => void;
 }
 
-const GroupModificationForm: FunctionComponent<GroupModificationFormProps> = ({ usersOptions }) => {
+const GroupModificationForm: FunctionComponent<GroupModificationFormProps> = ({
+    usersOptions,
+    selectedUsers,
+    onSelectionChanged,
+}) => {
     return (
-        <Grid container spacing={2} marginTop={'auto'}>
+        <Grid item container spacing={2} marginTop={0} style={{ height: '100%' }}>
             <Grid item xs={12}>
                 <TextInput name={GROUP_NAME} label={'groups.table.id'} clearable={true} />
+            </Grid>
+            <Grid item xs={12} style={{ height: '85%' }}>
+                <TableSelection
+                    itemNameTranslationKey={'groups.table.users'}
+                    tableItems={usersOptions}
+                    tableSelectedItems={selectedUsers}
+                    onSelectionChanged={onSelectionChanged}
+                />
             </Grid>
         </Grid>
     );

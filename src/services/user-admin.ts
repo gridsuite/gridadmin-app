@@ -218,7 +218,7 @@ export function deleteProfiles(names: string[]): Promise<void> {
 export type GroupInfos = {
     id?: UUID;
     name: string;
-    users: UserInfos[];
+    users: string[];
 };
 
 export function fetchGroups(): Promise<GroupInfos[]> {

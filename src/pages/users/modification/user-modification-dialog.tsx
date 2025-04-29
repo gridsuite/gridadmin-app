@@ -43,14 +43,18 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
 
     useEffect(() => {
         if (userInfos && open) {
+            const sortedGroups = Array.from(userInfos.groups).sort((a, b) => a.localeCompare(b));
+            reset({
+                [USER_NAME]: userInfos.sub,
+                [USER_PROFILE_NAME]: userInfos.profileName,
+                [USER_SELECTED_GROUPS]: JSON.stringify(sortedGroups), // only used to dirty the form
+            });
             setSelectedGroups(userInfos.groups);
+
             // fetch profile & groups
             setDataFetchStatus(FetchStatus.FETCHING);
-            let fetcherPromises: Promise<unknown>[] = [];
             const profilePromise = UserAdminSrv.fetchProfilesWithoutValidityCheck();
             const groupPromise = UserAdminSrv.fetchGroups();
-            fetcherPromises.push(profilePromise);
-            fetcherPromises.push(groupPromise);
 
             profilePromise
                 .then((allProfiles: UserProfile[]) => {
@@ -76,7 +80,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     });
                 });
 
-            Promise.all(fetcherPromises)
+            Promise.all([profilePromise, groupPromise])
                 .then(() => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                 })
@@ -84,18 +88,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     setDataFetchStatus(FetchStatus.FETCH_ERROR);
                 });
         }
-    }, [open, snackError, userInfos]);
-
-    useEffect(() => {
-        if (userInfos && open) {
-            const sortedGroups = Array.from(userInfos.groups).sort((a, b) => a.localeCompare(b));
-            reset({
-                [USER_NAME]: userInfos.sub,
-                [USER_PROFILE_NAME]: userInfos.profileName,
-                [USER_SELECTED_GROUPS]: JSON.stringify(sortedGroups), // only used to dirty the form
-            });
-        }
-    }, [userInfos, open, reset]);
+    }, [open, reset, snackError, userInfos]);
 
     const onDialogClose = useCallback(() => {
         setDataFetchStatus(FetchStatus.IDLE);
@@ -104,15 +97,13 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
 
     const onSelectionChanged = useCallback(
         (selectedItems: string[]) => {
-            if (userInfos) {
-                setSelectedGroups(selectedItems);
-                selectedItems.sort((a, b) => a.localeCompare(b));
-                setValue(USER_SELECTED_GROUPS, JSON.stringify(selectedItems), {
-                    shouldDirty: true,
-                });
-            }
+            setSelectedGroups(selectedItems);
+            selectedItems.sort((a, b) => a.localeCompare(b));
+            setValue(USER_SELECTED_GROUPS, JSON.stringify(selectedItems), {
+                shouldDirty: true,
+            });
         },
-        [setValue, userInfos]
+        [setValue]
     );
 
     const onSubmit = useCallback(

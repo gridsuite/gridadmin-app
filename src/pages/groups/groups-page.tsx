@@ -40,22 +40,24 @@ const GroupsPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid item container direction="column" spacing={2} component="section">
-            <Grid item container xs sx={{ width: 1 }}>
-                <GroupModificationDialog
-                    groupInfos={editingGroup}
-                    open={openGroupModificationDialog}
-                    onClose={handleCloseGroupModificationDialog}
-                    onUpdate={handleUpdateGroupModificationDialog}
-                />
-                <GroupsTable
-                    gridRef={gridRef}
-                    onRowClicked={onRowClicked}
-                    setOpenAddGroupDialog={setOpenAddGroupDialog}
-                />
-                <AddGroupDialog gridRef={gridRef} open={openAddGroupDialog} setOpen={setOpenAddGroupDialog} />
+        <>
+            <Grid item container direction="column" spacing={2} component="section">
+                <Grid item container xs sx={{ width: 1 }}>
+                    <GroupsTable
+                        gridRef={gridRef}
+                        onRowClicked={onRowClicked}
+                        setOpenAddGroupDialog={setOpenAddGroupDialog}
+                    />
+                </Grid>
             </Grid>
-        </Grid>
+            <AddGroupDialog gridRef={gridRef} open={openAddGroupDialog} setOpen={setOpenAddGroupDialog} />
+            <GroupModificationDialog
+                groupInfos={editingGroup}
+                open={openGroupModificationDialog}
+                onClose={handleCloseGroupModificationDialog}
+                onUpdate={handleUpdateGroupModificationDialog}
+            />
+        </>
     );
 };
 export default GroupsPage;

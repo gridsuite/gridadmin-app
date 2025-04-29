@@ -5,25 +5,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
-import { GroupInfos, UpdateGroupInfos, UserAdminSrv, UserInfos } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    ICellEditorParams,
-    RowClickedEvent,
-    SelectionChangedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
+import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
-import MultiSelectEditorComponent from '../common/multi-select-editor-component';
-import { UUID } from 'crypto';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
@@ -37,21 +28,6 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
 
     const [rowsSelection, setRowsSelection] = useState<GroupInfos[]>([]);
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
-    const [usersOptions, setUsersOptions] = useState<string[]>([]);
-
-    useEffect(() => {
-        UserAdminSrv.fetchUsers()
-            .then((allUsers: UserInfos[]) => {
-                const users = allUsers?.map((u) => u.sub) || [];
-                setUsersOptions(users);
-            })
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'groups.table.error.users',
-                })
-            );
-    }, [snackError]);
 
     function getRowId(params: GetRowIdParams<GroupInfos>): string {
         return params.data.name;
@@ -83,25 +59,6 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
     }, [props.gridRef, rowsSelection, snackError]);
 
     const deleteGroupsDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
-
-    const updateGroupCallback = useCallback(
-        (id: UUID, name: string, users: string[]) => {
-            const newData: UpdateGroupInfos = {
-                id: id,
-                name: name,
-                users: [],
-            };
-            UserAdminSrv.udpateGroup(newData)
-                .catch((error) =>
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'groups.table.error.update',
-                    })
-                )
-                .then(() => props.gridRef?.current?.context?.refresh?.());
-        },
-        [props.gridRef, snackError]
-    );
 
     const columns = useMemo(
         (): ColDef<GroupInfos>[] => [
@@ -136,20 +93,10 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
-                editable: true,
                 cellRenderer: MultiChipsRendererComponent,
-                cellEditor: MultiSelectEditorComponent,
-                cellEditorParams: (params: ICellEditorParams<GroupInfos>) => ({
-                    options: usersOptions,
-                    setValue: (values: string[]) => {
-                        if (params.data?.id) {
-                            updateGroupCallback(params.data.id, params.data.name, values);
-                        }
-                    },
-                }),
             },
         ],
-        [intl, usersOptions, updateGroupCallback]
+        [intl]
     );
 
     return (
