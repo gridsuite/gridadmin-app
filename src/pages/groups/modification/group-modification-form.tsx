@@ -40,9 +40,9 @@ const GroupModificationForm: FunctionComponent<GroupModificationFormProps> = ({
             <Grid item xs={12}>
                 <TextInput name={GROUP_NAME} label={'groups.table.id'} clearable={true} />
             </Grid>
-            <Grid item xs={12} style={{ height: '85%' }}>
+            <Grid item xs={12} style={{ height: '90%' }}>
                 <TableSelection
-                    itemNameTranslationKey={'groups.table.users'}
+                    itemName={'groups.table.users'}
                     tableItems={usersOptions}
                     tableSelectedItems={selectedUsers}
                     onSelectionChanged={onSelectionChanged}

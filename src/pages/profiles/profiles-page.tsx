@@ -41,22 +41,24 @@ const ProfilesPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid item container direction="column" spacing={2} component="section">
-            <Grid item container xs sx={{ width: 1 }}>
-                <ProfilesTable
-                    gridRef={gridRef}
-                    onRowClicked={onRowClicked}
-                    setOpenAddProfileDialog={setOpenAddProfileDialog}
-                />
-                <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />
-                <ProfileModificationDialog
-                    profileId={editingProfileId}
-                    open={openProfileModificationDialog}
-                    onClose={handleCloseProfileModificationDialog}
-                    onUpdate={handleUpdateProfileModificationDialog}
-                />
+        <>
+            <Grid item container direction="column" spacing={2} component="section">
+                <Grid item container xs sx={{ width: 1 }}>
+                    <ProfilesTable
+                        gridRef={gridRef}
+                        onRowClicked={onRowClicked}
+                        setOpenAddProfileDialog={setOpenAddProfileDialog}
+                    />
+                </Grid>
             </Grid>
-        </Grid>
+            <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />
+            <ProfileModificationDialog
+                profileId={editingProfileId}
+                open={openProfileModificationDialog}
+                onClose={handleCloseProfileModificationDialog}
+                onUpdate={handleUpdateProfileModificationDialog}
+            />
+        </>
     );
 };
 export default ProfilesPage;

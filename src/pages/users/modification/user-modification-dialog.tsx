@@ -110,8 +110,8 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
         (userFormData: UserModificationFormType) => {
             if (userInfos) {
                 const newData: UpdateUserInfos = {
-                    sub: userInfos.sub, // sub cannot be changed, it is a PK in database
-                    isAdmin: userInfos.isAdmin, // cannot be changed for now
+                    sub: userInfos.sub, // can't be changed
+                    isAdmin: userInfos.isAdmin, // can't be changed
                     profileName: userFormData.profileName ?? undefined,
                     groups: selectedGroups,
                 };

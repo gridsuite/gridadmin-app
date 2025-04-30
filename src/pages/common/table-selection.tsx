@@ -14,7 +14,7 @@ import { ColDef, GetRowIdParams, GridReadyEvent } from 'ag-grid-community';
 import { defaultColDef, defaultRowSelection } from './table-config';
 
 export interface TableSelectionProps {
-    itemNameTranslationKey: string;
+    itemName: string;
     tableItems: string[];
     tableSelectedItems?: string[];
     onSelectionChanged: (selectedItems: string[]) => void;
@@ -45,8 +45,8 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                 field: 'id',
                 filter: true,
                 sortable: true,
-                minWidth: 80,
                 tooltipField: 'id',
+                flex: 1,
             },
         ],
         []
@@ -71,7 +71,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
         <Grid item container direction={'column'} style={{ height: '100%' }}>
             <Grid item>
                 <Typography variant="subtitle1">
-                    <FormattedMessage id={props.itemNameTranslationKey}></FormattedMessage>
+                    <FormattedMessage id={props.itemName}></FormattedMessage>
                     {` (${selectedRowsLength} / ${rowData?.length ?? 0})`}
                 </Typography>
             </Grid>

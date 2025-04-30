@@ -16,7 +16,7 @@ import {
     ITooltipParams,
     RowClickedEvent,
     SelectionChangedEvent,
-    TextFilterParams
+    TextFilterParams,
 } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';

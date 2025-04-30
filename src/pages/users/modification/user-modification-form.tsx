@@ -63,7 +63,7 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
             </Grid>
             <Grid item xs={12} style={{ height: '85%' }}>
                 <TableSelection
-                    itemNameTranslationKey={'users.table.groups'}
+                    itemName={'users.table.groups'}
                     tableItems={groupOptions}
                     tableSelectedItems={selectedGroups}
                     onSelectionChanged={onSelectionChanged}

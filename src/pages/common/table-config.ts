@@ -11,7 +11,6 @@ export const defaultColDef: ColDef = {
     editable: false,
     resizable: true,
     minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer',
     rowDrag: false,
     sortable: true,
 };
