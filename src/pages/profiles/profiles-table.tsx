@@ -75,7 +75,6 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserProfile>,
-                editable: false,
             },
             {
                 field: 'allLinksValid',
@@ -85,13 +84,13 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     alignItems: 'center',
                 }),
                 cellRenderer: (params: any) => {
-                    return params.value == null ? (
-                        <RadioButtonUnchecked fontSize="small" />
-                    ) : params.value ? (
-                        <CheckCircle fontSize="small" color="success" />
-                    ) : (
-                        <Cancel fontSize="small" color="error" />
-                    );
+                    if (params.value == null) {
+                        return <RadioButtonUnchecked fontSize="small" />;
+                    } else if (params.value) {
+                        return <CheckCircle fontSize="small" color="success" />;
+                    } else {
+                        return <Cancel fontSize="small" color="error" />;
+                    }
                 },
                 flex: 1,
                 headerName: intl.formatMessage({

@@ -46,6 +46,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                 filter: true,
                 sortable: true,
                 minWidth: 80,
+                tooltipField: 'id',
             },
         ],
         []

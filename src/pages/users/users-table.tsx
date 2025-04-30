@@ -5,16 +5,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { PersonAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
-import { GroupInfos, UpdateUserInfos, UserAdminSrv, UserInfos } from '../../services';
+import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
 import {
     ColDef,
     GetRowIdParams,
-    ICellEditorParams,
     ICheckboxCellRendererParams,
+    ITooltipParams,
     RowClickedEvent,
     SelectionChangedEvent,
     TextFilterParams,
@@ -22,8 +22,6 @@ import {
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
-import MultiChipsRendererComponent from '../common/multi-chips-renderer-component';
-import MultiSelectEditorComponent from '../common/multi-select-editor-component';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
@@ -37,23 +35,6 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
 
     const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
-    const [groupsOptions, setGroupsOptions] = useState<string[]>([]);
-
-    useEffect(() => {
-        // fetch available groups
-        UserAdminSrv.fetchGroups()
-            .then((allGroups: GroupInfos[]) => {
-                let groups: string[] = [];
-                allGroups?.forEach((g) => groups.push(g.name));
-                setGroupsOptions(groups);
-            })
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'users.table.error.groups',
-                })
-            );
-    }, [intl, snackError]);
 
     function getRowId(params: GetRowIdParams<UserInfos>): string {
         return params.data.sub ?? '';
@@ -80,32 +61,12 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
 
     const deleteUsersDisabled = useMemo(() => rowsSelection.length <= 0, [rowsSelection.length]);
 
-    const updateUserCallback = useCallback(
-        (sub: string, profileName: string | undefined, isAdmin: boolean | undefined, groups: string[]) => {
-            const newData: UpdateUserInfos = {
-                sub: sub,
-                profileName: profileName,
-                isAdmin: isAdmin,
-                groups: groups,
-            };
-            UserAdminSrv.udpateUser(newData)
-                .catch((error) =>
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'users.table.error.update',
-                    })
-                )
-                .then(() => props.gridRef?.current?.context?.refresh?.());
-        },
-        [props.gridRef, snackError]
-    );
-
     const columns = useMemo(
         (): ColDef<UserInfos>[] => [
             {
                 field: 'sub',
                 cellDataType: 'text',
-                flex: 3,
+                flex: 2,
                 lockVisible: true,
                 filter: true,
                 headerName: intl.formatMessage({ id: 'users.table.id' }),
@@ -121,7 +82,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
             {
                 field: 'profileName',
                 cellDataType: 'text',
-                flex: 1,
+                flex: 2,
                 filter: true,
                 headerName: intl.formatMessage({
                     id: 'users.table.profileName',
@@ -133,6 +94,35 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+            },
+            {
+                field: 'groups',
+                cellDataType: 'text',
+                flex: 3,
+                filter: true,
+                headerName: intl.formatMessage({
+                    id: 'users.table.groups',
+                }),
+                headerTooltip: intl.formatMessage({
+                    id: 'users.table.groups.description',
+                }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<GroupInfos>,
+                tooltipValueGetter: (p: ITooltipParams) => {
+                    const items = p.value as string[];
+                    if (items == null || items.length === 0) {
+                        return '';
+                    }
+                    let groupWord = intl.formatMessage({
+                        id: 'form.delete.dialog.group',
+                    });
+                    if (items.length > 1) {
+                        groupWord = groupWord.concat('s');
+                    }
+                    return `${items.length} ${groupWord}`;
+                },
             },
             {
                 field: 'isAdmin',
@@ -150,35 +140,8 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 }),
                 filter: true,
             },
-            {
-                field: 'groups',
-                cellDataType: 'text',
-                flex: 1,
-                filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.groups',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.groups.description',
-                }),
-                filterParams: {
-                    caseSensitive: false,
-                    trimInput: true,
-                } as TextFilterParams<GroupInfos>,
-                editable: true,
-                cellRenderer: MultiChipsRendererComponent,
-                cellEditor: MultiSelectEditorComponent,
-                cellEditorParams: (params: ICellEditorParams<UserInfos>) => ({
-                    options: groupsOptions,
-                    setValue: (values: string[]) => {
-                        if (params.data?.sub) {
-                            updateUserCallback(params.data.sub, params.data.profileName, params.data.isAdmin, values);
-                        }
-                    },
-                }),
-            },
         ],
-        [groupsOptions, intl, updateUserCallback]
+        [intl]
     );
 
     return (
@@ -193,6 +156,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                tooltipShowDelay={1000}
             >
                 <GridButton
                     labelId="users.table.toolbar.add.label"
