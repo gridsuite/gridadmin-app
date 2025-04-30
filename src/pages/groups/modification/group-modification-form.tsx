@@ -9,7 +9,7 @@ import { TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
 import React, { FunctionComponent } from 'react';
 import yup from '../../../utils/yup-config';
-import TableSelection from 'pages/common/table-selection';
+import TableSelection from '../../common/table-selection';
 
 export const GROUP_NAME = 'name';
 export const SELECTED_USERS = 'users';

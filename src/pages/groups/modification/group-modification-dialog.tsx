@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { GroupInfos, UpdateGroupInfos, UserAdminSrv, UserInfos } from '../../../services';
+import { GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
 
 interface GroupModificationDialogProps {
     groupInfos: GroupInfos | undefined;
@@ -86,7 +86,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
     const onSubmit = useCallback(
         (groupFormData: GroupModificationFormType) => {
             if (groupInfos?.id) {
-                const newData: UpdateGroupInfos = {
+                const newData: GroupInfos = {
                     id: groupInfos.id,
                     name: groupFormData.name,
                     users: selectedUsers,

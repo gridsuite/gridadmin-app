@@ -16,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { GroupInfos, UpdateUserInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
+import { GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
 
 interface UserModificationDialogProps {
     userInfos: UserInfos | undefined;
@@ -109,13 +109,13 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
     const onSubmit = useCallback(
         (userFormData: UserModificationFormType) => {
             if (userInfos) {
-                const newData: UpdateUserInfos = {
+                const newData: UserInfos = {
                     sub: userInfos.sub, // can't be changed
                     isAdmin: userInfos.isAdmin, // can't be changed
                     profileName: userFormData.profileName ?? undefined,
                     groups: selectedGroups,
                 };
-                UserAdminSrv.udpateUser(newData)
+                UserAdminSrv.updateUser(newData)
                     .catch((error) =>
                         snackError({
                             messageTxt: error.message,
