@@ -10,7 +10,14 @@ import { useIntl } from 'react-intl';
 import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
-import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
+import {
+    ColDef,
+    GetRowIdParams,
+    ITooltipParams,
+    RowClickedEvent,
+    SelectionChangedEvent,
+    TextFilterParams
+} from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
@@ -90,6 +97,21 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                         return <CheckCircle fontSize="small" color="success" />;
                     } else {
                         return <Cancel fontSize="small" color="error" />;
+                    }
+                },
+                tooltipValueGetter: (p: ITooltipParams) => {
+                    if (p.value == null) {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.none',
+                        });
+                    } else if (p.value) {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.ok',
+                        });
+                    } else {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.ko',
+                        });
                     }
                 },
                 flex: 1,

@@ -66,6 +66,9 @@
     "profiles.table.id.description": "Profile name",
     "profiles.table.validity": "Configurations links validity",
     "profiles.table.validity.description": "Are all configurations links valid ?",
+    "profiles.table.validity.tooltip.none": "No configuration link defined",
+    "profiles.table.validity.tooltip.ok": "All configurations links are valid",
+    "profiles.table.validity.tooltip.ko": "At least one configuration link is invalid",
     "profiles.table.error.add": "Error while adding profile {profile} : A profile with the same name already exists.",
     "profiles.table.error.delete": "Error while deleting profile",
     "profiles.table.integrity.error.delete": "Error while deleting profile : a profile is still referenced by users",
@@ -89,7 +92,7 @@
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile",
 
-    "groups.table.id": "ID",
+    "groups.table.id": "Name",
     "groups.table.id.description": "Group identifier",
     "groups.table.users": "Users",
     "groups.table.users.description": "The group's users",
