@@ -8,24 +8,15 @@
 import type { UUID } from 'crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Divider, Grid, type SxProps, type Theme, Typography } from '@mui/material';
+import { Divider, Grid, Typography } from '@mui/material';
 import { useSnackMessage } from '@gridsuite/commons-ui';
-import type { ColDef, GetRowIdParams, ValueGetterParams } from 'ag-grid-community';
+import type { ColDef, GetRowIdParams, ValueFormatterFunc } from 'ag-grid-community';
 import { type GridTableRef } from '../../components/Grid';
 import { Announcement, UserAdminSrv } from '../../services';
 import AddAnnouncementForm from './add-announcement-form';
-import { DateCellRenderer } from './date-cell-renderer';
 import AgGrid from '../../components/Grid/AgGrid';
-import { CancelButtonCellRenderer } from './cancel-button-cell-renderer';
+import CancelCellRenderer from './cancel-cell-renderer';
 import { getErrorMessage } from '../../utils/error';
-
-const stylesLayout = {
-    root: { display: 'flex' },
-    columnContainer: {
-        maxHeight: '60px',
-        paddingLeft: '15px',
-    },
-} as const satisfies Record<string, SxProps<Theme>>;
 
 const defaultColDef: ColDef<Announcement> = {
     editable: false,
@@ -56,16 +47,22 @@ export default function AnnouncementsPage() {
         }
     }, [snackError]);
 
-    const convertSeverity = useCallback(
-        (severity: string) => {
-            if (severity === UserAdminSrv.AnnouncementSeverity.INFO) {
-                return intl.formatMessage({ id: 'announcements.severity.INFO' });
-            } else if (severity === UserAdminSrv.AnnouncementSeverity.WARN) {
-                return intl.formatMessage({ id: 'announcements.severity.WARN' });
-            } else {
-                return '';
+    const renderSeverity = useCallback<NonNullable<ValueFormatterFunc<Announcement, string>>>(
+        (params) => {
+            switch (params.value) {
+                case UserAdminSrv.AnnouncementSeverity.INFO:
+                    return intl.formatMessage({ id: 'announcements.severity.INFO' });
+                case UserAdminSrv.AnnouncementSeverity.WARN:
+                    return intl.formatMessage({ id: 'announcements.severity.WARN' });
+                default:
+                    return params.value || '';
             }
         },
+        [intl]
+    );
+
+    const renderDate = useCallback<NonNullable<ValueFormatterFunc<Announcement, string>>>(
+        (params) => (params.value ? intl.formatDate(params.value, { dateStyle: 'short', timeStyle: 'short' }) : ''),
         [intl]
     );
 
@@ -83,44 +80,47 @@ export default function AnnouncementsPage() {
     const columns = useMemo(
         (): ColDef<Announcement>[] => [
             {
-                field: 'message',
-                cellDataType: 'text',
-                flex: 3,
-                headerName: intl.formatMessage({ id: 'announcements.table.message' }),
-            },
-            {
                 field: 'startDate',
-                cellRenderer: DateCellRenderer,
-                flex: 3,
+                valueFormatter: renderDate,
                 headerName: intl.formatMessage({ id: 'announcements.table.startDate' }),
+                sort: 'asc',
+                sortIndex: 1,
+                initialWidth: 150,
             },
             {
                 field: 'endDate',
-                cellRenderer: DateCellRenderer,
-                flex: 3,
+                valueFormatter: renderDate,
                 headerName: intl.formatMessage({ id: 'announcements.table.endDate' }),
+                sort: 'asc',
+                sortIndex: 2,
+                initialWidth: 150,
             },
             {
                 field: 'severity',
-                cellDataType: 'text',
-                flex: 2,
+                valueFormatter: renderSeverity,
                 headerName: intl.formatMessage({ id: 'announcements.severity' }),
-                valueGetter: (value: ValueGetterParams) => convertSeverity(value.data.severity),
+                initialWidth: 150,
+            },
+            {
+                field: 'message',
+                cellDataType: 'text',
+                flex: 1,
+                headerName: intl.formatMessage({ id: 'announcements.table.message' }),
             },
             {
                 field: 'id',
-                cellRenderer: CancelButtonCellRenderer,
+                cellRenderer: CancelCellRenderer,
                 cellRendererParams: { onClickHandler: handleDeleteAnnouncement },
-                flex: 2,
-                headerName: intl.formatMessage({ id: 'announcements.table.cancel' }),
+                headerName: '',
+                initialWidth: 70,
             },
         ],
-        [intl, convertSeverity, handleDeleteAnnouncement]
+        [renderDate, intl, handleDeleteAnnouncement, renderSeverity]
     );
 
     // Note: using <Stack/> for the columns didn't work
     return (
-        <Grid container spacing={1}>
+        <Grid container spacing={2} marginLeft={'2px' /*Grid.spacing is in px?*/}>
             <Grid item container direction="column" xs={12} sm={6} md={4}>
                 <Grid item xs="auto">
                     <Typography variant="subtitle1">

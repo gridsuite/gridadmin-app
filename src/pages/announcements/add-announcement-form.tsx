@@ -155,8 +155,8 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                     <TextareaAutosizeElement<FormSchema>
                         name={MESSAGE}
                         label={intl.formatMessage({ id: 'announcements.form.message' })}
-                        style={{ height: '100%' }}
                         rows={5} // why does it do nothing even if the field is set as multiline?!
+                        //style={{ height: '100%' }}
                         fullWidth
                         //inputProps={{ maxLength: 200 }}
                     />
