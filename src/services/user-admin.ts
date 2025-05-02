@@ -6,7 +6,7 @@
  */
 
 import { User } from 'oidc-client';
-import { backendFetch, backendFetchJson, backendFetchText, getRestBase } from '../utils/api-rest';
+import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { UUID } from 'crypto';
 
@@ -305,12 +305,12 @@ export type Announcement = NewAnnouncement & {
     id: UUID;
 };
 
-export async function addAnnouncement(announcement: NewAnnouncement): Promise<UUID> {
+export async function addAnnouncement(announcement: NewAnnouncement) {
     console.debug(`Creating announcement ...`);
-    return backendFetchText(
+    return backendFetchJson<Announcement>(
         `${USER_ADMIN_URL}/announcements?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
         {
-            method: 'post',
+            method: 'put',
             headers: {
                 Accept: 'plain/text',
                 'Content-Type': 'plain/text',
@@ -318,23 +318,25 @@ export async function addAnnouncement(announcement: NewAnnouncement): Promise<UU
             body: sanitizeString(announcement.message),
         }
     ).catch((reason) => {
-        console.error(`Error while creating announcement : ${reason}`);
-        throw reason;
-    }) as Promise<UUID>;
-}
-
-export function fetchAnnouncementList() {
-    console.debug(`Fetching announcement ...`);
-    return backendFetchJson<Announcement[]>(`${USER_ADMIN_URL}/announcements`, { method: 'get' }).catch((reason) => {
-        console.error(`Error while fetching announcement : ${reason}`);
+        console.error('Error while creating announcement:', reason);
         throw reason;
     });
+}
+
+export async function fetchAnnouncementList() {
+    console.debug(`Fetching announcement ...`);
+    try {
+        return await backendFetchJson<Announcement[]>(`${USER_ADMIN_URL}/announcements`, { method: 'get' });
+    } catch (reason) {
+        console.error('Error while fetching announcement:', reason);
+        throw reason;
+    }
 }
 
 export async function deleteAnnouncement(announcementId: UUID): Promise<void> {
     console.debug(`Deleting announcement ${announcementId}...`);
     await backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
-        console.error(`Error while deleting announcement : ${reason}`);
+        console.error('Error while deleting announcement:', reason);
         throw reason;
     });
 }
