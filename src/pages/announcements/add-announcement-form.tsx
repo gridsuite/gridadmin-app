@@ -7,6 +7,7 @@
 
 import { useCallback } from 'react';
 import { Grid } from '@mui/material';
+import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
 import { type Option, SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
 import yup from '../../utils/yup-config';
@@ -16,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormContainer, SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
 import { TZDate } from '@date-fns/tz';
-import { addSeconds } from 'date-fns';
+import { endOfMinute, startOfMinute } from 'date-fns';
 import { UserAdminSrv } from '../../services';
 import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
 
@@ -49,9 +50,10 @@ const formSchema = yup
 type FormSchema = InferType<typeof formSchema>;
 
 const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
-    input: (value) => (value && new TZDate(value)) || null,
-    output: (value, context) => value?.toISOString() || '',
+    input: (value) => (value ? new TZDate(value) : null),
+    output: (value) => value?.toISOString() ?? '',
 };
+const pickerView = ['year', 'month', 'day', 'hours', 'minutes'] as const satisfies readonly DateOrTimeView[];
 
 export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<AddAnnouncementFormProps>) {
     const intl = useIntl();
@@ -66,7 +68,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             [SEVERITY]: null,
         },*/
     });
-    const { register, setValue, handleSubmit, formState, control, getValues } = formContext;
+    const { formState, getValues } = formContext;
     const startDateValue = getValues(START_DATE);
 
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
@@ -74,8 +76,8 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             UserAdminSrv.addAnnouncement({
                 //id: crypto.randomUUID(),
                 message: params.message,
-                startDate: params.startDate,
-                endDate: params.endDate,
+                startDate: startOfMinute(new TZDate(params.startDate)).toISOString(),
+                endDate: endOfMinute(new TZDate(params.endDate)).toISOString(),
                 severity: params.severity,
             })
                 .then(() => onAnnouncementCreated?.())
@@ -107,8 +109,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                     <DateTimePickerElement<FormSchema>
                         name={START_DATE}
                         label={intl.formatMessage({ id: 'announcements.table.startDate' })}
-                        transform={datetimePickerTransform} //TODO round startOf(min)
+                        transform={datetimePickerTransform}
                         timezone="system"
+                        views={pickerView}
                         timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
                         disablePast
                     />
@@ -117,11 +120,12 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                     <DateTimePickerElement<FormSchema>
                         name={END_DATE}
                         label={intl.formatMessage({ id: 'announcements.table.endDate' })}
-                        transform={datetimePickerTransform} //TODO round startOf(min)
+                        transform={datetimePickerTransform}
                         timezone="system"
+                        views={pickerView}
                         timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
                         disablePast
-                        minDateTime={startDateValue ? addSeconds(new TZDate(startDateValue), 1) : undefined}
+                        minDateTime={startDateValue ? new TZDate(startDateValue) : undefined}
                     />
                 </Grid>
                 <Grid item xs={2}>
