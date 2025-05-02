@@ -5,11 +5,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Grid } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
-import { type Option, SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
+import { SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
 import yup from '../../utils/yup-config';
 import { type InferType } from 'yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
@@ -28,19 +28,26 @@ export type AddAnnouncementFormProps = {
     onAnnouncementCreated?: () => void;
 };
 
-const severitySelect: Option[] = Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
-    id: value,
-    label: `announcements.severity.${value}`,
-}));
-
 const formSchema = yup
     .object()
     .shape({
-        [MESSAGE]: yup.string().trim().min(1).required(),
-        [START_DATE]: yup.string().datetime({ precision: 0 }).required(),
-        [END_DATE]: yup.string().datetime({ precision: 0 }).required(),
+        [MESSAGE]: yup.string().nullable().trim().min(1).required(),
+        [START_DATE]: yup.string().nullable().datetime().required(),
+        [END_DATE]: yup
+            .string()
+            .nullable()
+            .datetime()
+            .required()
+            .when(START_DATE, (startDate, schema) =>
+                schema.test(
+                    'is-after-start',
+                    'End date must be after start date',
+                    (endDate) => !startDate || !endDate || new Date(endDate) > new Date(startDate as unknown as string)
+                )
+            ),
         [SEVERITY]: yup
             .string<UserAdminSrv.AnnouncementSeverity>()
+            .nullable()
             .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
             .required(),
     })
@@ -59,12 +66,16 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
 
     const formContext = useForm({
         resolver: yupResolver(formSchema),
-        /*TODO defaultValues: {
+        defaultValues: {
+            // @ts-expect-error: nullable() is called, so null is accepted as default value
             [MESSAGE]: null,
+            // @ts-expect-error: nullable() is called, so null is accepted as default value
             [START_DATE]: null,
+            // @ts-expect-error: nullable() is called, so null is accepted as default value
             [END_DATE]: null,
+            // @ts-expect-error: nullable() is called, so null is accepted as default value
             [SEVERITY]: null,
-        },*/
+        },
     });
     const { formState, getValues } = formContext;
     const startDateValue = getValues(START_DATE);
@@ -72,7 +83,6 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
         (params) => {
             UserAdminSrv.addAnnouncement({
-                //id: crypto.randomUUID(),
                 message: params.message,
                 startDate: params.startDate,
                 endDate: params.endDate,
@@ -90,51 +100,68 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
     );
 
     return (
-        <FormContainer<FormSchema> formContext={formContext} onSuccess={onSubmit}>
-            <DateTimePickerElement<FormSchema> name={END_DATE} />
-            <Grid container spacing={1}>
-                <Grid item xs={4}>
+        <FormContainer<FormSchema>
+            formContext={formContext}
+            onSuccess={onSubmit}
+            //criteriaMode="all"
+            //mode="all"
+            mode="onChange"
+            reValidateMode="onChange"
+            //reValidateMode="onChange"
+            FormProps={{ style: { height: '100%' } }}
+        >
+            <Grid container direction="column" spacing={1.5} height="100%">
+                <Grid item container xs="auto" spacing={1}>
+                    <Grid item xs={12} lg={6}>
+                        <DateTimePickerElement<FormSchema>
+                            name={START_DATE}
+                            label={intl.formatMessage({ id: 'announcements.table.startDate' })}
+                            transform={datetimePickerTransform}
+                            timezone="system"
+                            views={pickerView}
+                            timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                            disablePast
+                        />
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                        <DateTimePickerElement<FormSchema>
+                            name={END_DATE}
+                            label={intl.formatMessage({ id: 'announcements.table.endDate' })}
+                            transform={datetimePickerTransform}
+                            timezone="system"
+                            views={pickerView}
+                            timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                            disablePast
+                            minDateTime={startDateValue ? new Date(startDateValue) : undefined}
+                        />
+                    </Grid>
+                </Grid>
+                <Grid item xs="auto">
+                    <SelectElement<FormSchema>
+                        name={SEVERITY}
+                        label={intl.formatMessage({ id: 'announcements.severity' })}
+                        options={useMemo(
+                            () =>
+                                Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
+                                    id: value,
+                                    label: intl.formatMessage({ id: `announcements.severity.${value}` }),
+                                })),
+                            [intl]
+                        )}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs>
                     <TextareaAutosizeElement<FormSchema>
                         name={MESSAGE}
                         label={intl.formatMessage({ id: 'announcements.form.message' })}
-                        minRows={2}
-                        maxRows={5}
+                        style={{ height: '100%' }}
+                        rows={5} // why does it do nothing even if the field is set as multiline?!
                         fullWidth
                         //inputProps={{ maxLength: 200 }}
                     />
                 </Grid>
-                <Grid item xs={2}>
-                    <DateTimePickerElement<FormSchema>
-                        name={START_DATE}
-                        label={intl.formatMessage({ id: 'announcements.table.startDate' })}
-                        transform={datetimePickerTransform}
-                        timezone="system"
-                        views={pickerView}
-                        timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
-                        disablePast
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <DateTimePickerElement<FormSchema>
-                        name={END_DATE}
-                        label={intl.formatMessage({ id: 'announcements.table.endDate' })}
-                        transform={datetimePickerTransform}
-                        timezone="system"
-                        views={pickerView}
-                        timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
-                        disablePast
-                        minDateTime={startDateValue ? new Date(startDateValue) : undefined}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <SelectElement<FormSchema>
-                        name={SEVERITY}
-                        label={intl.formatMessage({ id: 'announcements.severity' })}
-                        options={severitySelect}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={2}>
+                <Grid item xs="auto">
                     <SubmitButton
                         variant="outlined"
                         type="submit"

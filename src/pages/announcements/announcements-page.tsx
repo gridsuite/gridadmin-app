@@ -8,7 +8,7 @@
 import type { UUID } from 'crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Grid, type SxProps, type Theme, Typography } from '@mui/material';
+import { Divider, Grid, type SxProps, type Theme, Typography } from '@mui/material';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import type { ColDef, GetRowIdParams, ValueGetterParams } from 'ag-grid-community';
 import { type GridTableRef } from '../../components/Grid';
@@ -118,26 +118,29 @@ export default function AnnouncementsPage() {
         [intl, convertSeverity, handleDeleteAnnouncement]
     );
 
+    // Note: using <Stack/> for the columns didn't work
     return (
-        <Grid container direction="column" sx={stylesLayout.root}>
-            <Grid container item xs={3} direction="column">
-                <Grid item xs sx={stylesLayout.columnContainer}>
-                    <h3>
+        <Grid container spacing={1}>
+            <Grid item container direction="column" xs={12} sm={6} md={4}>
+                <Grid item xs="auto">
+                    <Typography variant="subtitle1">
                         <FormattedMessage id="announcements.programNewMessage" />
-                    </h3>
+                    </Typography>
                 </Grid>
-                <Grid item xs paddingX="15px">
+                <Grid item xs="auto">
+                    <Divider sx={{ mt: 0.5, mb: 1.5 }} />
+                </Grid>
+                <Grid item xs>
                     <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
                 </Grid>
             </Grid>
-
-            <Grid container item xs direction="column" marginBottom="15px">
-                <Grid item sx={stylesLayout.columnContainer}>
-                    <Typography variant="h3">
+            <Grid item container direction="column" xs={12} sm={6} md={8}>
+                <Grid item xs="auto">
+                    <Typography variant="subtitle1" mb={0.5}>
                         <FormattedMessage id="announcements.programmedMessage" />
                     </Typography>
                 </Grid>
-                <Grid item xs paddingX="15px">
+                <Grid item xs>
                     <AgGrid<Announcement>
                         ref={gridRef}
                         rowData={data}
