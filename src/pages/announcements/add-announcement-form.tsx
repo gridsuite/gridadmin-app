@@ -16,8 +16,6 @@ import { type SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormContainer, SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
-import { TZDate } from '@date-fns/tz';
-import { endOfMinute, startOfMinute } from 'date-fns';
 import { UserAdminSrv } from '../../services';
 import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
 
@@ -50,7 +48,7 @@ const formSchema = yup
 type FormSchema = InferType<typeof formSchema>;
 
 const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
-    input: (value) => (value ? new TZDate(value) : null),
+    input: (value) => (value ? new Date(value) : null),
     output: (value) => value?.toISOString() ?? '',
 };
 const pickerView = ['year', 'month', 'day', 'hours', 'minutes'] as const satisfies readonly DateOrTimeView[];
@@ -76,8 +74,8 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             UserAdminSrv.addAnnouncement({
                 //id: crypto.randomUUID(),
                 message: params.message,
-                startDate: startOfMinute(new TZDate(params.startDate)).toISOString(),
-                endDate: endOfMinute(new TZDate(params.endDate)).toISOString(),
+                startDate: params.startDate,
+                endDate: params.endDate,
                 severity: params.severity,
             })
                 .then(() => onAnnouncementCreated?.())
@@ -125,7 +123,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                         views={pickerView}
                         timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
                         disablePast
-                        minDateTime={startDateValue ? new TZDate(startDateValue) : undefined}
+                        minDateTime={startDateValue ? new Date(startDateValue) : undefined}
                     />
                 </Grid>
                 <Grid item xs={2}>
