@@ -312,8 +312,8 @@ export async function addAnnouncement(announcement: NewAnnouncement) {
         {
             method: 'put',
             headers: {
-                Accept: 'plain/text',
-                'Content-Type': 'plain/text',
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: sanitizeString(announcement.message),
         }
