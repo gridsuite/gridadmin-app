@@ -5,18 +5,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { CustomFormProvider, SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
-import Grid from '@mui/material/Grid';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { useCallback } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { DateTimePicker } from '@mui/x-date-pickers';
-import { Announcement, UserAdminSrv } from '../../services';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Grid } from '@mui/material';
+import { useIntl } from 'react-intl';
+import { type Option, SubmitButton, useSnackMessage } from '@gridsuite/commons-ui';
 import yup from '../../utils/yup-config';
-import { useParameterState } from '../../components/parameters';
-import { PARAM_LANGUAGE } from '../../utils/config-params';
+import { type InferType } from 'yup';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { FormContainer, SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
+import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
+import { TZDate } from '@date-fns/tz';
+import { addSeconds } from 'date-fns';
+import { UserAdminSrv } from '../../services';
 import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
 
 export const MESSAGE = 'message';
@@ -24,49 +25,64 @@ export const START_DATE = 'startDate';
 export const END_DATE = 'endDate';
 export const SEVERITY = 'severity';
 
-interface AddAnnouncementProps {
-    onAnnouncementCreated: () => void;
-}
+export type AddAnnouncementFormProps = {
+    onAnnouncementCreated?: () => void;
+};
 
-export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<AddAnnouncementProps>) {
+const severitySelect: Option[] = Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
+    id: value,
+    label: `announcements.severity.${value}`,
+}));
+
+const formSchema = yup
+    .object()
+    .shape({
+        [MESSAGE]: yup.string().trim().min(1).required(),
+        [START_DATE]: yup.string().datetime({ precision: 0 }).required(),
+        [END_DATE]: yup.string().datetime({ precision: 0 }).required(),
+        [SEVERITY]: yup
+            .string<UserAdminSrv.AnnouncementSeverity>()
+            .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
+            .required(),
+    })
+    .required();
+type FormSchema = InferType<typeof formSchema>;
+
+const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
+    input: (value) => (value && new TZDate(value)) || null,
+    output: (value, context) => value?.toISOString() || '',
+};
+
+export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<AddAnnouncementFormProps>) {
     const intl = useIntl();
-    const [languageLocal] = useParameterState(PARAM_LANGUAGE);
     const { snackError } = useSnackMessage();
 
-    const formSchema = yup
-        .object()
-        .shape({
-            [MESSAGE]: yup.string().trim().required(), // TODO not empty
-            [START_DATE]: yup.string().required(), //TODO date
-            [END_DATE]: yup.string().required(), // TODO date
-            [SEVERITY]: yup.string().required(), // TODO enum
-        })
-        .required();
-    const formMethods = useForm({
+    const formContext = useForm({
         resolver: yupResolver(formSchema),
+        /*TODO defaultValues: {
+            [MESSAGE]: null,
+            [START_DATE]: null,
+            [END_DATE]: null,
+            [SEVERITY]: null,
+        },*/
     });
-    const { register, setValue, handleSubmit, formState } = formMethods;
+    const { register, setValue, handleSubmit, formState, control, getValues } = formContext;
+    const startDateValue = getValues(START_DATE);
 
-    const onSubmit = useCallback(
-        (params: any) => {
-            let startDate = new Date(params.startDate).toISOString();
-            let endDate = new Date(params.endDate).toISOString();
-            const newAnnouncement = {
-                id: crypto.randomUUID(),
+    const onSubmit = useCallback<SubmitHandler<FormSchema>>(
+        (params) => {
+            UserAdminSrv.addAnnouncement({
+                //id: crypto.randomUUID(),
                 message: params.message,
-                startDate: startDate,
-                endDate: endDate,
+                startDate: params.startDate,
+                endDate: params.endDate,
                 severity: params.severity,
-            } as Announcement;
-            UserAdminSrv.addAnnouncement(newAnnouncement)
-                .then(() => onAnnouncementCreated())
+            })
+                .then(() => onAnnouncementCreated?.())
                 .catch((error) => {
                     let errorMessage = getErrorMessage(error) ?? '';
                     if (!handleAnnouncementCreationErrors(errorMessage, snackError)) {
-                        snackError({
-                            headerId: 'announcements.form.errCreateAnnouncement',
-                            messageTxt: errorMessage,
-                        });
+                        snackError({ headerId: 'announcements.form.errCreateAnnouncement', messageTxt: errorMessage });
                     }
                 });
         },
@@ -74,67 +90,57 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
     );
 
     return (
-        <CustomFormProvider validationSchema={formSchema} {...formMethods}>
+        <FormContainer<FormSchema> formContext={formContext} onSuccess={onSubmit}>
+            <DateTimePickerElement<FormSchema> name={END_DATE} />
             <Grid container spacing={1}>
                 <Grid item xs={4}>
-                    <TextField
-                        {...register('message')}
-                        id="message-input"
+                    <TextareaAutosizeElement<FormSchema>
+                        name={MESSAGE}
                         label={intl.formatMessage({ id: 'announcements.form.message' })}
-                        multiline
-                        rows={4}
+                        minRows={2}
+                        maxRows={5}
                         fullWidth
-                        inputProps={{ maxLength: 200 }}
+                        //inputProps={{ maxLength: 200 }}
                     />
                 </Grid>
                 <Grid item xs={2}>
-                    <DateTimePicker
-                        {...register('startDate')}
+                    <DateTimePickerElement<FormSchema>
                         name={START_DATE}
                         label={intl.formatMessage({ id: 'announcements.table.startDate' })}
-                        onChange={(newValue) => setValue('startDate', newValue?.toISOString() ?? '')} //TODO startOf(min)
+                        transform={datetimePickerTransform} //TODO round startOf(min)
                         timezone="system"
+                        timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                        disablePast
                     />
                 </Grid>
                 <Grid item xs={2}>
-                    <DateTimePicker
-                        {...register('endDate')}
+                    <DateTimePickerElement<FormSchema>
                         name={END_DATE}
                         label={intl.formatMessage({ id: 'announcements.table.endDate' })}
-                        onChange={(newValue) => setValue('endDate', newValue?.toISOString() ?? '')} //TODO endOf(min)
+                        transform={datetimePickerTransform} //TODO round startOf(min)
                         timezone="system"
+                        timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                        disablePast
+                        minDateTime={startDateValue ? addSeconds(new TZDate(startDateValue), 1) : undefined}
                     />
                 </Grid>
                 <Grid item xs={2}>
-                    <FormControl fullWidth>
-                        <InputLabel id="severity-input-label">
-                            <FormattedMessage id="announcements.severity" />
-                        </InputLabel>
-                        <Select
-                            {...register('severity')}
-                            name={SEVERITY}
-                            label={intl.formatMessage({ id: 'announcements.severity' })}
-                            fullWidth={true}
-                            defaultValue={''} // TODO default info
-                        >
-                            <MenuItem value={UserAdminSrv.AnnouncementSeverity.INFO}>
-                                {intl.formatMessage({ id: 'announcements.severity.INFO' })}
-                            </MenuItem>
-                            <MenuItem value={UserAdminSrv.AnnouncementSeverity.WARN}>
-                                {intl.formatMessage({ id: 'announcements.severity.WARN' })}
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
+                    <SelectElement<FormSchema>
+                        name={SEVERITY}
+                        label={intl.formatMessage({ id: 'announcements.severity' })}
+                        options={severitySelect}
+                        fullWidth
+                    />
                 </Grid>
                 <Grid item xs={2}>
                     <SubmitButton
                         variant="outlined"
-                        onClick={handleSubmit(onSubmit)}
-                        fullWidth={true}
+                        type="submit"
+                        fullWidth
                         disabled={!formState.isValid || formState.isValidating}
                     />
                 </Grid>
             </Grid>
-        </CustomFormProvider>
+        </FormContainer>
     );
 }

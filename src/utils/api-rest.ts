@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import type { JsonValue } from 'type-fest';
 import { getToken, parseError, Token } from './api';
 
 export type { Token } from './api';
@@ -60,10 +61,10 @@ export function backendFetch(url: Url, init?: InitRequest, token?: Token): Promi
     return safeFetch(url, prepareRequest(init, token));
 }
 
-export function backendFetchText(url: Url, init?: InitRequest, token?: Token): Promise<string> {
-    return backendFetch(url, init, token).then((safeResponse: Response) => safeResponse.text());
+export function backendFetchText<R extends string = string>(url: Url, init?: InitRequest, token?: Token) {
+    return backendFetch(url, init, token).then((safeResponse) => safeResponse.text()) as Promise<R>;
 }
 
-export function backendFetchJson(url: Url, init?: InitRequest, token?: Token): Promise<unknown> {
-    return backendFetch(url, init, token).then((safeResponse: Response) => safeResponse.json());
+export function backendFetchJson<R extends JsonValue>(url: Url, init?: InitRequest, token?: Token): Promise<R> {
+    return backendFetch(url, init, token).then((safeResponse) => safeResponse.json());
 }

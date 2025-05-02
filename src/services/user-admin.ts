@@ -6,7 +6,7 @@
  */
 
 import { User } from 'oidc-client';
-import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
+import { backendFetch, backendFetchJson, backendFetchText, getRestBase } from '../utils/api-rest';
 import { extractUserSub, getToken, getUser } from '../utils/api';
 import { UUID } from 'crypto';
 
@@ -291,52 +291,50 @@ export enum AnnouncementSeverity {
 }
 
 export function sanitizeString(val: string | null | undefined) {
-    const trimedValue = val?.trim();
-    return trimedValue === '' ? null : trimedValue;
+    const trimmedValue = val?.trim();
+    return trimmedValue === '' ? null : trimmedValue;
 }
 
-export type Announcement = {
-    id: UUID;
+export type NewAnnouncement = {
     startDate: string;
     endDate: string;
     message: string;
-    severity: string;
+    severity: AnnouncementSeverity;
+};
+export type Announcement = NewAnnouncement & {
+    id: UUID;
 };
 
-export function addAnnouncement(announcement: Announcement): Promise<void> {
+export async function addAnnouncement(announcement: NewAnnouncement): Promise<UUID> {
     console.debug(`Creating announcement ...`);
-    return backendFetch(
+    return backendFetchText(
         `${USER_ADMIN_URL}/announcements?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
         {
             method: 'post',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+                Accept: 'plain/text',
+                'Content-Type': 'plain/text',
             },
             body: sanitizeString(announcement.message),
         }
-    )
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while creating announcement : ${reason}`);
-            throw reason;
-        });
+    ).catch((reason) => {
+        console.error(`Error while creating announcement : ${reason}`);
+        throw reason;
+    }) as Promise<UUID>;
 }
 
-export function fetchAnnouncementList(): Promise<Announcement[]> {
+export function fetchAnnouncementList() {
     console.debug(`Fetching announcement ...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/announcements`, { method: 'get' }).catch((reason) => {
+    return backendFetchJson<Announcement[]>(`${USER_ADMIN_URL}/announcements`, { method: 'get' }).catch((reason) => {
         console.error(`Error while fetching announcement : ${reason}`);
         throw reason;
-    }) as Promise<Announcement[]>;
+    });
 }
 
-export function deleteAnnouncement(announcementId: UUID): Promise<void> {
-    console.debug(`Deleting announcement ...`);
-    return backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' })
-        .then(() => undefined)
-        .catch((reason) => {
-            console.error(`Error while deleting announcement : ${reason}`);
-            throw reason;
-        });
+export async function deleteAnnouncement(announcementId: UUID): Promise<void> {
+    console.debug(`Deleting announcement ${announcementId}...`);
+    await backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
+        console.error(`Error while deleting announcement : ${reason}`);
+        throw reason;
+    });
 }

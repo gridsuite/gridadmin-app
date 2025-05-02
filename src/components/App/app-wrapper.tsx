@@ -15,9 +15,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { enUS as MuiDatePickersEnUS, frFR as MuiDatePickersFrFR } from '@mui/x-date-pickers/locales';
 import { enUS as dateFnsEnUS, fr as dateFnsFr } from 'date-fns/locale';
 import {
+    CardErrorBoundary,
     cardErrorBoundaryEn,
     cardErrorBoundaryFr,
-    CardErrorBoundary,
     GsLangUser,
     GsTheme,
     LANG_ENGLISH,
@@ -25,10 +25,10 @@ import {
     LIGHT_THEME,
     loginEn,
     loginFr,
+    NotificationsProvider,
     SnackbarProvider,
     topBarEn,
     topBarFr,
-    NotificationsProvider,
 } from '@gridsuite/commons-ui';
 import { type IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
@@ -155,6 +155,7 @@ const AppWrapperRouterLayout: typeof App = (props: Readonly<PropsWithChildren<{}
                 <ThemeProvider theme={themeCompiled}>
                     <LocalizationProvider
                         dateAdapter={AdapterDateFns}
+                        // @ts-expect-error: Error of AdapterDateFns for Locales type in x-date-pickers v7
                         adapterLocale={intlToDateFnsLocale(computedLanguage)}
                     >
                         <SnackbarProvider hideIconVariant={false}>
