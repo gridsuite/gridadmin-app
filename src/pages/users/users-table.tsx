@@ -22,7 +22,7 @@ import {
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
-import MultiChipCellRenderer from 'pages/common/multi-chip-cell-renderer';
+import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
