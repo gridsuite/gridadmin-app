@@ -7,7 +7,7 @@
 
 import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
+import { ManageAccounts } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import {
@@ -21,6 +21,7 @@ import {
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
+import ValidityCellRenderer from './validity-cell-renderer';
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
@@ -82,6 +83,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserProfile>,
+                tooltipField: 'name',
             },
             {
                 field: 'allLinksValid',
@@ -90,15 +92,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     display: 'flex',
                     alignItems: 'center',
                 }),
-                cellRenderer: (params: any) => {
-                    if (params.value == null) {
-                        return <RadioButtonUnchecked fontSize="small" />;
-                    } else if (params.value) {
-                        return <CheckCircle fontSize="small" color="success" />;
-                    } else {
-                        return <Cancel fontSize="small" color="error" />;
-                    }
-                },
+                cellRenderer: ValidityCellRenderer,
                 tooltipValueGetter: (p: ITooltipParams) => {
                     if (p.value == null) {
                         return intl.formatMessage({
