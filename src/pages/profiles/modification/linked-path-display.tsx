@@ -22,7 +22,7 @@ const LinkedPathDisplay: FunctionComponent<LinkedPathDisplayProps> = (props) => 
     return (
         <Typography
             sx={{
-                fontWeight: 'bold',
+                fontWeight: props.value || props.linkValidity === false ? 'bold' : 'normal',
                 color: props.linkValidity === false ? theme.palette.error.main : undefined,
             }}
         >
