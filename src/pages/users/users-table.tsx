@@ -22,6 +22,7 @@ import {
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
+import MultiChipCellRenderer from 'pages/common/multi-chip-cell-renderer';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
@@ -66,7 +67,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
             {
                 field: 'sub',
                 cellDataType: 'text',
-                flex: 2,
+                flex: 1,
                 lockVisible: true,
                 filter: true,
                 headerName: intl.formatMessage({ id: 'users.table.id' }),
@@ -78,6 +79,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
                 initialSort: 'asc',
+                tooltipField: 'sub',
             },
             {
                 field: 'profileName',
@@ -94,11 +96,12 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+                tooltipField: 'profileName',
             },
             {
                 field: 'groups',
                 cellDataType: 'text',
-                flex: 3,
+                flex: 4,
                 filter: true,
                 headerName: intl.formatMessage({
                     id: 'users.table.groups',
@@ -110,6 +113,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<GroupInfos>,
+                cellRenderer: MultiChipCellRenderer,
                 tooltipValueGetter: (p: ITooltipParams) => {
                     const items = p.value as string[];
                     if (items == null || items.length === 0) {

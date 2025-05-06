@@ -21,6 +21,7 @@ import {
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
+import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
@@ -83,6 +84,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                     trimInput: true,
                 } as TextFilterParams<GroupInfos>,
                 initialSort: 'asc',
+                tooltipField: 'name',
             },
             {
                 field: 'users',
@@ -99,6 +101,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
+                cellRenderer: MultiChipCellRenderer,
                 tooltipValueGetter: (p: ITooltipParams) => {
                     const items = p.value as string[];
                     if (items == null || items.length === 0) {
