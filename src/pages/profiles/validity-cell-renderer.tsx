@@ -10,17 +10,13 @@ import { Cancel, CheckCircle, RadioButtonUnchecked } from '@mui/icons-material';
 import { ICellRendererParams } from 'ag-grid-community';
 
 export const ValidityCellRenderer = (props: ICellRendererParams) => {
-    const renderIcon = (valid: boolean | undefined | null) => {
-        if (valid == null) {
-            return <RadioButtonUnchecked fontSize="small" />;
-        } else if (valid) {
-            return <CheckCircle fontSize="small" color="success" />;
-        } else {
-            return <Cancel fontSize="small" color="error" />;
-        }
-    };
-
-    return <Grid container>{renderIcon(props.value)}</Grid>;
+    return (
+        <Grid container>
+            {props.value == null && <RadioButtonUnchecked fontSize="small" />}
+            {props.value === true && <CheckCircle fontSize="small" color="success" />}
+            {props.value === false && <Cancel fontSize="small" color="error" />}
+        </Grid>
+    );
 };
 
 export default ValidityCellRenderer;
