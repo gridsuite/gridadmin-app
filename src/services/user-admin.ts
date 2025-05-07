@@ -7,14 +7,10 @@
 
 import { User } from 'oidc-client';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { extractUserSub, getToken, getUser } from '../utils/api';
+import { extractUserSub, getToken } from '../utils/api';
 import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
-
-export function getUserSub(): Promise<unknown> {
-    return extractUserSub(getUser());
-}
 
 /*
  * fetchValidateUser is call from commons-ui AuthServices to validate user infos before setting state.user!
@@ -40,9 +36,9 @@ export function fetchValidateUser(user: User): Promise<boolean> {
 
 export type UserInfos = {
     sub: string;
-    profileName: string;
+    profileName?: string;
     isAdmin: boolean;
-    groups: GroupInfos[];
+    groups: string[];
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
@@ -59,14 +55,7 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }) as Promise<UserInfos[]>;
 }
 
-export type UpdateUserInfos = {
-    sub: string;
-    profileName?: string;
-    isAdmin?: boolean;
-    groups: string[];
-};
-
-export function udpateUser(userInfos: UpdateUserInfos) {
+export function updateUser(userInfos: UserInfos) {
     console.debug(`Updating a user...`);
 
     return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
@@ -216,9 +205,9 @@ export function deleteProfiles(names: string[]): Promise<void> {
 }
 
 export type GroupInfos = {
-    id?: UUID;
+    id: UUID;
     name: string;
-    users: UserInfos[];
+    users: string[];
 };
 
 export function fetchGroups(): Promise<GroupInfos[]> {
@@ -235,13 +224,7 @@ export function fetchGroups(): Promise<GroupInfos[]> {
     }) as Promise<GroupInfos[]>;
 }
 
-export type UpdateGroupInfos = {
-    id: UUID;
-    name: string;
-    users: string[];
-};
-
-export function udpateGroup(groupInfos: UpdateGroupInfos) {
+export function udpateGroup(groupInfos: GroupInfos) {
     console.debug(`Updating a group...`);
 
     return backendFetch(`${USER_ADMIN_URL}/groups/${groupInfos.id}`, {

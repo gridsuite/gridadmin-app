@@ -41,7 +41,6 @@
     "users.table.error.update": "Erreur pendant la modification de l'utilisateur",
     "users.table.toolbar.add.label": "Ajouter un utilisateur",
     "users.table.toolbar.add": "Ajouter utilisateur",
-    "users.table.profile.none": "<Aucun>",
     "users.table.error.profiles": "Erreur pendant la récupération des profils",
     "users.table.error.groups": "Erreur pendant la récupération des groupes",
     "users.table.groups": "Groupes",
@@ -49,6 +48,7 @@
     "users.form.title": "Ajouter un utilisateur",
     "users.form.content": "Veuillez renseigner les informations de l'utilisateur.",
     "users.form.field.username.label": "ID utilisateur",
+    "users.form.modification.title": "Modifier utilisateur",
 
     "form.delete.dialog.user": "utilisateur",
     "form.delete.dialog.profile": "profil",
@@ -67,6 +67,9 @@
     "profiles.table.id.description": "Nom du profil",
     "profiles.table.validity": "Validité des liens vers les configurations",
     "profiles.table.validity.description": "Tous les liens vers les configurations sont-ils valides ?",
+    "profiles.table.validity.tooltip.none": "Aucun lien vers une configuration n'est défini",
+    "profiles.table.validity.tooltip.ok": "Tous les liens vers les configurations sont valides",
+    "profiles.table.validity.tooltip.ko": "Au moins un lien vers les configurations est invalide",
     "profiles.table.error.add": "Erreur pendant l'ajout du profil {profile} : Un profil du même nom existe déjà.",
     "profiles.table.error.delete": "Erreur pendant la suppression de profil",
     "profiles.table.integrity.error.delete": "Erreur pendant la suppression de profil: un profil est toujours référencé par des utilisateurs",
@@ -104,6 +107,7 @@
     "groups.form.title": "Ajouter un groupe",
     "groups.form.content": "Veuillez renseigner les informations du groupe.",
     "groups.form.field.group.label": "ID groupe",
+    "groups.form.modification.title": "Modifier groupe",
 
     "linked.path.display.noLink": "pas de configuration selectionnée.",
     "linked.path.display.invalidLink": "lien vers configurations invalide."

@@ -9,7 +9,7 @@ import { FunctionComponent, useCallback, useRef, useState } from 'react';
 import { Grid } from '@mui/material';
 import { GridTableRef } from '../../components/Grid';
 import { UserProfile } from '../../services';
-import { RowDoubleClickedEvent } from 'ag-grid-community';
+import { RowClickedEvent } from 'ag-grid-community';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
 import { UUID } from 'crypto';
 import ProfilesTable from './profiles-table';
@@ -33,7 +33,7 @@ const ProfilesPage: FunctionComponent = () => {
         handleCloseProfileModificationDialog();
     }, [gridContext, handleCloseProfileModificationDialog]);
 
-    const onRowDoubleClicked = useCallback((event: RowDoubleClickedEvent<UserProfile>) => {
+    const onRowClicked = useCallback((event: RowClickedEvent<UserProfile>) => {
         if (event.data) {
             setEditingProfileId(event.data.id);
             setOpenProfileModificationDialog(true);
@@ -41,22 +41,24 @@ const ProfilesPage: FunctionComponent = () => {
     }, []);
 
     return (
-        <Grid item container direction="column" spacing={2} component="section">
-            <Grid item container xs sx={{ width: 1 }}>
-                <ProfileModificationDialog
-                    profileId={editingProfileId}
-                    open={openProfileModificationDialog}
-                    onClose={handleCloseProfileModificationDialog}
-                    onUpdate={handleUpdateProfileModificationDialog}
-                />
-                <ProfilesTable
-                    gridRef={gridRef}
-                    onRowDoubleClicked={onRowDoubleClicked}
-                    setOpenAddProfileDialog={setOpenAddProfileDialog}
-                />
-                <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />
+        <>
+            <Grid item container direction="column" spacing={2} component="section">
+                <Grid item container xs sx={{ width: 1 }}>
+                    <ProfilesTable
+                        gridRef={gridRef}
+                        onRowClicked={onRowClicked}
+                        setOpenAddProfileDialog={setOpenAddProfileDialog}
+                    />
+                </Grid>
             </Grid>
-        </Grid>
+            <AddProfileDialog gridRef={gridRef} open={openAddProfileDialog} setOpen={setOpenAddProfileDialog} />
+            <ProfileModificationDialog
+                profileId={editingProfileId}
+                open={openProfileModificationDialog}
+                onClose={handleCloseProfileModificationDialog}
+                onUpdate={handleUpdateProfileModificationDialog}
+            />
+        </>
     );
 };
 export default ProfilesPage;

@@ -39,7 +39,6 @@
     "users.table.error.add": "Error while adding user {user} : A user with the same name already exists.",
     "users.table.toolbar.add": "Add user",
     "users.table.error.update": "Error while modifying user",
-    "users.table.profile.none": "<None>",
     "users.table.error.profiles": "Error while fetching profiles",
     "users.table.error.groups": "Error while fetching groups",
     "users.table.groups": "Groups",
@@ -48,6 +47,7 @@
     "users.form.title": "Add a user",
     "users.form.content": "Please fill in new user data.",
     "users.form.field.username.label": "User ID",
+    "users.form.modification.title": "Edit user",
 
     "form.delete.dialog.user": "user",
     "form.delete.dialog.profile": "profile",
@@ -66,6 +66,9 @@
     "profiles.table.id.description": "Profile name",
     "profiles.table.validity": "Configurations links validity",
     "profiles.table.validity.description": "Are all configurations links valid ?",
+    "profiles.table.validity.tooltip.none": "No configuration link defined",
+    "profiles.table.validity.tooltip.ok": "All configurations links are valid",
+    "profiles.table.validity.tooltip.ko": "At least one configuration link is invalid",
     "profiles.table.error.add": "Error while adding profile {profile} : A profile with the same name already exists.",
     "profiles.table.error.delete": "Error while deleting profile",
     "profiles.table.integrity.error.delete": "Error while deleting profile : a profile is still referenced by users",
@@ -89,7 +92,7 @@
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile",
 
-    "groups.table.id": "ID",
+    "groups.table.id": "Name",
     "groups.table.id.description": "Group identifier",
     "groups.table.users": "Users",
     "groups.table.users.description": "The group's users",
@@ -103,6 +106,7 @@
     "groups.form.title": "Add a group",
     "groups.form.content": "Please fill in new group data.",
     "groups.form.field.group.label": "Group ID",
+    "groups.form.modification.title": "Edit group",
 
     "linked.path.display.noLink": "no configuration selected.",
     "linked.path.display.invalidLink": "invalid configurations link."

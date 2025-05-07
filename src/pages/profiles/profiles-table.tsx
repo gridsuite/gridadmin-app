@@ -7,31 +7,25 @@
 
 import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Cancel, CheckCircle, ManageAccounts, RadioButtonUnchecked } from '@mui/icons-material';
+import { ManageAccounts } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import {
     ColDef,
     GetRowIdParams,
-    RowDoubleClickedEvent,
+    ITooltipParams,
+    RowClickedEvent,
     SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
-
-const defaultColDef: ColDef<UserProfile> = {
-    editable: false,
-    resizable: true,
-    minWidth: 50,
-    cellRenderer: 'agAnimateSlideCellRenderer',
-    rowDrag: false,
-    sortable: true,
-};
+import { defaultColDef, defaultRowSelection } from '../common/table-config';
+import ValidityCellRenderer from './validity-cell-renderer';
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
-    onRowDoubleClicked: (event: RowDoubleClickedEvent<UserProfile>) => void;
+    onRowClicked: (event: RowClickedEvent<UserProfile>) => void;
     setOpenAddProfileDialog: (open: boolean) => void;
 }
 
@@ -43,7 +37,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserProfile>): string {
-        return params.data.id ? params.data.id : '';
+        return params.data.id ?? '';
     }
 
     const onSelectionChanged = useCallback(
@@ -89,7 +83,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<UserProfile>,
-                editable: false,
+                tooltipField: 'name',
             },
             {
                 field: 'allLinksValid',
@@ -98,14 +92,21 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     display: 'flex',
                     alignItems: 'center',
                 }),
-                cellRenderer: (params: any) => {
-                    return params.value == null ? (
-                        <RadioButtonUnchecked fontSize="small" />
-                    ) : params.value ? (
-                        <CheckCircle fontSize="small" color="success" />
-                    ) : (
-                        <Cancel fontSize="small" color="error" />
-                    );
+                cellRenderer: ValidityCellRenderer,
+                tooltipValueGetter: (p: ITooltipParams) => {
+                    if (p.value == null) {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.none',
+                        });
+                    } else if (p.value) {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.ok',
+                        });
+                    } else {
+                        return intl.formatMessage({
+                            id: 'profiles.table.validity.tooltip.ko',
+                        });
+                    }
                 },
                 flex: 1,
                 headerName: intl.formatMessage({
@@ -132,14 +133,8 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 defaultColDef={defaultColDef}
                 gridId="table-profiles"
                 getRowId={getRowId}
-                rowSelection={{
-                    mode: 'multiRow',
-                    enableClickSelection: false,
-                    checkboxes: true,
-                    headerCheckbox: true,
-                    hideDisabledCheckboxes: false,
-                }}
-                onRowDoubleClicked={props.onRowDoubleClicked}
+                rowSelection={defaultRowSelection}
+                onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
             >
                 <GridButton

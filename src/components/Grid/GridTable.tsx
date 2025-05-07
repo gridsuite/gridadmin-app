@@ -76,7 +76,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
     );
 
     return (
-        <Grid container direction="column" justifyContent="flex-start" alignItems="stretch">
+        <Grid container direction="column" justifyContent="flex-start" alignItems="stretch" width={'100%'}>
             <Grid item xs="auto">
                 <AppBar position="static" color="default">
                     <Toolbar
