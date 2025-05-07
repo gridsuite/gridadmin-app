@@ -14,7 +14,6 @@ import {
     ColDef,
     GetRowIdParams,
     ICheckboxCellRendererParams,
-    ITooltipParams,
     RowClickedEvent,
     SelectionChangedEvent,
     TextFilterParams,
@@ -100,6 +99,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
             },
             {
                 field: 'groups',
+                minWidth: 200,
                 cellDataType: 'text',
                 flex: 4,
                 filter: true,
@@ -114,19 +114,6 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                     trimInput: true,
                 } as TextFilterParams<GroupInfos>,
                 cellRenderer: MultiChipCellRenderer,
-                tooltipValueGetter: (p: ITooltipParams) => {
-                    const items = p.value as string[];
-                    if (items == null || items.length === 0) {
-                        return '';
-                    }
-                    let groupWord = intl.formatMessage({
-                        id: 'form.delete.dialog.group',
-                    });
-                    if (items.length > 1) {
-                        groupWord = groupWord.concat('s');
-                    }
-                    return `${items.length} ${groupWord}`;
-                },
             },
             {
                 field: 'isAdmin',

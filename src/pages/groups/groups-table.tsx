@@ -10,14 +10,7 @@ import { useIntl } from 'react-intl';
 import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    ITooltipParams,
-    RowClickedEvent,
-    SelectionChangedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
@@ -88,6 +81,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
             },
             {
                 field: 'users',
+                minWidth: 200,
                 cellDataType: 'text',
                 flex: 3,
                 filter: true,
@@ -102,19 +96,6 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                     trimInput: true,
                 } as TextFilterParams<UserInfos>,
                 cellRenderer: MultiChipCellRenderer,
-                tooltipValueGetter: (p: ITooltipParams) => {
-                    const items = p.value as string[];
-                    if (items == null || items.length === 0) {
-                        return '';
-                    }
-                    let userWord = intl.formatMessage({
-                        id: 'form.delete.dialog.user',
-                    });
-                    if (items.length > 1) {
-                        userWord = userWord.concat('s');
-                    }
-                    return `${items.length} ${userWord}`;
-                },
             },
         ],
         [intl]
