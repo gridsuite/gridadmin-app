@@ -30,7 +30,7 @@ export interface MultiChipCellRendererProps {
 }
 
 const MultiChipCellRenderer = (props: MultiChipCellRendererProps) => {
-    const values: string[] = props.value || [];
+    const values: string[] = props.value ? [...props.value].sort((a: string, b: string) => a.localeCompare(b)) : [];
     const containerRef = useRef<HTMLDivElement>(null);
     const [chipLimit, setChipLimit] = useState<number>(5);
 
