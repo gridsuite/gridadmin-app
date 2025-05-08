@@ -10,12 +10,7 @@ import { useSelector } from 'react-redux';
 import type { AppState } from '../redux/reducer';
 import { getUrlWithToken, getWsBase } from './api-ws';
 import { APP_NAME } from './config-params';
-
-export enum NOTIFICATIONS_URL_KEYS {
-    CONFIG = 'CONFIG',
-}
-
-export const PREFIX_CONFIG_NOTIFICATION_WS = '/config-notification';
+import { NotificationsUrlKeys, PREFIX_CONFIG_NOTIFICATION_WS } from '@gridsuite/commons-ui';
 
 export function useNotificationsUrlGenerator() {
     // The websocket API doesn't allow relative urls
@@ -27,14 +22,15 @@ export function useNotificationsUrlGenerator() {
     return useMemo(
         () =>
             ({
-                [NOTIFICATIONS_URL_KEYS.CONFIG]: tokenId
+                [NotificationsUrlKeys.CONFIG]: tokenId
                     ? getUrlWithToken(
-                          `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({
-                              appName: APP_NAME,
-                          })}`
+                          `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({ appName: APP_NAME })}`
                       )
                     : undefined,
-            }) satisfies Record<NOTIFICATIONS_URL_KEYS, string | undefined>,
+                [NotificationsUrlKeys.GLOBAL_CONFIG]: tokenId
+                    ? getUrlWithToken(`${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/global`)
+                    : undefined,
+            }) satisfies Partial<Record<NotificationsUrlKeys, string | undefined>>,
         [wsBase, tokenId]
     );
 }

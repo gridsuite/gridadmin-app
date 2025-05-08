@@ -11,6 +11,7 @@ import { CommonServerOptions, defineConfig } from 'vite';
 import eslint from 'vite-plugin-eslint';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import path from 'node:path';
 
 const serverSettings: CommonServerOptions = {
     port: 3002,
@@ -42,5 +43,19 @@ export default defineConfig((config) => ({
     preview: serverSettings, // for npm run serve (use local build)
     build: {
         outDir: 'build',
+    },
+    resolve: {
+        alias: {
+            /* "@mui/x-date-pickers/AdapterDateFns/AdapterDateFns" do an import from 'date-fns/_lib/format/longFormatters'
+             * which cause rollup error '[commonjs--resolver] Missing "./_lib/format/longFormatters" specifier in "date-fns" package'.
+             *   - we fix the no default import with a shim that will fix that
+             *   - we do a second alias to resolve the import to a non-exported file to date-fns/_lib/...
+             */
+            'date-fns/_lib/format/longFormatters': path.resolve(import.meta.dirname, 'vite.shim.x-date-pickers.js'),
+            'virtual:date-fns/_lib/format/longFormatters': path.resolve(
+                import.meta.dirname,
+                'node_modules/date-fns/_lib/format/longFormatters'
+            ),
+        },
     },
 }));

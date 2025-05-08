@@ -8,6 +8,9 @@
 import { CSSObject } from '@mui/styled-engine';
 import { Theme as MuiTheme, ThemeOptions as MuiThemeOptions } from '@mui/material/styles/createTheme';
 
+// https://mui.com/x/react-date-pickers/quickstart/#theme-augmentation
+import type {} from '@mui/x-date-pickers/themeAugmentation';
+
 declare module '@mui/material/styles/createTheme' {
     export * from '@mui/material/styles/createTheme';
 
