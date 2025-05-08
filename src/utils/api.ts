@@ -34,7 +34,7 @@ export function extractUserSub(user: User | null): Promise<unknown> {
 export function parseError(text: string) {
     try {
         return JSON.parse(text);
-    } catch (err) {
+    } catch {
         return null;
     }
 }
