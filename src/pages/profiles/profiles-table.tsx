@@ -10,18 +10,12 @@ import { useIntl } from 'react-intl';
 import { ManageAccounts } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    ITooltipParams,
-    RowClickedEvent,
-    SelectionChangedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { ColDef, GetRowIdParams, ITooltipParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import ValidityCellRenderer from './validity-cell-renderer';
+import { useTableSelection } from 'utils/hooks';
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;
@@ -33,17 +27,12 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const [rowsSelection, setRowsSelection] = useState<UserProfile[]>([]);
+    const { rowsSelection, onSelectionChanged } = useTableSelection<UserProfile>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserProfile>): string {
         return params.data.id ?? '';
     }
-
-    const onSelectionChanged = useCallback(
-        (event: SelectionChangedEvent<UserProfile, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
-        [setRowsSelection]
-    );
 
     const onAddButton = useCallback(() => props.setOpenAddProfileDialog(true), [props]);
 
