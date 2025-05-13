@@ -44,7 +44,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
             {
                 field: 'id',
                 filter: true,
-                sortable: true,
+                initialSort: 'asc',
                 tooltipField: 'id',
                 flex: 1,
             },
@@ -86,6 +86,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                     getRowId={getRowId}
                     onSelectionChanged={handleEquipmentSelectionChanged}
                     onGridReady={onGridReady}
+                    accentedSort={true}
                 />
             </Grid>
         </Grid>
