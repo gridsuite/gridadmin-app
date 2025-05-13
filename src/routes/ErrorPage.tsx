@@ -44,7 +44,7 @@ export default function ErrorPage(): ReactElement {
                         {(function () {
                             try {
                                 return JSON.stringify(error.data.error, undefined, 2);
-                            } catch (e) {
+                            } catch {
                                 return null;
                             }
                         })() ?? `${error.data.error}`}
