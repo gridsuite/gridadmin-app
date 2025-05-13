@@ -105,6 +105,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                     rowData={data}
                     alwaysShowVerticalScroll={true}
                     onGridReady={loadDataAndSave}
+                    accentedSort={true}
                     context={useMemo(
                         () =>
                             ({
