@@ -33,7 +33,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const { rowsSelection, onSelectionChanged } = useTableSelection<UserInfos>();
+    const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<UserInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserInfos>): string {
@@ -142,6 +142,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                onFilterChanged={onFilterChanged}
                 tooltipShowDelay={1000}
             >
                 <GridButton

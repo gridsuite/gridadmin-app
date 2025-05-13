@@ -27,7 +27,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const { rowsSelection, onSelectionChanged } = useTableSelection<UserProfile>();
+    const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<UserProfile>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserProfile>): string {
@@ -125,6 +125,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                onFilterChanged={onFilterChanged}
             >
                 <GridButton
                     labelId="profiles.table.toolbar.add.label"

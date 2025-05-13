@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { SelectionChangedEvent } from "ag-grid-community";
-import { useCallback, useState } from "react";
+import { FilterChangedEvent, GridApi, IRowNode, SelectionChangedEvent } from 'ag-grid-community';
+import { useCallback, useState } from 'react';
 
 export function useDebugRender(label: string) {
     // uncomment when you want the output in the console
@@ -19,15 +19,15 @@ export function useDebugRender(label: string) {
 
 /**
  * Custom hook to handle table row selection with proper filtering support
- * @returns Selection state and handler for AG Grid's onSelectionChanged
+ * @returns Selection state and handlers for AG Grid's selection and filter changes
  */
 export function useTableSelection<T>() {
     const [rowsSelection, setRowsSelection] = useState<T[]>([]);
 
-    const onSelectionChanged = useCallback((event: SelectionChangedEvent<T, {}>) => {
-        // Get only selected rows that are currently visible (after filtering)
+    // update visible selections based on current filter state
+    const updateVisibleSelection = useCallback((api: GridApi) => {
         const visibleSelectedRows: T[] = [];
-        event.api.forEachNodeAfterFilterAndSort((node) => {
+        api.forEachNodeAfterFilterAndSort((node: IRowNode) => {
             if (node.isSelected() && node.data) {
                 visibleSelectedRows.push(node.data);
             }
@@ -35,5 +35,19 @@ export function useTableSelection<T>() {
         setRowsSelection(visibleSelectedRows);
     }, []);
 
-    return { rowsSelection, setRowsSelection, onSelectionChanged };
+    const onSelectionChanged = useCallback(
+        (event: SelectionChangedEvent) => {
+            updateVisibleSelection(event.api);
+        },
+        [updateVisibleSelection]
+    );
+
+    const onFilterChanged = useCallback(
+        (event: FilterChangedEvent) => {
+            updateVisibleSelection(event.api);
+        },
+        [updateVisibleSelection]
+    );
+
+    return { rowsSelection, onSelectionChanged, onFilterChanged };
 }

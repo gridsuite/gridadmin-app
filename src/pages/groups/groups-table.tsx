@@ -27,7 +27,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const { rowsSelection, onSelectionChanged } = useTableSelection<GroupInfos>();
+    const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<GroupInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<GroupInfos>): string {
@@ -110,6 +110,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                onFilterChanged={onFilterChanged}
             >
                 <GridButton
                     labelId="groups.table.toolbar.add.label"
