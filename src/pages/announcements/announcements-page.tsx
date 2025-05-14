@@ -118,6 +118,8 @@ export default function AnnouncementsPage() {
         [renderDate, intl, handleDeleteAnnouncement, renderSeverity]
     );
 
+    const gridContext = useMemo(() => ({ refresh: loadDataAndSave }), [loadDataAndSave]);
+
     // Note: using <Stack/> for the columns didn't work
     return (
         <Grid container spacing={2} marginLeft={'2px' /*Grid.spacing is in px?*/}>
@@ -150,7 +152,7 @@ export default function AnnouncementsPage() {
                         defaultColDef={defaultColDef}
                         gridId="table-announcements"
                         getRowId={getRowId}
-                        context={useMemo(() => ({ refresh: loadDataAndSave }), [loadDataAndSave])}
+                        context={gridContext}
                     />
                 </Grid>
             </Grid>

@@ -6,22 +6,19 @@
  */
 import type { UUID } from 'crypto';
 import { useCallback } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, type IconButtonProps, Tooltip } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { FormattedMessage } from 'react-intl';
 
-export type CancelButtonCellRendererProps = { value: UUID; onClickHandler: Function };
+export type CancelButtonCellRendererProps = { value: UUID; onClickHandler: (value: UUID) => void };
 
 export default function CancelCellRenderer({ value, onClickHandler }: Readonly<CancelButtonCellRendererProps>) {
+    const handleClick = useCallback<NonNullable<IconButtonProps['onClick']>>(() => {
+        onClickHandler(value);
+    }, [onClickHandler, value]);
     return (
         <Tooltip title={<FormattedMessage id="announcements.table.cancel" />}>
-            <IconButton
-                disableRipple
-                color="secondary"
-                onClick={useCallback(() => {
-                    onClickHandler(value);
-                }, [onClickHandler, value])}
-            >
+            <IconButton disableRipple color="secondary" onClick={handleClick}>
                 <Delete fontSize="medium" />
             </IconButton>
         </Tooltip>

@@ -103,11 +103,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
         <FormContainer<FormSchema>
             formContext={formContext}
             onSuccess={onSubmit}
-            //criteriaMode="all"
-            //mode="all"
-            mode="onChange"
+            //criteriaMode="all" ?
+            mode="onChange" // or maybe mode "all"?
             reValidateMode="onChange"
-            //reValidateMode="onChange"
             FormProps={{ style: { height: '100%' } }}
         >
             <Grid container direction="column" spacing={1.5} height="100%">
@@ -156,9 +154,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                         name={MESSAGE}
                         label={intl.formatMessage({ id: 'announcements.form.message' })}
                         rows={5} // why does it do nothing even if the field is set as multiline?!
-                        //style={{ height: '100%' }}
                         fullWidth
-                        //inputProps={{ maxLength: 200 }}
                     />
                 </Grid>
                 <Grid item xs="auto">
