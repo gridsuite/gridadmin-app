@@ -73,6 +73,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                     trimInput: true,
                 } as TextFilterParams<UserProfile>,
                 tooltipField: 'name',
+                initialSort: 'asc',
             },
             {
                 field: 'allLinksValid',
@@ -104,10 +105,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                 headerTooltip: intl.formatMessage({
                     id: 'profiles.table.validity.description',
                 }),
-                sortable: true,
                 filter: true,
-                initialSortIndex: 1,
-                initialSort: 'asc',
             },
         ],
         [intl]
