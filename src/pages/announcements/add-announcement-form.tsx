@@ -158,12 +158,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                     />
                 </Grid>
                 <Grid item xs="auto">
-                    <SubmitButton
-                        variant="outlined"
-                        type="submit"
-                        fullWidth
-                        disabled={!formState.isValid || formState.isValidating}
-                    />
+                    <SubmitButton variant="outlined" type="submit" fullWidth />
                 </Grid>
             </Grid>
         </FormContainer>
