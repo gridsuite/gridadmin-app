@@ -12,7 +12,7 @@ import { Grid, Typography } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GetRowIdParams, GridReadyEvent } from 'ag-grid-community';
 import { defaultColDef, defaultRowSelection } from './table-config';
-import { useTableSelection } from 'utils/hooks';
+import { useTableSelection } from '../../utils/hooks';
 
 export interface TableSelectionProps {
     itemName: string;

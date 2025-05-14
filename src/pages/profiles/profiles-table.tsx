@@ -15,7 +15,7 @@ import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import ValidityCellRenderer from './validity-cell-renderer';
-import { useTableSelection } from 'utils/hooks';
+import { useTableSelection } from '../../utils/hooks';
 
 export interface ProfilesTableProps {
     gridRef: RefObject<GridTableRef<UserProfile>>;

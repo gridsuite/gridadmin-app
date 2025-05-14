@@ -15,7 +15,7 @@ import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
-import { useTableSelection } from 'utils/hooks';
+import { useTableSelection } from '../../utils/hooks';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
