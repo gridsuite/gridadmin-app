@@ -18,29 +18,35 @@ import {
 } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
-import { Groups } from '@mui/icons-material';
-import { GroupInfos, UserAdminSrv } from '../../services';
+import { AccountCircle } from '@mui/icons-material';
+import { UserAdminSrv, UserInfos } from '../../services';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
-export interface AddGroupDialogProps {
-    gridRef: RefObject<GridTableRef<GroupInfos>>;
+export interface AddUserDialogProps {
+    gridRef: RefObject<GridTableRef<UserInfos>>;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
 
-const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
+const AddUserDialog: FunctionComponent<AddUserDialogProps> = (props) => {
     const { snackError } = useSnackMessage();
 
-    const addGroup = useCallback(
-        (group: string) => {
-            UserAdminSrv.addGroup(group)
+    const { handleSubmit, control, reset, clearErrors } = useForm<{
+        name: string;
+    }>({
+        defaultValues: { name: '' }, //need default not undefined value for html input, else react error at runtime
+    });
+
+    const addUser = useCallback(
+        (id: string) => {
+            UserAdminSrv.addUser(id)
                 .catch((error) =>
                     snackError({
-                        headerId: 'groups.table.error.add',
+                        headerId: 'users.table.error.add',
                         headerValues: {
-                            group: group,
+                            user: id,
                         },
                     })
                 )
@@ -48,11 +54,6 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
         },
         [props.gridRef, snackError]
     );
-    const { handleSubmit, control, reset, clearErrors } = useForm<{
-        group: string;
-    }>({
-        defaultValues: { group: '' }, //need default not undefined value for html input, else react error at runtime
-    });
 
     const handleClose = useCallback(() => {
         props.setOpen(false);
@@ -61,11 +62,11 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
     }, [clearErrors, props, reset]);
 
     const onSubmit = useCallback(
-        (data: { group: string }) => {
-            addGroup(data.group.trim());
+        (data: { name: string }) => {
+            addUser(data.name.trim());
             handleClose();
         },
-        [addGroup, handleClose]
+        [addUser, handleClose]
     );
 
     return (
@@ -75,14 +76,14 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
             PaperComponent={(props) => <PaperForm untypedProps={props} onSubmit={handleSubmit(onSubmit)} />}
         >
             <DialogTitle>
-                <FormattedMessage id="groups.form.title" />
+                <FormattedMessage id="users.form.title" />
             </DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    <FormattedMessage id="groups.form.content" />
+                    <FormattedMessage id="users.form.content" />
                 </DialogContentText>
                 <Controller
-                    name="group"
+                    name="name"
                     control={control}
                     rules={{ required: true, minLength: 1 }}
                     render={({ field, fieldState, formState }) => (
@@ -91,7 +92,7 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                             autoFocus
                             required
                             margin="dense"
-                            label={<FormattedMessage id="groups.form.field.group.label" />}
+                            label={<FormattedMessage id="users.form.field.username.label" />}
                             type="text"
                             fullWidth
                             variant="standard"
@@ -99,7 +100,7 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <Groups />
+                                        <AccountCircle />
                                     </InputAdornment>
                                 ),
                             }}
@@ -120,4 +121,4 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
         </Dialog>
     );
 };
-export default AddGroupDialog;
+export default AddUserDialog;
