@@ -5,10 +5,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, PropsWithChildren, useCallback, useEffect } from 'react';
+import { type PropsWithChildren, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { CardErrorBoundary, useNotificationsListener, useSnackMessage } from '@gridsuite/commons-ui';
+import {
+    AnnouncementNotification,
+    CardErrorBoundary,
+    NotificationsUrlKeys,
+    useNotificationsListener,
+    useSnackMessage,
+} from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
 import { ConfigParameters, ConfigSrv } from '../../services';
@@ -17,9 +23,8 @@ import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
-import { NOTIFICATIONS_URL_KEYS } from '../../utils/notifications-provider';
 
-const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
+export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
@@ -59,7 +64,7 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
         [updateParams, snackError]
     );
 
-    useNotificationsListener(NOTIFICATIONS_URL_KEYS.CONFIG, { listenerCallbackMessage: updateConfig });
+    useNotificationsListener(NotificationsUrlKeys.CONFIG, { listenerCallbackMessage: updateConfig });
 
     useEffect(() => {
         if (user !== null) {
@@ -93,10 +98,12 @@ const App: FunctionComponent<PropsWithChildren<{}>> = (props, context) => {
             sx={{ height: '100vh', width: '100vw' }}
         >
             <Grid item xs="auto" component={AppTopBar} />
+            <Grid item xs="auto">
+                <AnnouncementNotification user={user} />
+            </Grid>
             <Grid item container xs component="main">
-                <CardErrorBoundary>{/*Router outlet ->*/ props.children}</CardErrorBoundary>
+                <CardErrorBoundary>{/*Router outlet ->*/ children}</CardErrorBoundary>
             </Grid>
         </Grid>
     );
-};
-export default App;
+}

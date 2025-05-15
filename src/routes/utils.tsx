@@ -11,11 +11,13 @@ import ErrorPage from './ErrorPage';
 import HomePage from './HomePage';
 import { getPreLoginPath } from '@gridsuite/commons-ui';
 import { FormattedMessage } from 'react-intl';
+import { Announcements } from '../pages/announcements';
 
 export enum MainPaths {
     users = 'users',
     profiles = 'profiles',
     groups = 'groups',
+    announcements = 'announcements',
 }
 
 export function appRoutes(): RouteObject[] {
@@ -47,6 +49,13 @@ export function appRoutes(): RouteObject[] {
                     element: <Groups />,
                     handle: {
                         appBar_tab: MainPaths.groups,
+                    },
+                },
+                {
+                    path: `/${MainPaths.announcements}`,
+                    element: <Announcements />,
+                    handle: {
+                        appBar_tab: MainPaths.announcements,
                     },
                 },
             ],

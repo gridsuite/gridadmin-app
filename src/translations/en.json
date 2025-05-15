@@ -16,6 +16,7 @@
     "appBar.tabs.profiles": "Profiles",
     "appBar.tabs.groups": "Groups",
     "appBar.tabs.connections": "Connections",
+    "appBar.tabs.warningBanner": "Warning banner",
 
     "table.noRows": "No data",
     "table.error.retrieve": "Error while retrieving data",
@@ -109,5 +110,20 @@
     "groups.form.modification.title": "Edit group",
 
     "linked.path.display.noLink": "no configuration selected.",
-    "linked.path.display.invalidLink": "invalid configurations link."
+    "linked.path.display.invalidLink": "invalid configurations link.",
+
+    "announcements.programNewMessage": "New message scheduling",
+    "announcements.programmedMessage": "Programmed messages",
+    "announcements.table.message": "Message",
+    "announcements.table.startDate": "Start date",
+    "announcements.table.endDate": "Stop date",
+    "announcements.table.cancel": "Cancel",
+    "announcements.severity": "Severity",
+    "announcements.severity.INFO": "Info",
+    "announcements.severity.WARN": "Warning",
+    "announcements.form.message": "Announcement message",
+    "announcements.form.errCreateAnnouncement": "Error while creating announcement:",
+    "announcements.form.errCreateAnnouncement.noOverlapAllowedErr": "The date overlaps with another announcement date.",
+    "announcements.form.errCreateAnnouncement.noSameDateErr": "The announcement start and end date must be different.",
+    "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "The start date cannot be after the end date."
 }
