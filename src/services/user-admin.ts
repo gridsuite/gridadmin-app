@@ -5,34 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { User } from 'oidc-client';
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { extractUserSub, getToken } from '../utils/api';
 import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
-
-/*
- * fetchValidateUser is call from commons-ui AuthServices to validate user infos before setting state.user!
- */
-export function fetchValidateUser(user: User): Promise<boolean> {
-    return extractUserSub(user)
-        .then((sub) => {
-            console.debug(`Fetching access for user "${sub}"...`);
-            return backendFetch(`${USER_ADMIN_URL}/users/${sub}`, { method: 'head' }, getToken(user) ?? undefined);
-        })
-        .then((response: Response) => {
-            //if the response is ok, the responseCode will be either 200 or 204 otherwise it's an HTTP error and it will be caught
-            return response.status === 200;
-        })
-        .catch((error) => {
-            if (error.status === 403) {
-                return false;
-            } else {
-                throw error;
-            }
-        });
-}
 
 export type UserInfos = {
     sub: string;
