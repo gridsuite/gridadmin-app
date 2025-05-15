@@ -6,7 +6,7 @@
  */
 
 import App from './app';
-import { FunctionComponent, PropsWithChildren, useMemo } from 'react';
+import { FunctionComponent, type PropsWithChildren, useMemo } from 'react';
 import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
