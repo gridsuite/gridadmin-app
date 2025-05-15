@@ -15,13 +15,13 @@ import {
     GetRowIdParams,
     ICheckboxCellRendererParams,
     RowClickedEvent,
-    SelectionChangedEvent,
     TextFilterParams,
 } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
+import { useTableSelection } from '../../utils/hooks';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
@@ -33,17 +33,12 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const [rowsSelection, setRowsSelection] = useState<UserInfos[]>([]);
+    const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<UserInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<UserInfos>): string {
         return params.data.sub ?? '';
     }
-
-    const onSelectionChanged = useCallback(
-        (event: SelectionChangedEvent<UserInfos, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
-        [setRowsSelection]
-    );
 
     const onAddButton = useCallback(() => props.setOpenAddUserDialog(true), [props]);
 
@@ -147,6 +142,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                onFilterChanged={onFilterChanged}
                 tooltipShowDelay={1000}
             >
                 <GridButton

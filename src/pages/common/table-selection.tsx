@@ -20,6 +20,11 @@ export interface TableSelectionProps {
     onSelectionChanged: (selectedItems: string[]) => void;
 }
 
+const rowSelection = {
+    ...defaultRowSelection,
+    headerCheckbox: false,
+};
+
 const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
     const [selectedRowsLength, setSelectedRowsLength] = useState(0);
     const gridRef = useRef<AgGridReact>(null);
@@ -82,7 +87,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                     rowData={rowData}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
-                    rowSelection={defaultRowSelection}
+                    rowSelection={rowSelection}
                     getRowId={getRowId}
                     onSelectionChanged={handleEquipmentSelectionChanged}
                     onGridReady={onGridReady}
