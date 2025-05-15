@@ -5,14 +5,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FunctionComponent, useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { CustomAGGrid } from '@gridsuite/commons-ui';
 import { Grid, Typography } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GetRowIdParams, GridReadyEvent } from 'ag-grid-community';
 import { defaultColDef, defaultRowSelection } from './table-config';
-import { useTableSelection } from '../../utils/hooks';
 
 export interface TableSelectionProps {
     itemName: string;
@@ -21,13 +20,25 @@ export interface TableSelectionProps {
     onSelectionChanged: (selectedItems: string[]) => void;
 }
 
+const rowSelection = {
+    ...defaultRowSelection,
+    headerCheckbox: false,
+};
+
 const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
-    const { rowsSelection, onSelectionChanged: handleSelection, onFilterChanged } = useTableSelection<{ id: string }>();
+    const [selectedRowsLength, setSelectedRowsLength] = useState(0);
     const gridRef = useRef<AgGridReact>(null);
 
-    useEffect(() => {
-        props.onSelectionChanged(rowsSelection.map((r) => r.id));
-    }, [rowsSelection, props]);
+    const handleEquipmentSelectionChanged = useCallback(() => {
+        const selectedRows = gridRef.current?.api.getSelectedRows();
+        if (selectedRows == null) {
+            setSelectedRowsLength(0);
+            props.onSelectionChanged([]);
+        } else {
+            setSelectedRowsLength(selectedRows.length);
+            props.onSelectionChanged(selectedRows.map((r) => r.id));
+        }
+    }, [props]);
 
     const rowData = useMemo(() => {
         return props.tableItems.map((str) => ({ id: str }));
@@ -66,7 +77,7 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
             <Grid item>
                 <Typography variant="subtitle1">
                     <FormattedMessage id={props.itemName}></FormattedMessage>
-                    {` (${rowsSelection?.length} / ${rowData?.length ?? 0})`}
+                    {` (${selectedRowsLength} / ${rowData?.length ?? 0})`}
                 </Typography>
             </Grid>
             <Grid item xs>
@@ -76,10 +87,9 @@ const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
                     rowData={rowData}
                     columnDefs={columnDefs}
                     defaultColDef={defaultColDef}
-                    rowSelection={defaultRowSelection}
+                    rowSelection={rowSelection}
                     getRowId={getRowId}
-                    onSelectionChanged={handleSelection}
-                    onFilterChanged={onFilterChanged}
+                    onSelectionChanged={handleEquipmentSelectionChanged}
                     onGridReady={onGridReady}
                     accentedSort={true}
                 />
