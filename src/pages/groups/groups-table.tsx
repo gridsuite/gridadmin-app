@@ -10,11 +10,12 @@ import { useIntl } from 'react-intl';
 import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
-import { ColDef, GetRowIdParams, RowClickedEvent, SelectionChangedEvent, TextFilterParams } from 'ag-grid-community';
+import { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
+import { useTableSelection } from '../../utils/hooks';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
@@ -26,17 +27,12 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
 
-    const [rowsSelection, setRowsSelection] = useState<GroupInfos[]>([]);
+    const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<GroupInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
 
     function getRowId(params: GetRowIdParams<GroupInfos>): string {
         return params.data.name;
     }
-
-    const onSelectionChanged = useCallback(
-        (event: SelectionChangedEvent<GroupInfos, {}>) => setRowsSelection(event.api.getSelectedRows() ?? []),
-        [setRowsSelection]
-    );
 
     const onAddButton = useCallback(() => props.setOpenAddGroupDialog(true), [props]);
 
@@ -114,6 +110,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                 rowSelection={defaultRowSelection}
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
+                onFilterChanged={onFilterChanged}
             >
                 <GridButton
                     labelId="groups.table.toolbar.add.label"
