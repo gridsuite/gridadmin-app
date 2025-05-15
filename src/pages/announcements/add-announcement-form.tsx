@@ -77,7 +77,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             [SEVERITY]: null,
         },
     });
-    const { formState, getValues } = formContext;
+    const { getValues } = formContext;
     const startDateValue = getValues(START_DATE);
 
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
