@@ -18,7 +18,7 @@ import {
 } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../redux/reducer';
-import { AppsMetadataSrv, UserAdminSrv } from '../services';
+import { AppsMetadataSrv } from '../services';
 import type { App } from '../components/App';
 import { updateUserManagerDestructured } from '../redux/actions';
 import { getErrorMessage } from '../utils/error';
@@ -78,7 +78,6 @@ const AppAuthStateWithRouterLayer: FunctionComponent<PropsWithChildren<{ layout:
                             dispatch,
                             initialMatchSilentRenewCallbackUrl != null,
                             AppsMetadataSrv.fetchIdpSettings,
-                            UserAdminSrv.fetchValidateUser,
                             initialMatchSignInCallbackUrl != null
                         )) ?? null,
                         null
