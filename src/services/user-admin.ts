@@ -243,3 +243,59 @@ export function addGroup(group: string): Promise<void> {
             throw reason;
         });
 }
+
+export enum AnnouncementSeverity {
+    INFO = 'INFO',
+    WARN = 'WARN',
+}
+
+export function sanitizeString(val: string | null | undefined) {
+    const trimmedValue = val?.trim();
+    return trimmedValue === '' ? null : trimmedValue;
+}
+
+export type NewAnnouncement = {
+    startDate: string;
+    endDate: string;
+    message: string;
+    severity: AnnouncementSeverity;
+};
+export type Announcement = NewAnnouncement & {
+    id: UUID;
+};
+
+export async function addAnnouncement(announcement: NewAnnouncement) {
+    console.debug(`Creating announcement ...`);
+    return backendFetchJson<Announcement>(
+        `${USER_ADMIN_URL}/announcements?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
+        {
+            method: 'put',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'text/plain',
+            },
+            body: sanitizeString(announcement.message),
+        }
+    ).catch((reason) => {
+        console.error('Error while creating announcement:', reason);
+        throw reason;
+    });
+}
+
+export async function fetchAnnouncementList() {
+    console.debug(`Fetching announcement ...`);
+    try {
+        return await backendFetchJson<Announcement[]>(`${USER_ADMIN_URL}/announcements`, { method: 'get' });
+    } catch (reason) {
+        console.error('Error while fetching announcement:', reason);
+        throw reason;
+    }
+}
+
+export async function deleteAnnouncement(announcementId: UUID): Promise<void> {
+    console.debug(`Deleting announcement ${announcementId}...`);
+    await backendFetch(`${USER_ADMIN_URL}/announcements/${announcementId}`, { method: 'delete' }).catch((reason) => {
+        console.error('Error while deleting announcement:', reason);
+        throw reason;
+    });
+}

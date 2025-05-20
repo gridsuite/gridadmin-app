@@ -6,14 +6,18 @@
  */
 
 import App from './app';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, type PropsWithChildren, useMemo } from 'react';
 import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { enUS as MuiDatePickersEnUS, frFR as MuiDatePickersFrFR } from '@mui/x-date-pickers/locales';
+import { enUS as dateFnsEnUS, fr as dateFnsFr } from 'date-fns/locale';
 import {
+    CardErrorBoundary,
     cardErrorBoundaryEn,
     cardErrorBoundaryFr,
-    CardErrorBoundary,
     GsLangUser,
     GsTheme,
     LANG_ENGLISH,
@@ -21,12 +25,12 @@ import {
     LIGHT_THEME,
     loginEn,
     loginFr,
+    NotificationsProvider,
     SnackbarProvider,
     topBarEn,
     topBarFr,
-    NotificationsProvider,
 } from '@gridsuite/commons-ui';
-import { IntlConfig, IntlProvider } from 'react-intl';
+import { type IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
 import messages_en from '../../translations/en.json';
 import messages_fr from '../../translations/fr.json';
@@ -103,7 +107,8 @@ const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {
     return responsiveFontSizes(
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
-            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS // MUI core translations
+            locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS, // MUI core translations
+            locale === LANG_FRENCH ? MuiDatePickersFrFR : MuiDatePickersEnUS // MUI x-date-pickers translations
         )
     );
 };
@@ -125,10 +130,21 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
 
 const basename = new URL(document.baseURI ?? '').pathname;
 
+function intlToDateFnsLocale(lng: GsLangUser) {
+    switch (lng) {
+        case LANG_FRENCH:
+            return dateFnsFr;
+        case LANG_ENGLISH:
+            return dateFnsEnUS;
+        default:
+            return undefined;
+    }
+}
+
 /**
  * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
  */
-const AppWrapperRouterLayout: typeof App = (props, context) => {
+const AppWrapperRouterLayout: typeof App = (props: Readonly<PropsWithChildren<{}>>) => {
     const computedLanguage = useSelector((state: AppState) => state.computedLanguage);
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
     const themeCompiled = useMemo(() => getMuiTheme(theme, computedLanguage), [computedLanguage, theme]);
@@ -137,14 +153,20 @@ const AppWrapperRouterLayout: typeof App = (props, context) => {
         <IntlProvider locale={computedLanguage} defaultLocale={LANG_ENGLISH} messages={messages[computedLanguage]}>
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={themeCompiled}>
-                    <SnackbarProvider hideIconVariant={false}>
-                        <CssBaseline />
-                        <CardErrorBoundary>
-                            <NotificationsProvider urls={urlMapper}>
-                                <App {...props}>{props.children}</App>
-                            </NotificationsProvider>
-                        </CardErrorBoundary>
-                    </SnackbarProvider>
+                    <LocalizationProvider
+                        dateAdapter={AdapterDateFns}
+                        // @ts-expect-error: Error of AdapterDateFns for Locales type in x-date-pickers v7
+                        adapterLocale={intlToDateFnsLocale(computedLanguage)}
+                    >
+                        <SnackbarProvider hideIconVariant={false}>
+                            <CssBaseline />
+                            <CardErrorBoundary>
+                                <NotificationsProvider urls={urlMapper}>
+                                    <App {...props}>{props.children}</App>
+                                </NotificationsProvider>
+                            </CardErrorBoundary>
+                        </SnackbarProvider>
+                    </LocalizationProvider>
                 </ThemeProvider>
             </StyledEngineProvider>
         </IntlProvider>
