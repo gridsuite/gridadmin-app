@@ -14,18 +14,20 @@ import {
     NotificationsUrlKeys,
     useNotificationsListener,
     useSnackMessage,
+    useYupIntl,
 } from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
-import { AppState } from '../../redux/reducer';
-import { ConfigParameters, ConfigSrv } from '../../services';
+import type { AppState } from '../../redux/reducer';
+import type { AppDispatch } from '../../redux/store';
+import { type ConfigParameters, ConfigSrv } from '../../services';
 import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import { useDebugRender } from '../../utils/hooks';
-import { AppDispatch } from '../../redux/store';
 
 export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
     useDebugRender('app');
+    useYupIntl();
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);

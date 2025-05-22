@@ -17,13 +17,14 @@ import ProfileModificationForm, {
     USER_QUOTA_CASE_NB,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
 } from './profile-modification-form';
-import yup from '../../../utils/yup-config';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import { type FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { UserAdminSrv, UserProfile } from '../../../services';
-import { UUID } from 'crypto';
+import { UserAdminSrv, type UserProfile } from '../../../services';
+import type { UUID } from 'crypto';
+import { useIntl } from 'react-intl';
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -39,23 +40,37 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
+    const intl = useIntl();
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
-    const formSchema = yup
-        .object()
-        .shape({
-            [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
-            [LOADFLOW_PARAM_ID]: yup.string().optional(),
-            [SECURITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
-            [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
-            [SHORTCIRCUIT_PARAM_ID]: yup.string().optional(),
-            [VOLTAGE_INIT_PARAM_ID]: yup.string().optional(),
-            [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
-            [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
-            [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
-            [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string().optional(),
-        })
-        .required();
+    const formSchema = useMemo(
+        () =>
+            yup
+                .object()
+                .shape({
+                    [PROFILE_NAME]: yup
+                        .string()
+                        .trim()
+                        .required(intl.formatMessage({ id: 'nameEmpty' })),
+                    [LOADFLOW_PARAM_ID]: yup.string().optional(),
+                    [SECURITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
+                    [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
+                    [SHORTCIRCUIT_PARAM_ID]: yup.string().optional(),
+                    [VOLTAGE_INIT_PARAM_ID]: yup.string().optional(),
+                    [USER_QUOTA_CASE_NB]: yup
+                        .number()
+                        .positive(intl.formatMessage({ id: 'userQuotaPositive' }))
+                        .nullable(),
+                    [USER_QUOTA_BUILD_NB]: yup
+                        .number()
+                        .positive(intl.formatMessage({ id: 'userQuotaPositive' }))
+                        .nullable(),
+                    [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
+                    [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string().optional(),
+                })
+                .required(),
+        [intl]
+    );
 
     const formMethods = useForm({
         resolver: yupResolver(formSchema),

@@ -5,18 +5,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import UserModificationForm, {
-    USER_NAME,
-    USER_PROFILE_NAME,
-    USER_SELECTED_GROUPS,
-    UserModificationFormType,
-    UserModificationSchema,
-} from './user-modification-form';
+import UserModificationForm, { USER_NAME, USER_PROFILE_NAME, USER_SELECTED_GROUPS } from './user-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
+import { useIntl } from 'react-intl';
+import type { InferType } from 'yup';
+import * as yup from 'yup';
 
 interface UserModificationDialogProps {
     userInfos: UserInfos | undefined;
@@ -32,10 +29,29 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
+    const intl = useIntl();
+
+    const UserModificationSchema = useMemo(
+        () =>
+            yup
+                .object()
+                .shape({
+                    [USER_NAME]: yup
+                        .string()
+                        .trim()
+                        .required(intl.formatMessage({ id: 'nameEmpty' })),
+                    [USER_PROFILE_NAME]: yup.string().nullable(),
+                    [USER_SELECTED_GROUPS]: yup.string().nullable(),
+                })
+                .required(),
+        [intl]
+    );
+    type UserModificationFormType = InferType<typeof UserModificationSchema>;
     const formMethods = useForm({
         resolver: yupResolver(UserModificationSchema),
     });
     const { reset, setValue } = formMethods;
+
     const [profileOptions, setProfileOptions] = useState<string[]>([]);
     const [groupOptions, setGroupOptions] = useState<string[]>([]);
     const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
