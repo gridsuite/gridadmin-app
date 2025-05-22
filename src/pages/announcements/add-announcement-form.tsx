@@ -27,10 +27,12 @@ export type AddAnnouncementFormProps = {
     onAnnouncementCreated?: () => void;
 };
 
+const MESSAGE_MAX_LENGTH = 200;
+
 const formSchema = yup
     .object()
     .shape({
-        [MESSAGE]: yup.string().nullable().trim().min(1).required(),
+        [MESSAGE]: yup.string().nullable().trim().min(1).max(MESSAGE_MAX_LENGTH).required(),
         [START_DATE]: yup.string().nullable().datetime().required(),
         [END_DATE]: yup
             .string()
@@ -154,6 +156,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                         label={intl.formatMessage({ id: 'announcements.form.message' })}
                         rows={5} // why does it do nothing even if the field is set as multiline?!
                         fullWidth
+                        //inputProps={{ maxLength: MESSAGE_MAX_LENGTH } satisfies Partial<HTMLInputElement>}
                     />
                 </Grid>
                 <Grid item xs="auto">
