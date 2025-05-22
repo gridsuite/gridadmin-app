@@ -6,9 +6,9 @@
  */
 
 import { AutocompleteInput, TextInput } from '@gridsuite/commons-ui';
-import Grid from '@mui/material/Grid';
-import React, { FunctionComponent } from 'react';
-import yup from '../../../utils/yup-config';
+import { Grid } from '@mui/material';
+import { type FunctionComponent } from 'react';
+import yup, { type InferType } from 'yup';
 import TableSelection from '../../common/table-selection';
 
 export const USER_NAME = 'sub';
@@ -24,7 +24,7 @@ export const UserModificationSchema = yup
     })
     .required();
 
-export type UserModificationFormType = yup.InferType<typeof UserModificationSchema>;
+export type UserModificationFormType = InferType<typeof UserModificationSchema>;
 
 interface UserModificationFormProps {
     profileOptions: string[];

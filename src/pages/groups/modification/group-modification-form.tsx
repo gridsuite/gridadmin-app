@@ -6,9 +6,9 @@
  */
 
 import { TextInput } from '@gridsuite/commons-ui';
-import Grid from '@mui/material/Grid';
-import React, { FunctionComponent } from 'react';
-import yup from '../../../utils/yup-config';
+import { Grid } from '@mui/material';
+import { type FunctionComponent } from 'react';
+import yup, { type InferType } from 'yup';
 import TableSelection from '../../common/table-selection';
 
 export const GROUP_NAME = 'name';
@@ -22,7 +22,7 @@ export const GroupModificationSchema = yup
     })
     .required();
 
-export type GroupModificationFormType = yup.InferType<typeof GroupModificationSchema>;
+export type GroupModificationFormType = InferType<typeof GroupModificationSchema>;
 
 interface GroupModificationFormProps {
     usersOptions: string[];
