@@ -11,7 +11,8 @@ import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
-import yup, { type InferType } from 'yup';
+import type { InferType } from 'yup';
+import * as yup from 'yup';
 import { useIntl } from 'react-intl';
 
 interface GroupModificationDialogProps {

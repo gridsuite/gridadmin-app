@@ -17,7 +17,7 @@ import ProfileModificationForm, {
     USER_QUOTA_CASE_NB,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
 } from './profile-modification-form';
-import yup from 'yup';
+import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { type FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';

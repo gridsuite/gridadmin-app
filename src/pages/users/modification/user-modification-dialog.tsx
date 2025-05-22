@@ -12,7 +12,8 @@ import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 're
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
 import { useIntl } from 'react-intl';
-import yup, { type InferType } from 'yup';
+import type { InferType } from 'yup';
+import * as yup from 'yup';
 
 interface UserModificationDialogProps {
     userInfos: UserInfos | undefined;
