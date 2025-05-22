@@ -27,41 +27,52 @@ export type AddAnnouncementFormProps = {
     onAnnouncementCreated?: () => void;
 };
 
-const formSchema = yup
-    .object()
-    .shape({
-        [MESSAGE]: yup.string().nullable().trim().min(1).required(),
-        [START_DATE]: yup.string().nullable().datetime().required(),
-        [END_DATE]: yup
-            .string()
-            .nullable()
-            .datetime()
-            .required()
-            .when(START_DATE, (startDate, schema) =>
-                schema.test(
-                    'is-after-start',
-                    'End date must be after start date',
-                    (endDate) => !startDate || !endDate || new Date(endDate) > new Date(startDate as unknown as string)
-                )
-            ),
-        [SEVERITY]: yup
-            .string<UserAdminSrv.AnnouncementSeverity>()
-            .nullable()
-            .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
-            .required(),
-    })
-    .required();
-type FormSchema = InferType<typeof formSchema>;
-
-const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
-    input: (value) => (value ? new Date(value) : null),
-    output: (value) => value?.toISOString() ?? '',
-};
 const pickerView = ['year', 'month', 'day', 'hours', 'minutes'] as const satisfies readonly DateOrTimeView[];
 
 export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<AddAnnouncementFormProps>) {
     const intl = useIntl();
     const { snackError } = useSnackMessage();
+
+    const formSchema = useMemo(
+        () =>
+            yup
+                .object()
+                .shape({
+                    [MESSAGE]: yup.string().nullable().trim().min(1).required(),
+                    [START_DATE]: yup.string().nullable().datetime().required(),
+                    [END_DATE]: yup
+                        .string()
+                        .nullable()
+                        .datetime()
+                        .required()
+                        .when(START_DATE, (startDate, schema) =>
+                            schema.test(
+                                'is-after-start',
+                                intl.formatMessage({ id: 'announcements.form.errForm.startDateAfterEndDateErr' }),
+                                (endDate) =>
+                                    !startDate ||
+                                    !endDate ||
+                                    new Date(endDate) > new Date(startDate as unknown as string)
+                            )
+                        ),
+                    [SEVERITY]: yup
+                        .string<UserAdminSrv.AnnouncementSeverity>()
+                        .nullable()
+                        .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
+                        .required(),
+                })
+                .required(),
+        [intl]
+    );
+
+    type FormSchema = InferType<typeof formSchema>;
+    const datetimePickerTransform = useMemo<NonNullable<DateTimePickerElementProps<FormSchema>['transform']>>(
+        () => ({
+            input: (value) => (value ? new Date(value) : null),
+            output: (value) => value?.toISOString() ?? '',
+        }),
+        []
+    );
 
     const formContext = useForm({
         resolver: yupResolver(formSchema),

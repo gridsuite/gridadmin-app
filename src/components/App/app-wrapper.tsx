@@ -18,6 +18,8 @@ import {
     CardErrorBoundary,
     cardErrorBoundaryEn,
     cardErrorBoundaryFr,
+    filterEn,
+    filterFr,
     GsLangUser,
     GsTheme,
     LANG_ENGLISH,
@@ -115,16 +117,18 @@ const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {
 
 const messages: Record<GsLangUser, IntlConfig['messages']> = {
     en: {
-        ...messages_en,
+        ...filterEn,
         ...loginEn,
         ...topBarEn,
         ...cardErrorBoundaryEn,
+        ...messages_en,
     },
     fr: {
-        ...messages_fr,
+        ...filterFr,
         ...loginFr,
         ...topBarFr,
         ...cardErrorBoundaryFr,
+        ...messages_fr,
     },
 };
 

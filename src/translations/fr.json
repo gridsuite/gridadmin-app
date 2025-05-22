@@ -7,7 +7,6 @@
     "cancel": "Annuler",
     "validate": "Valider",
     "parameters": "Paramètres",
-    "nameEmpty": "Le nom est vide",
     "paramsChangingError": "Une erreur est survenue lors de la modification des paramètres",
     "paramsRetrievingError": "Une erreur est survenue lors de la récupération des paramètres",
     "userQuotaPositive": "Le quota utilisateur doit être positif",
@@ -126,5 +125,6 @@
     "announcements.form.errCreateAnnouncement": "Erreur lors de la création de l'annonce :",
     "announcements.form.errCreateAnnouncement.noOverlapAllowedErr": "La date d'annonce chevauche une autre date d'annonce.",
     "announcements.form.errCreateAnnouncement.noSameDateErr": "La date de début et de fin d'annonce doivent être différentes.",
-    "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "La date de début d'annonce ne peut pas être après la date de fin."
+    "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "La date de début d'annonce ne peut pas être après la date de fin.",
+    "announcements.form.errForm.startDateAfterEndDateErr": "La date de fin doit être après la date de début."
 }

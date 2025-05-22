@@ -5,17 +5,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import GroupModificationForm, {
-    GROUP_NAME,
-    GroupModificationFormType,
-    GroupModificationSchema,
-    SELECTED_USERS,
-} from './group-modification-form';
+import GroupModificationForm, { GROUP_NAME, SELECTED_USERS } from './group-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
+import yup, { type InferType } from 'yup';
+import { useIntl } from 'react-intl';
 
 interface GroupModificationDialogProps {
     groupInfos: GroupInfos | undefined;
@@ -31,6 +28,23 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
+    const intl = useIntl();
+
+    const GroupModificationSchema = useMemo(
+        () =>
+            yup
+                .object()
+                .shape({
+                    [GROUP_NAME]: yup
+                        .string()
+                        .trim()
+                        .required(intl.formatMessage({ id: 'nameEmpty' })),
+                    [SELECTED_USERS]: yup.string().nullable(),
+                })
+                .required(),
+        [intl]
+    );
+    type GroupModificationFormType = InferType<typeof GroupModificationSchema>;
     const formMethods = useForm({
         resolver: yupResolver(GroupModificationSchema),
     });

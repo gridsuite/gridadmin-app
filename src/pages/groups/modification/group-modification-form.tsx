@@ -8,21 +8,10 @@
 import { TextInput } from '@gridsuite/commons-ui';
 import { Grid } from '@mui/material';
 import { type FunctionComponent } from 'react';
-import yup, { type InferType } from 'yup';
 import TableSelection from '../../common/table-selection';
 
 export const GROUP_NAME = 'name';
 export const SELECTED_USERS = 'users';
-
-export const GroupModificationSchema = yup
-    .object()
-    .shape({
-        [GROUP_NAME]: yup.string().trim().required('nameEmpty'),
-        [SELECTED_USERS]: yup.string().nullable(),
-    })
-    .required();
-
-export type GroupModificationFormType = InferType<typeof GroupModificationSchema>;
 
 interface GroupModificationFormProps {
     usersOptions: string[];
