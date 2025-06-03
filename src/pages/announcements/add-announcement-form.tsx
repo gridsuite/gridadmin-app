@@ -77,6 +77,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             // @ts-expect-error: nullable() is called, so null is accepted as default value
             [SEVERITY]: null,
         },
+        criteriaMode: 'all',
+        mode: 'all',
+        reValidateMode: 'onBlur', // TODO 'onChange'?
     });
     const { getValues } = formContext;
     const startDateValue = getValues(START_DATE);
@@ -104,9 +107,6 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
         <FormContainer<FormSchema>
             formContext={formContext}
             onSuccess={onSubmit}
-            //criteriaMode="all" ?
-            mode="onChange" // or maybe mode "all"?
-            reValidateMode="onChange"
             FormProps={{ style: { height: '100%' } }}
         >
             <Grid container direction="column" spacing={1.5} height="100%">
