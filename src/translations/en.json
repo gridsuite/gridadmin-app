@@ -112,8 +112,8 @@
     "linked.path.display.noLink": "no configuration selected.",
     "linked.path.display.invalidLink": "invalid configurations link.",
 
-    "announcements.programNewMessage": "New message scheduling",
-    "announcements.programmedMessage": "Programmed messages",
+    "announcements.programNewMessage": "Schedule a new message",
+    "announcements.programmedMessage": "Scheduled messages",
     "announcements.table.message": "Message",
     "announcements.table.startDate": "Start date",
     "announcements.table.endDate": "Stop date",
