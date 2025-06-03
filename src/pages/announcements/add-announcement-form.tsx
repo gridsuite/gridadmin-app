@@ -13,7 +13,13 @@ import { SubmitButton, useSnackMessage, yupConfig as yup } from '@gridsuite/comm
 import { type InferType } from 'yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormContainer, SelectElement, TextareaAutosizeElement } from 'react-hook-form-mui';
+import {
+    FormContainer,
+    FormErrorProvider,
+    type FormErrorProviderProps,
+    SelectElement,
+    TextareaAutosizeElement,
+} from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
 import { UserAdminSrv } from '../../services';
 import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
@@ -32,7 +38,7 @@ const MESSAGE_MAX_LENGTH = 200;
 const formSchema = yup
     .object()
     .shape({
-        [MESSAGE]: yup.string().nullable().trim().min(1).max(MESSAGE_MAX_LENGTH).required(),
+        [MESSAGE]: yup.string().nullable().trim().min(1, 'YupRequired').max(MESSAGE_MAX_LENGTH).required(),
         [START_DATE]: yup.string().nullable().datetime().required(),
         [END_DATE]: yup
             .string()
@@ -42,7 +48,7 @@ const formSchema = yup
             .when(START_DATE, (startDate, schema) =>
                 schema.test(
                     'is-after-start',
-                    'End date must be after start date',
+                    'announcements.form.errForm.startDateAfterEndDateErr',
                     (endDate) => !startDate || !endDate || new Date(endDate) > new Date(startDate as unknown as string)
                 )
             ),
@@ -109,66 +115,77 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
         [onAnnouncementCreated, snackError]
     );
 
+    // TODO remove when yupConfig has been rework
+    const onErrorIntl = useCallback<FormErrorProviderProps['onError']>(
+        (error) =>
+            error?.message?.includes(' ') // if it's not a token
+                ? error.message
+                : intl.formatMessage({ id: error.message, defaultMessage: error.message }),
+        [intl]
+    );
+
     return (
         <FormContainer<FormSchema>
             formContext={formContext}
             onSuccess={onSubmit}
             FormProps={{ style: { height: '100%' } }}
         >
-            <Grid container direction="column" spacing={1.5} height="100%">
-                <Grid item container xs="auto" spacing={1}>
-                    <Grid item xs={12} lg={6}>
-                        <DateTimePickerElement<FormSchema>
-                            name={START_DATE}
-                            label={intl.formatMessage({ id: 'announcements.table.startDate' })}
-                            transform={datetimePickerTransform}
-                            timezone="system"
-                            views={pickerView}
-                            timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
-                            disablePast
+            <FormErrorProvider onError={onErrorIntl}>
+                <Grid container direction="column" spacing={1.5} height="100%">
+                    <Grid item container xs="auto" spacing={1}>
+                        <Grid item xs={12} lg={6}>
+                            <DateTimePickerElement<FormSchema>
+                                name={START_DATE}
+                                label={intl.formatMessage({ id: 'announcements.table.startDate' })}
+                                transform={datetimePickerTransform}
+                                timezone="system"
+                                views={pickerView}
+                                timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                                disablePast
+                            />
+                        </Grid>
+                        <Grid item xs={12} lg={6}>
+                            <DateTimePickerElement<FormSchema>
+                                name={END_DATE}
+                                label={intl.formatMessage({ id: 'announcements.table.endDate' })}
+                                transform={datetimePickerTransform}
+                                timezone="system"
+                                views={pickerView}
+                                timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
+                                disablePast
+                                minDateTime={startDateValue ? new Date(startDateValue) : undefined}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid item xs="auto">
+                        <SelectElement<FormSchema>
+                            name={SEVERITY}
+                            label={intl.formatMessage({ id: 'announcements.severity' })}
+                            options={useMemo(
+                                () =>
+                                    Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
+                                        id: value,
+                                        label: intl.formatMessage({ id: `announcements.severity.${value}` }),
+                                    })),
+                                [intl]
+                            )}
+                            fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} lg={6}>
-                        <DateTimePickerElement<FormSchema>
-                            name={END_DATE}
-                            label={intl.formatMessage({ id: 'announcements.table.endDate' })}
-                            transform={datetimePickerTransform}
-                            timezone="system"
-                            views={pickerView}
-                            timeSteps={{ hours: 1, minutes: 1, seconds: 0 }}
-                            disablePast
-                            minDateTime={startDateValue ? new Date(startDateValue) : undefined}
+                    <Grid item xs>
+                        <TextareaAutosizeElement<FormSchema>
+                            name={MESSAGE}
+                            label={intl.formatMessage({ id: 'announcements.form.message' })}
+                            rows={5} // why does it do nothing even if the field is set as multiline?!
+                            fullWidth
+                            //inputProps={{ maxLength: MESSAGE_MAX_LENGTH } satisfies Partial<HTMLInputElement>}
                         />
                     </Grid>
+                    <Grid item xs="auto">
+                        <SubmitButton variant="outlined" type="submit" fullWidth />
+                    </Grid>
                 </Grid>
-                <Grid item xs="auto">
-                    <SelectElement<FormSchema>
-                        name={SEVERITY}
-                        label={intl.formatMessage({ id: 'announcements.severity' })}
-                        options={useMemo(
-                            () =>
-                                Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
-                                    id: value,
-                                    label: intl.formatMessage({ id: `announcements.severity.${value}` }),
-                                })),
-                            [intl]
-                        )}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs>
-                    <TextareaAutosizeElement<FormSchema>
-                        name={MESSAGE}
-                        label={intl.formatMessage({ id: 'announcements.form.message' })}
-                        rows={5} // why does it do nothing even if the field is set as multiline?!
-                        fullWidth
-                        //inputProps={{ maxLength: MESSAGE_MAX_LENGTH } satisfies Partial<HTMLInputElement>}
-                    />
-                </Grid>
-                <Grid item xs="auto">
-                    <SubmitButton variant="outlined" type="submit" fullWidth />
-                </Grid>
-            </Grid>
+            </FormErrorProvider>
         </FormContainer>
     );
 }
