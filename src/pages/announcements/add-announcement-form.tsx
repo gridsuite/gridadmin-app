@@ -56,7 +56,13 @@ const formSchema = yup
 type FormSchema = InferType<typeof formSchema>;
 
 const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
-    input: (value) => (value ? new Date(value) : null),
+    input: (value) => {
+        try {
+            return value ? new Date(value) : null;
+        } catch {
+            return null; // RangeError: invalid date
+        }
+    },
     output: (value) => value?.toISOString() ?? '',
 };
 const pickerView = ['year', 'month', 'day', 'hours', 'minutes'] as const satisfies readonly DateOrTimeView[];
