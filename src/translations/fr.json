@@ -118,7 +118,7 @@
     "announcements.table.message": "Message",
     "announcements.table.startDate": "Date de début",
     "announcements.table.endDate": "Date de fin",
-    "announcements.table.cancel": "Annulé",
+    "announcements.table.cancel": "Annuler",
     "announcements.severity": "Sévérité",
     "announcements.severity.INFO": "Information",
     "announcements.severity.WARN": "Avertissement",
