@@ -19,3 +19,18 @@ code {
 body > iframe[width='0'][height='0'] {
     border: 0;
 }
+
+/* chromium browsers? */
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
+    /* The popup selection of DateTimePickerElement is a dialog at the root of body ... */
+    .MuiMultiSectionDigitalClockSection-root {
+        scrollbar-width: thin; /* for Edge thick scroll-bar */
+    }
+}
+
+/** Mozilla Firefox */
+@-moz-document url-prefix() {
+    .MuiMultiSectionDigitalClockSection-root {
+        scrollbar-width: revert; /* firefox one is good (on ubuntu at least) */
+    }
+}

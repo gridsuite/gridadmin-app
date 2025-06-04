@@ -5,10 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { TextInput } from '@gridsuite/commons-ui';
-import Grid from '@mui/material/Grid';
-import React, { FunctionComponent } from 'react';
-import yup from '../../../utils/yup-config';
+import { type FunctionComponent } from 'react';
+import { Grid } from '@mui/material';
+import { TextInput, yupConfig as yup } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
 
 export const GROUP_NAME = 'name';

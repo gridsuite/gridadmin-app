@@ -17,11 +17,10 @@ import ProfileModificationForm, {
     USER_QUOTA_CASE_NB,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
 } from './profile-modification-form';
-import yup from '../../../utils/yup-config';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import { UUID } from 'crypto';
 

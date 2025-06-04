@@ -112,8 +112,8 @@
     "linked.path.display.noLink": "no configuration selected.",
     "linked.path.display.invalidLink": "invalid configurations link.",
 
-    "announcements.programNewMessage": "New message scheduling",
-    "announcements.programmedMessage": "Programmed messages",
+    "announcements.programNewMessage": "Schedule a new message",
+    "announcements.programmedMessage": "Scheduled messages",
     "announcements.table.message": "Message",
     "announcements.table.startDate": "Start date",
     "announcements.table.endDate": "Stop date",
@@ -125,5 +125,8 @@
     "announcements.form.errCreateAnnouncement": "Error while creating announcement:",
     "announcements.form.errCreateAnnouncement.noOverlapAllowedErr": "The date overlaps with another announcement date.",
     "announcements.form.errCreateAnnouncement.noSameDateErr": "The announcement start and end date must be different.",
-    "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "The start date cannot be after the end date."
+    "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "The start date cannot be after the end date.",
+    "announcements.form.errForm.startDateAfterEndDateErr": "End date must be after start date.",
+
+    "YupRequired": "This field is required"
 }
