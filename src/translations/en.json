@@ -127,6 +127,7 @@
     "announcements.form.errCreateAnnouncement.noSameDateErr": "The announcement start and end date must be different.",
     "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "The start date cannot be after the end date.",
     "announcements.form.errForm.startDateAfterEndDateErr": "End date must be after start date.",
+    "announcements.form.errForm.msgMaxLength": "Message must be at most 200 characters.",
 
     "YupRequired": "This field is required"
 }
