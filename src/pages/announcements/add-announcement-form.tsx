@@ -38,13 +38,19 @@ const MESSAGE_MAX_LENGTH = 200;
 const formSchema = yup
     .object()
     .shape({
-        [MESSAGE]: yup.string().nullable().trim().min(1, 'YupRequired').max(MESSAGE_MAX_LENGTH).required(),
-        [START_DATE]: yup.string().nullable().datetime().required(),
+        [MESSAGE]: yup
+            .string()
+            .nullable()
+            .trim()
+            .min(1, 'YupRequired')
+            .max(MESSAGE_MAX_LENGTH, 'announcements.form.errForm.msgMaxLength' /*TODO temporary*/)
+            .required('YupRequired' /*TODO temporary*/),
+        [START_DATE]: yup.string().nullable().datetime().required('YupRequired' /*TODO temporary*/),
         [END_DATE]: yup
             .string()
             .nullable()
             .datetime()
-            .required()
+            .required('YupRequired' /*TODO temporary*/)
             .when(START_DATE, (startDate, schema) =>
                 schema.test(
                     'is-after-start',
@@ -56,7 +62,7 @@ const formSchema = yup
             .string<UserAdminSrv.AnnouncementSeverity>()
             .nullable()
             .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
-            .required(),
+            .required('YupRequired' /*TODO temporary*/),
     })
     .required();
 type FormSchema = InferType<typeof formSchema>;

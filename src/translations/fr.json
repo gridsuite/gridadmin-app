@@ -128,6 +128,7 @@
     "announcements.form.errCreateAnnouncement.noSameDateErr": "La date de début et de fin d'annonce doivent être différentes.",
     "announcements.form.errCreateAnnouncement.startDateAfterEndDateErr": "La date de début d'annonce ne peut pas être après la date de fin.",
     "announcements.form.errForm.startDateAfterEndDateErr": "La date de fin doit être après la date de début.",
+    "announcements.form.errForm.msgMaxLength": "Le message ne doit pas dépasser 200 caractères.",
 
     "YupRequired": "Ce champ doit être renseigné"
 }
