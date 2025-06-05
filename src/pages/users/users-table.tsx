@@ -5,18 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
+import { type FunctionComponent, type RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { PersonAdd } from '@mui/icons-material';
-import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
-import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    ICheckboxCellRendererParams,
-    RowClickedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { GridButton, GridButtonDelete, GridTable, type GridTableRef } from '../../components/Grid';
+import { type GroupInfos, UserAdminSrv, type UserInfos } from '../../services';
+import type { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
