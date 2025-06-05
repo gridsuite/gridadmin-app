@@ -13,7 +13,6 @@ const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 export type UserInfos = {
     sub: string;
     profileName?: string;
-    isAdmin: boolean;
     groups: string[];
 };
 

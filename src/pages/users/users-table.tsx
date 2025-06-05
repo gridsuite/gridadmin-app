@@ -65,9 +65,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 lockVisible: true,
                 filter: true,
                 headerName: intl.formatMessage({ id: 'users.table.id' }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.id.description',
-                }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.id.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -80,12 +78,8 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 cellDataType: 'text',
                 flex: 2,
                 filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.profileName',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.profileName.description',
-                }),
+                headerName: intl.formatMessage({ id: 'users.table.profileName' }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.profileName.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -98,33 +92,13 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 cellDataType: 'text',
                 flex: 4,
                 filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.groups',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.groups.description',
-                }),
+                headerName: intl.formatMessage({ id: 'users.table.groups' }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.groups.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<GroupInfos>,
                 cellRenderer: MultiChipCellRenderer,
-            },
-            {
-                field: 'isAdmin',
-                cellDataType: 'boolean',
-                //detected as cellRenderer: 'agCheckboxCellRenderer',
-                cellRendererParams: {
-                    disabled: true,
-                } as ICheckboxCellRendererParams<UserInfos, {}>,
-                flex: 1,
-                headerName: intl.formatMessage({
-                    id: 'users.table.isAdmin',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.isAdmin.description',
-                }),
-                filter: true,
             },
         ],
         [intl]

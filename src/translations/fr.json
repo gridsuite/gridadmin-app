@@ -33,8 +33,6 @@
 
     "users.table.id": "ID",
     "users.table.id.description": "Identifiant de l'utilisateur",
-    "users.table.isAdmin": "Admin",
-    "users.table.isAdmin.description": "L'utilisateur est administrateur de GridSuite",
     "users.table.profileName": "Profil",
     "users.table.profileName.description": "Nom du profil associé à l'utilisateur",
     "users.table.error.delete": "Erreur pendant la suppression de l'utilisateur",

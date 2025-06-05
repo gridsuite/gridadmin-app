@@ -109,22 +109,13 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
     const onSubmit = useCallback(
         (userFormData: UserModificationFormType) => {
             if (userInfos) {
-                const newData: UserInfos = {
+                UserAdminSrv.updateUser({
                     sub: userInfos.sub, // can't be changed
-                    isAdmin: userInfos.isAdmin, // can't be changed
                     profileName: userFormData.profileName ?? undefined,
                     groups: selectedGroups,
-                };
-                UserAdminSrv.updateUser(newData)
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'users.table.error.update',
-                        })
-                    )
-                    .then(() => {
-                        onUpdate();
-                    });
+                })
+                    .catch((error) => snackError({ messageTxt: error.message, headerId: 'users.table.error.update' }))
+                    .then(() => onUpdate());
             }
         },
         [onUpdate, selectedGroups, snackError, userInfos]
