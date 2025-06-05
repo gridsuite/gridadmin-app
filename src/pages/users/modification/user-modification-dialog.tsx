@@ -43,13 +43,13 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
 
     useEffect(() => {
         if (userInfos && open) {
-            const sortedGroups = Array.from(userInfos.groups).sort((a, b) => a.localeCompare(b));
+            const sortedGroups = Array.from(userInfos.groups ?? []).sort((a, b) => a.localeCompare(b));
             reset({
                 [USER_NAME]: userInfos.sub,
                 [USER_PROFILE_NAME]: userInfos.profileName,
                 [USER_SELECTED_GROUPS]: JSON.stringify(sortedGroups), // only used to dirty the form
             });
-            setSelectedGroups(userInfos.groups);
+            setSelectedGroups(userInfos.groups ?? []);
 
             // fetch profile & groups
             setDataFetchStatus(FetchStatus.FETCHING);

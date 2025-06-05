@@ -10,15 +10,20 @@ import { UUID } from 'crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 
-export type UserInfos = {
+export type UserInfosUpdate = {
     sub: string;
     profileName?: string;
-    groups: string[];
+    groups?: string[];
+};
+export type UserInfos = UserInfosUpdate & {
+    maxAllowedCases?: number;
+    numberCasesUsed?: number;
+    maxAllowedBuilds?: number;
 };
 
 export function fetchUsers(): Promise<UserInfos[]> {
     console.debug(`Fetching list of users...`);
-    return backendFetchJson(`${USER_ADMIN_URL}/users`, {
+    return backendFetchJson<UserInfos[]>(`${USER_ADMIN_URL}/users`, {
         headers: {
             Accept: 'application/json',
             //'Content-Type': 'application/json; utf-8',
@@ -27,10 +32,10 @@ export function fetchUsers(): Promise<UserInfos[]> {
     }).catch((reason) => {
         console.error(`Error while fetching the servers data : ${reason}`);
         throw reason;
-    }) as Promise<UserInfos[]>;
+    });
 }
 
-export function updateUser(userInfos: UserInfos) {
+export function updateUser(userInfos: UserInfosUpdate) {
     console.debug(`Updating a user...`);
 
     return backendFetch(`${USER_ADMIN_URL}/users/${userInfos.sub}`, {
