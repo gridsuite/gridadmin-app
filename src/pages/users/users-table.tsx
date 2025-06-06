@@ -5,18 +5,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, RefObject, useCallback, useMemo, useState } from 'react';
+import { type FunctionComponent, type RefObject, useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { PersonAdd } from '@mui/icons-material';
-import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
-import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
-import {
-    ColDef,
-    GetRowIdParams,
-    ICheckboxCellRendererParams,
-    RowClickedEvent,
-    TextFilterParams,
-} from 'ag-grid-community';
+import { GridButton, GridButtonDelete, GridTable, type GridTableRef } from '../../components/Grid';
+import { type GroupInfos, UserAdminSrv, type UserInfos } from '../../services';
+import type { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
@@ -65,9 +59,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 lockVisible: true,
                 filter: true,
                 headerName: intl.formatMessage({ id: 'users.table.id' }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.id.description',
-                }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.id.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -80,12 +72,8 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 cellDataType: 'text',
                 flex: 2,
                 filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.profileName',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.profileName.description',
-                }),
+                headerName: intl.formatMessage({ id: 'users.table.profileName' }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.profileName.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
@@ -98,33 +86,13 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 cellDataType: 'text',
                 flex: 4,
                 filter: true,
-                headerName: intl.formatMessage({
-                    id: 'users.table.groups',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.groups.description',
-                }),
+                headerName: intl.formatMessage({ id: 'users.table.groups' }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.groups.description' }),
                 filterParams: {
                     caseSensitive: false,
                     trimInput: true,
                 } as TextFilterParams<GroupInfos>,
                 cellRenderer: MultiChipCellRenderer,
-            },
-            {
-                field: 'isAdmin',
-                cellDataType: 'boolean',
-                //detected as cellRenderer: 'agCheckboxCellRenderer',
-                cellRendererParams: {
-                    disabled: true,
-                } as ICheckboxCellRendererParams<UserInfos, {}>,
-                flex: 1,
-                headerName: intl.formatMessage({
-                    id: 'users.table.isAdmin',
-                }),
-                headerTooltip: intl.formatMessage({
-                    id: 'users.table.isAdmin.description',
-                }),
-                filter: true,
             },
         ],
         [intl]

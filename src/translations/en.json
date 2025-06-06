@@ -32,8 +32,6 @@
 
     "users.table.id": "ID",
     "users.table.id.description": "User identifier",
-    "users.table.isAdmin": "Admin",
-    "users.table.isAdmin.description": "The users is an administrator of GridSuite",
     "users.table.profileName": "Profile",
     "users.table.profileName.description": "The user's profile",
     "users.table.error.delete": "Error while deleting user",
