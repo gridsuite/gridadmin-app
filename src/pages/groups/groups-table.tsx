@@ -11,7 +11,7 @@ import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
 import { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
-import { CsvExport, useSnackMessage} from '@gridsuite/commons-ui';
+import { CsvExport, useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
@@ -99,17 +99,20 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
         [intl]
     );
 
-    const csvExportComponent = useMemo(() => (
-        <CsvExport
-            gridRef={props.gridRef}
-            columns={columns}
-            tableName={intl.formatMessage({ id: 'appBar.tabs.groups' })}
-            disabled={false}
-            skipColumnHeaders={false}
-            language={language}
-            exportDataAsCsv={(params) => props.gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
-        />
-    ), [props.gridRef, columns, intl, language]);
+    const csvExportComponent = useMemo(
+        () => (
+            <CsvExport
+                gridRef={props.gridRef}
+                columns={columns}
+                tableName={intl.formatMessage({ id: 'appBar.tabs.groups' })}
+                disabled={false}
+                skipColumnHeaders={false}
+                language={language}
+                exportDataAsCsv={(params) => props.gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
+            />
+        ),
+        [props.gridRef, columns, intl, language]
+    );
 
     return (
         <>
