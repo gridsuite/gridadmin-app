@@ -25,6 +25,8 @@ import {
     LIGHT_THEME,
     loginEn,
     loginFr,
+    tableEn,
+    tableFr,
     NotificationsProvider,
     SnackbarProvider,
     topBarEn,
@@ -119,12 +121,14 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
         ...loginEn,
         ...topBarEn,
         ...cardErrorBoundaryEn,
+        ...tableEn,
     },
     fr: {
         ...messages_fr,
         ...loginFr,
         ...topBarFr,
         ...cardErrorBoundaryFr,
+        ...tableFr,
     },
 };
 
