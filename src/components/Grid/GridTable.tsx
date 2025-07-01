@@ -36,6 +36,7 @@ export interface GridTableProps<TData>
         PropsWithChildren<{}> {
     //accessRef: RefObject<GridTableRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
+    alignedRightToolbarContent?: ReactNode;
 }
 
 /*
@@ -58,7 +59,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
     props: PropsWithChildren<GridTableProps<TData>>,
     gridRef: ForwardedRef<GridTableRef<TData, TContext>>
 ): ReactNode {
-    const { children: toolbarContent, context, dataLoader, ...agGridProps } = props;
+    const { children: toolbarContent, alignedRightToolbarContent, context, dataLoader, ...agGridProps } = props;
     const { snackError } = useSnackMessage();
 
     const [data, setData] = useState<TData[] | null>(null);
@@ -95,6 +96,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                     >
                         {toolbarContent}
                         <Box sx={{ flexGrow: 1 }} />
+                        {alignedRightToolbarContent}
                     </Toolbar>
                 </AppBar>
             </Grid>

@@ -12,10 +12,13 @@ import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../com
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
 import { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
+import { useCsvExport } from '../common/use-csv-export';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 import { useTableSelection } from '../../utils/hooks';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../redux/reducer';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
@@ -29,6 +32,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
 
     const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<GroupInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
+    const language = useSelector((state: AppState) => state.computedLanguage);
 
     function getRowId(params: GetRowIdParams<GroupInfos>): string {
         return params.data.name;
@@ -97,6 +101,14 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
         [intl]
     );
 
+    const csvExportComponent = useCsvExport<GroupInfos>({
+        gridRef: props.gridRef,
+        columns,
+        tableNameId: 'appBar.tabs.groups',
+        intl,
+        language,
+    });
+
     return (
         <>
             <GridTable<GroupInfos, {}>
@@ -111,6 +123,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                 onRowClicked={props.onRowClicked}
                 onSelectionChanged={onSelectionChanged}
                 onFilterChanged={onFilterChanged}
+                alignedRightToolbarContent={csvExportComponent}
             >
                 <GridButton
                     labelId="groups.table.toolbar.add.label"

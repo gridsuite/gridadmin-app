@@ -16,6 +16,9 @@ import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 import { useTableSelection } from '../../utils/hooks';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../redux/reducer';
+import { useCsvExport } from '../common/use-csv-export';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
@@ -29,6 +32,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
 
     const { rowsSelection, onSelectionChanged, onFilterChanged } = useTableSelection<UserInfos>();
     const [showDeletionDialog, setShowDeletionDialog] = useState(false);
+    const language = useSelector((state: AppState) => state.computedLanguage);
 
     function getRowId(params: GetRowIdParams<UserInfos>): string {
         return params.data.sub ?? '';
@@ -98,6 +102,14 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
         [intl]
     );
 
+    const csvExportComponent = useCsvExport<UserInfos>({
+        gridRef: props.gridRef,
+        columns,
+        tableNameId: 'appBar.tabs.users',
+        intl,
+        language,
+    });
+
     return (
         <>
             <GridTable<UserInfos, {}>
@@ -112,6 +124,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 onSelectionChanged={onSelectionChanged}
                 onFilterChanged={onFilterChanged}
                 tooltipShowDelay={1000}
+                alignedRightToolbarContent={csvExportComponent}
             >
                 <GridButton
                     labelId="users.table.toolbar.add.label"
