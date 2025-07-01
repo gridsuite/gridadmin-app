@@ -17,6 +17,7 @@ import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 import { useTableSelection } from '../../utils/hooks';
 import { useSelector } from 'react-redux';
+import { AppState } from '../../redux/reducer';
 
 export interface GroupsTableProps {
     gridRef: RefObject<GridTableRef<GroupInfos>>;
@@ -102,7 +103,6 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
     const csvExportComponent = useMemo(
         () => (
             <CsvExport
-                gridRef={props.gridRef}
                 columns={columns}
                 tableName={intl.formatMessage({ id: 'appBar.tabs.groups' })}
                 disabled={false}
