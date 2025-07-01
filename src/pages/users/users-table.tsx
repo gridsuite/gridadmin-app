@@ -16,9 +16,9 @@ import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
 import { useTableSelection } from '../../utils/hooks';
-import { CsvExport } from '@gridsuite/commons-ui';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../redux/reducer';
+import { useCsvExport } from '../common/use-csv-export';
 
 export interface UsersTableProps {
     gridRef: RefObject<GridTableRef<UserInfos>>;
@@ -102,19 +102,13 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
         [intl]
     );
 
-    const csvExportComponent = useMemo(
-        () => (
-            <CsvExport
-                columns={columns}
-                tableName={intl.formatMessage({ id: 'appBar.tabs.users' })}
-                disabled={false}
-                skipColumnHeaders={false}
-                language={language}
-                exportDataAsCsv={(params) => props.gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
-            />
-        ),
-        [props.gridRef, columns, intl, language]
-    );
+    const csvExportComponent = useCsvExport<UserInfos>({
+        gridRef: props.gridRef,
+        columns,
+        tableNameId: 'appBar.tabs.users',
+        intl,
+        language,
+    });
 
     return (
         <>
