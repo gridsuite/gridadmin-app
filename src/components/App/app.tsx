@@ -11,13 +11,15 @@ import { Grid } from '@mui/material';
 import {
     AnnouncementNotification,
     CardErrorBoundary,
+    fetchConfigParameter,
+    fetchConfigParameters,
     NotificationsUrlKeys,
     useNotificationsListener,
     useSnackMessage,
 } from '@gridsuite/commons-ui';
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
-import { ConfigParameters, ConfigSrv } from '../../services';
+import { ConfigParameters } from '../../services';
 import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
 import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
@@ -56,7 +58,7 @@ export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
         (event: MessageEvent) => {
             const eventData = JSON.parse(event.data);
             if (eventData?.headers?.parameterName) {
-                ConfigSrv.fetchConfigParameter(eventData.headers.parameterName)
+                fetchConfigParameter(APP_NAME, eventData.headers.parameterName)
                     .then((param) => updateParams([param]))
                     .catch((error) => snackError({ messageTxt: error.message, headerId: 'paramsRetrievingError' }));
             }
@@ -68,7 +70,7 @@ export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
 
     useEffect(() => {
         if (user !== null) {
-            ConfigSrv.fetchConfigParameters(COMMON_APP_NAME)
+            fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
@@ -77,7 +79,7 @@ export default function App({ children }: Readonly<PropsWithChildren<{}>>) {
                     })
                 );
 
-            ConfigSrv.fetchConfigParameters(APP_NAME)
+            fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) =>
                     snackError({
