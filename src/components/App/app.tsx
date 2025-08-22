@@ -13,6 +13,7 @@ import {
     CardErrorBoundary,
     fetchConfigParameter,
     fetchConfigParameters,
+    getComputedLanguage,
     NotificationsUrlKeys,
     useNotificationsListener,
     useSnackMessage,
@@ -21,7 +22,6 @@ import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux
 import { AppState } from '../../redux/reducer';
 import { ConfigParameters } from '../../services';
 import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
-import { getComputedLanguage } from '../../utils/language';
 import AppTopBar from './app-top-bar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
