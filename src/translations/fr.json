@@ -89,6 +89,7 @@
     "profiles.form.modification.voltageInit.name": "Initialisation du plan de tension",
     "profiles.form.modification.spreadsheetConfigCollection.name": "Modèles de tableur",
     "profiles.form.modification.networkVisualizations.name": "Images réseau",
+    "profiles.form.modification.diagramConfig.name": "Image nodale d'accueil",
     "profiles.form.modification.readError": "Erreur lors de la lecture du profil",
     "profiles.form.modification.updateError": "Erreur lors de la modification du profil",
 
