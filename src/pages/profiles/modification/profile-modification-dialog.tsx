@@ -16,6 +16,7 @@ import ProfileModificationForm, {
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
+    DIAGRAM_CONFIG_ID,
 } from './profile-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -53,6 +54,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
             [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
             [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string().optional(),
+            [DIAGRAM_CONFIG_ID]: yup.string().optional(),
         })
         .required();
 
@@ -77,6 +79,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                     spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
                     networkVisualizationParameterId: profileFormData[NETWORK_VISUALIZATION_PARAMETERS_ID],
+                    diagramConfigId: profileFormData[DIAGRAM_CONFIG_ID],
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
@@ -115,6 +118,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                         [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId ?? undefined,
                         [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId ?? undefined,
+                        [DIAGRAM_CONFIG_ID]: response.diagramConfigId ?? undefined,
                     });
                 })
                 .catch((error) => {
