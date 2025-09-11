@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import App from './app';
-import { FunctionComponent, type PropsWithChildren, useMemo } from 'react';
+import App from './App';
+import { useMemo } from 'react';
 import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
@@ -39,9 +39,9 @@ import messages_fr from '../../translations/fr.json';
 import { store } from '../../redux/store';
 import { PARAM_THEME } from '../../utils/config-params';
 import { AppState } from '../../redux/reducer';
-import { AppWithAuthRouter } from '../../routes';
 import { useNotificationsUrlGenerator } from '../../utils/notifications-provider';
 import { AllCommunityModule, ModuleRegistry, provideGlobalGridOptions } from 'ag-grid-community';
+import { BrowserRouter } from 'react-router';
 
 // Register all community features (migration to V33)
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -145,51 +145,42 @@ function intlToDateFnsLocale(lng: GsLangUser) {
     }
 }
 
-/**
- * Layer injecting Theme, Internationalization (i18n) and other tools (snackbar, error boundary, ...)
- */
-const AppWrapperRouterLayout: typeof App = (props: Readonly<PropsWithChildren<{}>>) => {
+const AppWrapperWithRedux = () => {
     const computedLanguage = useSelector((state: AppState) => state.computedLanguage);
     const theme = useSelector((state: AppState) => state[PARAM_THEME]);
     const themeCompiled = useMemo(() => getMuiTheme(theme, computedLanguage), [computedLanguage, theme]);
     const urlMapper = useNotificationsUrlGenerator();
+
     return (
         <IntlProvider locale={computedLanguage} defaultLocale={LANG_ENGLISH} messages={messages[computedLanguage]}>
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={themeCompiled}>
-                    <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        // @ts-expect-error: Error of AdapterDateFns for Locales type in x-date-pickers v7
-                        adapterLocale={intlToDateFnsLocale(computedLanguage)}
-                    >
-                        <SnackbarProvider hideIconVariant={false}>
-                            <CssBaseline />
-                            <CardErrorBoundary>
-                                <NotificationsProvider urls={urlMapper}>
-                                    <App {...props}>{props.children}</App>
-                                </NotificationsProvider>
-                            </CardErrorBoundary>
-                        </SnackbarProvider>
-                    </LocalizationProvider>
-                </ThemeProvider>
-            </StyledEngineProvider>
+            <BrowserRouter basename={basename}>
+                <StyledEngineProvider injectFirst>
+                    <ThemeProvider theme={themeCompiled}>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDateFns}
+                            // @ts-expect-error: Error of AdapterDateFns for Locales type in x-date-pickers v7
+                            adapterLocale={intlToDateFnsLocale(computedLanguage)}
+                        >
+                            <SnackbarProvider hideIconVariant={false}>
+                                <CssBaseline />
+                                <CardErrorBoundary>
+                                    <NotificationsProvider urls={urlMapper}>
+                                        <App />
+                                    </NotificationsProvider>
+                                </CardErrorBoundary>
+                            </SnackbarProvider>
+                        </LocalizationProvider>
+                    </ThemeProvider>
+                </StyledEngineProvider>
+            </BrowserRouter>
         </IntlProvider>
     );
 };
 
-/**
- * Layer managing router depending on user authentication state
- */
-const AppWrapperWithRedux: FunctionComponent = () => (
-    <AppWithAuthRouter basename={basename} layout={AppWrapperRouterLayout} />
-);
-
-/**
- * Layer injecting Redux store in context
- */
-export const AppWrapper: FunctionComponent = () => (
-    <Provider store={store}>
-        <AppWrapperWithRedux />
-    </Provider>
-);
-export default AppWrapper;
+export const AppWrapper = () => {
+    return (
+        <Provider store={store}>
+            <AppWrapperWithRedux />
+        </Provider>
+    );
+};

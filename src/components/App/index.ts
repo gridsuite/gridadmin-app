@@ -5,7 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import AppComponent from './app';
+import AppComponent from './App';
+
 export type App = typeof AppComponent;
 
-export { AppWrapper } from './app-wrapper';
+export { AppWrapper } from './AppWrapper';
