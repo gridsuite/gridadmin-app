@@ -177,10 +177,10 @@ const AppWrapperWithRedux = () => {
     );
 };
 
-export const AppWrapper = () => {
+export default function AppWrapper() {
     return (
         <Provider store={store}>
             <AppWrapperWithRedux />
         </Provider>
     );
-};
+}

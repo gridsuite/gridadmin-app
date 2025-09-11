@@ -85,7 +85,7 @@ type AppTopBarProps = {
     userManagerInstance: UserManagerState['instance'];
 };
 
-export function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
+export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);

@@ -26,7 +26,7 @@ import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux
 import { AppState } from '../../redux/reducer';
 import { AppsMetadataSrv, ConfigParameters } from '../../services';
 import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
-import { AppTopBar } from './AppTopBar';
+import AppTopBar from './AppTopBar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
 import { Navigate, Route, Routes, useLocation, useMatch, useNavigate } from 'react-router';
