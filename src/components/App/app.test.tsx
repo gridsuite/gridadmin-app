@@ -4,9 +4,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-// app.test.tsx
 
-import React, { FunctionComponent, PropsWithChildren } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { IntlProvider } from 'react-intl';
@@ -66,6 +65,7 @@ it.skip('renders', async () => {
         ]
         //{ basename: props.basename }
     );
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     await act(async () =>
         root.render(
             <Provider store={store}>

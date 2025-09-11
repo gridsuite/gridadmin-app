@@ -9,7 +9,7 @@ import { ElementType, IntegerInput, TextInput } from '@gridsuite/commons-ui';
 import Grid from '@mui/material/Grid';
 import ConfigurationSelection, { ConfigSelectionProps } from './configuration-selection';
 import { FormattedMessage } from 'react-intl';
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 export const PROFILE_NAME = 'name';
 export const LOADFLOW_PARAM_ID = 'loadFlowParamId';
