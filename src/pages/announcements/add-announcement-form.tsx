@@ -137,7 +137,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             FormProps={{ style: { height: '100%' } }}
         >
             <FormErrorProvider onError={onErrorIntl}>
-                <Grid container direction="column" spacing={1.5} height="100%">
+                <Grid container direction="column" spacing={1} height="100%">
                     <Grid item container xs="auto" spacing={1}>
                         <Grid item xs={12} lg={6}>
                             <DateTimePickerElement<FormSchema>

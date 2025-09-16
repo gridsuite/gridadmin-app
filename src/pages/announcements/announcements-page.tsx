@@ -122,7 +122,7 @@ export default function AnnouncementsPage() {
 
     // Note: using <Stack/> for the columns didn't work
     return (
-        <Grid container spacing={2} marginLeft={'2px' /*Grid.spacing is in px?*/} marginTop={1}>
+        <Grid container spacing={2} p={1} height={'100%'}>
             <Grid item container direction="column" xs={12} sm={6} md={4}>
                 <Grid item xs="auto">
                     <Typography variant="subtitle1">
