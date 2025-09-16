@@ -5,21 +5,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {
-    type AnchorHTMLAttributes,
-    forwardRef,
-    type FunctionComponent,
-    type ReactElement,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
-import { capitalize, Tab, Tabs, useTheme } from '@mui/material';
+import { type AnchorHTMLAttributes, forwardRef, type ReactElement, SyntheticEvent, useEffect, useState } from 'react';
+import { capitalize, Tab, Tabs, TabsProps, useTheme } from '@mui/material';
 import { Groups, ManageAccounts, NotificationImportant, PeopleAlt } from '@mui/icons-material';
-import { fetchAppsMetadata, logout, Metadata, TopBar } from '@gridsuite/commons-ui';
+import { fetchAppsMetadata, logout, Metadata, TopBar, UserManagerState } from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
 import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
-import { NavLink, type To, useMatches, useNavigate } from 'react-router';
+import { NavLink, type To, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';
@@ -28,7 +20,7 @@ import GridAdminLogoDark from '../../images/GridAdmin_logo_dark.svg?react';
 import AppPackage from '../../../package.json';
 import { AppState } from '../../redux/reducer';
 import { AppDispatch } from '../../redux/store';
-import { MainPaths } from '../../routes/utils';
+import { MainPaths } from './utils';
 
 const tabs = new Map<MainPaths, ReactElement>([
     [
@@ -89,27 +81,22 @@ const tabs = new Map<MainPaths, ReactElement>([
     ],
 ]);
 
-const AppTopBar: FunctionComponent = () => {
+type AppTopBarProps = {
+    userManagerInstance: UserManagerState['instance'];
+};
+
+export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector((state: AppState) => state.user);
-    const userManagerInstance = useSelector((state: AppState) => state.userManager?.instance);
 
     const navigate = useNavigate();
-    const matches = useMatches();
-    const selectedTabValue = useMemo(() => {
-        const handle: any = matches
-            .map((match) => match.handle)
-            .filter((handle: any) => !!handle?.appBar_tab)
-            .shift();
-        const tabValue: MainPaths = handle?.appBar_tab;
-        return tabValue && tabs.has(tabValue) ? tabValue : false;
-    }, [matches]);
 
     const [themeLocal, handleChangeTheme] = useParameterState(PARAM_THEME);
     const [languageLocal, handleChangeLanguage] = useParameterState(PARAM_LANGUAGE);
 
     const [appsAndUrls, setAppsAndUrls] = useState<Metadata[]>([]);
+    const [tabValue, setTabValue] = useState<TabsProps['value']>(false);
 
     useEffect(() => {
         if (user !== null) {
@@ -118,6 +105,10 @@ const AppTopBar: FunctionComponent = () => {
             });
         }
     }, [user]);
+
+    const handleChange = (_: SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
+    };
 
     return (
         <TopBar
@@ -147,11 +138,11 @@ const AppTopBar: FunctionComponent = () => {
                     visibility: !user ? 'hidden' : undefined,
                     flexGrow: 1,
                 }}
-                value={selectedTabValue}
+                value={tabValue}
+                onChange={handleChange}
             >
                 {[...tabs.values()]}
             </Tabs>
         </TopBar>
     );
-};
-export default AppTopBar;
+}
