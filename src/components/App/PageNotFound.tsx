@@ -5,9 +5,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import Container from '@mui/material/Container';
+import { Container } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { ReactNode } from 'react';
+import { type MuiStyles } from '@gridsuite/commons-ui';
 
 const styles = {
     error: {
@@ -18,7 +19,7 @@ const styles = {
     container: {
         marginTop: '70px',
     },
-};
+} as const as MuiStyles;
 
 const PageNotFound = ({ message }: { message: ReactNode }) => {
     return (
