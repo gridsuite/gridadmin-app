@@ -17,7 +17,7 @@ import {
     useRef,
 } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { CustomAGGrid, type CustomAGGridProps } from '@gridsuite/commons-ui';
+import { CustomAGGrid, type CustomAGGridProps, type SxStyle } from '@gridsuite/commons-ui';
 import { useDebugRender } from '../../utils/hooks';
 
 type AccessibleAgGridReact<TData> = Omit<
@@ -50,7 +50,7 @@ const style = {
     '@media print': {
         pageBreakInside: 'avoid',
     },
-};
+} as const satisfies SxStyle;
 
 // TODO move type generic restoration to commons-ui
 // TODO move useDebug feature from env to commons-ui

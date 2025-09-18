@@ -7,7 +7,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Chip, Grid, Tooltip } from '@mui/material';
-import { mergeSx } from '@gridsuite/commons-ui';
+import { mergeSx, type MuiStyles } from '@gridsuite/commons-ui';
 
 const maxChipWidth = 100;
 const counterChipWidth = 25;
@@ -23,7 +23,7 @@ const chipStyles = {
             fontWeight: 'bold',
         },
     },
-};
+} as const satisfies MuiStyles;
 
 export interface MultiChipCellRendererProps {
     value: string[];
