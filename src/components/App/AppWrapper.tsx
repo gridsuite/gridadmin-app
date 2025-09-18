@@ -158,7 +158,6 @@ const AppWrapperWithRedux = () => {
                     <ThemeProvider theme={themeCompiled}>
                         <LocalizationProvider
                             dateAdapter={AdapterDateFns}
-                            // @ts-expect-error: Error of AdapterDateFns for Locales type in x-date-pickers v7
                             adapterLocale={intlToDateFnsLocale(computedLanguage)}
                         >
                             <SnackbarProvider hideIconVariant={false}>
