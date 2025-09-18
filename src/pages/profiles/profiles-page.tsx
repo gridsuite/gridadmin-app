@@ -42,7 +42,7 @@ const ProfilesPage: FunctionComponent = () => {
 
     return (
         <>
-            <Grid item container direction="column" spacing={2} component="section">
+            <Grid item container direction="column" spacing={2} component="section" height={'100%'}>
                 <Grid item container xs sx={{ width: 1 }}>
                     <ProfilesTable
                         gridRef={gridRef}

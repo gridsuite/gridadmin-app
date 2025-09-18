@@ -6,21 +6,17 @@
  */
 // app.test.tsx
 
-import React, { FunctionComponent, PropsWithChildren } from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { createMemoryRouter, Outlet, RouterProvider } from 'react-router';
-import App from './app';
-import { store } from '../../redux/store';
-import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter } from 'react-router';
+import { createTheme, CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { SnackbarProvider } from '@gridsuite/commons-ui';
-import { CssBaseline } from '@mui/material';
-import { appRoutes } from '../../routes/utils';
+import App from './App';
+import { store } from '../../redux/store';
 
-let container: HTMLElement | null = null;
-
+let container: HTMLDivElement | null = null;
 beforeEach(() => {
     // setup a DOM element as a render target
     container = document.createElement('div');
@@ -33,48 +29,28 @@ afterEach(() => {
     container = null;
 });
 
-//broken test
-it.skip('renders', async () => {
-    if (container === null) {
-        throw new Error('No container was defined');
-    }
-    const root = createRoot(container);
-    const AppWrapperRouterLayout: FunctionComponent<PropsWithChildren<{}>> = () => (
-        <IntlProvider locale="en">
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={createTheme({})}>
-                    <SnackbarProvider hideIconVariant={false}>
-                        <CssBaseline />
-                        <App>
-                            <Outlet />
-                        </App>
-                    </SnackbarProvider>
-                </ThemeProvider>
-            </StyledEngineProvider>
-        </IntlProvider>
-    );
-    const router = createMemoryRouter(
-        [
-            {
-                element: (
-                    <AppWrapperRouterLayout>
-                        <Outlet />
-                    </AppWrapperRouterLayout>
-                ),
-                children: appRoutes(),
-            },
-        ]
-        //{ basename: props.basename }
-    );
+it('renders', async () => {
+    const root = createRoot(container!);
     await act(async () =>
         root.render(
-            <Provider store={store}>
-                <RouterProvider router={router} />
-            </Provider>
+            <IntlProvider locale="en">
+                <BrowserRouter>
+                    <Provider store={store}>
+                        <StyledEngineProvider injectFirst>
+                            <ThemeProvider theme={createTheme()}>
+                                <SnackbarProvider hideIconVariant={false}>
+                                    <CssBaseline />
+                                    <App />
+                                </SnackbarProvider>
+                            </ThemeProvider>
+                        </StyledEngineProvider>
+                    </Provider>
+                </BrowserRouter>
+            </IntlProvider>
         )
     );
 
-    expect(container.textContent).toContain('GridAdmin');
+    expect(container?.textContent).toContain('GridAdmin');
     act(() => {
         root.unmount();
     });
