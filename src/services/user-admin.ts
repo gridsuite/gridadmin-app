@@ -6,7 +6,7 @@
  */
 
 import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
-import { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
 

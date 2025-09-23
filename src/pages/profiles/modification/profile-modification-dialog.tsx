@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
-import { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;

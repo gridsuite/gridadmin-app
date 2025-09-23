@@ -11,7 +11,7 @@ import { GridTableRef } from '../../components/Grid';
 import { UserProfile } from '../../services';
 import { RowClickedEvent } from 'ag-grid-community';
 import ProfileModificationDialog from './modification/profile-modification-dialog';
-import { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 import ProfilesTable from './profiles-table';
 import AddProfileDialog from './add-profile-dialog';
 

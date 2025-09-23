@@ -6,7 +6,7 @@
  */
 
 import { backendFetchJson, getRestBase } from '../utils/api-rest';
-import { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 import { ElementAttributes } from '@gridsuite/commons-ui';
 
 const EXPLORE_URL = `${getRestBase()}/explore/v1`;

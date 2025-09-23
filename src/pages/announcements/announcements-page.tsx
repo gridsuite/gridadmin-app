@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import type { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Divider, Grid, Typography } from '@mui/material';
