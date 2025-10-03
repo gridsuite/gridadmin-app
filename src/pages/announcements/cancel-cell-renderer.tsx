@@ -4,7 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-import type { UUID } from 'crypto';
+import type { UUID } from 'node:crypto';
 import { useCallback } from 'react';
 import { IconButton, type IconButtonProps, Tooltip } from '@mui/material';
 import { Delete } from '@mui/icons-material';
