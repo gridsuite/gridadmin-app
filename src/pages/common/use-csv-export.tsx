@@ -18,7 +18,7 @@ export function useCsvExport<TData>({
     intl,
     language,
 }: {
-    gridRef: RefObject<GridTableRef<TData>>;
+    gridRef: RefObject<GridTableRef<TData> | null>;
     columns: ColDef[];
     tableNameId: string;
     intl: IntlShape;
