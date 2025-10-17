@@ -5,9 +5,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetchJson, getRestBase } from '../utils/api-rest';
+import { getRestBase } from '../utils/api-rest';
 import type { UUID } from 'node:crypto';
-import { ElementAttributes } from '@gridsuite/commons-ui';
+import { ElementAttributes, backendFetchJson } from '@gridsuite/commons-ui';
 
 const EXPLORE_URL = `${getRestBase()}/explore/v1`;
 

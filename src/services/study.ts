@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { GridSuiteModule } from '@gridsuite/commons-ui';
-import { backendFetchJson, getRestBase } from '../utils/api-rest';
+import { GridSuiteModule, backendFetchJson } from '@gridsuite/commons-ui';
+import { getRestBase } from '../utils/api-rest';
 import { getErrorMessage } from '../utils/error';
 import { APP_NAME } from '../utils/config-params';
 

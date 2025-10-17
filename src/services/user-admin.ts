@@ -5,7 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, backendFetchJson, getRestBase } from '../utils/api-rest';
+import { backendFetch, backendFetchJson } from '@gridsuite/commons-ui';
+import { getRestBase } from '../utils/api-rest';
 import type { UUID } from 'node:crypto';
 
 const USER_ADMIN_URL = `${getRestBase()}/user-admin/v1`;
@@ -23,7 +24,7 @@ export type UserInfos = UserInfosUpdate & {
 
 export function fetchUsers(): Promise<UserInfos[]> {
     console.debug(`Fetching list of users...`);
-    return backendFetchJson<UserInfos[]>(`${USER_ADMIN_URL}/users`, {
+    return backendFetchJson(`${USER_ADMIN_URL}/users`, {
         headers: {
             Accept: 'application/json',
             //'Content-Type': 'application/json; utf-8',
@@ -271,7 +272,7 @@ export type Announcement = NewAnnouncement & {
 
 export async function addAnnouncement(announcement: NewAnnouncement) {
     console.debug(`Creating announcement ...`);
-    return backendFetchJson<Announcement>(
+    return backendFetchJson(
         `${USER_ADMIN_URL}/announcements?startDate=${announcement.startDate}&endDate=${announcement.endDate}&severity=${announcement.severity}`,
         {
             method: 'put',
@@ -290,7 +291,7 @@ export async function addAnnouncement(announcement: NewAnnouncement) {
 export async function fetchAnnouncementList() {
     console.debug(`Fetching announcement ...`);
     try {
-        return await backendFetchJson<Announcement[]>(`${USER_ADMIN_URL}/announcements`, { method: 'get' });
+        return await backendFetchJson(`${USER_ADMIN_URL}/announcements`, { method: 'get' });
     } catch (reason) {
         console.error('Error while fetching announcement:', reason);
         throw reason;
