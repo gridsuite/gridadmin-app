@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../../redux/reducer';
 
 export interface GroupsTableProps {
-    gridRef: RefObject<GridTableRef<GroupInfos>>;
+    gridRef: RefObject<GridTableRef<GroupInfos> | null>;
     onRowClicked: (event: RowClickedEvent<GroupInfos>) => void;
     setOpenAddGroupDialog: (open: boolean) => void;
 }

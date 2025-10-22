@@ -18,7 +18,7 @@ import ValidityCellRenderer from './validity-cell-renderer';
 import { useTableSelection } from '../../utils/hooks';
 
 export interface ProfilesTableProps {
-    gridRef: RefObject<GridTableRef<UserProfile>>;
+    gridRef: RefObject<GridTableRef<UserProfile> | null>;
     onRowClicked: (event: RowClickedEvent<UserProfile>) => void;
     setOpenAddProfileDialog: (open: boolean) => void;
 }

@@ -21,7 +21,7 @@ import { AppState } from '../../redux/reducer';
 import { useCsvExport } from '../common/use-csv-export';
 
 export interface UsersTableProps {
-    gridRef: RefObject<GridTableRef<UserInfos>>;
+    gridRef: RefObject<GridTableRef<UserInfos> | null>;
     onRowClicked: (event: RowClickedEvent<UserInfos>) => void;
     setOpenAddUserDialog: (open: boolean) => void;
 }

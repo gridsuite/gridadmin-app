@@ -25,7 +25,7 @@ import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
 export interface AddGroupDialogProps {
-    gridRef: RefObject<GridTableRef<GroupInfos>>;
+    gridRef: RefObject<GridTableRef<GroupInfos> | null>;
     open: boolean;
     setOpen: (open: boolean) => void;
 }

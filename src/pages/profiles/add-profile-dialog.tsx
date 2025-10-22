@@ -25,7 +25,7 @@ import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
 export interface AddProfileDialogProps {
-    gridRef: RefObject<GridTableRef<UserProfile>>;
+    gridRef: RefObject<GridTableRef<UserProfile> | null>;
     open: boolean;
     setOpen: (open: boolean) => void;
 }
