@@ -125,7 +125,7 @@ const projectConfig = [
             'import-x/no-unresolved': 'off',
             'import-x/no-useless-path-segments': 'off',
             'import-x/no-cycle': [
-                'error', // TODO: Re-enable and fix circular dependencies in the codebase
+                'error',
                 {
                     maxDepth: Infinity,
                     ignoreExternal: true,
