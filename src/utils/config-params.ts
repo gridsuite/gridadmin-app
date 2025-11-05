@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { LiteralUnion } from 'type-fest';
+import type { LiteralUnion } from 'type-fest';
 
 export const COMMON_APP_NAME = 'common';
 export const APP_NAME = 'admin';
