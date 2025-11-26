@@ -32,7 +32,7 @@ export function useCsvExport<TData>({
                 disabled={false}
                 skipColumnHeaders={false}
                 language={language}
-                exportDataAsCsv={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
+                getData={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
             />
         ),
         [gridRef, columns, intl, language, tableNameId]
