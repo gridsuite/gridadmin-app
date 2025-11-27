@@ -45,7 +45,7 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                 name: name,
             };
             UserAdminSrv.addProfile(profileData)
-                .catch((error) =>
+                .catch((_error) =>
                     snackError({
                         headerId: 'profiles.table.error.add',
                         headerValues: {
@@ -89,7 +89,7 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                     name="name"
                     control={control}
                     rules={{ required: true, minLength: 1 }}
-                    render={({ field, fieldState, formState }) => (
+                    render={({ field, fieldState }) => (
                         <TextField
                             {...field}
                             autoFocus

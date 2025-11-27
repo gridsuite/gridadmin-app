@@ -36,7 +36,7 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
     const addGroup = useCallback(
         (group: string) => {
             UserAdminSrv.addGroup(group)
-                .catch((error) =>
+                .catch((_error) =>
                     snackError({
                         headerId: 'groups.table.error.add',
                         headerValues: {
@@ -85,7 +85,7 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                     name="group"
                     control={control}
                     rules={{ required: true, minLength: 1 }}
-                    render={({ field, fieldState, formState }) => (
+                    render={({ field, fieldState }) => (
                         <TextField
                             {...field}
                             autoFocus

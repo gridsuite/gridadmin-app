@@ -12,7 +12,7 @@ import { Paper, PaperProps } from '@mui/material';
  * <Paper> is defined in <Dialog> without generics, which default to `PaperProps => PaperProps<'div'>`,
  *   so we must trick typescript check with a cast
  */
-const PaperForm: FunctionComponent<PaperProps<'form'> & { untypedProps?: PaperProps }> = (props, context) => {
+const PaperForm: FunctionComponent<PaperProps<'form'> & { untypedProps?: PaperProps }> = (props, _context) => {
     const { untypedProps, ...formProps } = props;
     const othersProps = untypedProps as PaperProps<'form'>; //trust me ts
     return <Paper component="form" {...formProps} {...(othersProps ?? {})} />;

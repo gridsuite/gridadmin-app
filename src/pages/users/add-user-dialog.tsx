@@ -42,7 +42,7 @@ const AddUserDialog: FunctionComponent<AddUserDialogProps> = (props) => {
     const addUser = useCallback(
         (id: string) => {
             UserAdminSrv.addUser(id)
-                .catch((error) =>
+                .catch((_error) =>
                     snackError({
                         headerId: 'users.table.error.add',
                         headerValues: {
@@ -86,7 +86,7 @@ const AddUserDialog: FunctionComponent<AddUserDialogProps> = (props) => {
                     name="name"
                     control={control}
                     rules={{ required: true, minLength: 1 }}
-                    render={({ field, fieldState, formState }) => (
+                    render={({ field, fieldState }) => (
                         <TextField
                             {...field}
                             autoFocus
