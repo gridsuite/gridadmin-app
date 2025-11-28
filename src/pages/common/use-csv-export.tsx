@@ -18,7 +18,7 @@ export function useCsvExport<TData>({
     intl,
     language,
 }: {
-    gridRef: RefObject<GridTableRef<TData>>;
+    gridRef: RefObject<GridTableRef<TData> | null>;
     columns: ColDef[];
     tableNameId: string;
     intl: IntlShape;
@@ -32,7 +32,7 @@ export function useCsvExport<TData>({
                 disabled={false}
                 skipColumnHeaders={false}
                 language={language}
-                exportDataAsCsv={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
+                getData={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
             />
         ),
         [gridRef, columns, intl, language, tableNameId]
