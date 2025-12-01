@@ -31,6 +31,8 @@ import {
     SnackbarProvider,
     topBarEn,
     topBarFr,
+    errorsEn,
+    errorsFr,
 } from '@gridsuite/commons-ui';
 import { type IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
@@ -122,6 +124,7 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
         ...topBarEn,
         ...cardErrorBoundaryEn,
         ...tableEn,
+        ...errorsEn,
     },
     fr: {
         ...messages_fr,
@@ -129,6 +132,7 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
         ...topBarFr,
         ...cardErrorBoundaryFr,
         ...tableFr,
+        ...errorsFr,
     },
 };
 
