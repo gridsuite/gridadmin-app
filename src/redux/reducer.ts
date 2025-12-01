@@ -121,7 +121,7 @@ export const reducer = createReducer<AppState>(initialState, (builder) => {
         state.authenticationRouterError = action.authenticationRouterError;
     });
 
-    builder.addCase(RESET_AUTHENTICATION_ROUTER_ERROR, (state, action: AuthenticationRouterErrorAction) => {
+    builder.addCase(RESET_AUTHENTICATION_ROUTER_ERROR, (state, _action: AuthenticationRouterErrorAction) => {
         state.authenticationRouterError = null;
     });
 

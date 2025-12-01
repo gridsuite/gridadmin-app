@@ -8,7 +8,7 @@
 import { FilterChangedEvent, GridApi, IRowNode, SelectionChangedEvent } from 'ag-grid-community';
 import { useCallback, useState } from 'react';
 
-export function useDebugRender(label: string) {
+export function useDebugRender(_label: string) {
     // uncomment when you want the output in the console
     /*if (import.meta.env.DEV) {
         label = `${label} render`;
