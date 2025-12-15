@@ -34,6 +34,8 @@ import {
     GsTheme,
     LOGOUT_ERROR,
     LogoutErrorAction,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
     RESET_AUTHENTICATION_ROUTER_ERROR,
     SHOW_AUTH_INFO_LOGIN,
     ShowAuthenticationRouterLoginAction,
@@ -47,7 +49,6 @@ import {
     UserManagerState,
     UserValidationErrorAction,
 } from '@gridsuite/commons-ui';
-import { PARAM_LANGUAGE, PARAM_THEME } from '../utils/config-params';
 
 export type AppState = CommonStoreState & {
     computedLanguage: GsLangUser;

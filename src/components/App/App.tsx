@@ -18,6 +18,8 @@ import {
     getPreLoginPath,
     initializeAuthenticationProd,
     NotificationsUrlKeys,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
     useNotificationsListener,
     UserManagerState,
     useSnackMessage,
@@ -25,7 +27,7 @@ import {
 import { selectComputedLanguage, selectLanguage, selectTheme } from '../../redux/actions';
 import { AppState } from '../../redux/reducer';
 import { AppsMetadataSrv, ConfigParameters } from '../../services';
-import { APP_NAME, COMMON_APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
+import { APP_NAME, COMMON_APP_NAME } from '../../utils/config-params';
 import AppTopBar from './AppTopBar';
 import { useDebugRender } from '../../utils/hooks';
 import { AppDispatch } from '../../redux/store';
