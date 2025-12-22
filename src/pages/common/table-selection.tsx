@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { FunctionComponent, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { CustomAGGrid } from '@gridsuite/commons-ui';
 import { Grid, Typography } from '@mui/material';
@@ -13,11 +13,23 @@ import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GetRowIdParams, GridReadyEvent } from 'ag-grid-community';
 import { defaultColDef, defaultRowSelection } from './table-config';
 
-export interface TableSelectionProps {
-    itemName: string;
-    tableItems: string[];
-    tableSelectedItems?: string[];
-    onSelectionChanged: (selectedItems: string[]) => void;
+/**
+ * Generic props for TableSelection component.
+ * @template TData - The type of data items in the table
+ */
+export interface TableSelectionProps<TData> {
+    /** Translation key for the table title */
+    titleId: string;
+    /** Array of data items to display */
+    items: TData[];
+    /** Function to extract the unique ID from each item (used for selection tracking) */
+    getItemId: (item: TData) => string;
+    /** Column definitions for the AG Grid */
+    columnDefs: ColDef<TData>[];
+    /** Array of selected item IDs */
+    selectedIds?: string[];
+    /** Callback when selection changes, receives array of selected IDs */
+    onSelectionChanged: (selectedIds: string[]) => void;
 }
 
 const rowSelection = {
@@ -25,76 +37,88 @@ const rowSelection = {
     headerCheckbox: false,
 };
 
-const TableSelection: FunctionComponent<TableSelectionProps> = (props) => {
-    const [selectedRowsLength, setSelectedRowsLength] = useState(0);
-    const gridRef = useRef<AgGridReact>(null);
+/**
+ * A generic table component with row selection support.
+ * Displays data in an AG Grid with checkboxes for selection.
+ */
+function TableSelection<TData>({
+    titleId,
+    items,
+    getItemId,
+    columnDefs,
+    selectedIds,
+    onSelectionChanged,
+}: Readonly<TableSelectionProps<TData>>) {
+    const [selectedCount, setSelectedCount] = useState(0);
+    const gridRef = useRef<AgGridReact<TData>>(null);
 
-    const handleEquipmentSelectionChanged = useCallback(() => {
-        const selectedRows = gridRef.current?.api.getSelectedRows();
-        if (selectedRows == null) {
-            setSelectedRowsLength(0);
-            props.onSelectionChanged([]);
-        } else {
-            setSelectedRowsLength(selectedRows.length);
-            props.onSelectionChanged(selectedRows.map((r) => r.id));
-        }
-    }, [props]);
-
-    const rowData = useMemo(() => {
-        return props.tableItems.map((str) => ({ id: str }));
-    }, [props.tableItems]);
-
-    const columnDefs = useMemo(
-        (): ColDef[] => [
-            {
-                field: 'id',
-                filter: true,
-                initialSort: 'asc',
-                tooltipField: 'id',
-                flex: 1,
-            },
-        ],
-        []
+    const getRowId = useCallback(
+        (params: GetRowIdParams<TData>): string => {
+            return getItemId(params.data);
+        },
+        [getItemId]
     );
 
-    function getRowId(params: GetRowIdParams): string {
-        return params.data.id;
-    }
+    const handleSelectionChanged = useCallback(() => {
+        const selectedRows = gridRef.current?.api.getSelectedRows();
+        if (selectedRows == null) {
+            setSelectedCount(0);
+            onSelectionChanged([]);
+        } else {
+            setSelectedCount(selectedRows.length);
+            onSelectionChanged(selectedRows.map(getItemId));
+        }
+    }, [onSelectionChanged, getItemId]);
 
-    const onGridReady = useCallback(
-        ({ api }: GridReadyEvent) => {
-            api?.forEachNode((n) => {
-                if (props.tableSelectedItems !== undefined && n.id && props.tableSelectedItems.includes(n.id)) {
-                    n.setSelected(true);
+    const handleGridReady = useCallback(
+        ({ api }: GridReadyEvent<TData>) => {
+            if (!selectedIds?.length) {
+                return;
+            }
+            api.forEachNode((node) => {
+                const nodeId = node.id;
+                if (nodeId && selectedIds.includes(nodeId)) {
+                    node.setSelected(true);
                 }
             });
         },
-        [props.tableSelectedItems]
+        [selectedIds]
     );
 
+    const mergedColumnDefs = useMemo((): ColDef<TData>[] => {
+        return columnDefs.map((col, index) => ({
+            filter: true,
+            flex: 1,
+            ...col,
+            // First column gets initial sort if not specified elsewhere
+            ...(index === 0 && !columnDefs.some((c) => c.initialSort) ? { initialSort: 'asc' as const } : {}),
+        }));
+    }, [columnDefs]);
+
     return (
-        <Grid item container direction={'column'} style={{ height: '100%' }}>
+        <Grid item container direction="column" style={{ height: '100%' }}>
             <Grid item>
                 <Typography variant="subtitle1">
-                    <FormattedMessage id={props.itemName}></FormattedMessage>
-                    {` (${selectedRowsLength} / ${rowData?.length ?? 0})`}
+                    <FormattedMessage id={titleId} />
+                    {` (${selectedCount} / ${items.length})`}
                 </Typography>
             </Grid>
             <Grid item xs>
                 <CustomAGGrid
                     gridId="table-selection"
                     ref={gridRef}
-                    rowData={rowData}
-                    columnDefs={columnDefs}
+                    rowData={items}
+                    columnDefs={mergedColumnDefs}
                     defaultColDef={defaultColDef}
                     rowSelection={rowSelection}
                     getRowId={getRowId}
-                    onSelectionChanged={handleEquipmentSelectionChanged}
-                    onGridReady={onGridReady}
-                    accentedSort={true}
+                    onSelectionChanged={handleSelectionChanged}
+                    onGridReady={handleGridReady}
+                    accentedSort
                 />
             </Grid>
         </Grid>
     );
-};
+}
+
 export default TableSelection;

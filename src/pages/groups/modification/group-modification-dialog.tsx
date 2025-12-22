@@ -10,12 +10,13 @@ import GroupModificationForm, {
     GroupModificationFormType,
     GroupModificationSchema,
     SELECTED_USERS,
+    UserSelectionItem,
 } from './group-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
+import { formatFullName, GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
 
 interface GroupModificationDialogProps {
     groupInfos: GroupInfos | undefined;
@@ -35,7 +36,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
         resolver: yupResolver(GroupModificationSchema),
     });
     const { reset, setValue } = formMethods;
-    const [userOptions, setUserOptions] = useState<string[]>([]);
+    const [userOptions, setUserOptions] = useState<UserSelectionItem[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
@@ -54,7 +55,14 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                 .then((allUsers: UserInfos[]) => {
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     setUserOptions(
-                        allUsers?.map((p) => p.sub).sort((a: string, b: string) => a.localeCompare(b)) || []
+                        allUsers
+                            ?.map(
+                                (p): UserSelectionItem => ({
+                                    sub: p.sub,
+                                    fullName: formatFullName(p.firstName, p.lastName),
+                                })
+                            )
+                            .sort((a, b) => a.sub.localeCompare(b.sub)) || []
                     );
                 })
                 .catch((error) => {
