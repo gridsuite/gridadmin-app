@@ -10,7 +10,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useIntl } from 'react-intl';
-import { DirectoryItemSelector, ElementType } from '@gridsuite/commons-ui';
+import { DirectoryItemSelector, ElementAttributes, ElementType, TreeViewFinderNodeProps } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
 import { DirectorySrv } from '../../../services';
 import LinkedPathDisplay from './linked-path-display';
@@ -47,9 +47,11 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
             setConfigLinkValid(undefined);
         } else {
             DirectorySrv.fetchPath(watchConfigId)
-                .then((res: any) => {
+                .then((res: ElementAttributes[]) => {
                     setConfigLinkValid(true);
-                    setSelectedElementName(res.map((element: any) => element.elementName.trim()).join('/'));
+                    setSelectedElementName(
+                        res.map((element: ElementAttributes) => element.elementName.trim()).join('/')
+                    );
                 })
                 .catch(() => {
                     setSelectedElementName(undefined);
@@ -66,7 +68,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
         ctlConfigId.field.onChange(undefined);
     };
 
-    const handleClose = (selection: any) => {
+    const handleClose = (selection: TreeViewFinderNodeProps[]) => {
         if (selection.length) {
             ctlConfigId.field.onChange(selection[0]?.id);
         }
