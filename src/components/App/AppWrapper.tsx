@@ -11,7 +11,7 @@ import { CssBaseline, responsiveFontSizes, ThemeOptions } from '@mui/material';
 import { createTheme, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material/styles';
 import { enUS as MuiCoreEnUS, frFR as MuiCoreFrFR } from '@mui/material/locale';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV2';
 import { enUS as MuiDatePickersEnUS, frFR as MuiDatePickersFrFR } from '@mui/x-date-pickers/locales';
 import { enUS as dateFnsEnUS, fr as dateFnsFr } from 'date-fns/locale';
 import {
