@@ -33,6 +33,8 @@
 
     "users.table.id": "ID",
     "users.table.id.description": "Identifiant de l'utilisateur",
+    "users.table.fullName": "Nom complet",
+    "users.table.fullName.description": "Nom complet de l'utilisateur (NOM prénom)",
     "users.table.profileName": "Profil",
     "users.table.profileName.description": "Nom du profil associé à l'utilisateur",
     "users.table.error.delete": "Erreur pendant la suppression de l'utilisateur",
