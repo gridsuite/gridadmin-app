@@ -32,6 +32,8 @@
 
     "users.table.id": "ID",
     "users.table.id.description": "User identifier",
+    "users.table.fullName": "Full name",
+    "users.table.fullName.description": "User's full name (LASTNAME firstname)",
     "users.table.profileName": "Profile",
     "users.table.profileName.description": "The user's profile",
     "users.table.error.delete": "Error while deleting user",

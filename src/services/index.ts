@@ -15,7 +15,7 @@ export * as StudySrv from './study';
 export type * from './study';
 
 export * as UserAdminSrv from './user-admin';
-export type * from './user-admin';
+export * from './user-admin';
 
 export * as DirectorySrv from './directory';
 export type * from './directory';

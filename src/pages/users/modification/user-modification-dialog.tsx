@@ -6,6 +6,8 @@
  */
 
 import UserModificationForm, {
+    GroupSelectionItem,
+    USER_FULL_NAME,
     USER_NAME,
     USER_PROFILE_NAME,
     USER_SELECTED_GROUPS,
@@ -16,7 +18,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
-import { GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
+import { formatFullName, GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
 
 interface UserModificationDialogProps {
     userInfos: UserInfos | undefined;
@@ -37,15 +39,17 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
     });
     const { reset, setValue } = formMethods;
     const [profileOptions, setProfileOptions] = useState<string[]>([]);
-    const [groupOptions, setGroupOptions] = useState<string[]>([]);
+    const [groupOptions, setGroupOptions] = useState<GroupSelectionItem[]>([]);
     const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
     const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
 
     useEffect(() => {
         if (userInfos && open) {
             const sortedGroups = Array.from(userInfos.groups ?? []).sort((a, b) => a.localeCompare(b));
+            const fullName = formatFullName(userInfos.firstName, userInfos.lastName);
             reset({
                 [USER_NAME]: userInfos.sub,
+                [USER_FULL_NAME]: fullName,
                 [USER_PROFILE_NAME]: userInfos.profileName,
                 [USER_SELECTED_GROUPS]: JSON.stringify(sortedGroups), // only used to dirty the form
             });
@@ -71,7 +75,11 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
 
             groupPromise
                 .then((allGroups: GroupInfos[]) => {
-                    setGroupOptions(allGroups.map((g) => g.name).sort((a: string, b: string) => a.localeCompare(b)));
+                    setGroupOptions(
+                        allGroups
+                            .map((g): GroupSelectionItem => ({ name: g.name }))
+                            .sort((a: GroupSelectionItem, b: GroupSelectionItem) => a.name.localeCompare(b.name))
+                    );
                 })
                 .catch((error) => {
                     snackError({

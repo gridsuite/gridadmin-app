@@ -17,10 +17,25 @@ export type UserInfosUpdate = {
     groups?: string[];
 };
 export type UserInfos = UserInfosUpdate & {
+    firstName?: string;
+    lastName?: string;
     maxAllowedCases?: number;
     numberCasesUsed?: number;
     maxAllowedBuilds?: number;
 };
+
+/**
+ * Formats user's full name as "LASTNAME firstname"
+ * Returns empty string if both names are missing
+ */
+export function formatFullName(firstName?: string, lastName?: string): string {
+    if (!firstName && !lastName) {
+        return '';
+    }
+    const upperLastName = lastName?.toUpperCase() ?? '';
+    const capitalizedFirstName = firstName ?? '';
+    return `${upperLastName} ${capitalizedFirstName}`.trim();
+}
 
 export function fetchUsers(): Promise<UserInfos[]> {
     console.debug(`Fetching list of users...`);
