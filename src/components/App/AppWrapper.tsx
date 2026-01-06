@@ -31,13 +31,15 @@ import {
     SnackbarProvider,
     topBarEn,
     topBarFr,
+    errorsEn,
+    errorsFr,
+    PARAM_THEME,
 } from '@gridsuite/commons-ui';
 import { type IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
 import messages_en from '../../translations/en.json';
 import messages_fr from '../../translations/fr.json';
 import { store } from '../../redux/store';
-import { PARAM_THEME } from '../../utils/config-params';
 import { AppState } from '../../redux/reducer';
 import { useNotificationsUrlGenerator } from '../../utils/notifications-provider';
 import { AllCommunityModule, ModuleRegistry, provideGlobalGridOptions } from 'ag-grid-community';
@@ -122,6 +124,7 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
         ...topBarEn,
         ...cardErrorBoundaryEn,
         ...tableEn,
+        ...errorsEn,
     },
     fr: {
         ...messages_fr,
@@ -129,6 +132,7 @@ const messages: Record<GsLangUser, IntlConfig['messages']> = {
         ...topBarFr,
         ...cardErrorBoundaryFr,
         ...tableFr,
+        ...errorsFr,
     },
 };
 

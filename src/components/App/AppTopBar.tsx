@@ -8,9 +8,17 @@
 import { type AnchorHTMLAttributes, forwardRef, type ReactElement, SyntheticEvent, useEffect, useState } from 'react';
 import { capitalize, Tab, Tabs, TabsProps, useTheme } from '@mui/material';
 import { Groups, ManageAccounts, NotificationImportant, PeopleAlt } from '@mui/icons-material';
-import { fetchAppsMetadata, logout, Metadata, TopBar, UserManagerState } from '@gridsuite/commons-ui';
+import {
+    fetchAppsMetadata,
+    logout,
+    Metadata,
+    PARAM_LANGUAGE,
+    PARAM_THEME,
+    TopBar,
+    UserManagerState,
+} from '@gridsuite/commons-ui';
 import { useParameterState } from '../parameters';
-import { APP_NAME, PARAM_LANGUAGE, PARAM_THEME } from '../../utils/config-params';
+import { APP_NAME } from '../../utils/config-params';
 import { NavLink, type To, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';

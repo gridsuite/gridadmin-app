@@ -9,7 +9,7 @@ import { type FunctionComponent, type RefObject, useCallback, useMemo, useState 
 import { useIntl } from 'react-intl';
 import { PersonAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, type GridTableRef } from '../../components/Grid';
-import { type GroupInfos, UserAdminSrv, type UserInfos } from '../../services';
+import { formatFullName, type GroupInfos, UserAdminSrv, type UserInfos } from '../../services';
 import type { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
 import { useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
@@ -21,7 +21,7 @@ import { AppState } from '../../redux/reducer';
 import { useCsvExport } from '../common/use-csv-export';
 
 export interface UsersTableProps {
-    gridRef: RefObject<GridTableRef<UserInfos>>;
+    gridRef: RefObject<GridTableRef<UserInfos> | null>;
     onRowClicked: (event: RowClickedEvent<UserInfos>) => void;
     setOpenAddUserDialog: (open: boolean) => void;
 }
@@ -70,6 +70,20 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
                 } as TextFilterParams<UserInfos>,
                 initialSort: 'asc',
                 tooltipField: 'sub',
+            },
+            {
+                colId: 'fullName',
+                cellDataType: 'text',
+                flex: 2,
+                filter: true,
+                headerName: intl.formatMessage({ id: 'users.table.fullName' }),
+                headerTooltip: intl.formatMessage({ id: 'users.table.fullName.description' }),
+                filterParams: {
+                    caseSensitive: false,
+                    trimInput: true,
+                } as TextFilterParams<UserInfos>,
+                valueGetter: (params) => formatFullName(params.data?.firstName, params.data?.lastName),
+                tooltipValueGetter: (params) => formatFullName(params.data?.firstName, params.data?.lastName),
             },
             {
                 field: 'profileName',

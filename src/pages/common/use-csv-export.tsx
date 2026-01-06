@@ -6,7 +6,7 @@
  */
 
 import { useMemo, RefObject } from 'react';
-import { CsvExport, GsLang } from '@gridsuite/commons-ui';
+import { CsvExport, GsLangUser } from '@gridsuite/commons-ui';
 import { IntlShape } from 'react-intl';
 import { GridTableRef } from '../../components/Grid';
 import { ColDef } from 'ag-grid-community';
@@ -18,11 +18,11 @@ export function useCsvExport<TData>({
     intl,
     language,
 }: {
-    gridRef: RefObject<GridTableRef<TData>>;
+    gridRef: RefObject<GridTableRef<TData> | null>;
     columns: ColDef[];
     tableNameId: string;
     intl: IntlShape;
-    language: GsLang;
+    language: GsLangUser;
 }) {
     return useMemo(
         () => (
@@ -32,7 +32,7 @@ export function useCsvExport<TData>({
                 disabled={false}
                 skipColumnHeaders={false}
                 language={language}
-                exportDataAsCsv={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
+                getData={(params) => gridRef?.current?.aggrid?.api?.exportDataAsCsv(params)}
             />
         ),
         [gridRef, columns, intl, language, tableNameId]
