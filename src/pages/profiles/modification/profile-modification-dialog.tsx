@@ -72,7 +72,6 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
         (profileFormData) => {
             if (profileId) {
-                console.log('====== SUBMIT ', profileFormData);
                 const profileData: UserProfile = {
                     id: profileId,
                     name: profileFormData[PROFILE_NAME],

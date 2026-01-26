@@ -153,7 +153,6 @@ export function getProfile(profileId: UUID): Promise<UserProfile> {
 
 export function modifyProfile(profileData: UserProfile) {
     console.debug(`Updating a profile...`);
-    console.log("^^^^^^^ ",profileData )
     return backendFetch(`${USER_ADMIN_URL}/profiles/${profileData.id}`, {
         method: 'PUT',
         headers: {
