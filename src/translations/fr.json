@@ -88,6 +88,7 @@
     "profiles.form.modification.securityAnalysis.name": "Analyse de sécurité",
     "profiles.form.modification.sensitivityAnalysis.name": "Analyse de sensibilités",
     "profiles.form.modification.shortcircuit.name": "Calcul de court-circuit",
+    "profiles.form.modification.pccmin.name": "Pcc min N-1",
     "profiles.form.modification.voltageInit.name": "Initialisation du plan de tension",
     "profiles.form.modification.spreadsheetConfigCollection.name": "Modèles de tableur",
     "profiles.form.modification.networkVisualizations.name": "Images réseau",

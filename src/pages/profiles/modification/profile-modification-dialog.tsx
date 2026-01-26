@@ -9,6 +9,7 @@ import ProfileModificationForm, {
     DIAGRAM_CONFIG_ID,
     LOADFLOW_PARAM_ID,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
+    PCCMIN_PARAM_ID,
     PROFILE_NAME,
     SECURITY_ANALYSIS_PARAM_ID,
     SENSITIVITY_ANALYSIS_PARAM_ID,
@@ -50,6 +51,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [SECURITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
             [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
             [SHORTCIRCUIT_PARAM_ID]: yup.string<UUID>().optional(),
+            [PCCMIN_PARAM_ID]: yup.string<UUID>().optional(),
             [VOLTAGE_INIT_PARAM_ID]: yup.string<UUID>().optional(),
             [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').optional(),
@@ -70,6 +72,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
         (profileFormData) => {
             if (profileId) {
+                console.log('====== SUBMIT ', profileFormData);
                 const profileData: UserProfile = {
                     id: profileId,
                     name: profileFormData[PROFILE_NAME],
@@ -77,6 +80,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     securityAnalysisParameterId: profileFormData[SECURITY_ANALYSIS_PARAM_ID],
                     sensitivityAnalysisParameterId: profileFormData[SENSITIVITY_ANALYSIS_PARAM_ID],
                     shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
+                    pccminParameterId: profileFormData[PCCMIN_PARAM_ID],
                     voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
@@ -116,6 +120,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId ?? undefined,
                         [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId ?? undefined,
                         [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ?? undefined,
+                        [PCCMIN_PARAM_ID]: response.pccminParameterId ?? undefined,
                         [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ?? undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,

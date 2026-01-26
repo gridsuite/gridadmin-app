@@ -21,6 +21,7 @@ export interface ConfigSelectionProps {
         | ElementType.SECURITY_ANALYSIS_PARAMETERS
         | ElementType.SENSITIVITY_PARAMETERS
         | ElementType.SHORT_CIRCUIT_PARAMETERS
+        | ElementType.PCC_MIN_PARAMETERS
         | ElementType.VOLTAGE_INIT_PARAMETERS
         | ElementType.SPREADSHEET_CONFIG_COLLECTION
         | ElementType.NETWORK_VISUALIZATIONS_PARAMETERS
@@ -30,7 +31,6 @@ export interface ConfigSelectionProps {
 
 const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) => {
     const intl = useIntl();
-
     const [openDirectorySelector, setOpenDirectorySelector] = useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
     const [configLinkValid, setConfigLinkValid] = useState<boolean>();
@@ -93,6 +93,8 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                 return 'profiles.form.modification.networkVisualizations.name';
             case ElementType.DIAGRAM_CONFIG:
                 return 'profiles.form.modification.diagramConfig.name';
+            case ElementType.PCC_MIN_PARAMETERS:
+                return 'profiles.form.modification.pccmin.name';
         }
     };
 
