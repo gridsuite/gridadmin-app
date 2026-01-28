@@ -94,7 +94,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
             case ElementType.DIAGRAM_CONFIG:
                 return 'profiles.form.modification.diagramConfig.name';
             case ElementType.PCC_MIN_PARAMETERS:
-                return 'profiles.form.modification.pccmin.name';
+                return 'profiles.form.modification.pccMin.name';
         }
     };
 
