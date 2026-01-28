@@ -103,7 +103,7 @@ export type UserProfile = {
     securityAnalysisParameterId?: UUID;
     sensitivityAnalysisParameterId?: UUID;
     shortcircuitParameterId?: UUID;
-    pccminParameterId?: UUID;
+    pccMinParameterId?: UUID;
     voltageInitParameterId?: UUID;
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
