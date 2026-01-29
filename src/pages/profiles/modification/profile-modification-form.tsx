@@ -20,7 +20,7 @@ export const PCCMIN_PARAM_ID = 'pccminParamId';
 export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
 export const SPREADSHEET_CONFIG_COLLECTION_ID = 'spreadsheetConfigCollectionId';
 export const NETWORK_VISUALIZATION_PARAMETERS_ID = 'networkVisualizationParametersId';
-export const DIAGRAM_CONFIG_ID = 'diagramConfigId';
+export const WORKSPACE_ID = 'workspaceId';
 
 export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
 export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
@@ -37,7 +37,7 @@ const configList: ConfigSelectionProps[] = [
         selectionFormId: NETWORK_VISUALIZATION_PARAMETERS_ID,
         elementType: ElementType.NETWORK_VISUALIZATIONS_PARAMETERS,
     },
-    { selectionFormId: DIAGRAM_CONFIG_ID, elementType: ElementType.DIAGRAM_CONFIG },
+    { selectionFormId: WORKSPACE_ID, elementType: ElementType.WORKSPACE },
 ];
 
 const ProfileModificationForm: FunctionComponent = () => {

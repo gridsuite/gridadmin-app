@@ -25,7 +25,7 @@ export interface ConfigSelectionProps {
         | ElementType.VOLTAGE_INIT_PARAMETERS
         | ElementType.SPREADSHEET_CONFIG_COLLECTION
         | ElementType.NETWORK_VISUALIZATIONS_PARAMETERS
-        | ElementType.DIAGRAM_CONFIG;
+        | ElementType.WORKSPACE;
     selectionFormId: string;
 }
 
@@ -91,10 +91,10 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                 return 'profiles.form.modification.spreadsheetConfigCollection.name';
             case ElementType.NETWORK_VISUALIZATIONS_PARAMETERS:
                 return 'profiles.form.modification.networkVisualizations.name';
-            case ElementType.DIAGRAM_CONFIG:
-                return 'profiles.form.modification.diagramConfig.name';
             case ElementType.PCC_MIN_PARAMETERS:
                 return 'profiles.form.modification.pccMin.name';
+            case ElementType.WORKSPACE:
+                return 'profiles.form.modification.workspace.name';
         }
     };
 
