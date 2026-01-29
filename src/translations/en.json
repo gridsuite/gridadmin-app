@@ -90,7 +90,7 @@
     "profiles.form.modification.voltageInit.name": "Voltage init",
     "profiles.form.modification.spreadsheetConfigCollection.name": "Spreadsheet model collection",
     "profiles.form.modification.networkVisualizations.name": "Network visualizations",
-    "profiles.form.modification.diagramConfig.name": "Default network area diagram",
+    "profiles.form.modification.workspace.name": "Default workspace",
     "profiles.form.modification.readError": "Error while reading the profile",
     "profiles.form.modification.updateError": "Error while updating the profile",
 

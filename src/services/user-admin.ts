@@ -108,7 +108,7 @@ export type UserProfile = {
     maxAllowedBuilds?: number;
     spreadsheetConfigCollectionId?: UUID;
     networkVisualizationParameterId?: UUID;
-    diagramConfigId?: UUID;
+    workspaceId?: UUID;
 };
 
 export function fetchProfiles(): Promise<UserProfile[]> {
