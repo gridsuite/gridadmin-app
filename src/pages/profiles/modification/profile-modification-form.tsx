@@ -16,6 +16,7 @@ export const LOADFLOW_PARAM_ID = 'loadFlowParamId';
 export const SECURITY_ANALYSIS_PARAM_ID = 'securityAnalysisParamId';
 export const SENSITIVITY_ANALYSIS_PARAM_ID = 'sensitivityAnalysisParamId';
 export const SHORTCIRCUIT_PARAM_ID = 'shortcircuitParamId';
+export const PCCMIN_PARAM_ID = 'pccminParamId';
 export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
 export const SPREADSHEET_CONFIG_COLLECTION_ID = 'spreadsheetConfigCollectionId';
 export const NETWORK_VISUALIZATION_PARAMETERS_ID = 'networkVisualizationParametersId';
@@ -29,6 +30,7 @@ const configList: ConfigSelectionProps[] = [
     { selectionFormId: SECURITY_ANALYSIS_PARAM_ID, elementType: ElementType.SECURITY_ANALYSIS_PARAMETERS },
     { selectionFormId: SENSITIVITY_ANALYSIS_PARAM_ID, elementType: ElementType.SENSITIVITY_PARAMETERS },
     { selectionFormId: SHORTCIRCUIT_PARAM_ID, elementType: ElementType.SHORT_CIRCUIT_PARAMETERS },
+    { selectionFormId: PCCMIN_PARAM_ID, elementType: ElementType.PCC_MIN_PARAMETERS },
     { selectionFormId: VOLTAGE_INIT_PARAM_ID, elementType: ElementType.VOLTAGE_INIT_PARAMETERS },
     { selectionFormId: SPREADSHEET_CONFIG_COLLECTION_ID, elementType: ElementType.SPREADSHEET_CONFIG_COLLECTION },
     {

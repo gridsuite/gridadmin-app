@@ -87,6 +87,7 @@
     "profiles.form.modification.securityAnalysis.name": "Security analysis",
     "profiles.form.modification.sensitivityAnalysis.name": "Sensitivity analysis",
     "profiles.form.modification.shortcircuit.name": "Short-circuit",
+    "profiles.form.modification.pccMin.name": "Pcc min N-1",
     "profiles.form.modification.voltageInit.name": "Voltage init",
     "profiles.form.modification.spreadsheetConfigCollection.name": "Spreadsheet model collection",
     "profiles.form.modification.networkVisualizations.name": "Network visualizations",

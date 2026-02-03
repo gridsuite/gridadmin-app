@@ -103,6 +103,7 @@ export type UserProfile = {
     securityAnalysisParameterId?: UUID;
     sensitivityAnalysisParameterId?: UUID;
     shortcircuitParameterId?: UUID;
+    pccMinParameterId?: UUID;
     voltageInitParameterId?: UUID;
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
@@ -152,7 +153,6 @@ export function getProfile(profileId: UUID): Promise<UserProfile> {
 
 export function modifyProfile(profileData: UserProfile) {
     console.debug(`Updating a profile...`);
-
     return backendFetch(`${USER_ADMIN_URL}/profiles/${profileData.id}`, {
         method: 'PUT',
         headers: {
