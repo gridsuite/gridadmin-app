@@ -41,7 +41,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     onUpdate,
 }) => {
     const { snackError } = useSnackMessage();
-    const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
+    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(FetchStatus.IDLE);
 
     const formSchema = yup
         .object()
@@ -109,10 +109,10 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
 
     useEffect(() => {
         if (profileId && open) {
-            setDataFetchStatus(FetchStatus.FETCHING);
+            setDataFetchStatus(FetchStatus.RUNNING);
             UserAdminSrv.getProfile(profileId)
                 .then((response) => {
-                    setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
+                    setDataFetchStatus(FetchStatus.SUCCEED);
                     reset({
                         [PROFILE_NAME]: response.name,
                         [LOADFLOW_PARAM_ID]: response.loadFlowParameterId ?? undefined,
@@ -129,7 +129,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     });
                 })
                 .catch((error) => {
-                    setDataFetchStatus(FetchStatus.FETCH_ERROR);
+                    setDataFetchStatus(FetchStatus.FAILED);
                     snackError({
                         messageTxt: error.message,
                         headerId: 'profiles.form.modification.readError',
@@ -138,9 +138,9 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
         }
     }, [profileId, open, reset, snackError]);
 
-    const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.FETCH_SUCCESS, [dataFetchStatus]);
+    const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.SUCCEED, [dataFetchStatus]);
 
-    const isDataFetching = useMemo(() => dataFetchStatus === FetchStatus.FETCHING, [dataFetchStatus]);
+    const isDataFetching = useMemo(() => dataFetchStatus === FetchStatus.RUNNING, [dataFetchStatus]);
 
     return (
         <CustomMuiDialog
