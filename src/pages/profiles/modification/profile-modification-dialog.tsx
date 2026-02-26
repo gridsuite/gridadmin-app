@@ -147,10 +147,12 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             open={open}
             onClose={onDialogClose}
             onSave={onSubmit}
-            formSchema={formSchema}
-            formMethods={formMethods}
+            formContext={{
+                ...formMethods,
+                validationSchema: formSchema,
+                removeOptional: true,
+            }}
             titleId={'profiles.form.modification.title'}
-            removeOptional={true}
             isDataFetching={isDataFetching}
         >
             {isDataReady && <ProfileModificationForm />}

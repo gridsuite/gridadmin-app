@@ -122,10 +122,12 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
             open={open}
             onClose={onDialogClose}
             onSave={onSubmit}
-            formSchema={GroupModificationSchema}
-            formMethods={formMethods}
+            formContext={{
+                ...formMethods,
+                validationSchema: GroupModificationSchema,
+                removeOptional: true,
+            }}
             titleId={'groups.form.modification.title'}
-            removeOptional={true}
             isDataFetching={isDataFetching}
             unscrollableFullHeight
         >
