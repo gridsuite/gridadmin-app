@@ -137,10 +137,12 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
             open={open}
             onClose={onDialogClose}
             onSave={onSubmit}
-            formSchema={UserModificationSchema}
-            formMethods={formMethods}
+            formContext={{
+                ...formMethods,
+                validationSchema: UserModificationSchema,
+                removeOptional: true,
+            }}
             titleId={'users.form.modification.title'}
-            removeOptional={true}
             isDataFetching={isDataFetching}
             unscrollableFullHeight
         >

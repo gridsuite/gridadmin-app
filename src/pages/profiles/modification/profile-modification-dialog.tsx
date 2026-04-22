@@ -7,23 +7,25 @@
 
 import ProfileModificationForm, {
     LOADFLOW_PARAM_ID,
+    NETWORK_VISUALIZATION_PARAMETERS_ID,
+    PCCMIN_PARAM_ID,
+    PROFILE_NAME,
     SECURITY_ANALYSIS_PARAM_ID,
     SENSITIVITY_ANALYSIS_PARAM_ID,
     SHORTCIRCUIT_PARAM_ID,
-    VOLTAGE_INIT_PARAM_ID,
     SPREADSHEET_CONFIG_COLLECTION_ID,
-    PROFILE_NAME,
     USER_QUOTA_BUILD_NB,
     USER_QUOTA_CASE_NB,
-    NETWORK_VISUALIZATION_PARAMETERS_ID,
-    DIAGRAM_CONFIG_ID,
+    VOLTAGE_INIT_PARAM_ID,
+    WORKSPACE_ID,
 } from './profile-modification-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { CustomMuiDialog, FetchStatus, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
+import { InferType } from 'yup';
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -45,27 +47,30 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
         .object()
         .shape({
             [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
-            [LOADFLOW_PARAM_ID]: yup.string().optional(),
-            [SECURITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
-            [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string().optional(),
-            [SHORTCIRCUIT_PARAM_ID]: yup.string().optional(),
-            [VOLTAGE_INIT_PARAM_ID]: yup.string().optional(),
-            [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').nullable(),
-            [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').nullable(),
-            [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string().optional(),
-            [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string().optional(),
-            [DIAGRAM_CONFIG_ID]: yup.string().optional(),
+            [LOADFLOW_PARAM_ID]: yup.string<UUID>().optional(),
+            [SECURITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
+            [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
+            [SHORTCIRCUIT_PARAM_ID]: yup.string<UUID>().optional(),
+            [PCCMIN_PARAM_ID]: yup.string<UUID>().optional(),
+            [VOLTAGE_INIT_PARAM_ID]: yup.string<UUID>().optional(),
+            [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').optional(),
+            [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').optional(),
+            [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string<UUID>().optional(),
+            [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string<UUID>().optional(),
+            [WORKSPACE_ID]: yup.string<UUID>().optional(),
         })
         .required();
 
-    const formMethods = useForm({
+    type FormSchema = InferType<typeof formSchema>;
+
+    const formMethods = useForm<FormSchema>({
         resolver: yupResolver(formSchema),
     });
 
     const { reset } = formMethods;
 
-    const onSubmit = useCallback(
-        (profileFormData: any) => {
+    const onSubmit = useCallback<SubmitHandler<FormSchema>>(
+        (profileFormData) => {
             if (profileId) {
                 const profileData: UserProfile = {
                     id: profileId,
@@ -74,12 +79,13 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     securityAnalysisParameterId: profileFormData[SECURITY_ANALYSIS_PARAM_ID],
                     sensitivityAnalysisParameterId: profileFormData[SENSITIVITY_ANALYSIS_PARAM_ID],
                     shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
+                    pccMinParameterId: profileFormData[PCCMIN_PARAM_ID],
                     voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                     spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
                     networkVisualizationParameterId: profileFormData[NETWORK_VISUALIZATION_PARAMETERS_ID],
-                    diagramConfigId: profileFormData[DIAGRAM_CONFIG_ID],
+                    workspaceId: profileFormData[WORKSPACE_ID],
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
@@ -113,12 +119,13 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [SECURITY_ANALYSIS_PARAM_ID]: response.securityAnalysisParameterId ?? undefined,
                         [SENSITIVITY_ANALYSIS_PARAM_ID]: response.sensitivityAnalysisParameterId ?? undefined,
                         [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ?? undefined,
+                        [PCCMIN_PARAM_ID]: response.pccMinParameterId ?? undefined,
                         [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ?? undefined,
                         [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
                         [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
                         [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId ?? undefined,
                         [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId ?? undefined,
-                        [DIAGRAM_CONFIG_ID]: response.diagramConfigId ?? undefined,
+                        [WORKSPACE_ID]: response.workspaceId ?? undefined,
                     });
                 })
                 .catch((error) => {
@@ -140,10 +147,12 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             open={open}
             onClose={onDialogClose}
             onSave={onSubmit}
-            formSchema={formSchema}
-            formMethods={formMethods}
+            formContext={{
+                ...formMethods,
+                validationSchema: formSchema,
+                removeOptional: true,
+            }}
             titleId={'profiles.form.modification.title'}
-            removeOptional={true}
             isDataFetching={isDataFetching}
         >
             {isDataReady && <ProfileModificationForm />}

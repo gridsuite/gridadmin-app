@@ -10,7 +10,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useIntl } from 'react-intl';
-import { DirectoryItemSelector, ElementType } from '@gridsuite/commons-ui';
+import { DirectoryItemSelector, ElementAttributes, ElementType, TreeViewFinderNodeProps } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
 import { DirectorySrv } from '../../../services';
 import LinkedPathDisplay from './linked-path-display';
@@ -21,16 +21,16 @@ export interface ConfigSelectionProps {
         | ElementType.SECURITY_ANALYSIS_PARAMETERS
         | ElementType.SENSITIVITY_PARAMETERS
         | ElementType.SHORT_CIRCUIT_PARAMETERS
+        | ElementType.PCC_MIN_PARAMETERS
         | ElementType.VOLTAGE_INIT_PARAMETERS
         | ElementType.SPREADSHEET_CONFIG_COLLECTION
         | ElementType.NETWORK_VISUALIZATIONS_PARAMETERS
-        | ElementType.DIAGRAM_CONFIG;
+        | ElementType.WORKSPACE;
     selectionFormId: string;
 }
 
 const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) => {
     const intl = useIntl();
-
     const [openDirectorySelector, setOpenDirectorySelector] = useState<boolean>(false);
     const [selectedElementName, setSelectedElementName] = useState<string>();
     const [configLinkValid, setConfigLinkValid] = useState<boolean>();
@@ -47,9 +47,11 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
             setConfigLinkValid(undefined);
         } else {
             DirectorySrv.fetchPath(watchConfigId)
-                .then((res: any) => {
+                .then((res: ElementAttributes[]) => {
                     setConfigLinkValid(true);
-                    setSelectedElementName(res.map((element: any) => element.elementName.trim()).join('/'));
+                    setSelectedElementName(
+                        res.map((element: ElementAttributes) => element.elementName.trim()).join('/')
+                    );
                 })
                 .catch(() => {
                     setSelectedElementName(undefined);
@@ -66,7 +68,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
         ctlConfigId.field.onChange(undefined);
     };
 
-    const handleClose = (selection: any) => {
+    const handleClose = (selection: TreeViewFinderNodeProps[]) => {
         if (selection.length) {
             ctlConfigId.field.onChange(selection[0]?.id);
         }
@@ -89,8 +91,10 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                 return 'profiles.form.modification.spreadsheetConfigCollection.name';
             case ElementType.NETWORK_VISUALIZATIONS_PARAMETERS:
                 return 'profiles.form.modification.networkVisualizations.name';
-            case ElementType.DIAGRAM_CONFIG:
-                return 'profiles.form.modification.diagramConfig.name';
+            case ElementType.PCC_MIN_PARAMETERS:
+                return 'profiles.form.modification.pccMin.name';
+            case ElementType.WORKSPACE:
+                return 'profiles.form.modification.workspace.name';
         }
     };
 
