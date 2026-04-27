@@ -14,7 +14,7 @@ const config: Config = {
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
     },
     transformIgnorePatterns: [
-        'node_modules/(?!@gridsuite/commons-ui|react-dnd|dnd-core|@react-dnd|uuid)',
+        'node_modules/(?!@gridsuite/commons-ui|react-dnd|dnd-core|@react-dnd|react-resizable-panels|uuid)',
     ], // transform from ESM
     moduleDirectories: ['node_modules', 'src'], // to allow absolute path from ./src
     globals: {
