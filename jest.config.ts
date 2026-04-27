@@ -14,8 +14,12 @@ const config: Config = {
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
     },
     transformIgnorePatterns: [
-        'node_modules/(?!react-dnd|dnd-core|@react-dnd|react-resizable-panels|uuid)',
+        'node_modules/(?!@gridsuite/commons-ui|react-dnd|dnd-core|@react-dnd|react-resizable-panels|uuid)',
     ], // transform from ESM
+    moduleDirectories: ['node_modules', 'src'], // to allow absolute path from ./src
+    globals: {
+        IS_REACT_ACT_ENVIRONMENT: true,
+    },
     setupFiles: ['<rootDir>/jest.setup.ts'],
 };
 
