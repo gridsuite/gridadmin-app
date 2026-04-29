@@ -13,8 +13,9 @@ const config: Config = {
         '^.+\\.svg\\?react$': '<rootDir>/src/_mocks_/svg.tsx',
         '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
     },
-    // see https://github.com/react-dnd/react-dnd/issues/3443
-    transformIgnorePatterns: ['node_modules/(?!react-dnd)/'],
+    transformIgnorePatterns: [
+        'node_modules/(?!@gridsuite/commons-ui|react-dnd|dnd-core|@react-dnd|react-resizable-panels|uuid)',
+    ], // transform from ESM
     setupFiles: ['<rootDir>/jest.setup.ts'],
 };
 
