@@ -19,7 +19,7 @@ export function useNotificationsUrlGenerator() {
     return useMemo(
         () =>
             ({
-                [NotificationsUrlKeys.CONFIG]:`${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({ appName: APP_NAME })}`,
+                [NotificationsUrlKeys.CONFIG]: `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/notify?${new URLSearchParams({ appName: APP_NAME })}`,
                 [NotificationsUrlKeys.GLOBAL_CONFIG]: `${wsBase}${PREFIX_CONFIG_NOTIFICATION_WS}/global`,
             }) satisfies Partial<Record<NotificationsUrlKeys, string>>,
         [wsBase]
