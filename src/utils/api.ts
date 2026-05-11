@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { User } from 'oidc-client';
+import type { User } from 'oidc-client-ts';
 import { AppState } from '../redux/reducer';
 import { store } from '../redux/store';
 
