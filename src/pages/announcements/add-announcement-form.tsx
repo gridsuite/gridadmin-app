@@ -22,7 +22,6 @@ import {
 } from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
 import { UserAdminSrv } from '../../services';
-import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
 
 export const MESSAGE = 'message';
 export const START_DATE = 'startDate';
@@ -112,12 +111,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             })
                 .then(() => onAnnouncementCreated?.())
                 .catch((error) => {
-                    let errorMessage = getErrorMessage(error) ?? '';
-                    if (!handleAnnouncementCreationErrors(errorMessage, snackError)) {
-                        snackWithFallback(snackError, error, {
-                            headerId: 'announcements.form.errCreateAnnouncement',
-                        });
-                    }
+                    snackWithFallback(snackError, error, {
+                        headerId: 'announcements.form.errCreateAnnouncement',
+                    });
                 });
         },
         [onAnnouncementCreated, snackError]
