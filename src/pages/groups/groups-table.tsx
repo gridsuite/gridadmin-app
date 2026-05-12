@@ -11,7 +11,7 @@ import { GroupAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { GroupInfos, UserAdminSrv, UserInfos } from '../../services';
 import { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { useCsvExport } from '../common/use-csv-export';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
@@ -49,10 +49,7 @@ const GroupsTable: FunctionComponent<GroupsTableProps> = (props) => {
                         headerId: 'groups.table.integrity.error.delete',
                     });
                 } else {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'groups.table.error.delete',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'groups.table.error.delete' });
                 }
             })
             .then(() => props.gridRef?.current?.context?.refresh?.());

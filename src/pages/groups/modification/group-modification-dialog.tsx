@@ -15,7 +15,7 @@ import GroupModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { formatFullName, GroupInfos, UserAdminSrv, UserInfos } from '../../../services';
 
 interface GroupModificationDialogProps {
@@ -67,10 +67,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                 })
                 .catch((error) => {
                     setDataFetchStatus(FetchStatus.FETCH_ERROR);
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'groups.table.error.users',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'groups.table.error.users' });
                 });
         }
     }, [open, snackError, groupInfos, reset]);
@@ -100,12 +97,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                     users: selectedUsers,
                 };
                 UserAdminSrv.udpateGroup(newData)
-                    .catch((error) =>
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'groups.table.error.update',
-                        })
-                    )
+                    .catch((error) => snackWithFallback(snackError, error, { headerId: 'groups.table.error.update' }))
                     .then(() => {
                         onUpdate();
                     });

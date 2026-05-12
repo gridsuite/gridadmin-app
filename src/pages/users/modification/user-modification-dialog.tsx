@@ -17,7 +17,7 @@ import UserModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { formatFullName, GroupInfos, UserAdminSrv, UserInfos, UserProfile } from '../../../services';
 
 interface UserModificationDialogProps {
@@ -67,10 +67,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     );
                 })
                 .catch((error) => {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'users.table.error.profiles',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'users.table.error.profiles' });
                 });
 
             groupPromise
@@ -82,10 +79,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     );
                 })
                 .catch((error) => {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'users.table.error.groups',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'users.table.error.groups' });
                 });
 
             Promise.all([profilePromise, groupPromise])
@@ -122,7 +116,7 @@ const UserModificationDialog: FunctionComponent<UserModificationDialogProps> = (
                     profileName: userFormData.profileName ?? undefined,
                     groups: selectedGroups,
                 })
-                    .catch((error) => snackError({ messageTxt: error.message, headerId: 'users.table.error.update' }))
+                    .catch((error) => snackWithFallback(snackError, error, { headerId: 'users.table.error.update' }))
                     .then(() => onUpdate());
             }
         },

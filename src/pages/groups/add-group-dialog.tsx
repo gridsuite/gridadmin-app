@@ -20,7 +20,7 @@ import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import { Groups } from '@mui/icons-material';
 import { GroupInfos, UserAdminSrv } from '../../services';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
@@ -36,8 +36,8 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
     const addGroup = useCallback(
         (group: string) => {
             UserAdminSrv.addGroup(group)
-                .catch((_error) =>
-                    snackError({
+                .catch((error) =>
+                    snackWithFallback(snackError, error, {
                         headerId: 'groups.table.error.add',
                         headerValues: {
                             group: group,

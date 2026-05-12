@@ -22,7 +22,13 @@ import ProfileModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
+import {
+    CustomMuiDialog,
+    FetchStatus,
+    snackWithFallback,
+    useSnackMessage,
+    yupConfig as yup,
+} from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
 import { InferType } from 'yup';
@@ -89,10 +95,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                 };
                 UserAdminSrv.modifyProfile(profileData)
                     .catch((error) => {
-                        snackError({
-                            messageTxt: error.message,
-                            headerId: 'profiles.form.modification.updateError',
-                        });
+                        snackWithFallback(snackError, error, { headerId: 'profiles.form.modification.updateError' });
                     })
                     .then(() => {
                         onUpdate();
@@ -130,10 +133,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                 })
                 .catch((error) => {
                     setDataFetchStatus(FetchStatus.FETCH_ERROR);
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'profiles.form.modification.readError',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'profiles.form.modification.readError' });
                 });
         }
     }, [profileId, open, reset, snackError]);
