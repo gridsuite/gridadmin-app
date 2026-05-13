@@ -38,7 +38,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
     const { reset, setValue } = formMethods;
     const [userOptions, setUserOptions] = useState<UserSelectionItem[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-    const [dataFetchStatus, setDataFetchStatus] = useState<string>(FetchStatus.IDLE);
+    const [dataFetchStatus, setDataFetchStatus] = useState<FetchStatus>(FetchStatus.IDLE);
 
     useEffect(() => {
         if (groupInfos && open) {
@@ -50,10 +50,10 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
             setSelectedUsers(groupInfos.users);
 
             // fetch all users
-            setDataFetchStatus(FetchStatus.FETCHING);
+            setDataFetchStatus(FetchStatus.RUNNING);
             UserAdminSrv.fetchUsers()
                 .then((allUsers: UserInfos[]) => {
-                    setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
+                    setDataFetchStatus(FetchStatus.SUCCEED);
                     setUserOptions(
                         allUsers
                             ?.map(
@@ -66,7 +66,7 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                     );
                 })
                 .catch((error) => {
-                    setDataFetchStatus(FetchStatus.FETCH_ERROR);
+                    setDataFetchStatus(FetchStatus.FAILED);
                     snackError({
                         messageTxt: error.message,
                         headerId: 'groups.table.error.users',
@@ -114,8 +114,8 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
         [groupInfos?.id, selectedUsers, snackError, onUpdate]
     );
 
-    const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.FETCH_SUCCESS, [dataFetchStatus]);
-    const isDataFetching = useMemo(() => dataFetchStatus === FetchStatus.FETCHING, [dataFetchStatus]);
+    const isDataReady = useMemo(() => dataFetchStatus === FetchStatus.SUCCEED, [dataFetchStatus]);
+    const isDataFetching = useMemo(() => dataFetchStatus === FetchStatus.RUNNING, [dataFetchStatus]);
 
     return (
         <CustomMuiDialog
