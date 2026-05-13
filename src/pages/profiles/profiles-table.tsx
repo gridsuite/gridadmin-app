@@ -11,7 +11,7 @@ import { ManageAccounts } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, GridTableRef } from '../../components/Grid';
 import { UserAdminSrv, UserProfile } from '../../services';
 import { ColDef, GetRowIdParams, ITooltipParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import ValidityCellRenderer from './validity-cell-renderer';
@@ -45,10 +45,7 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
                         headerId: 'profiles.table.integrity.error.delete',
                     });
                 } else {
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'profiles.table.error.delete',
-                    });
+                    snackWithFallback(snackError, error, { headerId: 'profiles.table.error.delete' });
                 }
             })
             .then(() => props.gridRef?.current?.context?.refresh?.());

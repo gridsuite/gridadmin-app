@@ -20,6 +20,7 @@ import {
     NotificationsUrlKeys,
     PARAM_LANGUAGE,
     PARAM_THEME,
+    snackWithFallback,
     useNotificationsListener,
     UserManagerState,
     useSnackMessage,
@@ -72,7 +73,7 @@ export default function App() {
             if (eventData?.headers?.parameterName) {
                 fetchConfigParameter(APP_NAME, eventData.headers.parameterName)
                     .then((param) => updateParams([param]))
-                    .catch((error) => snackError({ messageTxt: error.message, headerId: 'paramsRetrievingError' }));
+                    .catch((error) => snackWithFallback(snackError, error, { headerId: 'paramsRetrievingError' }));
             }
         },
         [updateParams, snackError]
@@ -84,21 +85,11 @@ export default function App() {
         if (user !== null) {
             fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
-                .catch((error) =>
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'paramsRetrievingError',
-                    })
-                );
+                .catch((error) => snackWithFallback(snackError, error, { headerId: 'paramsRetrievingError' }));
 
             fetchConfigParameters(APP_NAME)
                 .then((params) => updateParams(params))
-                .catch((error) =>
-                    snackError({
-                        messageTxt: error.message,
-                        headerId: 'paramsRetrievingError',
-                    })
-                );
+                .catch((error) => snackWithFallback(snackError, error, { headerId: 'paramsRetrievingError' }));
         }
     }, [user, dispatch, updateParams, snackError]);
 

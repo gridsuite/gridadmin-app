@@ -9,7 +9,7 @@ import { useCallback, useMemo } from 'react';
 import { Grid } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
-import { SubmitButton, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
+import { snackWithFallback, SubmitButton, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
 import { type InferType } from 'yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -22,7 +22,6 @@ import {
 } from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
 import { UserAdminSrv } from '../../services';
-import { getErrorMessage, handleAnnouncementCreationErrors } from '../../utils/error';
 
 export const MESSAGE = 'message';
 export const START_DATE = 'startDate';
@@ -112,10 +111,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             })
                 .then(() => onAnnouncementCreated?.())
                 .catch((error) => {
-                    let errorMessage = getErrorMessage(error) ?? '';
-                    if (!handleAnnouncementCreationErrors(errorMessage, snackError)) {
-                        snackError({ headerId: 'announcements.form.errCreateAnnouncement', messageTxt: errorMessage });
-                    }
+                    snackWithFallback(snackError, error, {
+                        headerId: 'announcements.form.errCreateAnnouncement',
+                    });
                 });
         },
         [onAnnouncementCreated, snackError]

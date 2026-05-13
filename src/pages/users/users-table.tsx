@@ -11,7 +11,7 @@ import { PersonAdd } from '@mui/icons-material';
 import { GridButton, GridButtonDelete, GridTable, type GridTableRef } from '../../components/Grid';
 import { formatFullName, type GroupInfos, UserAdminSrv, type UserInfos } from '../../services';
 import type { ColDef, GetRowIdParams, RowClickedEvent, TextFilterParams } from 'ag-grid-community';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import DeleteConfirmationDialog from '../common/delete-confirmation-dialog';
 import { defaultColDef, defaultRowSelection } from '../common/table-config';
 import MultiChipCellRenderer from '../common/multi-chip-cell-renderer';
@@ -43,12 +43,7 @@ const UsersTable: FunctionComponent<UsersTableProps> = (props) => {
     const deleteUsers = useCallback(() => {
         let subs = rowsSelection.map((user) => user.sub);
         return UserAdminSrv.deleteUsers(subs)
-            .catch((error) =>
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'users.table.error.delete',
-                })
-            )
+            .catch((error) => snackWithFallback(snackError, error, { headerId: 'users.table.error.delete' }))
             .then(() => props.gridRef?.current?.context?.refresh?.());
     }, [props.gridRef, rowsSelection, snackError]);
 
