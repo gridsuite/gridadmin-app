@@ -5,13 +5,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { getToken } from './api';
-
 export type * from './api';
 
 export const getWsBase = () => document.baseURI.replace(/^http:\/\//, 'ws://').replace(/^https:\/\//, 'wss://');
-
-export function getUrlWithToken(baseUrl: string): string {
-    const querySymbol = baseUrl.includes('?') ? '&' : '?';
-    return `${baseUrl}${querySymbol}access_token=${getToken()}`;
-}

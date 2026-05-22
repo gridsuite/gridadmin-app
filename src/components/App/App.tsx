@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
     AnnouncementNotification,
@@ -43,7 +43,7 @@ export default function App() {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: AppState) => state.user);
+    const userProfile = useSelector((state: AppState) => state.user?.profile ?? null, shallowEqual);
 
     const updateParams = useCallback(
         (params: ConfigParameters) => {
@@ -82,7 +82,7 @@ export default function App() {
     useNotificationsListener(NotificationsUrlKeys.CONFIG, { listenerCallbackMessage: updateConfig });
 
     useEffect(() => {
-        if (user !== null) {
+        if (userProfile !== null) {
             fetchConfigParameters(COMMON_APP_NAME)
                 .then((params) => updateParams(params))
                 .catch((error) => snackWithFallback(snackError, error, { headerId: 'paramsRetrievingError' }));
@@ -91,7 +91,7 @@ export default function App() {
                 .then((params) => updateParams(params))
                 .catch((error) => snackWithFallback(snackError, error, { headerId: 'paramsRetrievingError' }));
         }
-    }, [user, dispatch, updateParams, snackError]);
+    }, [userProfile, dispatch, updateParams, snackError]);
 
     const signInCallbackError = useSelector((state: AppState) => state.signInCallbackError);
     const authenticationRouterError = useSelector((state: AppState) => state.authenticationRouterError);
@@ -149,7 +149,7 @@ export default function App() {
                 <AppTopBar userManagerInstance={userManager.instance} />
             </Grid>
             <Grid item xs="auto">
-                <AnnouncementNotification user={user} />
+                <AnnouncementNotification userProfile={userProfile} />
             </Grid>
             <Grid item container xs component="main" height={'100%'}>
                 <CardErrorBoundary>
@@ -159,7 +159,7 @@ export default function App() {
                             flexGrow: 1,
                         }}
                     >
-                        {user !== null ? (
+                        {userProfile !== null ? (
                             <Routes>
                                 <Route path={'/'} element={<HomePage />} />
                                 <Route path={`/${MainPaths.users}`} element={<Users />} />
