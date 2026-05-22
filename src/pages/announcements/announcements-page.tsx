@@ -9,14 +9,13 @@ import type { UUID } from 'node:crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Divider, Grid, Typography } from '@mui/material';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import type { ColDef, GetRowIdParams, ValueFormatterFunc } from 'ag-grid-community';
 import { type GridTableRef } from '../../components/Grid';
 import { Announcement, UserAdminSrv } from '../../services';
 import AddAnnouncementForm from './add-announcement-form';
 import AgGrid from '../../components/Grid/AgGrid';
 import CancelCellRenderer from './cancel-cell-renderer';
-import { getErrorMessage } from '../../utils/error';
 
 const defaultColDef: ColDef<Announcement> = {
     editable: false,
@@ -43,7 +42,7 @@ export default function AnnouncementsPage() {
         try {
             setData(await UserAdminSrv.fetchAnnouncementList());
         } catch (error) {
-            snackError({ messageTxt: getErrorMessage(error) ?? undefined, headerId: 'table.error.retrieve' });
+            snackWithFallback(snackError, error, { headerId: 'table.error.retrieve' });
         }
     }, [snackError]);
 

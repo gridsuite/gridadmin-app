@@ -23,7 +23,7 @@ import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
 import { useIntl } from 'react-intl';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 
 type GridTableExposed = {
     refresh: () => Promise<void>;
@@ -67,10 +67,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
     const loadDataAndSave = useCallback(
         function loadDataAndSave(): Promise<void> {
             return dataLoader().then(setData, (error) => {
-                snackError({
-                    messageTxt: error.message,
-                    headerId: 'table.error.retrieve',
-                });
+                snackWithFallback(snackError, error, { headerId: 'table.error.retrieve' });
             });
         },
         [dataLoader, snackError]

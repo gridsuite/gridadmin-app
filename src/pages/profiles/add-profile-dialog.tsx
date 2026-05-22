@@ -20,7 +20,7 @@ import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import { ManageAccounts } from '@mui/icons-material';
 import { UserAdminSrv, UserProfile } from '../../services';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
@@ -45,8 +45,8 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                 name: name,
             };
             UserAdminSrv.addProfile(profileData)
-                .catch((_error) =>
-                    snackError({
+                .catch((error) =>
+                    snackWithFallback(snackError, error, {
                         headerId: 'profiles.table.error.add',
                         headerValues: {
                             profile: profileData.name,

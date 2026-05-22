@@ -20,7 +20,7 @@ import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import { AccountCircle } from '@mui/icons-material';
 import { UserAdminSrv, UserInfos } from '../../services';
-import { useSnackMessage } from '@gridsuite/commons-ui';
+import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { GridTableRef } from '../../components/Grid';
 import PaperForm from '../common/paper-form';
 
@@ -42,8 +42,8 @@ const AddUserDialog: FunctionComponent<AddUserDialogProps> = (props) => {
     const addUser = useCallback(
         (id: string) => {
             UserAdminSrv.addUser(id)
-                .catch((_error) =>
-                    snackError({
+                .catch((error) =>
+                    snackWithFallback(snackError, error, {
                         headerId: 'users.table.error.add',
                         headerValues: {
                             user: id,
