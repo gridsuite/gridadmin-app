@@ -20,7 +20,7 @@ import {
 import { useParameterState } from '../parameters';
 import { APP_NAME } from '../../utils/config-params';
 import { NavLink, type To, useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
@@ -96,7 +96,7 @@ type AppTopBarProps = {
 export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: AppState) => state.user);
+    const userProfile = useSelector((state: AppState) => state.user?.profile ?? null, shallowEqual);
 
     const navigate = useNavigate();
 
@@ -107,12 +107,12 @@ export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarPro
     const [tabValue, setTabValue] = useState<TabsProps['value']>(false);
 
     useEffect(() => {
-        if (user !== null) {
+        if (userProfile !== null) {
             fetchAppsMetadata().then((res) => {
                 setAppsAndUrls(res);
             });
         }
-    }, [user]);
+    }, [userProfile]);
 
     const handleChange = (_: SyntheticEvent, newValue: number) => {
         setTabValue(newValue);
@@ -127,7 +127,7 @@ export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarPro
             appLicense={AppPackage.license}
             onLogoutClick={() => logout(dispatch, userManagerInstance)}
             onLogoClick={() => navigate('/', { replace: true })}
-            user={user ?? undefined}
+            userProfile={userProfile ?? undefined}
             appsAndUrls={appsAndUrls}
             globalVersionPromise={() => AppsMetadataSrv.fetchVersion().then((res) => res?.deployVersion ?? 'unknown')}
             additionalModulesPromise={StudySrv.getServersInfos}
@@ -143,7 +143,7 @@ export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarPro
                 scrollButtons="auto"
                 aria-label="Main navigation menu"
                 sx={{
-                    visibility: !user ? 'hidden' : undefined,
+                    visibility: !userProfile ? 'hidden' : undefined,
                     flexGrow: 1,
                 }}
                 value={tabValue}
