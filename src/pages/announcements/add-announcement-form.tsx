@@ -9,8 +9,7 @@ import { useCallback, useMemo } from 'react';
 import { Grid } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
-import { snackWithFallback, SubmitButton, useSnackMessage, yupConfig as yup } from '@gridsuite/commons-ui';
-import { type InferType } from 'yup';
+import * as yup from 'yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -21,6 +20,7 @@ import {
     TextareaAutosizeElement,
 } from 'react-hook-form-mui';
 import { DateTimePickerElement, type DateTimePickerElementProps } from 'react-hook-form-mui/date-pickers';
+import { snackWithFallback, SubmitButton, useSnackMessage, YUP_REQUIRED } from '@gridsuite/commons-ui';
 import { UserAdminSrv } from '../../services';
 
 export const MESSAGE = 'message';
@@ -41,15 +41,15 @@ const formSchema = yup
             .string()
             .nullable()
             .trim()
-            .min(1, 'YupRequired')
+            .min(1, YUP_REQUIRED)
             .max(MESSAGE_MAX_LENGTH, 'announcements.form.errForm.msgMaxLength' /*TODO temporary*/)
-            .required('YupRequired' /*TODO temporary*/),
-        [START_DATE]: yup.string().nullable().datetime().required('YupRequired' /*TODO temporary*/),
+            .required(),
+        [START_DATE]: yup.string().nullable().datetime().required(),
         [END_DATE]: yup
             .string()
             .nullable()
             .datetime()
-            .required('YupRequired' /*TODO temporary*/)
+            .required()
             .when(START_DATE, (startDate, schema) =>
                 schema.test(
                     'is-after-start',
@@ -61,10 +61,10 @@ const formSchema = yup
             .string<UserAdminSrv.AnnouncementSeverity>()
             .nullable()
             .oneOf(Object.values(UserAdminSrv.AnnouncementSeverity))
-            .required('YupRequired' /*TODO temporary*/),
+            .required(),
     })
     .required();
-type FormSchema = InferType<typeof formSchema>;
+type FormSchema = yup.InferType<typeof formSchema>;
 
 const datetimePickerTransform: NonNullable<DateTimePickerElementProps<FormSchema>['transform']> = {
     input: (value) => {

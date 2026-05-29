@@ -10,6 +10,7 @@ import 'typeface-roboto';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './configure-yup-init';
 import AppWrapper from './components/App/AppWrapper';
 
 const container = document.getElementById('root');
