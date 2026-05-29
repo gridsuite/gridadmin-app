@@ -5,6 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+import * as yup from 'yup';
 import ProfileModificationForm, {
     LOADFLOW_PARAM_ID,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
@@ -22,16 +23,9 @@ import ProfileModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import {
-    CustomMuiDialog,
-    FetchStatus,
-    snackWithFallback,
-    useSnackMessage,
-    yupConfig as yup,
-} from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
-import { InferType } from 'yup';
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -67,7 +61,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
         })
         .required();
 
-    type FormSchema = InferType<typeof formSchema>;
+    type FormSchema = yup.InferType<typeof formSchema>;
 
     const formMethods = useForm<FormSchema>({
         resolver: yupResolver(formSchema),

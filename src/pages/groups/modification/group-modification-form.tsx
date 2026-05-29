@@ -7,7 +7,8 @@
 
 import { useMemo, type FunctionComponent } from 'react';
 import { Grid } from '@mui/material';
-import { TextInput, yupConfig as yup } from '@gridsuite/commons-ui';
+import * as yup from 'yup';
+import { TextInput } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
 import { useIntl } from 'react-intl';
 import { ColDef } from 'ag-grid-community';
