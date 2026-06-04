@@ -46,13 +46,7 @@ export default function App() {
     const userProfile = useSelector(
         (state: AppState) => state.user?.profile ?? null,
         (a, b) =>
-            a === b ||
-            (a != null &&
-                b != null &&
-                a.sub === b.sub &&
-                a.name === b.name &&
-                a.email === b.email &&
-                a.profile === b.profile)
+            a === b || (a?.sub === b?.sub && a?.name === b?.name && a?.email === b?.email && a?.profile === b?.profile)
     );
     const updateParams = useCallback(
         (params: ConfigParameters) => {
