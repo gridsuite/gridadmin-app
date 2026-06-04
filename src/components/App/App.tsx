@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import {
     AnnouncementNotification,
@@ -43,8 +43,17 @@ export default function App() {
     useDebugRender('app');
     const { snackError } = useSnackMessage();
     const dispatch = useDispatch<AppDispatch>();
-    const userProfile = useSelector((state: AppState) => state.user?.profile ?? null, shallowEqual);
-
+    const userProfile = useSelector(
+        (state: AppState) => state.user?.profile ?? null,
+        (a, b) =>
+            a === b ||
+            (a != null &&
+                b != null &&
+                a.sub === b.sub &&
+                a.name === b.name &&
+                a.email === b.email &&
+                a.profile === b.profile)
+    );
     const updateParams = useCallback(
         (params: ConfigParameters) => {
             console.groupCollapsed('received UI parameters');
