@@ -12,12 +12,13 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import './configure-yup-init';
 import AppWrapper from './components/App/AppWrapper';
+import SilentRenewApp from '../silent-renew-app';
 
 const container = document.getElementById('root');
-if (container) {
-    const root = createRoot(container);
-    root.render(<AppWrapper />);
+const root = createRoot(container!);
+
+if (window.location.pathname.endsWith('/silent-renew-callback')) {
+    root.render(<SilentRenewApp />);
 } else {
-    document.write("<b>Can't start the application...</b>");
-    throw new Error('No root container found');
+    root.render(<AppWrapper />);
 }
