@@ -107,6 +107,17 @@ export type UserProfile = {
     voltageInitParameterId?: UUID;
     maxAllowedCases?: number;
     maxAllowedBuilds?: number;
+    maxAllowedLoadflow?: number;
+    maxAllowedSecurity?: number;
+    maxAllowedSensitivity?: number;
+    maxAllowedShortCircuit?: number;
+    maxAllowedVoltageInit?: number;
+    maxAllowedPccMin?: number;
+    maxAllowedStateEstimation?: number;
+    maxAllowedBalanceAdjustement?: number;
+    maxAllowedDynamicSimulation?: number;
+    maxAllowedDynamicSecurity?: number;
+    maxAllowedDynamicMargin?: number;
     spreadsheetConfigCollectionId?: UUID;
     networkVisualizationParameterId?: UUID;
     workspaceId?: UUID;

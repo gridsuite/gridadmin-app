@@ -24,6 +24,17 @@ export const WORKSPACE_ID = 'workspaceId';
 
 export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
 export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
+export const USER_QUOTA_LOADFLOW_NB = 'userQuotaLoadflowNb';
+export const USER_QUOTA_SECURITY_NB = 'userQuotaSecurityNb';
+export const USER_QUOTA_SENSITIVITY_NB = 'userQuotaSensitivityNb';
+export const USER_QUOTA_SHORTCIRCUIT_NB = 'userQuotaShortcircuitNb';
+export const USER_QUOTA_VOLTAGE_INIT_NB = 'userQuotaVoltageInitNb';
+export const USER_QUOTA_PCC_MIN_NB = 'userQuotaPccminNb';
+export const USER_QUOTA_STATE_ESTIMATION_NB = 'userQuotaStateEstimationNb';
+export const USER_QUOTA_BALANCE_ADJUSTEMENT_NB = 'userQuotaBalanceAdjustementNb';
+export const USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB = 'userQuotaDynamicSimulationInitNb';
+export const USER_QUOTA_DYNAMIC_SECURITY_INIT_NB = 'userQuotaDynamicSecurityInitNb';
+export const USER_QUOTA_DYNAMIC_MARGIN_INIT_NB = 'userQuotaDynamicMarginInitNb';
 
 const configList: ConfigSelectionProps[] = [
     { selectionFormId: LOADFLOW_PARAM_ID, elementType: ElementType.LOADFLOW_PARAMETERS },
@@ -66,6 +77,11 @@ const ProfileModificationForm: FunctionComponent = () => {
                     <FormattedMessage id={'profiles.form.modification.userQuotas'} />
                 </h3>
             </Grid>
+            <Grid item xs={12} style={{ paddingTop: 0 }}>
+                <h4>
+                    <FormattedMessage id={'profiles.form.modification.userCaseAndBuildsQuotas'} />
+                </h4>
+            </Grid>
             <Grid container spacing={2} direction="row" marginLeft={'auto'}>
                 <Grid item xs={4}>
                     <IntegerInput
@@ -78,6 +94,96 @@ const ProfileModificationForm: FunctionComponent = () => {
                     <IntegerInput
                         name={USER_QUOTA_BUILD_NB}
                         label="profiles.form.modification.numberOfNodeBuilds"
+                        clearable={true}
+                    />
+                </Grid>
+            </Grid>
+            <Grid item xs={12} style={{ paddingTop: 0 }}>
+                <h4>
+                    <FormattedMessage id={'profiles.form.modification.parallelExecutionsQuotas'} />
+                </h4>
+            </Grid>
+            <Grid container spacing={2} direction="row" marginLeft={'auto'}>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_LOADFLOW_NB}
+                        label="profiles.form.modification.numberOfLoadflow"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_SECURITY_NB}
+                        label="profiles.form.modification.numberOfSecurityAnalysis"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_SENSITIVITY_NB}
+                        label="profiles.form.modification.numberOfSensitivityAnalysis"
+                        clearable={true}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} direction="row" marginLeft={'auto'} paddingTop={1}>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_SHORTCIRCUIT_NB}
+                        label="profiles.form.modification.numberOfShortcircuitAnalysis"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_VOLTAGE_INIT_NB}
+                        label="profiles.form.modification.numberOfVoltageInit"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_PCC_MIN_NB}
+                        label="profiles.form.modification.numberOfPccmin"
+                        clearable={true}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} direction="row" marginLeft={'auto'} paddingTop={1}>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_STATE_ESTIMATION_NB}
+                        label="profiles.form.modification.numberOfStateEstimation"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_BALANCE_ADJUSTEMENT_NB}
+                        label="profiles.form.modification.numberOfBalanceAdjustement"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB}
+                        label="profiles.form.modification.numberOfDynamicSimulation"
+                        clearable={true}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} direction="row" marginLeft={'auto'} paddingTop={1}>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_DYNAMIC_SECURITY_INIT_NB}
+                        label="profiles.form.modification.numberOfDynamicSecurity"
+                        clearable={true}
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <IntegerInput
+                        name={USER_QUOTA_DYNAMIC_MARGIN_INIT_NB}
+                        label="profiles.form.modification.numberOfDynamicMargin"
                         clearable={true}
                     />
                 </Grid>
