@@ -83,8 +83,8 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [USER_QUOTA_SECURITY_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_SENSITIVITY_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_SHORTCIRCUIT_NB]: yup.number().positive('userQuotaPositive').optional(),
-            [USER_QUOTA_PCC_MIN_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_VOLTAGE_INIT_NB]: yup.number().positive('userQuotaPositive').optional(),
+            [USER_QUOTA_PCC_MIN_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_STATE_ESTIMATION_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_BALANCE_ADJUSTEMENT_NB]: yup.number().positive('userQuotaPositive').optional(),
             [USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB]: yup.number().positive('userQuotaPositive').optional(),
@@ -185,10 +185,10 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [USER_QUOTA_SHORTCIRCUIT_NB]: response.maxAllowValuesMap
                             ? response.maxAllowValuesMap[MAX_ALLOWED_SHORT_CIRCUIT]
                             : undefined,
-                        [USER_QUOTA_PCC_MIN_NB]: response.maxAllowValuesMap
+                        [USER_QUOTA_VOLTAGE_INIT_NB]: response.maxAllowValuesMap
                             ? response.maxAllowValuesMap[MAX_ALLOWED_VOLTAGE_INIT]
                             : undefined,
-                        [USER_QUOTA_VOLTAGE_INIT_NB]: response.maxAllowValuesMap
+                        [USER_QUOTA_PCC_MIN_NB]: response.maxAllowValuesMap
                             ? response.maxAllowValuesMap[MAX_ALLOWED_PCC_MIN]
                             : undefined,
                         [USER_QUOTA_STATE_ESTIMATION_NB]: response.maxAllowValuesMap
