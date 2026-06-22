@@ -8,6 +8,19 @@
 import * as yup from 'yup';
 import ProfileModificationForm, {
     LOADFLOW_PARAM_ID,
+    MAX_ALLOWED_BALANCE_ADJUSTEMENT,
+    MAX_ALLOWED_BUILD,
+    MAX_ALLOWED_CASES,
+    MAX_ALLOWED_DYNAMIC_MARGIN,
+    MAX_ALLOWED_DYNAMIC_SECURITY,
+    MAX_ALLOWED_DYNAMIC_SIMULATION,
+    MAX_ALLOWED_LOADFLOW,
+    MAX_ALLOWED_PCC_MIN,
+    MAX_ALLOWED_SECURITY,
+    MAX_ALLOWED_SENSITIVITY,
+    MAX_ALLOWED_SHORT_CIRCUIT,
+    MAX_ALLOWED_STATE_ESTIMATION,
+    MAX_ALLOWED_VOLTAGE_INIT,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
     PCCMIN_PARAM_ID,
     PROFILE_NAME,
@@ -94,15 +107,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     const onSubmit = useCallback<SubmitHandler<FormSchema>>(
         (profileFormData) => {
             if (profileId) {
-                const profileData: UserProfile = {
-                    id: profileId,
-                    name: profileFormData[PROFILE_NAME],
-                    loadFlowParameterId: profileFormData[LOADFLOW_PARAM_ID],
-                    securityAnalysisParameterId: profileFormData[SECURITY_ANALYSIS_PARAM_ID],
-                    sensitivityAnalysisParameterId: profileFormData[SENSITIVITY_ANALYSIS_PARAM_ID],
-                    shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
-                    pccMinParameterId: profileFormData[PCCMIN_PARAM_ID],
-                    voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
+                const maxAllowValues = {
                     maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
                     maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
                     maxAllowedLoadflow: profileFormData[USER_QUOTA_LOADFLOW_NB],
@@ -116,6 +121,17 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     maxAllowedDynamicSimulation: profileFormData[USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB],
                     maxAllowedDynamicSecurity: profileFormData[USER_QUOTA_DYNAMIC_SECURITY_INIT_NB],
                     maxAllowedDynamicMargin: profileFormData[USER_QUOTA_DYNAMIC_MARGIN_INIT_NB],
+                };
+                const profileData: UserProfile = {
+                    id: profileId,
+                    name: profileFormData[PROFILE_NAME],
+                    loadFlowParameterId: profileFormData[LOADFLOW_PARAM_ID],
+                    securityAnalysisParameterId: profileFormData[SECURITY_ANALYSIS_PARAM_ID],
+                    sensitivityAnalysisParameterId: profileFormData[SENSITIVITY_ANALYSIS_PARAM_ID],
+                    shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
+                    pccMinParameterId: profileFormData[PCCMIN_PARAM_ID],
+                    voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
+                    maxAllowValuesMap: maxAllowValues,
                     spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
                     networkVisualizationParameterId: profileFormData[NETWORK_VISUALIZATION_PARAMETERS_ID],
                     workspaceId: profileFormData[WORKSPACE_ID],
@@ -151,19 +167,45 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ?? undefined,
                         [PCCMIN_PARAM_ID]: response.pccMinParameterId ?? undefined,
                         [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ?? undefined,
-                        [USER_QUOTA_CASE_NB]: response.maxAllowedCases,
-                        [USER_QUOTA_BUILD_NB]: response.maxAllowedBuilds,
-                        [USER_QUOTA_LOADFLOW_NB]: response.maxAllowedLoadflow,
-                        [USER_QUOTA_SECURITY_NB]: response.maxAllowedSecurity,
-                        [USER_QUOTA_SENSITIVITY_NB]: response.maxAllowedSensitivity,
-                        [USER_QUOTA_SHORTCIRCUIT_NB]: response.maxAllowedShortCircuit,
-                        [USER_QUOTA_PCC_MIN_NB]: response.maxAllowedPccMin,
-                        [USER_QUOTA_VOLTAGE_INIT_NB]: response.maxAllowedVoltageInit,
-                        [USER_QUOTA_STATE_ESTIMATION_NB]: response.maxAllowedStateEstimation,
-                        [USER_QUOTA_BALANCE_ADJUSTEMENT_NB]: response.maxAllowedBalanceAdjustement,
-                        [USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB]: response.maxAllowedDynamicSimulation,
-                        [USER_QUOTA_DYNAMIC_SECURITY_INIT_NB]: response.maxAllowedDynamicSecurity,
-                        [USER_QUOTA_DYNAMIC_MARGIN_INIT_NB]: response.maxAllowedDynamicMargin,
+                        [USER_QUOTA_CASE_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_CASES]
+                            : undefined,
+                        [USER_QUOTA_BUILD_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_BUILD]
+                            : undefined,
+                        [USER_QUOTA_LOADFLOW_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_LOADFLOW]
+                            : undefined,
+                        [USER_QUOTA_SECURITY_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_SECURITY]
+                            : undefined,
+                        [USER_QUOTA_SENSITIVITY_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_SENSITIVITY]
+                            : undefined,
+                        [USER_QUOTA_SHORTCIRCUIT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_SHORT_CIRCUIT]
+                            : undefined,
+                        [USER_QUOTA_PCC_MIN_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_VOLTAGE_INIT]
+                            : undefined,
+                        [USER_QUOTA_VOLTAGE_INIT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_PCC_MIN]
+                            : undefined,
+                        [USER_QUOTA_STATE_ESTIMATION_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_STATE_ESTIMATION]
+                            : undefined,
+                        [USER_QUOTA_BALANCE_ADJUSTEMENT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_BALANCE_ADJUSTEMENT]
+                            : undefined,
+                        [USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_SIMULATION]
+                            : undefined,
+                        [USER_QUOTA_DYNAMIC_SECURITY_INIT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_SECURITY]
+                            : undefined,
+                        [USER_QUOTA_DYNAMIC_MARGIN_INIT_NB]: response.maxAllowValuesMap
+                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_MARGIN]
+                            : undefined,
                         [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId ?? undefined,
                         [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId ?? undefined,
                         [WORKSPACE_ID]: response.workspaceId ?? undefined,
