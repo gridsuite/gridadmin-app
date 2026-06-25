@@ -4,20 +4,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-import 'core-js/es/array/flat-map';
-import 'typeface-roboto';
-import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
-import './configure-yup-init';
-import AppWrapper from './components/App/AppWrapper';
+import SilentRenew from '../silent-renew';
+import { SILENT_RENEW_CALLBACK_PATH } from './services/apps-metadata';
 
 const container = document.getElementById('root');
-if (container) {
-    const root = createRoot(container);
+const root = createRoot(container!);
+
+async function renderApp() {
+    if (globalThis.location.pathname.endsWith(SILENT_RENEW_CALLBACK_PATH)) {
+        root.render(<SilentRenew />);
+        return;
+    }
+    await import('core-js/es/array/flat-map');
+    await import('typeface-roboto');
+    await import('./index.css');
+    await import('./configure-yup-init');
+    const { default: AppWrapper } = await import('./components/App/AppWrapper');
     root.render(<AppWrapper />);
-} else {
-    document.write("<b>Can't start the application...</b>");
-    throw new Error('No root container found');
 }
+renderApp().catch((error) => console.error(error));

@@ -20,7 +20,7 @@ import {
 import { useParameterState } from '../parameters';
 import { APP_NAME } from '../../utils/config-params';
 import { NavLink, type To, useNavigate } from 'react-router';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
@@ -96,7 +96,11 @@ type AppTopBarProps = {
 export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
-    const userProfile = useSelector((state: AppState) => state.user?.profile ?? null, shallowEqual);
+    const userProfile = useSelector(
+        (state: AppState) => state.user?.profile ?? null,
+        (a, b) =>
+            a === b || (a?.sub === b?.sub && a?.name === b?.name && a?.email === b?.email && a?.profile === b?.profile)
+    );
 
     const navigate = useNavigate();
 
