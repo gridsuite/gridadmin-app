@@ -20,7 +20,7 @@ import {
 import { useParameterState } from '../parameters';
 import { APP_NAME } from '../../utils/config-params';
 import { NavLink, type To, useNavigate } from 'react-router';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { AppsMetadataSrv, StudySrv } from '../../services';
 import GridAdminLogoLight from '../../images/GridAdmin_logo_light.svg?react';
