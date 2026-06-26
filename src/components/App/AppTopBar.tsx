@@ -96,8 +96,11 @@ type AppTopBarProps = {
 export default function AppTopBar({ userManagerInstance }: Readonly<AppTopBarProps>) {
     const theme = useTheme();
     const dispatch = useDispatch<AppDispatch>();
-    const userProfile = useSelector((state: AppState) => state.user?.profile ?? null, shallowEqual);
-
+    const userProfile = useSelector(
+        (state: AppState) => state.user?.profile ?? null,
+        (a, b) =>
+            a === b || (a?.sub === b?.sub && a?.name === b?.name && a?.email === b?.email && a?.profile === b?.profile)
+    );
     const navigate = useNavigate();
 
     const [themeLocal, handleChangeTheme] = useParameterState(PARAM_THEME);
