@@ -5,18 +5,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Grid } from '@mui/material';
 import { Cancel, CheckCircle, RadioButtonUnchecked } from '@mui/icons-material';
 import { ICellRendererParams } from 'ag-grid-community';
 
 export const ValidityCellRenderer = (props: ICellRendererParams) => {
-    return (
-        <Grid container>
-            {props.value == null && <RadioButtonUnchecked fontSize="small" />}
-            {props.value === true && <CheckCircle fontSize="small" color="success" />}
-            {props.value === false && <Cancel fontSize="small" color="error" />}
-        </Grid>
-    );
+    if (props.value == null) {
+        return <RadioButtonUnchecked fontSize="small" />;
+    }
+    if (props.value === true) {
+        return <CheckCircle fontSize="small" color="success" />;
+    }
+
+    return <Cancel fontSize="small" color="error" />;
 };
 
 export default ValidityCellRenderer;

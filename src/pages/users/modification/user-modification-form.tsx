@@ -6,7 +6,7 @@
  */
 
 import { useMemo, type FunctionComponent } from 'react';
-import { Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import * as yup from 'yup';
 import { AutocompleteInput, TextInput } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
@@ -60,8 +60,8 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
     );
 
     return (
-        <Grid item container spacing={2} marginTop={0} style={{ height: '100%' }}>
-            <Grid item xs={12}>
+        <Grid container spacing={2} marginTop={0} sx={{ height: '100%', width: '100%' }}>
+            <Grid sx={{ width: '100%' }}>
                 <TextInput
                     name={USER_NAME}
                     label={'users.table.id'}
@@ -69,7 +69,7 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
                     formProps={{ disabled: true, style: { fontStyle: 'italic' } }}
                 />
             </Grid>
-            <Grid item xs={12}>
+            <Grid sx={{ width: '100%' }}>
                 <TextInput
                     name={USER_FULL_NAME}
                     label={'users.table.fullName'}
@@ -77,7 +77,7 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
                     formProps={{ disabled: true, style: { fontStyle: 'italic' } }}
                 />
             </Grid>
-            <Grid item xs={12}>
+            <Grid sx={{ width: '100%' }}>
                 <AutocompleteInput
                     name={USER_PROFILE_NAME}
                     label={'users.table.profileName'}
@@ -89,7 +89,7 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
                     options={profileOptions}
                 />
             </Grid>
-            <Grid item xs={12} style={{ height: '85%' }}>
+            <Grid sx={{ height: '85%', width: '100%' }}>
                 <TableSelection<GroupSelectionItem>
                     titleId="users.table.groups"
                     items={groupOptions}

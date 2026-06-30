@@ -5,13 +5,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { Grid, Typography } from '@mui/material';
+import { Grid2 as Grid, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 export default function HomePage(): ReactElement {
     return (
-        <Grid item id="home-page" xs={12} alignSelf="center" component="section">
+        <Grid
+            id="home-page"
+            size={12}
+            alignSelf="center"
+            component="section"
+        >
             <Typography variant="h3" color="textPrimary" align="center">
                 <FormattedMessage id="connected" />
             </Typography>

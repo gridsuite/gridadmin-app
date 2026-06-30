@@ -18,7 +18,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { AppBar, Box, Button, ButtonProps, Grid, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, ButtonProps, Grid2 as Grid, Toolbar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
@@ -75,7 +75,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
 
     return (
         <Grid container direction="column" justifyContent="flex-start" alignItems="stretch" width={'100%'}>
-            <Grid item xs="auto">
+            <Grid size="auto">
                 <AppBar position="static" color="default">
                     <Toolbar
                         variant="dense"
@@ -97,7 +97,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                     </Toolbar>
                 </AppBar>
             </Grid>
-            <Grid item xs>
+            <Grid sx={{ flexGrow: 1 }}>
                 <AgGrid<TData, TContext & GridTableExposed>
                     {...agGridProps}
                     ref={gridRef}

@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import {
     AnnouncementNotification,
     AuthenticationRouter,
@@ -148,13 +148,13 @@ export default function App() {
             alignItems="stretch"
             sx={{ height: '100vh', width: '100vw' }}
         >
-            <Grid item xs="auto">
+            <Grid size="auto">
                 <AppTopBar userManagerInstance={userManager.instance} />
             </Grid>
-            <Grid item xs="auto">
+            <Grid size="auto">
                 <AnnouncementNotification userProfile={userProfile} />
             </Grid>
-            <Grid item container xs component="main" height={'100%'}>
+            <Grid component="main" container sx={{ flexGrow: 1, height: '100%', width: '100%' }}>
                 <CardErrorBoundary>
                     <div
                         className="singlestretch-parent"

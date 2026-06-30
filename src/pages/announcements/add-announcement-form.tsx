@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
 import * as yup from 'yup';
@@ -136,8 +136,8 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
         >
             <FormErrorProvider onError={onErrorIntl}>
                 <Grid container direction="column" spacing={1} height="100%">
-                    <Grid item container xs="auto" spacing={1}>
-                        <Grid item xs={12} lg={6}>
+                    <Grid container spacing={1}>
+                        <Grid size={{ xs: 12, lg: 6 }}>
                             <DateTimePickerElement<FormSchema>
                                 name={START_DATE}
                                 label={intl.formatMessage({ id: 'announcements.table.startDate' })}
@@ -148,7 +148,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                                 disablePast
                             />
                         </Grid>
-                        <Grid item xs={12} lg={6}>
+                        <Grid size={{ xs: 12, lg: 6 }}>
                             <DateTimePickerElement<FormSchema>
                                 name={END_DATE}
                                 label={intl.formatMessage({ id: 'announcements.table.endDate' })}
@@ -161,7 +161,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                             />
                         </Grid>
                     </Grid>
-                    <Grid item xs="auto">
+                    <Grid size="auto">
                         <SelectElement<FormSchema>
                             name={SEVERITY}
                             label={intl.formatMessage({ id: 'announcements.severity' })}
@@ -176,7 +176,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs>
+                    <Grid sx={{ flexGrow: 1 }}>
                         <TextareaAutosizeElement<FormSchema>
                             name={MESSAGE}
                             label={intl.formatMessage({ id: 'announcements.form.message' })}
@@ -185,7 +185,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                             //inputProps={{ maxLength: MESSAGE_MAX_LENGTH } satisfies Partial<HTMLInputElement>}
                         />
                     </Grid>
-                    <Grid item xs="auto">
+                    <Grid size="auto">
                         <SubmitButton variant="outlined" type="submit" fullWidth />
                     </Grid>
                 </Grid>
