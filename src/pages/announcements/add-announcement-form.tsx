@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { Grid2 as Grid } from '@mui/material';
+import { Box, Grid2 as Grid, Stack } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
 import * as yup from 'yup';
@@ -135,7 +135,7 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
             FormProps={{ style: { height: '100%' } }}
         >
             <FormErrorProvider onError={onErrorIntl}>
-                <Grid container direction="column" spacing={1} height="100%">
+                <Stack spacing={1} height="100%">
                     <Grid container spacing={1}>
                         <Grid size={{ xs: 12, lg: 6 }}>
                             <DateTimePickerElement<FormSchema>
@@ -161,22 +161,20 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                             />
                         </Grid>
                     </Grid>
-                    <Grid size="auto">
-                        <SelectElement<FormSchema>
-                            name={SEVERITY}
-                            label={intl.formatMessage({ id: 'announcements.severity' })}
-                            options={useMemo(
-                                () =>
-                                    Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
-                                        id: value,
-                                        label: intl.formatMessage({ id: `announcements.severity.${value}` }),
-                                    })),
-                                [intl]
-                            )}
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid sx={{ flexGrow: 1 }}>
+                    <SelectElement<FormSchema>
+                        name={SEVERITY}
+                        label={intl.formatMessage({ id: 'announcements.severity' })}
+                        options={useMemo(
+                            () =>
+                                Object.values(UserAdminSrv.AnnouncementSeverity).map((value) => ({
+                                    id: value,
+                                    label: intl.formatMessage({ id: `announcements.severity.${value}` }),
+                                })),
+                            [intl]
+                        )}
+                        fullWidth
+                    />
+                    <Box sx={{ flexGrow: 1 }}>
                         <TextareaAutosizeElement<FormSchema>
                             name={MESSAGE}
                             label={intl.formatMessage({ id: 'announcements.form.message' })}
@@ -184,11 +182,9 @@ export default function AddAnnouncementForm({ onAnnouncementCreated }: Readonly<
                             fullWidth
                             //inputProps={{ maxLength: MESSAGE_MAX_LENGTH } satisfies Partial<HTMLInputElement>}
                         />
-                    </Grid>
-                    <Grid size="auto">
-                        <SubmitButton variant="outlined" type="submit" fullWidth />
-                    </Grid>
-                </Grid>
+                    </Box>
+                    <SubmitButton variant="outlined" type="submit" fullWidth />
+                </Stack>
             </FormErrorProvider>
         </FormContainer>
     );

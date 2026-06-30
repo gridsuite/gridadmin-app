@@ -6,7 +6,7 @@
  */
 
 import { FunctionComponent, useCallback, useRef, useState } from 'react';
-import { Grid2 as Grid } from '@mui/material';
+import { Grid2 as Grid, Stack } from '@mui/material';
 import { GridTableRef } from '../../components/Grid';
 import { GroupInfos } from '../../services';
 import { RowClickedEvent } from 'ag-grid-community';
@@ -41,7 +41,7 @@ const GroupsPage: FunctionComponent = () => {
 
     return (
         <>
-            <Grid container direction="column" spacing={2} component="section" sx={{ height: '100%', width: '100%' }}>
+            <Stack spacing={2} component="section" sx={{ height: '100%', width: '100%' }}>
                 <Grid container sx={{ flexGrow: 1, width: '100%' }}>
                     <GroupsTable
                         gridRef={gridRef}
@@ -49,7 +49,7 @@ const GroupsPage: FunctionComponent = () => {
                         setOpenAddGroupDialog={setOpenAddGroupDialog}
                     />
                 </Grid>
-            </Grid>
+            </Stack>
             <AddGroupDialog gridRef={gridRef} open={openAddGroupDialog} setOpen={setOpenAddGroupDialog} />
             <GroupModificationDialog
                 groupInfos={editingGroup}

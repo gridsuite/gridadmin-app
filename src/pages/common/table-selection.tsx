@@ -8,7 +8,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { CustomAGGrid } from '@gridsuite/commons-ui';
-import { Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, GetRowIdParams, GridReadyEvent } from 'ag-grid-community';
 import { defaultColDef, defaultRowSelection } from './table-config';
@@ -96,12 +96,12 @@ function TableSelection<TData>({
     }, [columnDefs]);
 
     return (
-        <Grid container direction="column" sx={{ height: '100%', width: '100%' }}>
+        <Stack sx={{ height: '100%', width: '100%' }}>
             <Typography variant="subtitle1">
                 <FormattedMessage id={titleId} />
                 {` (${selectedCount} / ${items.length})`}
             </Typography>
-            <Grid sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1 }}>
                 <CustomAGGrid
                     gridId="table-selection"
                     ref={gridRef}
@@ -114,8 +114,8 @@ function TableSelection<TData>({
                     onGridReady={handleGridReady}
                     accentedSort
                 />
-            </Grid>
-        </Grid>
+            </Box>
+        </Stack>
     );
 }
 
