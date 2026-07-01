@@ -6,7 +6,7 @@
  */
 
 import { useMemo, type FunctionComponent } from 'react';
-import { Grid } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import * as yup from 'yup';
 import { TextInput } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
@@ -60,11 +60,11 @@ const GroupModificationForm: FunctionComponent<GroupModificationFormProps> = ({
     );
 
     return (
-        <Grid item container spacing={2} marginTop={0} style={{ height: '100%' }}>
-            <Grid item xs={12}>
+        <Grid container spacing={2} marginTop={0} sx={{ height: '100%', width: '100%' }}>
+            <Grid sx={{ width: '100%' }}>
                 <TextInput name={GROUP_NAME} label={'groups.table.id'} clearable={true} />
             </Grid>
-            <Grid item xs={12} style={{ height: '90%' }}>
+            <Grid sx={{ height: '90%', width: '100%' }}>
                 <TableSelection<UserSelectionItem>
                     titleId="groups.table.users"
                     items={usersOptions}

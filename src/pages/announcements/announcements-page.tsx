@@ -8,7 +8,7 @@
 import type { UUID } from 'node:crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid2 as Grid, Stack, Typography } from '@mui/material';
 import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import type { ColDef, GetRowIdParams, ValueFormatterFunc } from 'ag-grid-community';
 import { type GridTableRef } from '../../components/Grid';
@@ -119,41 +119,38 @@ export default function AnnouncementsPage() {
 
     const gridContext = useMemo(() => ({ refresh: loadDataAndSave }), [loadDataAndSave]);
 
-    // Note: using <Stack/> for the columns didn't work
     return (
-        <Grid container spacing={2} p={1} height={'100%'}>
-            <Grid item container direction="column" xs={12} sm={6} md={4}>
-                <Grid item xs="auto">
+        <Grid container spacing={2} sx={{ p: 1, height: '100%', width: '100%' }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <Stack>
                     <Typography variant="subtitle1">
                         <FormattedMessage id="announcements.programNewMessage" />
                     </Typography>
-                </Grid>
-                <Grid item xs="auto">
                     <Divider sx={{ mt: 0.5, mb: 1.5 }} />
-                </Grid>
-                <Grid item xs>
-                    <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
-                </Grid>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
+                    </Box>
+                </Stack>
             </Grid>
-            <Grid item container direction="column" xs={12} sm={6} md={8}>
-                <Grid item xs="auto">
+            <Grid size={{ xs: 12, sm: 6, md: 8 }}>
+                <Stack height="100%">
                     <Typography variant="subtitle1" mb={0.5}>
                         <FormattedMessage id="announcements.programmedMessage" />
                     </Typography>
-                </Grid>
-                <Grid item xs>
-                    <AgGrid<Announcement>
-                        ref={gridRef}
-                        rowData={data}
-                        alwaysShowVerticalScroll
-                        onGridReady={loadDataAndSave}
-                        columnDefs={columns}
-                        defaultColDef={defaultColDef}
-                        gridId="table-announcements"
-                        getRowId={getRowId}
-                        context={gridContext}
-                    />
-                </Grid>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <AgGrid<Announcement>
+                            ref={gridRef}
+                            rowData={data}
+                            alwaysShowVerticalScroll
+                            onGridReady={loadDataAndSave}
+                            columnDefs={columns}
+                            defaultColDef={defaultColDef}
+                            gridId="table-announcements"
+                            getRowId={getRowId}
+                            context={gridContext}
+                        />
+                    </Box>
+                </Stack>
             </Grid>
         </Grid>
     );

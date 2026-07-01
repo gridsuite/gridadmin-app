@@ -6,7 +6,7 @@
  */
 
 import { FunctionComponent, useCallback, useRef, useState } from 'react';
-import { Grid } from '@mui/material';
+import { Grid2 as Grid, Stack } from '@mui/material';
 import { GridTableRef } from '../../components/Grid';
 import { UserInfos } from '../../services';
 import { RowClickedEvent } from 'ag-grid-community';
@@ -41,15 +41,15 @@ const UsersPage: FunctionComponent = () => {
 
     return (
         <>
-            <Grid item container direction="column" spacing={2} height={'100%'}>
-                <Grid item container xs sx={{ width: 1 }}>
+            <Stack spacing={2} sx={{ height: '100%', width: '100%' }}>
+                <Grid container sx={{ flexGrow: 1, width: '100%' }}>
                     <UsersTable
                         gridRef={gridRef}
                         onRowClicked={onRowClicked}
                         setOpenAddUserDialog={setOpenAddUserDialog}
                     />
                 </Grid>
-            </Grid>
+            </Stack>
             <AddUserDialog gridRef={gridRef} open={openAddUserDialog} setOpen={setOpenAddUserDialog} />
             <UserModificationDialog
                 userInfos={editingUser}

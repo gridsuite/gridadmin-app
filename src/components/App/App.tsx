@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import {
     AnnouncementNotification,
     AuthenticationRouter,
@@ -140,21 +140,10 @@ export default function App() {
     }, [initialMatchSilentRenewCallbackUrl, dispatch, initialMatchSigninCallbackUrl]);
 
     return (
-        <Grid
-            container
-            direction="column"
-            spacing={0}
-            justifyContent="flex-start"
-            alignItems="stretch"
-            sx={{ height: '100vh', width: '100vw' }}
-        >
-            <Grid item xs="auto">
-                <AppTopBar userManagerInstance={userManager.instance} />
-            </Grid>
-            <Grid item xs="auto">
-                <AnnouncementNotification userProfile={userProfile} />
-            </Grid>
-            <Grid item container xs component="main" height={'100%'}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
+            <AppTopBar userManagerInstance={userManager.instance} />
+            <AnnouncementNotification userProfile={userProfile} />
+            <Box component="main" sx={{ display: 'flex', flexGrow: 1, minHeight: 0, width: '100%' }}>
                 <CardErrorBoundary>
                     <div
                         className="singlestretch-parent"
@@ -195,7 +184,7 @@ export default function App() {
                         )}
                     </div>
                 </CardErrorBoundary>
-            </Grid>
-        </Grid>
+            </Box>
+        </Box>
     );
 }

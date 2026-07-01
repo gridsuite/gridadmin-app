@@ -18,7 +18,7 @@ import {
     useMemo,
     useState,
 } from 'react';
-import { AppBar, Box, Button, ButtonProps, Grid, Toolbar } from '@mui/material';
+import { AppBar, Box, Button, ButtonProps, Stack, Toolbar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { AgGrid, AgGridRef } from './AgGrid';
 import { GridOptions } from 'ag-grid-community';
@@ -74,30 +74,28 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
     );
 
     return (
-        <Grid container direction="column" justifyContent="flex-start" alignItems="stretch" width={'100%'}>
-            <Grid item xs="auto">
-                <AppBar position="static" color="default">
-                    <Toolbar
-                        variant="dense"
-                        disableGutters
-                        sx={(theme) => ({
-                            marginLeft: 1,
-                            '& > *': {
-                                // mui's button set it own margin on itself...
-                                marginRight: `${theme.spacing(1)} !important`,
-                                '&:last-child': {
-                                    marginRight: '0 !important',
-                                },
+        <Stack justifyContent="flex-start" alignItems="stretch" width={'100%'}>
+            <AppBar position="static" color="default">
+                <Toolbar
+                    variant="dense"
+                    disableGutters
+                    sx={(theme) => ({
+                        marginLeft: 1,
+                        '& > *': {
+                            // mui's button set it own margin on itself...
+                            marginRight: `${theme.spacing(1)} !important`,
+                            '&:last-child': {
+                                marginRight: '0 !important',
                             },
-                        })}
-                    >
-                        {toolbarContent}
-                        <Box sx={{ flexGrow: 1 }} />
-                        {alignedRightToolbarContent}
-                    </Toolbar>
-                </AppBar>
-            </Grid>
-            <Grid item xs>
+                        },
+                    })}
+                >
+                    {toolbarContent}
+                    <Box sx={{ flexGrow: 1 }} />
+                    {alignedRightToolbarContent}
+                </Toolbar>
+            </AppBar>
+            <Box sx={{ flexGrow: 1 }}>
                 <AgGrid<TData, TContext & GridTableExposed>
                     {...agGridProps}
                     ref={gridRef}
@@ -114,8 +112,8 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                         [context, loadDataAndSave]
                     )}
                 />
-            </Grid>
-        </Grid>
+            </Box>
+        </Stack>
     );
 });
 export default GridTable;

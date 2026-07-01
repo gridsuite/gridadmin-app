@@ -6,7 +6,7 @@
  */
 
 import { ElementType, IntegerInput, TextInput } from '@gridsuite/commons-ui';
-import Grid from '@mui/material/Grid';
+import { Grid2 as Grid } from '@mui/material';
 import ConfigurationSelection, { ConfigSelectionProps } from './configuration-selection';
 import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
@@ -42,18 +42,18 @@ const configList: ConfigSelectionProps[] = [
 
 const ProfileModificationForm: FunctionComponent = () => {
     return (
-        <Grid container spacing={2} marginTop={'auto'}>
-            <Grid item xs={12}>
+        <Grid container spacing={2} marginTop={'auto'} sx={{ width: '100%' }}>
+            <Grid sx={{ width: '100%' }}>
                 <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={true} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid sx={{ width: '100%' }}>
                 <h3>
                     <FormattedMessage id={'profiles.form.modification.defaultConfigurations'} />
                 </h3>
             </Grid>
             {configList.map((config) => {
                 return (
-                    <Grid item xs={12} key={config.selectionFormId}>
+                    <Grid key={config.selectionFormId} sx={{ width: '100%' }}>
                         <ConfigurationSelection
                             elementType={config.elementType}
                             selectionFormId={config.selectionFormId}
@@ -61,20 +61,20 @@ const ProfileModificationForm: FunctionComponent = () => {
                     </Grid>
                 );
             })}
-            <Grid item xs={12}>
+            <Grid sx={{ width: '100%' }}>
                 <h3>
                     <FormattedMessage id={'profiles.form.modification.userQuotas'} />
                 </h3>
             </Grid>
-            <Grid container spacing={2} direction="row" marginLeft={'auto'}>
-                <Grid item xs={4}>
+            <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid size={4}>
                     <IntegerInput
                         name={USER_QUOTA_CASE_NB}
                         label="profiles.form.modification.numberOfCasesOrStudies"
                         clearable={true}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                     <IntegerInput
                         name={USER_QUOTA_BUILD_NB}
                         label="profiles.form.modification.numberOfNodeBuilds"

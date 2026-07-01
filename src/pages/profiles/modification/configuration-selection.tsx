@@ -8,7 +8,7 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
-import { Grid, IconButton, Tooltip } from '@mui/material';
+import { Grid2 as Grid, IconButton, Tooltip } from '@mui/material';
 import { useIntl } from 'react-intl';
 import { DirectoryItemSelector, ElementAttributes, ElementType, TreeViewFinderNodeProps } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';
@@ -100,7 +100,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
 
     return (
         <Grid container columns={24} alignItems={'center'}>
-            <Grid item xs={1}>
+            <Grid size={1}>
                 <IconButton edge="start" onClick={handleResetConfig} disableRipple={watchConfigId === undefined}>
                     <Tooltip
                         title={intl.formatMessage({
@@ -111,7 +111,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                     </Tooltip>
                 </IconButton>
             </Grid>
-            <Grid item xs={1}>
+            <Grid size={1}>
                 <IconButton edge="start" onClick={handleSelectFolder}>
                     <Tooltip
                         title={intl.formatMessage({
@@ -122,7 +122,7 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
                     </Tooltip>
                 </IconButton>
             </Grid>
-            <Grid item xs={22}>
+            <Grid size={22}>
                 <LinkedPathDisplay
                     nameKey={getConfigTranslationKey()}
                     value={selectedElementName}

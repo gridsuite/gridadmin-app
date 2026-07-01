@@ -6,7 +6,7 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Chip, Grid, Tooltip } from '@mui/material';
+import { Chip, Grid2 as Grid, Tooltip } from '@mui/material';
 import { mergeSx, type MuiStyles } from '@gridsuite/commons-ui';
 
 const maxChipWidth = 100;
