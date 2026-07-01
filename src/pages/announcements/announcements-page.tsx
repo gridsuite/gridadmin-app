@@ -133,7 +133,7 @@ export default function AnnouncementsPage() {
                 </Stack>
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 8 }}>
-                <Stack>
+                <Stack height="100%">
                     <Typography variant="subtitle1" mb={0.5}>
                         <FormattedMessage id="announcements.programmedMessage" />
                     </Typography>
