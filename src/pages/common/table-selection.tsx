@@ -101,7 +101,7 @@ function TableSelection<TData>({
                 <FormattedMessage id={titleId} />
                 {` (${selectedCount} / ${items.length})`}
             </Typography>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, minHeight: 0 }}>
                 <CustomAGGrid
                     gridId="table-selection"
                     ref={gridRef}
