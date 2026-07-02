@@ -95,7 +95,7 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                     {alignedRightToolbarContent}
                 </Toolbar>
             </AppBar>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, minHeight: 0 }}>
                 <AgGrid<TData, TContext & GridTableExposed>
                     {...agGridProps}
                     ref={gridRef}
