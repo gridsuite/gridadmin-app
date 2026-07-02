@@ -56,12 +56,10 @@ const GroupModificationDialog: FunctionComponent<GroupModificationDialogProps> =
                     setDataFetchStatus(FetchStatus.FETCH_SUCCESS);
                     setUserOptions(
                         allUsers
-                            ?.map(
-                                (p): UserSelectionItem => ({
-                                    sub: p.sub,
-                                    fullName: formatFullName(p.firstName, p.lastName),
-                                })
-                            )
+                            ?.map((p): UserSelectionItem => ({
+                                sub: p.sub,
+                                fullName: formatFullName(p.firstName, p.lastName),
+                            }))
                             .sort((a, b) => a.sub.localeCompare(b.sub)) || []
                     );
                 })

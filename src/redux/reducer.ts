@@ -79,11 +79,7 @@ const initialState: AppState = {
 };
 
 export type Actions =
-    | AuthenticationActions
-    | UserManagerAction
-    | ThemeAction
-    | SelectLanguageAction
-    | ComputedLanguageAction;
+    AuthenticationActions | UserManagerAction | ThemeAction | SelectLanguageAction | ComputedLanguageAction;
 
 export type AppStateKey = keyof AppState;
 

@@ -32,8 +32,7 @@ type GridTableExposed = {
 export type GridTableRef<TData, TContext extends {} = {}> = AgGridRef<TData, TContext & GridTableExposed>;
 
 export interface GridTableProps<TData>
-    extends Omit<GridOptions<TData>, 'rowData' | 'alwaysShowVerticalScroll' | 'onGridReady'>,
-        PropsWithChildren<{}> {
+    extends Omit<GridOptions<TData>, 'rowData' | 'alwaysShowVerticalScroll' | 'onGridReady'>, PropsWithChildren<{}> {
     //accessRef: RefObject<GridTableRef<TData, TContext>>;
     dataLoader: () => Promise<TData[]>;
     alignedRightToolbarContent?: ReactNode;
@@ -106,11 +105,10 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
                     onGridReady={loadDataAndSave}
                     accentedSort={true}
                     context={useMemo(
-                        () =>
-                            ({
-                                ...((context ?? {}) as TContext),
-                                refresh: loadDataAndSave,
-                            }) as TContext & GridTableExposed,
+                        () => ({
+                            ...((context ?? {}) as TContext),
+                            refresh: loadDataAndSave,
+                        }),
                         [context, loadDataAndSave]
                     )}
                 />
