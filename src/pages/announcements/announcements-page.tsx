@@ -121,13 +121,13 @@ export default function AnnouncementsPage() {
 
     return (
         <Grid container spacing={2} sx={{ p: 1, height: '100%', width: '100%' }}>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Stack>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: 'flex' }}>
+                <Stack height="100%" sx={{ flexGrow: 1 }}>
                     <Typography variant="subtitle1">
                         <FormattedMessage id="announcements.programNewMessage" />
                     </Typography>
                     <Divider sx={{ mt: 0.5, mb: 1.5 }} />
-                    <Box sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1, minHeight: 0 }}>
                         <AddAnnouncementForm onAnnouncementCreated={refreshGrid} />
                     </Box>
                 </Stack>

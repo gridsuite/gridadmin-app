@@ -14,7 +14,7 @@ const counterChipWidth = 25;
 
 const chipStyles = {
     default: {
-        marginTop: 2,
+        marginTop: 1,
         marginLeft: 1,
         maxWidth: maxChipWidth,
     },

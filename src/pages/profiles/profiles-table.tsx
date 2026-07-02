@@ -75,10 +75,6 @@ const ProfilesTable: FunctionComponent<ProfilesTableProps> = (props) => {
             {
                 field: 'allLinksValid',
                 cellDataType: 'boolean',
-                cellStyle: () => ({
-                    display: 'flex',
-                    alignItems: 'center',
-                }),
                 cellRenderer: ValidityCellRenderer,
                 tooltipValueGetter: (p: ITooltipParams) => {
                     if (p.value == null) {
