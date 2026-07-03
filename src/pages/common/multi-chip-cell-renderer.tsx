@@ -85,7 +85,7 @@ const MultiChipCellRenderer = (props: MultiChipCellRendererProps) => {
     };
 
     return (
-        <Grid container direction="row" spacing={1} wrap="nowrap" ref={containerRef}>
+        <Grid container direction="row" wrap="nowrap" ref={containerRef}>
             {values.map((label: string, index: number) => customChip(label, index, values.length))}
         </Grid>
     );
