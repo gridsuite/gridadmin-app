@@ -60,7 +60,7 @@ const GroupModificationForm: FunctionComponent<GroupModificationFormProps> = ({
     );
 
     return (
-        <Grid container spacing={2} marginTop={0} sx={{ height: '100%', width: '100%' }}>
+        <Grid container spacing={2} marginTop={2} sx={{ height: '100%', width: '100%' }}>
             <Grid sx={{ width: '100%' }}>
                 <TextInput name={GROUP_NAME} label={'groups.table.id'} clearable={true} />
             </Grid>

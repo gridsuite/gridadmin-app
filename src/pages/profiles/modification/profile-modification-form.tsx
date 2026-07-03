@@ -42,7 +42,7 @@ const configList: ConfigSelectionProps[] = [
 
 const ProfileModificationForm: FunctionComponent = () => {
     return (
-        <Grid container spacing={2} marginTop={'auto'} sx={{ width: '100%' }}>
+        <Grid container spacing={2} marginTop={2} sx={{ width: '100%' }}>
             <Grid sx={{ width: '100%' }}>
                 <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={true} />
             </Grid>
