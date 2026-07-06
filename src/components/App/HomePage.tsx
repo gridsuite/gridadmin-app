@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 
 export default function HomePage(): ReactElement {
     return (
-        <Grid id="home-page" size={12} alignSelf="center" component="section">
+        <Grid id="home-page" alignSelf="center" component="section" sx={{ width: '100%' }}>
             <Typography variant="h3" color="textPrimary" align="center">
                 <FormattedMessage id="connected" />
             </Typography>
