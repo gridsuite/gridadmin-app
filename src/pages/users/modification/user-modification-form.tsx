@@ -8,7 +8,7 @@
 import { useMemo, type FunctionComponent } from 'react';
 import { Grid2 as Grid } from '@mui/material';
 import * as yup from 'yup';
-import { AutocompleteInput, TextInput } from '@gridsuite/commons-ui';
+import { AutocompleteInput, TextInput, NAME_EMPTY } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
 import { useIntl } from 'react-intl';
 import { ColDef } from 'ag-grid-community';
@@ -21,7 +21,7 @@ export const USER_SELECTED_GROUPS = 'groups';
 export const UserModificationSchema = yup
     .object()
     .shape({
-        [USER_NAME]: yup.string().trim().required('nameEmpty'),
+        [USER_NAME]: yup.string().trim().required(NAME_EMPTY),
         [USER_FULL_NAME]: yup.string().nullable(),
         [USER_PROFILE_NAME]: yup.string().nullable(),
         [USER_SELECTED_GROUPS]: yup.string().nullable(),

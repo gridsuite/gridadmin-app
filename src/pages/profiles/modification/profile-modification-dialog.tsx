@@ -23,7 +23,7 @@ import ProfileModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
+import { CustomMuiDialog, FetchStatus, NAME_EMPTY, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
 
@@ -46,7 +46,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     const formSchema = yup
         .object()
         .shape({
-            [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
+            [PROFILE_NAME]: yup.string().trim().required(NAME_EMPTY),
             [LOADFLOW_PARAM_ID]: yup.string<UUID>().optional(),
             [SECURITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
             [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
