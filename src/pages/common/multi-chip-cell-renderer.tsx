@@ -6,7 +6,7 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Chip, Grid, Tooltip } from '@mui/material';
+import { Chip, Grid2 as Grid, Tooltip } from '@mui/material';
 import { mergeSx, type MuiStyles } from '@gridsuite/commons-ui';
 
 const maxChipWidth = 100;
@@ -14,7 +14,7 @@ const counterChipWidth = 25;
 
 const chipStyles = {
     default: {
-        marginTop: 2,
+        marginTop: 1,
         marginLeft: 1,
         maxWidth: maxChipWidth,
     },
@@ -85,7 +85,7 @@ const MultiChipCellRenderer = (props: MultiChipCellRendererProps) => {
     };
 
     return (
-        <Grid container direction="row" spacing={1} wrap="nowrap" ref={containerRef}>
+        <Grid container direction="row" wrap="nowrap" ref={containerRef}>
             {values.map((label: string, index: number) => customChip(label, index, values.length))}
         </Grid>
     );
