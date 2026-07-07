@@ -105,8 +105,7 @@ export type UserProfile = {
     shortcircuitParameterId?: UUID;
     pccMinParameterId?: UUID;
     voltageInitParameterId?: UUID;
-    maxAllowedCases?: number;
-    maxAllowedBuilds?: number;
+    maxAllowValuesMap?: Record<string, number | undefined>;
     spreadsheetConfigCollectionId?: UUID;
     networkVisualizationParameterId?: UUID;
     workspaceId?: UUID;
