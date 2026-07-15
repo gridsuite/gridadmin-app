@@ -8,19 +8,6 @@
 import * as yup from 'yup';
 import ProfileModificationForm, {
     LOADFLOW_PARAM_ID,
-    MAX_ALLOWED_BALANCE_ADJUSTEMENT,
-    MAX_ALLOWED_BUILD,
-    MAX_ALLOWED_CASES,
-    MAX_ALLOWED_DYNAMIC_MARGIN,
-    MAX_ALLOWED_DYNAMIC_SECURITY,
-    MAX_ALLOWED_DYNAMIC_SIMULATION,
-    MAX_ALLOWED_LOADFLOW,
-    MAX_ALLOWED_PCC_MIN,
-    MAX_ALLOWED_SECURITY,
-    MAX_ALLOWED_SENSITIVITY,
-    MAX_ALLOWED_SHORT_CIRCUIT,
-    MAX_ALLOWED_STATE_ESTIMATION,
-    MAX_ALLOWED_VOLTAGE_INIT,
     NETWORK_VISUALIZATION_PARAMETERS_ID,
     PCCMIN_PARAM_ID,
     PROFILE_NAME,
@@ -28,19 +15,6 @@ import ProfileModificationForm, {
     SENSITIVITY_ANALYSIS_PARAM_ID,
     SHORTCIRCUIT_PARAM_ID,
     SPREADSHEET_CONFIG_COLLECTION_ID,
-    USER_QUOTA_BALANCE_ADJUSTEMENT_NB,
-    USER_QUOTA_BUILD_NB,
-    USER_QUOTA_CASE_NB,
-    USER_QUOTA_DYNAMIC_MARGIN_INIT_NB,
-    USER_QUOTA_DYNAMIC_SECURITY_INIT_NB,
-    USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB,
-    USER_QUOTA_LOADFLOW_NB,
-    USER_QUOTA_PCC_MIN_NB,
-    USER_QUOTA_SECURITY_NB,
-    USER_QUOTA_SENSITIVITY_NB,
-    USER_QUOTA_SHORTCIRCUIT_NB,
-    USER_QUOTA_STATE_ESTIMATION_NB,
-    USER_QUOTA_VOLTAGE_INIT_NB,
     VOLTAGE_INIT_PARAM_ID,
     WORKSPACE_ID,
 } from './profile-modification-form';
@@ -50,6 +24,8 @@ import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 're
 import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
+import { MaxAllowedKeys } from './max-allowed-keys';
+import { UserQuotaNb } from './user-quota-nb';
 
 export interface ProfileModificationDialogProps {
     profileId: UUID | undefined;
@@ -77,19 +53,19 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [SHORTCIRCUIT_PARAM_ID]: yup.string<UUID>().optional(),
             [PCCMIN_PARAM_ID]: yup.string<UUID>().optional(),
             [VOLTAGE_INIT_PARAM_ID]: yup.string<UUID>().optional(),
-            [USER_QUOTA_CASE_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_BUILD_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_LOADFLOW_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_SECURITY_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_SENSITIVITY_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_SHORTCIRCUIT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_VOLTAGE_INIT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_PCC_MIN_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_STATE_ESTIMATION_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_BALANCE_ADJUSTEMENT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_DYNAMIC_SECURITY_INIT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [USER_QUOTA_DYNAMIC_MARGIN_INIT_NB]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.CASE]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.BUILD]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.LOADFLOW]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.SECURITY]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.SENSITIVITY]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.SHORTCIRCUIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.VOLTAGE_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.PCC_MIN]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.STATE_ESTIMATION]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.BALANCE_ADJUSTEMENT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.DYNAMIC_SECURITY_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.DYNAMIC_MARGIN_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
             [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string<UUID>().optional(),
             [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string<UUID>().optional(),
             [WORKSPACE_ID]: yup.string<UUID>().optional(),
@@ -108,19 +84,19 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
         (profileFormData) => {
             if (profileId) {
                 const maxAllowValues = {
-                    maxAllowedCases: profileFormData[USER_QUOTA_CASE_NB],
-                    maxAllowedBuilds: profileFormData[USER_QUOTA_BUILD_NB],
-                    maxAllowedLoadflow: profileFormData[USER_QUOTA_LOADFLOW_NB],
-                    maxAllowedSecurity: profileFormData[USER_QUOTA_SECURITY_NB],
-                    maxAllowedSensitivity: profileFormData[USER_QUOTA_SENSITIVITY_NB],
-                    maxAllowedShortCircuit: profileFormData[USER_QUOTA_SHORTCIRCUIT_NB],
-                    maxAllowedVoltageInit: profileFormData[USER_QUOTA_VOLTAGE_INIT_NB],
-                    maxAllowedPccMin: profileFormData[USER_QUOTA_PCC_MIN_NB],
-                    maxAllowedStateEstimation: profileFormData[USER_QUOTA_STATE_ESTIMATION_NB],
-                    maxAllowedBalanceAdjustement: profileFormData[USER_QUOTA_BALANCE_ADJUSTEMENT_NB],
-                    maxAllowedDynamicSimulation: profileFormData[USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB],
-                    maxAllowedDynamicSecurity: profileFormData[USER_QUOTA_DYNAMIC_SECURITY_INIT_NB],
-                    maxAllowedDynamicMargin: profileFormData[USER_QUOTA_DYNAMIC_MARGIN_INIT_NB],
+                    [MaxAllowedKeys.CASES]: profileFormData[UserQuotaNb.CASE],
+                    [MaxAllowedKeys.BUILD]: profileFormData[UserQuotaNb.BUILD],
+                    [MaxAllowedKeys.LOADFLOW]: profileFormData[UserQuotaNb.LOADFLOW],
+                    [MaxAllowedKeys.SECURITY]: profileFormData[UserQuotaNb.SECURITY],
+                    [MaxAllowedKeys.SENSITIVITY]: profileFormData[UserQuotaNb.SENSITIVITY],
+                    [MaxAllowedKeys.SHORT_CIRCUIT]: profileFormData[UserQuotaNb.SHORTCIRCUIT],
+                    [MaxAllowedKeys.VOLTAGE_INIT]: profileFormData[UserQuotaNb.VOLTAGE_INIT],
+                    [MaxAllowedKeys.PCC_MIN]: profileFormData[UserQuotaNb.PCC_MIN],
+                    [MaxAllowedKeys.STATE_ESTIMATION]: profileFormData[UserQuotaNb.STATE_ESTIMATION],
+                    [MaxAllowedKeys.BALANCE_ADJUSTEMENT]: profileFormData[UserQuotaNb.BALANCE_ADJUSTEMENT],
+                    [MaxAllowedKeys.DYNAMIC_SIMULATION]: profileFormData[UserQuotaNb.DYNAMIC_SIMULATION_INIT],
+                    [MaxAllowedKeys.DYNAMIC_SECURITY]: profileFormData[UserQuotaNb.DYNAMIC_SECURITY_INIT],
+                    [MaxAllowedKeys.DYNAMIC_MARGIN]: profileFormData[UserQuotaNb.DYNAMIC_MARGIN_INIT],
                 };
                 const profileData: UserProfile = {
                     id: profileId,
@@ -131,7 +107,7 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     shortcircuitParameterId: profileFormData[SHORTCIRCUIT_PARAM_ID],
                     pccMinParameterId: profileFormData[PCCMIN_PARAM_ID],
                     voltageInitParameterId: profileFormData[VOLTAGE_INIT_PARAM_ID],
-                    maxAllowValuesMap: maxAllowValues,
+                    maxOperationQuota: maxAllowValues,
                     spreadsheetConfigCollectionId: profileFormData[SPREADSHEET_CONFIG_COLLECTION_ID],
                     networkVisualizationParameterId: profileFormData[NETWORK_VISUALIZATION_PARAMETERS_ID],
                     workspaceId: profileFormData[WORKSPACE_ID],
@@ -167,44 +143,44 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                         [SHORTCIRCUIT_PARAM_ID]: response.shortcircuitParameterId ?? undefined,
                         [PCCMIN_PARAM_ID]: response.pccMinParameterId ?? undefined,
                         [VOLTAGE_INIT_PARAM_ID]: response.voltageInitParameterId ?? undefined,
-                        [USER_QUOTA_CASE_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_CASES]
+                        [UserQuotaNb.CASE]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.CASES]
                             : undefined,
-                        [USER_QUOTA_BUILD_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_BUILD]
+                        [UserQuotaNb.BUILD]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.BUILD]
                             : undefined,
-                        [USER_QUOTA_LOADFLOW_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_LOADFLOW]
+                        [UserQuotaNb.LOADFLOW]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.LOADFLOW]
                             : undefined,
-                        [USER_QUOTA_SECURITY_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_SECURITY]
+                        [UserQuotaNb.SECURITY]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.SECURITY]
                             : undefined,
-                        [USER_QUOTA_SENSITIVITY_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_SENSITIVITY]
+                        [UserQuotaNb.SENSITIVITY]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.SENSITIVITY]
                             : undefined,
-                        [USER_QUOTA_SHORTCIRCUIT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_SHORT_CIRCUIT]
+                        [UserQuotaNb.SHORTCIRCUIT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.SHORT_CIRCUIT]
                             : undefined,
-                        [USER_QUOTA_VOLTAGE_INIT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_VOLTAGE_INIT]
+                        [UserQuotaNb.VOLTAGE_INIT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.VOLTAGE_INIT]
                             : undefined,
-                        [USER_QUOTA_PCC_MIN_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_PCC_MIN]
+                        [UserQuotaNb.PCC_MIN]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.PCC_MIN]
                             : undefined,
-                        [USER_QUOTA_STATE_ESTIMATION_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_STATE_ESTIMATION]
+                        [UserQuotaNb.STATE_ESTIMATION]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.STATE_ESTIMATION]
                             : undefined,
-                        [USER_QUOTA_BALANCE_ADJUSTEMENT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_BALANCE_ADJUSTEMENT]
+                        [UserQuotaNb.BALANCE_ADJUSTEMENT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.BALANCE_ADJUSTEMENT]
                             : undefined,
-                        [USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_SIMULATION]
+                        [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.DYNAMIC_SIMULATION]
                             : undefined,
-                        [USER_QUOTA_DYNAMIC_SECURITY_INIT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_SECURITY]
+                        [UserQuotaNb.DYNAMIC_SECURITY_INIT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.DYNAMIC_SECURITY]
                             : undefined,
-                        [USER_QUOTA_DYNAMIC_MARGIN_INIT_NB]: response.maxAllowValuesMap
-                            ? response.maxAllowValuesMap[MAX_ALLOWED_DYNAMIC_MARGIN]
+                        [UserQuotaNb.DYNAMIC_MARGIN_INIT]: response.maxOperationQuota
+                            ? response.maxOperationQuota[MaxAllowedKeys.DYNAMIC_MARGIN]
                             : undefined,
                         [SPREADSHEET_CONFIG_COLLECTION_ID]: response.spreadsheetConfigCollectionId ?? undefined,
                         [NETWORK_VISUALIZATION_PARAMETERS_ID]: response.networkVisualizationParameterId ?? undefined,
