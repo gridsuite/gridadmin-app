@@ -8,7 +8,7 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FolderIcon from '@mui/icons-material/Folder';
-import { Grid2 as Grid, IconButton, Tooltip } from '@mui/material';
+import { Grid, IconButton, Tooltip } from '@mui/material';
 import { useIntl } from 'react-intl';
 import { DirectoryItemSelector, ElementAttributes, ElementType, TreeViewFinderNodeProps } from '@gridsuite/commons-ui';
 import { useController, useWatch } from 'react-hook-form';

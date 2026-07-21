@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { Box, Grid2 as Grid, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { type DateOrTimeView } from '@mui/x-date-pickers';
 import { useIntl } from 'react-intl';
 import * as yup from 'yup';

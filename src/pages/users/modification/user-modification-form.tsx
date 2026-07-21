@@ -6,7 +6,7 @@
  */
 
 import { useMemo, type FunctionComponent } from 'react';
-import { Grid2 as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import * as yup from 'yup';
 import { AutocompleteInput, TextInput } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
