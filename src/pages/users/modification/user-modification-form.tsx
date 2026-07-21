@@ -5,13 +5,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { useMemo, type FunctionComponent } from 'react';
-import { Grid2 as Grid } from '@mui/material';
+import { useCallback, useMemo, type FunctionComponent } from 'react';
+import { Grid2 as Grid, IconButton, Tooltip } from '@mui/material';
 import * as yup from 'yup';
-import { AutocompleteInput, TextInput } from '@gridsuite/commons-ui';
+import { AutocompleteInput, snackWithFallback, TextInput, useSnackMessage } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
 import { useIntl } from 'react-intl';
 import { ColDef } from 'ag-grid-community';
+import { useWatch } from 'react-hook-form';
+import { LockReset } from '@mui/icons-material';
+import { UserAdminSrv } from '../../../services';
 
 export const USER_NAME = 'sub';
 export const USER_FULL_NAME = 'fullName';
@@ -47,6 +50,17 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
     onSelectionChanged,
 }) => {
     const intl = useIntl();
+    const { snackError, snackSuccess } = useSnackMessage();
+    const sub = useWatch({ name: USER_NAME });
+
+    const handleResetQuota = useCallback(() => {
+        if (!sub) {
+            return;
+        }
+        UserAdminSrv.resetUserCurrentQuotaUsage(sub)
+            .then(() => snackSuccess({ headerId: 'users.table.success.resetQuota' }))
+            .catch((error) => snackWithFallback(snackError, error, { headerId: 'users.table.error.resetQuota' }));
+    }, [sub, snackError, snackSuccess]);
 
     const groupColumnDefs = useMemo(
         (): ColDef<GroupSelectionItem>[] => [
@@ -78,16 +92,31 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
                 />
             </Grid>
             <Grid sx={{ width: '100%' }}>
-                <AutocompleteInput
-                    name={USER_PROFILE_NAME}
-                    label={'users.table.profileName'}
-                    size="small"
-                    forcePopupIcon
-                    autoHighlight
-                    selectOnFocus
-                    id="user-profile"
-                    options={profileOptions}
-                />
+                <Grid container columns={24} columnSpacing={3} alignItems="center">
+                    <Grid size={23}>
+                        <AutocompleteInput
+                            name={USER_PROFILE_NAME}
+                            label={'users.table.profileName'}
+                            size="small"
+                            forcePopupIcon
+                            autoHighlight
+                            selectOnFocus
+                            id="user-profile"
+                            options={profileOptions}
+                        />
+                    </Grid>
+                    <Grid size={1}>
+                        <Tooltip
+                            title={intl.formatMessage({
+                                id: 'users.table.resetQuota.tooltip',
+                            })}
+                        >
+                            <IconButton edge="start" onClick={handleResetQuota}>
+                                <LockReset color="action" />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid sx={{ height: '85%', width: '100%' }}>
                 <TableSelection<GroupSelectionItem>
