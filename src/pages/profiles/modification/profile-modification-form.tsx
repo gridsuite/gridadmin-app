@@ -10,6 +10,7 @@ import { Grid } from '@mui/material';
 import ConfigurationSelection, { ConfigSelectionProps } from './configuration-selection';
 import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
+import { UserQuotaNb } from './user-quota-nb';
 
 export const PROFILE_NAME = 'name';
 export const LOADFLOW_PARAM_ID = 'loadFlowParamId';
@@ -21,34 +22,6 @@ export const VOLTAGE_INIT_PARAM_ID = 'voltageInitParamId';
 export const SPREADSHEET_CONFIG_COLLECTION_ID = 'spreadsheetConfigCollectionId';
 export const NETWORK_VISUALIZATION_PARAMETERS_ID = 'networkVisualizationParametersId';
 export const WORKSPACE_ID = 'workspaceId';
-
-export const USER_QUOTA_CASE_NB = 'userQuotaCaseNb';
-export const USER_QUOTA_BUILD_NB = 'userQuotaBuildNb';
-export const USER_QUOTA_LOADFLOW_NB = 'userQuotaLoadflowNb';
-export const USER_QUOTA_SECURITY_NB = 'userQuotaSecurityNb';
-export const USER_QUOTA_SENSITIVITY_NB = 'userQuotaSensitivityNb';
-export const USER_QUOTA_SHORTCIRCUIT_NB = 'userQuotaShortcircuitNb';
-export const USER_QUOTA_VOLTAGE_INIT_NB = 'userQuotaVoltageInitNb';
-export const USER_QUOTA_PCC_MIN_NB = 'userQuotaPccminNb';
-export const USER_QUOTA_STATE_ESTIMATION_NB = 'userQuotaStateEstimationNb';
-export const USER_QUOTA_BALANCE_ADJUSTEMENT_NB = 'userQuotaBalanceAdjustementNb';
-export const USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB = 'userQuotaDynamicSimulationInitNb';
-export const USER_QUOTA_DYNAMIC_SECURITY_INIT_NB = 'userQuotaDynamicSecurityInitNb';
-export const USER_QUOTA_DYNAMIC_MARGIN_INIT_NB = 'userQuotaDynamicMarginInitNb';
-
-export const MAX_ALLOWED_CASES = 'maxAllowedCases';
-export const MAX_ALLOWED_BUILD = 'maxAllowedBuilds';
-export const MAX_ALLOWED_LOADFLOW = 'maxAllowedLoadflow';
-export const MAX_ALLOWED_SECURITY = 'maxAllowedSecurity';
-export const MAX_ALLOWED_SENSITIVITY = 'maxAllowedSensitivity';
-export const MAX_ALLOWED_SHORT_CIRCUIT = 'maxAllowedShortCircuit';
-export const MAX_ALLOWED_VOLTAGE_INIT = 'maxAllowedVoltageInit';
-export const MAX_ALLOWED_PCC_MIN = 'maxAllowedPccMin';
-export const MAX_ALLOWED_STATE_ESTIMATION = 'maxAllowedStateEstimation';
-export const MAX_ALLOWED_BALANCE_ADJUSTEMENT = 'maxAllowedBalanceAdjustement';
-export const MAX_ALLOWED_DYNAMIC_SIMULATION = 'maxAllowedDynamicSimulation';
-export const MAX_ALLOWED_DYNAMIC_SECURITY = 'maxAllowedDynamicSecurity';
-export const MAX_ALLOWED_DYNAMIC_MARGIN = 'maxAllowedDynamicMargin';
 
 const configList: ConfigSelectionProps[] = [
     { selectionFormId: LOADFLOW_PARAM_ID, elementType: ElementType.LOADFLOW_PARAMETERS },
@@ -100,14 +73,14 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_CASE_NB}
+                            name={UserQuotaNb.CASE}
                             label="profiles.form.modification.numberOfCasesOrStudies"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_BUILD_NB}
+                            name={UserQuotaNb.BUILD}
                             label="profiles.form.modification.numberOfNodeBuilds"
                             clearable={true}
                         />
@@ -121,21 +94,21 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_LOADFLOW_NB}
+                            name={UserQuotaNb.LOADFLOW}
                             label="profiles.form.modification.numberOfLoadflow"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_SECURITY_NB}
+                            name={UserQuotaNb.SECURITY}
                             label="profiles.form.modification.numberOfSecurityAnalysis"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_SENSITIVITY_NB}
+                            name={UserQuotaNb.SENSITIVITY}
                             label="profiles.form.modification.numberOfSensitivityAnalysis"
                             clearable={true}
                         />
@@ -144,21 +117,21 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_SHORTCIRCUIT_NB}
+                            name={UserQuotaNb.SHORTCIRCUIT}
                             label="profiles.form.modification.numberOfShortcircuitAnalysis"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_VOLTAGE_INIT_NB}
+                            name={UserQuotaNb.VOLTAGE_INIT}
                             label="profiles.form.modification.numberOfVoltageInit"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_PCC_MIN_NB}
+                            name={UserQuotaNb.PCC_MIN}
                             label="profiles.form.modification.numberOfPccmin"
                             clearable={true}
                         />
@@ -167,21 +140,21 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_STATE_ESTIMATION_NB}
+                            name={UserQuotaNb.STATE_ESTIMATION}
                             label="profiles.form.modification.numberOfStateEstimation"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_BALANCE_ADJUSTEMENT_NB}
+                            name={UserQuotaNb.BALANCE_ADJUSTEMENT}
                             label="profiles.form.modification.numberOfBalanceAdjustement"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_DYNAMIC_SIMULATION_INIT_NB}
+                            name={UserQuotaNb.DYNAMIC_SIMULATION_INIT}
                             label="profiles.form.modification.numberOfDynamicSimulation"
                             clearable={true}
                         />
@@ -190,14 +163,14 @@ const ProfileModificationForm: FunctionComponent = () => {
                 <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_DYNAMIC_SECURITY_INIT_NB}
+                            name={UserQuotaNb.DYNAMIC_SECURITY_INIT}
                             label="profiles.form.modification.numberOfDynamicSecurity"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={USER_QUOTA_DYNAMIC_MARGIN_INIT_NB}
+                            name={UserQuotaNb.DYNAMIC_MARGIN_INIT}
                             label="profiles.form.modification.numberOfDynamicMargin"
                             clearable={true}
                         />
