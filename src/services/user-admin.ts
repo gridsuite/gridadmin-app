@@ -5,7 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import { backendFetch, backendFetchJson } from '@gridsuite/commons-ui';
+import { backendFetch, backendFetchJson, safeEncodeURIComponent } from '@gridsuite/commons-ui';
 import { getRestBase } from '../utils/api-rest';
 import type { UUID } from 'node:crypto';
 
@@ -69,6 +69,18 @@ export function updateUser(userInfos: UserInfosUpdate) {
         });
 }
 
+export function resetUserCurrentQuotaUsage(sub: string): Promise<void> {
+    console.debug(`Resetting current quota usage for user "${sub}"...`);
+    return backendFetch(`${USER_ADMIN_URL}/users/${safeEncodeURIComponent(sub)}/quota/reset`, {
+        method: 'post',
+    })
+        .then(() => undefined)
+        .catch((reason) => {
+            console.error(`Error while resetting user quota usage : ${reason}`);
+            throw reason;
+        });
+}
+
 export function deleteUsers(subs: string[]): Promise<void> {
     console.debug(`Deleting sub users "${JSON.stringify(subs)}"...`);
     return backendFetch(`${USER_ADMIN_URL}/users`, {
@@ -105,7 +117,7 @@ export type UserProfile = {
     shortcircuitParameterId?: UUID;
     pccMinParameterId?: UUID;
     voltageInitParameterId?: UUID;
-    maxAllowValuesMap?: Record<string, number | undefined>;
+    maxOperationQuota?: Record<string, number | undefined>;
     spreadsheetConfigCollectionId?: UUID;
     networkVisualizationParameterId?: UUID;
     workspaceId?: UUID;
