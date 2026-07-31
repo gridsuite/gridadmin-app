@@ -8,8 +8,7 @@
 import { useCallback, useMemo, type FunctionComponent } from 'react';
 import { Grid2 as Grid, IconButton, Tooltip } from '@mui/material';
 import * as yup from 'yup';
-import { AutocompleteInput, TextInput, NAME_EMPTY } from '@gridsuite/commons-ui';
-import { AutocompleteInput, snackWithFallback, TextInput, useSnackMessage } from '@gridsuite/commons-ui';
+import { AutocompleteInput, NAME_EMPTY, snackWithFallback, TextInput, useSnackMessage } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';
 import { useIntl } from 'react-intl';
 import { ColDef } from 'ag-grid-community';
