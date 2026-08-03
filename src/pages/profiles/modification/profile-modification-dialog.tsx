@@ -21,7 +21,15 @@ import ProfileModificationForm, {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { CustomMuiDialog, FetchStatus, snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
+import {
+    CustomMuiDialog,
+    FetchStatus,
+    NAME_EMPTY,
+    snackWithFallback,
+    useSnackMessage,
+    YUP_REQUIRED,
+} from '@gridsuite/commons-ui';
+import { USER_QUOTA_POSITIVE } from '../../../utils/translation-keys';
 import { UserAdminSrv, UserProfile } from '../../../services';
 import type { UUID } from 'node:crypto';
 import { MaxAllowedKeys } from './max-allowed-keys';
@@ -33,6 +41,8 @@ export interface ProfileModificationDialogProps {
     onClose: () => void;
     onUpdate: () => void;
 }
+
+const userQuotaSchema = yup.number().positive(USER_QUOTA_POSITIVE).required(YUP_REQUIRED);
 
 const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProps> = ({
     profileId,
@@ -46,26 +56,26 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
     const formSchema = yup
         .object()
         .shape({
-            [PROFILE_NAME]: yup.string().trim().required('nameEmpty'),
+            [PROFILE_NAME]: yup.string().trim().required(NAME_EMPTY),
             [LOADFLOW_PARAM_ID]: yup.string<UUID>().optional(),
             [SECURITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
             [SENSITIVITY_ANALYSIS_PARAM_ID]: yup.string<UUID>().optional(),
             [SHORTCIRCUIT_PARAM_ID]: yup.string<UUID>().optional(),
             [PCCMIN_PARAM_ID]: yup.string<UUID>().optional(),
             [VOLTAGE_INIT_PARAM_ID]: yup.string<UUID>().optional(),
-            [UserQuotaNb.CASE]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.BUILD]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.LOADFLOW]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.SECURITY]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.SENSITIVITY]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.SHORTCIRCUIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.VOLTAGE_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.PCC_MIN]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.STATE_ESTIMATION]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.BALANCE_ADJUSTEMENT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.DYNAMIC_SECURITY_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
-            [UserQuotaNb.DYNAMIC_MARGIN_INIT]: yup.number().positive('userQuotaPositive').required('YupRequired'),
+            [UserQuotaNb.CASE]: userQuotaSchema,
+            [UserQuotaNb.BUILD]: userQuotaSchema,
+            [UserQuotaNb.LOADFLOW]: userQuotaSchema,
+            [UserQuotaNb.SECURITY]: userQuotaSchema,
+            [UserQuotaNb.SENSITIVITY]: userQuotaSchema,
+            [UserQuotaNb.SHORTCIRCUIT]: userQuotaSchema,
+            [UserQuotaNb.VOLTAGE_INIT]: userQuotaSchema,
+            [UserQuotaNb.PCC_MIN]: userQuotaSchema,
+            [UserQuotaNb.STATE_ESTIMATION]: userQuotaSchema,
+            [UserQuotaNb.BALANCE_ADJUSTEMENT]: userQuotaSchema,
+            [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: userQuotaSchema,
+            [UserQuotaNb.DYNAMIC_SECURITY_INIT]: userQuotaSchema,
+            [UserQuotaNb.DYNAMIC_MARGIN_INIT]: userQuotaSchema,
             [SPREADSHEET_CONFIG_COLLECTION_ID]: yup.string<UUID>().optional(),
             [NETWORK_VISUALIZATION_PARAMETERS_ID]: yup.string<UUID>().optional(),
             [WORKSPACE_ID]: yup.string<UUID>().optional(),
