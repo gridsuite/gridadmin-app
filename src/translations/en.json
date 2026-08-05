@@ -7,7 +7,6 @@
     "cancel": "Cancel",
     "validate": "Validate",
     "parameters": "Parameters",
-    "nameEmpty": "The name is empty",
     "paramsChangingError": "An error occurred when changing the parameters",
     "paramsRetrievingError": "An error occurred while retrieving the parameters",
     "userQuotaPositive": "User quota must be positive",
@@ -142,7 +141,5 @@
     "announcements.form.message": "Announcement message",
     "announcements.form.errCreateAnnouncement": "Error while creating announcement:",
     "announcements.form.errForm.startDateAfterEndDateErr": "End date must be after start date.",
-    "announcements.form.errForm.msgMaxLength": "Message must be at most 200 characters.",
-
-    "YupRequired": "This field is required"
+    "announcements.form.errForm.msgMaxLength": "Message must be at most 200 characters."
 }
