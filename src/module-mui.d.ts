@@ -5,14 +5,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 // https://mui.com/material-ui/customization/theming/#typescript
-import type { CSSObject } from '@mui/styled-engine';
 import { Theme as MuiTheme, ThemeOptions as MuiThemeOptions } from '@mui/material/styles/createTheme';
 
 // https://mui.com/x/react-date-pickers/quickstart/#theme-augmentation
 import type {} from '@mui/x-date-pickers/themeAugmentation';
 
-declare module '@mui/material/styles/createTheme' {
-    export * from '@mui/material/styles/createTheme';
+declare module '@mui/material/styles' {
+    export * from '@mui/material/styles';
 
     type ThemeExtension = {
         arrow: CSSObject;

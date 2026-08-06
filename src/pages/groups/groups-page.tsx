@@ -6,7 +6,7 @@
  */
 
 import { FunctionComponent, useCallback, useRef, useState } from 'react';
-import { Grid2 as Grid, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { GridTableRef } from '../../components/Grid';
 import { GroupInfos } from '../../services';
 import { RowClickedEvent } from 'ag-grid-community';

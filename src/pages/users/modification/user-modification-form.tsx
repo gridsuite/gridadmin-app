@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useMemo, type FunctionComponent } from 'react';
-import { Grid2 as Grid, IconButton, Tooltip } from '@mui/material';
+import { Grid, IconButton, Tooltip } from '@mui/material';
 import * as yup from 'yup';
 import { AutocompleteInput, NAME_EMPTY, snackWithFallback, TextInput, useSnackMessage } from '@gridsuite/commons-ui';
 import TableSelection from '../../common/table-selection';

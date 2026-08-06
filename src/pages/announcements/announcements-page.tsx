@@ -8,7 +8,7 @@
 import type { UUID } from 'node:crypto';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Divider, Grid2 as Grid, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { snackWithFallback, useSnackMessage } from '@gridsuite/commons-ui';
 import type { ColDef, GetRowIdParams, ValueFormatterFunc } from 'ag-grid-community';
 import { type GridTableRef } from '../../components/Grid';

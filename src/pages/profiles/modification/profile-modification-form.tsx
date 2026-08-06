@@ -6,7 +6,7 @@
  */
 
 import { ElementType, IntegerInput, TextInput } from '@gridsuite/commons-ui';
-import { Grid2 as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import ConfigurationSelection, { ConfigSelectionProps } from './configuration-selection';
 import { FormattedMessage } from 'react-intl';
 import React, { FunctionComponent } from 'react';
