@@ -6,7 +6,7 @@
  */
 
 import { Container } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import { ReactNode } from 'react';
 import { type MuiStyles } from '@gridsuite/commons-ui';
 
@@ -25,7 +25,7 @@ const PageNotFound = ({ message }: { message: ReactNode }) => {
     return (
         <Container sx={styles.container}>
             <br />
-            <ErrorOutlineIcon sx={styles.error} />
+            <ErrorOutlinedIcon sx={styles.error} />
             <h1 style={{ textAlign: 'center' }}>{message}</h1>
         </Container>
     );

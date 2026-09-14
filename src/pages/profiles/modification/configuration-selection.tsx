@@ -99,7 +99,13 @@ const ConfigurationSelection: FunctionComponent<ConfigSelectionProps> = (props) 
     };
 
     return (
-        <Grid container columns={24} alignItems={'center'}>
+        <Grid
+            container
+            columns={24}
+            sx={{
+                alignItems: 'center',
+            }}
+        >
             <Grid size={1}>
                 <IconButton edge="start" onClick={handleResetConfig} disableRipple={watchConfigId === undefined}>
                     <Tooltip
