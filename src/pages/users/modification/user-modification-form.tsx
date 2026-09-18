@@ -74,7 +74,15 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
     );
 
     return (
-        <Grid container spacing={2} marginTop={2} sx={{ height: '100%', width: '100%' }}>
+        <Grid
+            container
+            spacing={2}
+            sx={{
+                marginTop: 2,
+                height: '100%',
+                width: '100%',
+            }}
+        >
             <Grid sx={{ width: '100%' }}>
                 <TextInput
                     name={USER_NAME}
@@ -92,7 +100,14 @@ const UserModificationForm: FunctionComponent<UserModificationFormProps> = ({
                 />
             </Grid>
             <Grid sx={{ width: '100%' }}>
-                <Grid container columns={24} columnSpacing={3} alignItems="center">
+                <Grid
+                    container
+                    columns={24}
+                    columnSpacing={3}
+                    sx={{
+                        alignItems: 'center',
+                    }}
+                >
                     <Grid size={23}>
                         <AutocompleteInput
                             name={USER_PROFILE_NAME}

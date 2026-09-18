@@ -40,7 +40,14 @@ const configList: ConfigSelectionProps[] = [
 
 const ProfileModificationForm: FunctionComponent = () => {
     return (
-        <Grid container spacing={2} marginTop={2} sx={{ width: '100%' }}>
+        <Grid
+            container
+            spacing={2}
+            sx={{
+                marginTop: 2,
+                width: '100%',
+            }}
+        >
             <Grid sx={{ width: '100%' }}>
                 <TextInput name={PROFILE_NAME} label={'profiles.table.id'} clearable={true} />
             </Grid>
@@ -64,13 +71,29 @@ const ProfileModificationForm: FunctionComponent = () => {
                     <FormattedMessage id={'profiles.form.modification.userQuotas'} />
                 </h3>
             </Grid>
-            <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+            <Grid
+                container
+                spacing={2}
+                direction="row"
+                sx={{
+                    marginLeft: 'auto',
+                    width: '100%',
+                }}
+            >
                 <Grid sx={{ width: '100%' }}>
                     <h4>
                         <FormattedMessage id={'profiles.form.modification.userCaseAndBuildsQuotas'} />
                     </h4>
                 </Grid>
-                <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    sx={{
+                        marginLeft: 'auto',
+                        width: '100%',
+                    }}
+                >
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.CASE}
@@ -91,7 +114,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                         <FormattedMessage id={'profiles.form.modification.parallelExecutionsQuotas'} />
                     </h4>
                 </Grid>
-                <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    sx={{
+                        marginLeft: 'auto',
+                        width: '100%',
+                    }}
+                >
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.LOADFLOW}
@@ -114,7 +145,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                         />
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    sx={{
+                        marginLeft: 'auto',
+                        width: '100%',
+                    }}
+                >
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.SHORTCIRCUIT}
@@ -137,7 +176,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                         />
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    sx={{
+                        marginLeft: 'auto',
+                        width: '100%',
+                    }}
+                >
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.STATE_ESTIMATION}
@@ -160,7 +207,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                         />
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} direction="row" marginLeft={'auto'} sx={{ width: '100%' }}>
+                <Grid
+                    container
+                    spacing={2}
+                    direction="row"
+                    sx={{
+                        marginLeft: 'auto',
+                        width: '100%',
+                    }}
+                >
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.DYNAMIC_SECURITY_INIT}

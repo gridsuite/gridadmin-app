@@ -97,15 +97,17 @@ const AddUserDialog: FunctionComponent<AddUserDialogProps> = (props) => {
                             fullWidth
                             variant="standard"
                             inputMode="text"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <AccountCircle />
-                                    </InputAdornment>
-                                ),
-                            }}
                             error={fieldState?.invalid}
                             helperText={fieldState?.error?.message}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <AccountCircle />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
                         />
                     )}
                 />

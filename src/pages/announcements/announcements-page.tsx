@@ -122,7 +122,12 @@ export default function AnnouncementsPage() {
     return (
         <Grid container spacing={2} sx={{ p: 1, height: '100%', width: '100%' }}>
             <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: 'flex' }}>
-                <Stack height="100%" sx={{ flexGrow: 1 }}>
+                <Stack
+                    sx={{
+                        height: '100%',
+                        flexGrow: 1,
+                    }}
+                >
                     <Typography variant="subtitle1">
                         <FormattedMessage id="announcements.programNewMessage" />
                     </Typography>
@@ -133,8 +138,17 @@ export default function AnnouncementsPage() {
                 </Stack>
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 8 }}>
-                <Stack height="100%">
-                    <Typography variant="subtitle1" mb={0.5}>
+                <Stack
+                    sx={{
+                        height: '100%',
+                    }}
+                >
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            mb: 0.5,
+                        }}
+                    >
                         <FormattedMessage id="announcements.programmedMessage" />
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>

@@ -96,15 +96,17 @@ const AddGroupDialog: FunctionComponent<AddGroupDialogProps> = (props) => {
                             fullWidth
                             variant="standard"
                             inputMode="text"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Groups />
-                                    </InputAdornment>
-                                ),
-                            }}
                             error={fieldState?.invalid}
                             helperText={fieldState?.error?.message}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Groups />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
                         />
                     )}
                 />

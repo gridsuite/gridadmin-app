@@ -73,7 +73,13 @@ export const GridTable: GridTableWithRef = forwardRef(function AgGridToolbar<TDa
     );
 
     return (
-        <Stack justifyContent="flex-start" alignItems="stretch" width={'100%'}>
+        <Stack
+            sx={{
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+                width: '100%',
+            }}
+        >
             <AppBar position="static" color="default">
                 <Toolbar
                     variant="dense"
