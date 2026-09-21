@@ -100,15 +100,17 @@ const AddProfileDialog: FunctionComponent<AddProfileDialogProps> = (props) => {
                             fullWidth
                             variant="standard"
                             inputMode="text"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <ManageAccounts />
-                                    </InputAdornment>
-                                ),
-                            }}
                             error={fieldState?.invalid}
                             helperText={fieldState?.error?.message}
+                            slotProps={{
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <ManageAccounts />
+                                        </InputAdornment>
+                                    ),
+                                },
+                            }}
                         />
                     )}
                 />
