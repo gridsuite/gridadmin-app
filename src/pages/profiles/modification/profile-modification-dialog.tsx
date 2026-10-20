@@ -72,7 +72,6 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
             [UserQuotaNb.VOLTAGE_INIT]: userQuotaSchema,
             [UserQuotaNb.PCC_MIN]: userQuotaSchema,
             [UserQuotaNb.STATE_ESTIMATION]: userQuotaSchema,
-            [UserQuotaNb.BALANCE_ADJUSTEMENT]: userQuotaSchema,
             [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: userQuotaSchema,
             [UserQuotaNb.DYNAMIC_SECURITY_INIT]: userQuotaSchema,
             [UserQuotaNb.DYNAMIC_MARGIN_INIT]: userQuotaSchema,
@@ -103,7 +102,6 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                     [MaxAllowedKeys.VOLTAGE_INIT]: profileFormData[UserQuotaNb.VOLTAGE_INIT],
                     [MaxAllowedKeys.PCC_MIN]: profileFormData[UserQuotaNb.PCC_MIN],
                     [MaxAllowedKeys.STATE_ESTIMATION]: profileFormData[UserQuotaNb.STATE_ESTIMATION],
-                    [MaxAllowedKeys.BALANCE_ADJUSTEMENT]: profileFormData[UserQuotaNb.BALANCE_ADJUSTEMENT],
                     [MaxAllowedKeys.DYNAMIC_SIMULATION]: profileFormData[UserQuotaNb.DYNAMIC_SIMULATION_INIT],
                     [MaxAllowedKeys.DYNAMIC_SECURITY]: profileFormData[UserQuotaNb.DYNAMIC_SECURITY_INIT],
                     [MaxAllowedKeys.DYNAMIC_MARGIN]: profileFormData[UserQuotaNb.DYNAMIC_MARGIN_INIT],
@@ -179,9 +177,6 @@ const ProfileModificationDialog: FunctionComponent<ProfileModificationDialogProp
                             : undefined,
                         [UserQuotaNb.STATE_ESTIMATION]: response.maxOperationQuota
                             ? response.maxOperationQuota[MaxAllowedKeys.STATE_ESTIMATION]
-                            : undefined,
-                        [UserQuotaNb.BALANCE_ADJUSTEMENT]: response.maxOperationQuota
-                            ? response.maxOperationQuota[MaxAllowedKeys.BALANCE_ADJUSTEMENT]
                             : undefined,
                         [UserQuotaNb.DYNAMIC_SIMULATION_INIT]: response.maxOperationQuota
                             ? response.maxOperationQuota[MaxAllowedKeys.DYNAMIC_SIMULATION]

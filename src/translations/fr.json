@@ -91,7 +91,6 @@
     "profiles.form.modification.numberOfVoltageInit": "Initialisation du plan de tension",
     "profiles.form.modification.numberOfPccmin": "PCC min N-1",
     "profiles.form.modification.numberOfStateEstimation": "Estimation d'état",
-    "profiles.form.modification.numberOfBalanceAdjustement": "Équilibrage bilan",
     "profiles.form.modification.numberOfDynamicSimulation": "Simulation dynamique",
     "profiles.form.modification.numberOfDynamicSecurity": "Analyse de sécurité dynamique",
     "profiles.form.modification.numberOfDynamicMargin": "Calculs de marge dynamique",
