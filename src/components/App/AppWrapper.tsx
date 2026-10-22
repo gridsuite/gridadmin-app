@@ -36,6 +36,7 @@ import {
     errorsEn,
     errorsFr,
     PARAM_THEME,
+    DARK_THEME,
 } from '@gridsuite/commons-ui';
 import { type IntlConfig, IntlProvider } from 'react-intl';
 import { Provider, useSelector } from 'react-redux';
@@ -81,6 +82,32 @@ const lightTheme: ThemeOptions = {
     },
 };
 
+const darkScrollbarStyles = (theme: Theme) => {
+    const trackColor = theme.palette.grey[800];
+    const thumbColor = theme.palette.grey[500];
+
+    return {
+        '*': {
+            scrollbarColor: `${thumbColor} ${trackColor}`,
+
+            '&::-webkit-scrollbar': {
+                width: '12px',
+                height: '12px',
+            },
+
+            '&::-webkit-scrollbar-track': {
+                backgroundColor: trackColor,
+            },
+
+            '&::-webkit-scrollbar-thumb': {
+                backgroundColor: thumbColor,
+                borderRadius: '8px',
+                border: `3px solid ${trackColor}`,
+            },
+        },
+    };
+};
+
 const darkTheme: ThemeOptions = {
     palette: {
         mode: 'dark',
@@ -113,6 +140,11 @@ const getMuiTheme = (theme: GsTheme, locale: GsLangUser): Theme => {
     return responsiveFontSizes(
         createTheme(
             theme === LIGHT_THEME ? lightTheme : darkTheme,
+            {
+                components: {
+                    ...(theme === DARK_THEME ? { MuiCssBaseline: { styleOverrides: darkScrollbarStyles } } : {}),
+                },
+            },
             locale === LANG_FRENCH ? MuiCoreFrFR : MuiCoreEnUS, // MUI core translations
             locale === LANG_FRENCH ? MuiDatePickersFrFR : MuiDatePickersEnUS // MUI x-date-pickers translations
         )
