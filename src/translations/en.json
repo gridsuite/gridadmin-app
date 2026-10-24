@@ -90,7 +90,6 @@
     "profiles.form.modification.numberOfVoltageInit": "Voltage initialization",
     "profiles.form.modification.numberOfPccmin": "PCC N-1",
     "profiles.form.modification.numberOfStateEstimation": "State estimation",
-    "profiles.form.modification.numberOfBalanceAdjustement": "Balance adjustment",
     "profiles.form.modification.numberOfDynamicSimulation": "Dynamic simulation",
     "profiles.form.modification.numberOfDynamicSecurity": "Dynamic security analysis",
     "profiles.form.modification.numberOfDynamicMargin": "Dynamic Margin",

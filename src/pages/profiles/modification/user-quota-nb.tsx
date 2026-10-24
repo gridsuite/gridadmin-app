@@ -15,7 +15,6 @@ export enum UserQuotaNb {
     VOLTAGE_INIT = 'userQuotaVoltageInitNb',
     PCC_MIN = 'userQuotaPccminNb',
     STATE_ESTIMATION = 'userQuotaStateEstimationNb',
-    BALANCE_ADJUSTEMENT = 'userQuotaBalanceAdjustementNb',
     DYNAMIC_SIMULATION_INIT = 'userQuotaDynamicSimulationInitNb',
     DYNAMIC_SECURITY_INIT = 'userQuotaDynamicSecurityInitNb',
     DYNAMIC_MARGIN_INIT = 'userQuotaDynamicMarginInitNb',
