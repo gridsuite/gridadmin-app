@@ -169,7 +169,7 @@ const AppWrapperWithRedux = () => {
                             adapterLocale={intlToDateFnsLocale(computedLanguage)}
                         >
                             <SnackbarProvider hideIconVariant={false}>
-                                <CssBaseline />
+                                <CssBaseline enableColorScheme />
                                 <CardErrorBoundary>
                                     <NotificationsProvider urls={urlMapper}>
                                         <App />

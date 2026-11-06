@@ -194,15 +194,15 @@ const ProfileModificationForm: FunctionComponent = () => {
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={UserQuotaNb.BALANCE_ADJUSTEMENT}
-                            label="profiles.form.modification.numberOfBalanceAdjustement"
+                            name={UserQuotaNb.DYNAMIC_SIMULATION_INIT}
+                            label="profiles.form.modification.numberOfDynamicSimulation"
                             clearable={true}
                         />
                     </Grid>
                     <Grid size={4}>
                         <IntegerInput
-                            name={UserQuotaNb.DYNAMIC_SIMULATION_INIT}
-                            label="profiles.form.modification.numberOfDynamicSimulation"
+                            name={UserQuotaNb.DYNAMIC_SECURITY_INIT}
+                            label="profiles.form.modification.numberOfDynamicSecurity"
                             clearable={true}
                         />
                     </Grid>
@@ -216,13 +216,6 @@ const ProfileModificationForm: FunctionComponent = () => {
                         width: '100%',
                     }}
                 >
-                    <Grid size={4}>
-                        <IntegerInput
-                            name={UserQuotaNb.DYNAMIC_SECURITY_INIT}
-                            label="profiles.form.modification.numberOfDynamicSecurity"
-                            clearable={true}
-                        />
-                    </Grid>
                     <Grid size={4}>
                         <IntegerInput
                             name={UserQuotaNb.DYNAMIC_MARGIN_INIT}
